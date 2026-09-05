@@ -1,0 +1,26 @@
+{
+    "purchasable_boost_list": [
+        {
+            "boost_mag": 150,
+            "boost_type": 1,
+            "effect_seconds": 10800,
+            "price": 100,
+            "purchase_id": 4115003,
+            "purchase_type": 0
+        }
+    ],
+    "purchasable_item_list": [
+        {
+            "category": 0,
+            "price": 800,
+            "purchase_id": 3001001,
+            "purchase_type": 0
+        },
+        {
+            "category": 1,
+            "price": 100,
+            "purchase_id": 4115003,
+            "purchase_type": 0
+        }
+    ]
+}

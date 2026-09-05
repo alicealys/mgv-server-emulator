@@ -1,0 +1,220 @@
+# Progress
+
+List of implemeted/unimplemented server commands
+
+✔️: partial or full implementation  
+➖: none or partial implementation, unnecessary  
+❌: no implementation  
+
+## TPP
+
+### tppstm/gate
+| name | status | note |
+| --- | --- | --- |
+| CMD_GET_SVRLIST | ✔️ |  |
+| CMD_GET_SVRTIME | ✔️ |  |
+| CMD_GET_URLLIST | ✔️ |  |
+
+### tppstm/main
+| name | status | note |
+| --- | --- | --- |
+| CMD_ABORT_MOTHER_BASE | ✔️ |  |
+| CMD_ACTIVE_SNEAK_MOTHER_BASE | ✔️ |  |
+| CMD_ADD_FOLLOW | ✔️ |  |
+| CMD_APPROVE_STEAM_SHOP | ➖ |  |
+| CMD_AUTH_STEAMTICKET | ✔️ |  |
+| CMD_CALC_COST_FOB_DEPLOY_REPLACE | ✔️ |  |
+| CMD_CALC_COST_TIME_REDUCTION | ✔️ |  |
+| CMD_CANCEL_COMBAT_DEPLOY | ✔️ |  |
+| CMD_CANCEL_COMBAT_DEPLOY_SINGLE | ✔️ |  |
+| CMD_CANCEL_SHORT_PFLEAGUE | ✔️ |  |
+| CMD_CHECK_CONSUME_TRANSACTION | ➖ | unused |
+| CMD_CHECK_DEFENCE_MOTHERBASE | ✔️ |  |
+| CMD_CHECK_SERVER_ITEM_CORRECT | ✔️ |  |
+| CMD_CHECK_SHORT_PFLEAGUE_ENTERABLE | ✔️ |  |
+| CMD_COMMIT_CONSUME_TRANSACTION | ➖ | unused |
+| CMD_CONSUME_RESERVE | ✔️ |  |
+| CMD_CREATE_NUCLEAR | ✔️ |  |
+| CMD_CREATE_PLAYER | ✔️ |  |
+| CMD_DELETE_FOLLOW | ✔️ |  |
+| CMD_DELETE_TROOPS_LIST | ➖ | unused |
+| CMD_DEPLOY_FOB_ASSIST | ✔️ |  |
+| CMD_DEPLOY_MISSION | ✔️ |  |
+| CMD_DESTRUCT_NUCLEAR | ✔️ |  |
+| CMD_DESTRUCT_ONLINE_NUCLEAR | ✔️ |  |
+| CMD_DEVELOP_SERVER_ITEM | ✔️ |  |
+| CMD_DEVELOP_WEPON | ➖ | unused |
+| CMD_ELAPSE_COMBAT_DEPLOY | ➖ | unused |
+| CMD_ENTER_SHORT_PFLEAGUE | ✔️ |  |
+| CMD_EXCHANGE_FOB_EVENT_POINT | ➖ | unused |
+| CMD_EXCHANGE_LEAGUE_POINT | ➖ | unused |
+| CMD_EXCHANGE_LEAGUE_POINT2 | ✔️ |  |
+| CMD_EXTEND_PLATFORM | ➖ | unused |
+| CMD_GDPR_CHECK | ✔️ |  |
+| CMD_GET_ABOLITION_COUNT | ✔️ |  |
+| CMD_GET_CAMPAIGN_DIALOG_LIST | ➖ | unused |
+| CMD_GET_CHALLENGE_TASK_REWARDS | ✔️ |  |
+| CMD_GET_CHALLENGE_TASK_TARGET_VALUES | ✔️ |  |
+| CMD_GET_COMBAT_DEPLOY_LIST | ✔️ |  |
+| CMD_GET_COMBAT_DEPLOY_RESULT | ✔️ |  |
+| CMD_GET_CONTRIBUTE_PLAYER_LIST | ✔️ |  |
+| CMD_GET_DAILY_REWARD | ✔️ |  |
+| CMD_GET_DEVELOPMENT_PROGRESS | ➖ | unused |
+| CMD_GET_ENTITLEMENT_ID_LIST | ➖ | unused |
+| CMD_GET_FOB_DAMAGE | ✔️ |  |
+| CMD_GET_FOB_DEPLOY_LIST | ✔️ |  |
+| CMD_GET_FOB_EVENT_DETAIL | ✔️ |  |
+| CMD_GET_FOB_EVENT_LIST | ✔️ |  |
+| CMD_GET_FOB_EVENT_POINT_EXCHANGE_PARAMS | ✔️ |  |
+| CMD_GET_FOB_NOTICE | ✔️ |  |
+| CMD_GET_FOB_PARAM | ✔️ |  |
+| CMD_GET_FOB_REWARD_LIST | ✔️ |  |
+| CMD_GET_FOB_STATUS | ✔️ |  |
+| CMD_GET_FOB_TARGET_DETAIL | ✔️ |  |
+| CMD_GET_FOB_TARGET_LIST | ✔️ |  |
+| CMD_GET_INFORMATIONLIST2 | ✔️ |  |
+| CMD_GET_LEAGUE_RESULT | ✔️ |  |
+| CMD_GET_LOGIN_PARAM | ✔️ |  |
+| CMD_GET_MBCOIN_REMAINDER | ✔️ |  |
+| CMD_GET_NEXT_MAINTENANCE | ✔️ |  |
+| CMD_GET_ONLINE_DEVELOPMENT_PROGRESS | ➖ | unused |
+| CMD_GET_ONLINE_PRISON_LIST | ✔️ |  |
+| CMD_GET_OWN_FOB_LIST | ✔️ |  |
+| CMD_GET_PAY_ITEM_LIST | ✔️ | unused |
+| CMD_GET_PF_DETAIL_PARAMS | ✔️ |  |
+| CMD_GET_PF_POINT_EXCHANGE_PARAMS | ✔️ |  |
+| CMD_GET_PLATFORM_CONSTRUCTION_PROGRESS | ➖ | unused |
+| CMD_GET_PLAYERLIST | ✔️ |  |
+| CMD_GET_PLAYER_PLATFORM_LIST | ✔️ |  |
+| CMD_GET_PREVIOUS_SHORT_PFLEAGUE_RESULT | ✔️ |  |
+| CMD_GET_PURCHASABLE_AREA_LIST | ✔️ |  |
+| CMD_GET_PURCHASE_HISTORY | ✔️ |  |
+| CMD_GET_PURCHASE_HISTORY_NUM | ✔️ |  |
+| CMD_GET_RANKING | ✔️ |  |
+| CMD_GET_RENTAL_LOADOUT_LIST | ➖ | unused |
+| CMD_GET_RESOURCE_PARAM | ✔️ |  |
+| CMD_GET_SECURITY_INFO | ✔️ |  |
+| CMD_GET_SECURITY_PRODUCT_LIST | ✔️ |  |
+| CMD_GET_SECURITY_SETTING_PARAM | ✔️ |  |
+| CMD_GET_SERVER_ITEM | ✔️ |  |
+| CMD_GET_SERVER_ITEM_LIST | ✔️ |  |
+| CMD_GET_SHOP_ITEM_NAME_LIST | ✔️ |  |
+| CMD_GET_SHORT_PFLEAGUE_RESULT | ✔️ |  |
+| CMD_GET_SNEAK_TARGET_LIST | ➖ | unused |
+| CMD_GET_STEAM_SHOP_ITEM_LIST | ✔️ |  |
+| CMD_GET_TROOPS_LIST | ➖ | unused |
+| CMD_GET_WORMHOLE_LIST | ✔️ | unused |
+| CMD_MINING_RESOURCE | ✔️ |  |
+| CMD_NOTICE_SNEAK_MOTHER_BASE | ➖ | unused |
+| CMD_OPEN_STEAM_SHOP | ✔️ |  |
+| CMD_OPEN_WORMHOLE | ✔️ |  |
+| CMD_PURCHASE_FIRST_FOB | ✔️ |  |
+| CMD_PURCHASE_FOB | ✔️ |  |
+| CMD_PURCHASE_NUCLEAR_COMPLETION | ➖ | unused |
+| CMD_PURCHASE_ONLINE_DEPLOYMENT_COMPLETION | ✔️ |  |
+| CMD_PURCHASE_ONLINE_DEVELOPMENT_COMPLETION | ✔️ |  |
+| CMD_PURCHASE_PLATFORM_CONSTRUCTION | ✔️ |  |
+| CMD_PURCHASE_RESOURCES_PROCESSING | ➖ | unused |
+| CMD_PURCHASE_SECURITY_SERVICE | ✔️ |  |
+| CMD_PURCHASE_SEND_TROOPS_COMPLETION | ➖ | unused |
+| CMD_PURCHASE_WEPON_DEVELOPMENT_COMPLETION | ➖ | unused |
+| CMD_RELOCATE_FOB | ✔️ |  |
+| CMD_RENTAL_LOADOUT | ➖ | unused |
+| CMD_REQAUTH_HTTPS | ✔️ |  |
+| CMD_REQAUTH_SESSIONSVR | ➖ | unused |
+| CMD_REQUEST_RELIEF | ➖ | unused |
+| CMD_RESET_MOTHER_BASE | ➖ | unused |
+| CMD_SALE_RESOURCE | ✔️ |  |
+| CMD_SEND_BOOT | ✔️ |  |
+| CMD_SEND_DEPLOY_INJURE | ✔️ |  |
+| CMD_SEND_HEARTBEAT | ➖ | unused |
+| CMD_SEND_IPANDPORT | ✔️ |  |
+| CMD_SEND_MISSION_RESULT | ✔️ |  |
+| CMD_SEND_NUCLEAR | ✔️ | unused |
+| CMD_SEND_ONLINE_CHALLENGE_TASK_STATUS | ✔️ |  |
+| CMD_SEND_SNEAK_RESULT | ✔️ |  |
+| CMD_SEND_SUSPICION_PLAY_DATA | ✔️ |  |
+| CMD_SEND_TROOPS | ➖ | unused |
+| CMD_SET_CURRENTPLAYER | ✔️ |  |
+| CMD_SET_SECURITY_CHALLENGE | ✔️ |  |
+| CMD_SNEAK_MOTHER_BASE | ✔️ |  |
+| CMD_SPEND_SERVER_WALLET | ➖ | unused |
+| CMD_START_CONSUME_TRANSACTION | ➖ | unused |
+| CMD_SYNC_EMBLEM | ✔️ |  |
+| CMD_SYNC_LOADOUT | ✔️ |  |
+| CMD_SYNC_MOTHER_BASE | ✔️ |  |
+| CMD_SYNC_RESET | ➖ | unused |
+| CMD_SYNC_RESOURCE | ✔️ |  |
+| CMD_SYNC_SOLDIER_BIN | ✔️ |  |
+| CMD_SYNC_SOLDIER_DIFF | ✔️ |  |
+| CMD_UPDATE_SESSION | ✔️ |  |
+| CMD_USE_PF_ITEM | ✔️ |  |
+| CMD_USE_SHORT_PF_ITEM | ✔️ |  |
+
+## MGO
+
+### mgostm/gate
+| name | status | note |
+| --- | --- | --- |
+| CMD_GET_SVRLIST | ✔️ |  |
+| CMD_GET_SVRTIME | ✔️ |  |
+| CMD_GET_URLLIST | ✔️ |  |
+
+### mgostm/main
+
+| name | status | note |
+| --- | --- | --- |
+| CMD_AUTH_STEAMTICKET | ✔️ |  |
+| CMD_DO_MGO_ASCENSION | ✔️ |  |
+| CMD_GDPR_CHECK | ✔️ |  |
+| CMD_GET_ABOLITION_COUNT | ✔️ |  |
+| CMD_GET_INFORMATIONLIST2 | ✔️ |  |
+| CMD_GET_MBCOIN_REMAINDER | ✔️ |  |
+| CMD_GET_MGO_BOOST | ✔️ |  |
+| CMD_GET_MGO_CHARACTER2 | ✔️ |  |
+| CMD_GET_MGO_GLOBAL_PROGRESSION | ✔️ |  |
+| CMD_GET_MGO_GP | ✔️ |  |
+| CMD_GET_MGO_LOADOUT | ✔️ |  |
+| CMD_GET_MGO_MATCH_STAT | ✔️ |  |
+| CMD_GET_MGO_MISSION_INFO | ✔️ |  |
+| CMD_GET_MGO_PARAMETERS | ✔️ |  |
+| CMD_GET_MGO_PROGRESSION | ✔️ |  |
+| CMD_GET_MGO_PURCHASABLE_BOOST_LIST | ✔️ |  |
+| CMD_GET_MGO_PURCHASABLE_GEAR | ✔️ |  |
+| CMD_GET_MGO_PURCHASABLE_GEAR_COLOR | ✔️ |  |
+| CMD_GET_MGO_PURCHASABLE_ITEM_LIST | ✔️ |  |
+| CMD_GET_MGO_PURCHASABLE_WEAPON_COLOR | ✔️ |  |
+| CMD_GET_MGO_PURCHASED_ITEM | ✔️ |  |
+| CMD_GET_MGO_RANK_XP_LIST | ✔️ |  |
+| CMD_GET_MGO_STAT | ✔️ |  |
+| CMD_GET_MGO_SURVIVAL_FREE_TICKET | ✔️ |  |
+| CMD_GET_MGO_SURVIVAL_RULE_SET | ✔️ |  |
+| CMD_GET_MGO_TITLE_LIST | ✔️ |  |
+| CMD_GET_MGO_TITLE_LIST | ✔️ |  |
+| CMD_GET_MGO_TITLE_USR | ✔️ | title assignment not implemented |
+| CMD_GET_MGO_TITLE_USR2 | ✔️ | title assignment not implemented |
+| CMD_GET_MGO_USER_DATA | ✔️ |  |
+| CMD_GET_NEXT_MAINTENANCE | ✔️ |  |
+| CMD_GET_PLAYERLIST | ✔️ |  |
+| CMD_GET_PURCHASE_HISTORY | ✔️ |  |
+| CMD_GET_PURCHASE_HISTORY_NUM | ✔️ |  |
+| CMD_GET_SHOP_ITEM_NAME_LIST | ✔️ |  |
+| CMD_MGO_DLC_UPDATE | ✔️ |  |
+| CMD_MGO_MISSION_RESULT | ✔️ |  |
+| CMD_PURCHASE_MGO_BOOST | ✔️ |  |
+| CMD_PURCHASE_MGO_GEAR_COLOR | ✔️ |  |
+| CMD_PURCHASE_MGO_ITEM | ✔️ |  |
+| CMD_PURCHASE_MGO_WEAPON_COLOR | ✔️ |  |
+| CMD_REQAUTH_HTTPS | ✔️ |  |
+| CMD_SEND_IPANDPORT | ✔️ |  |
+| CMD_SEND_MGO_SESSION_ERROR | ✔️ |  |
+| CMD_SET_CURRENTPLAYER | ✔️ |  |
+| CMD_SET_MGO_CHARACTER2 | ✔️ |  |
+| CMD_SET_MGO_CHARACTER_AND_LOADOUT2 | ✔️ |  |
+| CMD_SET_MGO_LOADOUT | ✔️ |  |
+| CMD_SET_MGO_LOG | ➖ | unused |
+| CMD_SET_MGO_MATCH_STAT | ✔️ |  |
+| CMD_SET_MGO_PROGRESSION | ➖ | unused |
+| CMD_SET_MGO_STAT | ✔️ |  |
+| CMD_UPDATE_SESSION | ✔️ |  |
+| CMD_USE_MGO_SURVIVAL_FREE_TICKET | ✔️ |  |

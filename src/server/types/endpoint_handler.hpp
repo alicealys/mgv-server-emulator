@@ -1,0 +1,41 @@
+#pragma once
+
+#include "base_handler.hpp"
+#include "command_handler.hpp"
+#include "utils/http_server.hpp"
+
+namespace emulator
+{
+	class endpoint_handler : public base_handler<command_handler>
+	{
+	public:
+		virtual ~endpoint_handler()
+		{
+		}
+
+		virtual std::optional<nlohmann::json> decrypt_request(const std::string& data, std::optional<database::players::player>& player)
+		{
+			return {};
+		}
+
+		virtual bool verify_request(nlohmann::json& request)
+		{
+			return false;
+		}
+
+		virtual std::optional<std::string> encrypt_response(nlohmann::json& request, nlohmann::json& data, const std::optional<database::players::player>& player)
+		{
+			return {};
+		}
+
+		virtual std::optional<std::string> handle_command(const utils::request_params& params);
+
+		void print_handler_name([[ maybe_unused ]] const std::string& name) override;
+
+		void set_platform(const std::string& platform);
+
+	private:
+		std::string platform_;
+
+	};
+}

@@ -1,0 +1,147 @@
+// Microsoft Visual C++ generated resource script.
+//
+#pragma code_page(65001)
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "windows.h"
+#include "version.h"
+#include "resource.hpp"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "#include ""windows.h""\r\n"
+    "\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VERSION_FILE_RC
+ PRODUCTVERSION VERSION_PRODUCT_RC
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG
+#else
+#ifdef PRERELEASE
+ FILEFLAGS VS_FF_PRERELEASE
+#else
+#ifndef CI
+ FILEFLAGS VS_FF_PRIVATEBUILD
+#else
+ FILEFLAGS 0x0L
+#endif
+#endif
+#endif
+ FILEOS 0x40004L
+ FILETYPE VFT_DLL
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "alice"
+            VALUE "FileDescription", "tpp-server-emulator"
+            VALUE "FileVersion", VERSION_FILE
+            VALUE "InternalName", "tpp-server-emulator"
+            VALUE "LegalCopyright", "Copyright (C) 2026 alice. All rights reserved."
+            VALUE "Licence", "GPLv3"
+            VALUE "Info", "https://github.com/alicealys/tpp-server-emulator"
+            VALUE "OriginalFilename", "tpp-server-emulator.exe"
+            VALUE "ProductName", "tpp-server-emulator"
+            VALUE "ProductVersion", VERSION_PRODUCT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Data
+//
+
+RESOURCE_DLL_LIBMYSQL             RCDATA "../../deps/mysql/lib/libmysql.dll"
+RESOURCE_DLL_LIBCRYPTO            RCDATA "../../deps/mysql/bin/libcrypto-3-x64.dll"
+RESOURCE_DLL_LIBSSL               RCDATA "../../deps/mysql/bin/libssl-3-x64.dll"
+
+RESOURCE_GDPR_CHECK               RCDATA "resources/data/gdpr_check.json"
+RESOURCE_CHALLENGE_TASK_REWARDS   RCDATA "resources/data/challenge_task_rewards.json"
+RESOURCE_LOGIN_PARAM              RCDATA "resources/data/login_param.json"
+RESOURCE_TPP_INFORMATIONLIST2     RCDATA "resources/data/tpp_informationlist2.json"
+RESOURCE_ITEM_LIST                RCDATA "resources/data/item_list.json"
+RESOURCE_MINING_RESOURCE          RCDATA "resources/data/mining_resource.json"
+RESOURCE_AREA_LIST                RCDATA "resources/data/area_list.json"
+RESOURCE_FOB_PARAM                RCDATA "resources/data/fob_param.json"
+RESOURCE_SECURITY_SETTINGS_PARAM  RCDATA "resources/data/security_setting_param.json"
+RESOURCE_FOB_DEPLOY_LIST          RCDATA "resources/data/fob_deploy_list.json"
+RESOURCE_STEAM_SHOP_ITEM_LIST     RCDATA "resources/data/steam_shop_item_list.json"
+RESOURCE_MGO_PARAMETERS           RCDATA "resources/data/mgo_parameters.json"
+RESOURCE_MGO_TITLE_LIST           RCDATA "resources/data/mgo_title_list.json"
+RESOURCE_MGO_INFORMATIONLIST2     RCDATA "resources/data/mgo_informationlist2.json"
+RESOURCE_MGO_PURCHASABLE_LIST     RCDATA "resources/data/mgo_purchasable_list.json"
+RESOURCE_MGO_BASE_LOADOUTS        RCDATA "resources/data/mgo_base_loadouts.json"
+RESOURCE_MGO_BASE_AVATAR          RCDATA "resources/data/mgo_base_avatar.json"
+RESOURCE_MGO_GEAR_COLORS          RCDATA "resources/data/mgo_gear_colors.json"
+RESOURCE_MGO_GEAR_LIST            RCDATA "resources/data/mgo_gear_list.json"
+RESOURCE_MGO_WEAPON_COLORS        RCDATA "resources/data/mgo_weapon_colors.json"
+RESOURCE_FOB_EVENT_LIST           RCDATA "resources/data/fob_event_list.json"
+RESOURCE_SHOP_ITEM_LIST           RCDATA "resources/data/shop_item_list.json"
+RESOURCE_COMBAT_DEPLOY_LIST       RCDATA "resources/data/combat_deploy_list.json"
+RESOURCE_DAILY_REWARDS            RCDATA "resources/data/daily_rewards.json"
+RESOURCE_PAY_ITEM_LIST            RCDATA "resources/data/pay_item_list.json"
+RESOURCE_EMBLEM_LIST              RCDATA "resources/data/emblem_list.json"
+RESOURCE_SECURITY_PRODUCT_LIST    RCDATA "resources/data/security_product_list.json"
+RESOURCE_PF_POINTS_TABLE          RCDATA "resources/data/pf_points_table.json"
+RESOURCE_PF_POINTS_EXCHANGE_LIST  RCDATA "resources/data/pf_points_exchange_list.json"
+
+RESOURCE_SQL_MYSQL                RCDATA "resources/sql/mysql.sql"
+RESOURCE_SQL_SQLITE3              RCDATA "resources/sql/sqlite3.sql"
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,115 @@
+#include <std_include.hpp>
+
+#include "endpoint_handler.hpp"
+
+#include "component/console.hpp"
+
+#include "scripting/engine.hpp"
+
+namespace emulator
+{
+	std::optional<std::string> endpoint_handler::handle_command(const utils::request_params& params)
+	{
+		std::optional<database::players::player> player;
+		auto json_req_opt = this->decrypt_request(params.body, player);
+		if (!json_req_opt.has_value())
+		{
+			return {};
+		}
+
+		auto& json_req = json_req_opt.value();
+		if (!this->verify_request(json_req))
+		{
+			return {};
+		}
+
+		const auto& session_key = json_req["session_key"];
+		if (!session_key.is_string())
+		{
+			return {};
+		}
+
+		const auto msgid_str = json_req["data"]["msgid"].get<std::string>();
+		const auto handler = this->handlers_.find(msgid_str);
+
+		if (handler == this->handlers_.end())
+		{
+			console::warning("[Endpoint] Missing handler for \"%s\"\n", msgid_str.data());
+			return {};
+		}
+
+#ifdef DEBUG
+		static std::atomic_int64_t exec_id = 0;
+		auto id = exec_id++;
+		const auto start = std::chrono::high_resolution_clock::now();
+		const auto _0 = gsl::finally([=]
+		{
+			const auto end = std::chrono::high_resolution_clock::now();
+			const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+			console::debug("[Endpoint] Took %lli msec (%lli)", diff, id);
+		});
+
+		console::debug("[Endpoint] Handling command \"%s\" (%lli)\n", msgid_str.data(), id);
+#endif
+
+		auto get_json_response = [&]
+		{
+			const auto execute_command = [&]
+			{
+				if (handler->second->needs_ip_address())
+				{
+					if (!params.address.is_valid)
+					{
+						console::warning("[Endpoint] Client doesn't have a valid ip address\n");
+						return error(ERR_INVALIDARG);
+					}
+
+					json_req["data"]["ip"] = std::format("{}.{}.{}.{}",
+						params.address.ip[0], params.address.ip[1], params.address.ip[2], params.address.ip[3]);
+				}
+
+				if (handler->second->needs_player() && !player.has_value())
+				{
+					return error(ERR_INVALID_SESSION);
+				}
+				else
+				{
+					return handler->second->execute(json_req["data"], player);
+				}
+			};
+
+			const auto json_opt = scripting::execute_command_hook(msgid_str, json_req["data"], player, execute_command);
+			if (json_opt.has_value())
+			{
+				return json_opt.value();
+			}
+
+			return execute_command();
+		};
+
+		auto json_res = get_json_response();
+		auto& result_j = json_res["result"];
+
+		if (!result_j.is_string())
+		{
+			result_j = "NOERR";
+		}
+
+#ifdef DEBUG
+		const auto result = result_j.get<std::string>();
+		console::debug("[Endpoint] Command \"%s\" (%lli) result: %s\n", msgid_str.data(), id, result.data());
+#endif
+
+		return this->encrypt_response(json_req, json_res, player);
+	}
+
+	void endpoint_handler::print_handler_name([[ maybe_unused ]] const std::string& name)
+	{
+		console::log("Registering command for \"%s\": \"%s\"\n", this->platform_.data(), name.data());
+	}
+
+	void endpoint_handler::set_platform(const std::string& platform)
+	{
+		this->platform_ = platform;
+	}
+}

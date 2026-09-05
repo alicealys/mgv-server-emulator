@@ -1,0 +1,355 @@
+#include <std_include.hpp>
+
+#include "database.hpp"
+#include "models/players.hpp"
+
+#include "utils/config.hpp"
+
+#include <utils/string.hpp>
+#include <utils/cryptography.hpp>
+
+namespace database
+{
+	namespace
+	{
+		database_def_t database_def{};
+		constexpr const auto max_connections = 150;
+		constexpr const auto connection_lifetime = 60s * 10;
+		std::array<connection, max_connections> connection_pool;
+	}
+
+	database_type_t get_database_type()
+	{
+		return database_def.type;
+	}
+
+	void set_database_type(const database_type_t type)
+	{
+		database_def.type = type;
+
+		switch (type)
+		{
+		case database_mysql:
+		{
+			database_def.rand_func = "rand()";
+			database_def.use_multi_connection = true;
+			break;
+		}
+		case database_sqlite3:
+		{
+			database_def.rand_func = "random()";
+			database_def.use_multi_connection = false;
+			break;
+		}
+		}
+	}
+
+	database_def_t get_database_def()
+	{
+		return database_def;
+	}
+
+	database_type_t get_database_type(const std::string& type_name)
+	{
+		static std::unordered_map<std::string, database_type_t> map =
+		{
+			{"mysql", database_mysql},
+			{"sqlite3", database_sqlite3},
+		};
+
+		const auto lower = utils::string::to_lower(type_name);
+		const auto iter = map.find(lower);
+		if (iter == map.end())
+		{
+			return database_invalid;
+		}
+
+		return iter->second;
+	}
+
+	database_config load_config()
+	{
+		const auto type_name = config::get<std::string>("database_type");
+		const auto type = get_database_type(type_name);
+
+		if (type == database_invalid)
+		{
+			throw std::runtime_error(std::format("invalid database type specified: {}", type_name));
+		}
+
+#ifndef MYSQL_SUPPORTED
+		if (type == database_mysql)
+		{
+			throw std::runtime_error("mysql is not supported on this build");
+		}
+#endif
+
+		set_database_type(type);
+
+		database_config config;
+		config.user = config::get<std::string>("database_user");
+		config.password = config::get<std::string>("database_password");
+		config.host = config::get<std::string>("database_host");
+		config.port = config::get<std::uint16_t>("database_port");
+		config.database_name = config::get<std::string>("database_name");
+		return config;
+	}
+
+	database_config& get_config()
+	{
+		static auto config = load_config();
+		return config;
+	}
+
+	std::string get_database_name()
+	{
+		return get_config().database_name;
+	}
+
+	mysql_connection* database_container::get_mysql() const
+	{
+		return this->dbs_.mysql_.get();
+	}
+
+	sqlite3_connection* database_container::get_sqlite3() const
+	{
+		return this->dbs_.sqlite3_.get();
+	}
+
+	size_t database_container::execute(const std::string& query)
+	{
+#ifdef MYSQL_SUPPORTED
+		if (get_database_type() == database_mysql)
+		{
+			this->dbs_.mysql_->execute(query);
+			return 0ull;
+		}
+#endif
+
+		if (get_database_type() == database_sqlite3)
+		{
+			return this->dbs_.sqlite3_->execute(query);
+		}
+
+		throw std::runtime_error("[database_container::execute] invalid database provider");
+	}
+
+	void database_container::create_connection()
+	{
+		const auto& base_config = get_config();
+
+		switch (get_database_type())
+		{
+		case database_mysql:
+		{
+#ifdef MYSQL_SUPPORTED
+			sqlpp::mysql::connection_config config;
+			config.user = base_config.user;
+			config.password = base_config.password;
+			config.host = base_config.host;
+			config.port = base_config.port;
+			config.database = base_config.database_name;
+
+			this->dbs_.mysql_ = std::make_unique<sqlpp::mysql::connection>(config);
+#endif
+			return;
+		}
+		case database_sqlite3:
+		{
+			sqlpp::sqlite3::connection_config config;
+			config.password = base_config.password;
+			config.path_to_database = base_config.database_name;
+			config.flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX;
+
+			this->dbs_.sqlite3_ = std::make_unique<sqlpp::sqlite3::connection>(config);
+			return;
+		}
+		}
+
+		throw std::runtime_error("[database_container::create_connection] invalid database type");
+	}
+
+	bool database_container::is_valid() const
+	{
+#ifdef MYSQL_SUPPORTED
+		if (get_database_type() == database_mysql)
+		{
+			return this->dbs_.mysql_.get() && this->dbs_.mysql_->ping_server();
+		}
+#endif
+
+		if (get_database_type() == database_sqlite3)
+		{
+			return this->dbs_.sqlite3_.get();
+		}
+
+		return false;
+	}
+
+	std::string database_container::get_sql_query(const std::string& name)
+	{
+		const auto& cfg = get_config();
+
+		auto query = database::get_sql_query(get_database_type(), name);
+		query = utils::string::replace(query, "$database_name", cfg.database_name);
+
+		return query;
+	}
+
+	void database_container::reset()
+	{
+		this->dbs_.mysql_.reset();
+		this->dbs_.sqlite3_.reset();
+	}
+
+	void connection::check()
+	{
+		const auto now = std::chrono::high_resolution_clock::now();
+		const auto diff = now - this->start_;
+
+		if (!this->db.is_valid() || diff >= connection_lifetime)
+		{
+			this->db.create_connection();
+			this->start_ = now;
+		}
+
+		this->last_access_ = now;
+	}
+
+	void connection::cleanup()
+	{
+		std::unique_lock<database_mutex_t> lock(this->mutex, std::try_to_lock);
+		if (!lock.owns_lock())
+		{
+			return;
+		}
+
+		const auto now = std::chrono::high_resolution_clock::now();
+		const auto diff = now - this->last_access_;
+		if (diff >= database::vars.session_timeout)
+		{
+			this->db.reset();
+		}
+	}
+
+	connection* get_connection(std::unique_lock<database_mutex_t>& lock)
+	{
+		if (!get_database_def().use_multi_connection)
+		{
+			static connection single_connection;
+			return &single_connection;
+		}
+
+		static thread_local connection* last_connection{};
+		if (last_connection != nullptr)
+		{
+			lock = std::unique_lock(last_connection->mutex, std::try_to_lock);
+			if (lock.owns_lock())
+			{
+				return last_connection;
+			}
+		}
+
+		for (auto i = 0ull; i < connection_pool.size(); i++)
+		{
+			auto connection = &connection_pool[i];
+			if (connection == last_connection)
+			{
+				continue;
+			}
+
+			lock = std::unique_lock(connection->mutex, std::try_to_lock);
+			if (!lock.owns_lock())
+			{
+				continue;
+			}
+
+			last_connection = connection;
+			return connection;
+		}
+
+		return nullptr;
+	}
+
+	void cleanup_connections()
+	{
+		if (!get_database_def().use_multi_connection)
+		{
+			return;
+		}
+
+		const auto now = std::chrono::high_resolution_clock::now();
+		static auto last_check = now;
+		if (now - last_check < connection_lifetime)
+		{
+			return;
+		}
+
+		last_check = now;
+
+		for (auto& connection : connection_pool)
+		{
+			connection.cleanup();
+		}
+	}
+
+	void create_tables()
+	{
+		database::access([](database_t& db)
+		{
+			for (const auto& table : get_tables())
+			{
+				table.inst->create(db);
+			}
+		});
+	}
+
+	void run_tasks()
+	{
+		cleanup_connections();
+
+		database::access([](database_t& db)
+		{
+			for (const auto& table : get_tables())
+			{
+				try
+				{
+					table.inst->run_tasks(db);
+				}
+				catch (const std::exception& e)
+				{
+					console::error("database::run_tasks: %s\n", e.what());
+				}
+			}
+		});
+	}
+
+	void post_start()
+	{
+		database::access([](database_t& db)
+		{
+			for (const auto& table : get_tables())
+			{
+				try
+				{
+					table.inst->post_start(db);
+				}
+				catch (const std::exception& e)
+				{
+					console::error("database::run_tasks: %s\n", e.what());
+				}
+			}
+		});
+	}
+
+	void initialize()
+	{
+		initialize_vars();
+		create_tables();
+	}
+
+	void stop()
+	{
+
+	}
+}

@@ -1,0 +1,18 @@
+#include <std_include.hpp>
+
+#include "cmd_get_resource_param.hpp"
+
+namespace emulator::tpp
+{
+	nlohmann::json cmd_get_resource_param::execute(nlohmann::json& data, const std::optional<database::players::player>& player)
+	{
+		nlohmann::json result;
+
+		result["result"] = "NOERR";
+		result["nuclear_develop_costs"][0] = 750000;
+		result["nuclear_develop_costs"][1] = 50000;
+		result["nuclear_develop_costs"][2] = 75000;
+
+		return result;
+	}
+}
