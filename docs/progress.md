@@ -9,30 +9,27 @@ List of implemeted/unimplemented server commands
 ### ssdstm/gate
 | name | status | note |
 | --- | --- | --- |
-| CMD_GET_SVRLIST | ❌ |  |
-| CMD_GET_SVRTIME | ❌ |  |
-| CMD_GET_URLLIST | ❌ |  |
+| CMD_GET_SVRLIST | ✔️ |  |
+| CMD_GET_SVRTIME | ✔️ |  |
+| CMD_GET_URLLIST | ✔️ |  |
+| CMD_MAINTENANCE_GET_SCHEDULE | ✔️ |  |
 
 ### ssdstm/main
 | name | status | note |
 | --- | --- | --- |
-| CMD_AUTH_STEAMTICKET | ❌ |  |
-| CMD_REQAUTH_HTTPS | ❌ |  |
-| CMD_SEND_IPANDPORT | ❌ |  |
-| CMD_GET_PLAYERLIST | ❌ |  |
-| CMD_SET_CURRENTPLAYER | ❌ |  |
-| CMD_CREATE_PLAYER | ❌ |  |
-| CMD_GDPR_CHECK | ❌ |  |
+| CMD_AUTH_STEAMTICKET | ✔️ |  |
+| CMD_REQAUTH_HTTPS | ✔️ |  |
+| CMD_SEND_IPANDPORT | ✔️ |  |
+| CMD_GET_PLAYERLIST | ✔️ |  |
+| CMD_SET_CURRENTPLAYER | ✔️ |  |
+| CMD_CREATE_PLAYER | ✔️ |  |
+| CMD_GDPR_CHECK | ✔️ |  |
 | CMD_REQAUTH_SESSIONSVR | ❌ |  |
 | CMD_SEND_HEARTBEAT | ❌ |  |
 | CMD_ERROR_INFO_SEND | ❌ |  |
 | CMD_ERROR_LANG_ID_SEND | ❌ |  |
 | CMD_GET_INFORMATIONLIST | ❌ |  |
-| CMD_GET_URLLIST | ❌ |  |
-| CMD_GET_SVRLIST | ❌ |  |
-| CMD_GET_SVRTIME | ❌ |  |
-| CMD_MAINTENANCE_GET_SCHEDULE | ❌ |  |
-| CMD_UPDATE_SESSION | ❌ |  |
+| CMD_UPDATE_SESSION | ✔️ |  |
 | CMD_SVCOIN_GET_BALANCE | ❌ |  |
 | CMD_CHECK_CONSUME_TRANSACTION | ❌ |  |
 | CMD_START_CONSUME_TRANSACTION | ❌ |  |
@@ -86,7 +83,7 @@ List of implemeted/unimplemented server commands
 | CMD_CHECKPOINT_SAVE | ❌ |  |
 | CMD_CHECKPOINT_LOAD | ❌ |  |
 | CMD_AVATAR_SAVE | ❌ |  |
-| CMD_AVATAR_LOAD | ❌ |  |
+| CMD_AVATAR_LOAD | ✔️ |  |
 | CMD_MISSION_START | ❌ |  |
 | CMD_MISSION_END | ❌ |  |
 | CMD_MISSION_REPLAY_END | ❌ |  |
@@ -134,8 +131,8 @@ List of implemeted/unimplemented server commands
 | CMD_DEPLOY_DEPLOY | ❌ |  |
 | CMD_DEPLOY_COMPLETE | ❌ |  |
 | CMD_DEPLOY_SUPPLY_ITEM | ❌ |  |
-| CMD_SERVER_PARAMETER_LOAD | ❌ |  |
-| CMD_SERVER_PARAMETER_GET_URL_LIST | ❌ |  |
+| CMD_SERVER_PARAMETER_LOAD | ✔️ |  |
+| CMD_SERVER_PARAMETER_GET_URL_LIST | ✔️ |  |
 | CMD_INFORMATION_GET_TITLE | ❌ |  |
 | CMD_INFORMATION_GET_TEXT | ❌ |  |
 | CMD_INFORMATION_GET_DETAIL | ❌ |  |

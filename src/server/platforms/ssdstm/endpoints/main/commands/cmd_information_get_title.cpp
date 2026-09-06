@@ -2,13 +2,16 @@
 
 #include "cmd_information_get_title.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	nlohmann::json cmd_information_get_title::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
 	{
 		nlohmann::json result;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		
+		// TODO
+		result["info_list"] = nlohmann::json::array();
+		result["info_num"] = 0;
+
         return result;
 	}
 }
