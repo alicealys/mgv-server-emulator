@@ -2,7 +2,6 @@
 
 #include "steam_openid_url.hpp"
 #include "database/auth.hpp"
-#include "database/models/steam_users.hpp"
 
 #include <utils/http.hpp>
 

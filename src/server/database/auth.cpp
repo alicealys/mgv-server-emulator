@@ -6,7 +6,8 @@
 #include "component/console.hpp"
 
 #include "models/players.hpp"
-#include "models/steam_users.hpp"
+#include "models/users.hpp"
+#include "models/auth_tokens.hpp"
 
 #include "utils/tpp_client.hpp"
 #include "utils/encoding.hpp"
@@ -127,7 +128,7 @@ namespace auth
 		get_deny_list() = parse_list(deny_list_file);
 	}
 
-	std::optional<std::uint64_t> verify_ticket_konami(const std::string& auth_ticket, const size_t ticket_size, const bool is_tpp)
+	std::optional<std::uint64_t> verify_ticket_konami(const std::string& auth_ticket, const size_t ticket_size)
 	{
 		nlohmann::json data;
 		data["steam_ticket"] = utils::encoding::split_into_lines(auth_ticket);
@@ -138,7 +139,7 @@ namespace auth
 		data["lang"] = "en";
 		data["country"] = "ww";
 
-		const auto end_point = is_tpp ? "tppstm/main" : "mgostm/main";
+		const auto end_point = "ssdstm/main";
 		auto result_opt = client.send_command(end_point, data, false);
 		if (!result_opt.has_value())
 		{
@@ -209,7 +210,7 @@ namespace auth
 			return {};
 		}
 
-		if (database::steam_users::authenticate(ticket->account_id, token))
+		if (database::auth_tokens::authenticate(database::auth_tokens::token_game_auth, ticket->account_id, token))
 		{
 			return {ticket->account_id};
 		}
@@ -217,7 +218,7 @@ namespace auth
 		return {};
 	}
 
-	std::optional<std::uint64_t> verify_ticket(const std::string& auth_ticket, const size_t ticket_size, const bool is_tpp)
+	std::optional<std::uint64_t> verify_ticket(const std::string& auth_ticket, const size_t ticket_size)
 	{
 		const auto auth_mode = get_auth_mode();
 		if (!auth_mode.has_value())
@@ -230,7 +231,7 @@ namespace auth
 		case auth_offline:
 			return verify_ticket_offline(auth_ticket, ticket_size);
 		case auth_konami:
-			return verify_ticket_konami(auth_ticket, ticket_size, is_tpp);
+			return verify_ticket_konami(auth_ticket, ticket_size);
 		case auth_custom:
 			return verify_ticket_custom(auth_ticket, ticket_size);
 		case auth_hybrid:
@@ -241,7 +242,7 @@ namespace auth
 			}
 			else
 			{
-				return verify_ticket_konami(auth_ticket, ticket_size, is_tpp);
+				return verify_ticket_konami(auth_ticket, ticket_size);
 			}
 		}
 		}
@@ -249,9 +250,9 @@ namespace auth
 		return {};
 	}
 
-	std::optional<auth_ticket_response> authenticate_user_with_ticket(const std::string& auth_ticket, const size_t ticket_size, const bool is_tpp)
+	std::optional<auth_ticket_response> authenticate_user_with_ticket(const std::string& auth_ticket, const size_t ticket_size)
 	{
-		const auto account_id_opt = verify_ticket(auth_ticket, ticket_size, is_tpp);
+		const auto account_id_opt = verify_ticket(auth_ticket, ticket_size);
 		if (!account_id_opt.has_value())
 		{
 			return {};
@@ -266,13 +267,12 @@ namespace auth
 
 		console::log("Allowing user \"%lli\"\n", account_id);
 
-		const auto player = database::players::find_or_insert(account_id);
+		const auto user = database::users::find_or_insert(account_id);
 
 		auth_ticket_response response{};
 		response.account_id = std::to_string(account_id);
-		response.currency = player.get_currency();
-		response.password = database::players::generate_login_password(account_id);
-		response.smart_device_id = player.get_smart_device_id();
+		response.currency = user.get_currency();
+		response.password = database::users::generate_password(user.get_id());
 
 		return {response};
 	}
@@ -280,30 +280,25 @@ namespace auth
 	std::optional<auth_response> authenticate_user(const std::string& account_id, const std::string& password)
 	{
 		const auto account_id_int = std::strtoull(account_id.data(), nullptr, 10);
-		const auto player_opt = database::players::find_from_account(account_id_int);
-		if (!player_opt.has_value())
+		const auto user_opt = database::users::find_from_account(account_id_int);
+		if (!user_opt.has_value())
 		{
 			return {};
 		}
 
-		const auto& player = player_opt.value();
+		const auto& user = user_opt.value();
 
 		auth_response response{};
 
-		const auto pwd = player.get_login_password();
-		const auto hash = utils::cryptography::md5::compute(pwd);
-		const auto hash_b64 = utils::cryptography::base64::encode(hash);
-
-		response.success = password == hash_b64;
+		response.success = password == user.get_password_hash();
 		if (!response.success)
 		{
 			return {response};
 		}
 
-		response.player_id = player.get_id();
-		response.smart_device_id = player.get_smart_device_id();
-		response.session_id = database::players::generate_session_id(account_id_int);
-		response.crypto_key = database::players::generate_crypto_key(account_id_int);
+		response.user_id = user.get_id();
+		response.session_id = database::users::generate_session_id(account_id_int);
+		response.crypto_key = database::users::generate_crypto_key(account_id_int);
 
 		return {response};
 	}

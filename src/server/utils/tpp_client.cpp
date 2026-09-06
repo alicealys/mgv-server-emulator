@@ -7,7 +7,7 @@ namespace utils::tpp
 {
 	tpp_client::tpp_client()
 	{
-		this->set_url("https://mgstpp-game.konamionline.com");
+		this->set_url("https://mgssd-game.cs.konami.net/ssdstm/gate");
 		this->static_blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
@@ -51,7 +51,7 @@ namespace utils::tpp
 		auto encrypted = this->static_blow_.encrypt(data);
 		encrypted = utils::string::replace(encrypted, "+", "%2B");
 
-		const auto post_data = "httpMsg="s + encrypted;
+		const auto post_data = "body="s + encrypted;
 		utils::http::headers headers;
 
 		headers["Connection"] = "Keep-Alive";

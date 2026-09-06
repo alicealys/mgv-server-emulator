@@ -5,7 +5,6 @@
 #include "types/server.hpp"
 #include "database/database.hpp"
 #include "database/auth.hpp"
-#include "scripting/engine.hpp"
 
 #include "component/console.hpp"
 #include "component/command.hpp"
@@ -56,8 +55,6 @@ namespace emulator
 
 		startup = std::chrono::system_clock::now();
 
-		static const auto use_lua_scripts = config::get<bool>("use_lua_scripts");
-
 		threads.emplace_back([&]
 		{
 			while (!killed)
@@ -86,26 +83,12 @@ namespace emulator
 		database::post_start();
 		component_loader::post_start();
 
-		if (use_lua_scripts)
-		{
-			scripting::start();
-			threads.emplace_back([&]
-			{
-				while (!killed)
-				{
-					scripting::run_frame();
-					std::this_thread::sleep_for(10ms);
-				}
-			});
-		}
-
 		while (!killed)
 		{
 			command::run_frame();
 			std::this_thread::sleep_for(1ms);
 		}
 
-		scripting::stop();
 		database::stop();
 
 		for (auto& thread : threads)

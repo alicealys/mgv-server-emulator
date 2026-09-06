@@ -8,10 +8,7 @@
 #include "database/auth.hpp"
 
 #include "database/models/players.hpp"
-#include "database/models/player_data.hpp"
-#include "database/models/steam_users.hpp"
-
-#include "scripting/engine.hpp"
+#include "database/models/users.hpp"
 
 #include <utils/io.hpp>
 #include <utils/string.hpp>
@@ -138,28 +135,6 @@ namespace command
 			add("quit", [](const params& params)
 			{
 				emulator::stop_server();
-			});
-
-			add("max_resources", [](const params& params)
-			{
-				if (params.size() < 2)
-				{
-					return;
-				}
-
-				const auto arg = params.get(1);
-				const auto player_id = std::strtoull(arg.data(), nullptr, 10);
-				database::player_data::resource_arrays_t resource_arrays{};
-
-				for (auto i = 0; i < game::RESOURCE_TYPE_COUNT; i++)
-				{
-					resource_arrays[game::processed_server][i] = game::server_processed_resource_caps[i];
-					resource_arrays[game::unprocessed_server][i] = game::server_unprocessed_resource_caps[i];
-					resource_arrays[game::processed_local][i] = game::local_processed_resource_caps[i];
-					resource_arrays[game::unprocessed_local][i] = game::local_processed_resource_caps[i];
-				}
-
-				database::player_data::set_resources(player_id, resource_arrays, database::vars.max_local_gmp, database::vars.max_server_gmp);
 			});
 
 			add("query", [](const params& params)
@@ -319,38 +294,11 @@ namespace command
 
 			add("reload_lists", auth::reload_lists);
 
-			add("reload_scripts", emulator::scripting::reload);
-
-			add("update_has_fob", []()
-			{
-				const auto count = static_cast<std::uint32_t>(database::players::get_player_count());
-				const auto players = database::players::get_player_list(count);
-				for (auto& player : players)
-				{
-					auto has_an_fob = false;
-					const auto fobs = database::fobs::get_fob_list(player.get_id());
-					for (auto& fob : fobs)
-					{
-						const auto& clusters = fob.get_cluster_param();
-						for (auto i = 0; i < game::fob_clusters_count; i++)
-						{
-							if (clusters.param->build.fields.platform_count != 0)
-							{
-								has_an_fob = true;
-								break;
-							}
-						}
-					}
-
-					database::player_records::set_has_fob(player.get_id(), has_an_fob);
-				}
-			});
-
 			add("delete_user", [](const params& params)
 			{
 				const auto arg = params.get(1);
 				const auto account_id = std::strtoull(arg.data(), nullptr, 10);
-				if (!database::steam_users::delete_all_user_data(account_id))
+				if (!database::users::delete_all_user_data(account_id))
 				{
 					console::warning("user %lli not found\n", account_id);
 					return;

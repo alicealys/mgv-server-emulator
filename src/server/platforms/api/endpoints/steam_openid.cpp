@@ -2,7 +2,7 @@
 
 #include "steam_openid.hpp"
 #include "database/auth.hpp"
-#include "database/models/steam_users.hpp"
+#include "database/models/auth_tokens.hpp"
 
 #include <utils/http.hpp>
 
@@ -62,8 +62,8 @@ namespace emulator
 		result["is_valid"] = is_valid;
 		result["account_id"] = steam_id;
 
-		const auto auth_token = auth::generate_data(16, false);
-		if (database::steam_users::set_auth_token(steam_id, auth_token))
+		std::string auth_token;
+		if (database::auth_tokens::generate_auth_token(database::auth_tokens::token_game_auth, steam_id, auth_token))
 		{
 			result["auth_token"] = auth_token;
 		}

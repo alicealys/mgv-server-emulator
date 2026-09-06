@@ -15,16 +15,9 @@ namespace emulator
 		blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
-	std::optional<nlohmann::json> gate_handler::decrypt_request(const std::string& data, std::optional<database::players::player>&)
+	std::optional<nlohmann::json> gate_handler::decrypt_request(const std::string& data, std::optional<database::users::user>&)
 	{
-		if (!data.starts_with("httpMsg="))
-		{
-			return {};
-		}
-
-		const auto result = data.substr(8);
-		const auto decoded_data = utils::encoding::decode_url_string(result);
-
+		const auto decoded_data = utils::encoding::decode_url_string(data);
 		const auto str = this->blow_.decrypt(decoded_data);
 		auto json = nlohmann::json::parse(str);
 		
@@ -97,7 +90,7 @@ namespace emulator
 	}
 
 	std::optional<std::string> gate_handler::encrypt_response(nlohmann::json& request, nlohmann::json& data, 
-		const std::optional<database::players::player>&)
+		const std::optional<database::users::user>&)
 	{
 		data["crypto_type"] = "COMMON";
 		data["flowid"] = {};

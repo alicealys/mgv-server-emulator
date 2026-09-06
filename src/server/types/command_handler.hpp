@@ -1,6 +1,7 @@
 #pragma once
 
 #include "database/models/players.hpp"
+#include "database/models/users.hpp"
 #include "game/game.hpp"
 
 namespace emulator
@@ -12,17 +13,12 @@ namespace emulator
 		{
 		}
 
-		virtual nlohmann::json execute(nlohmann::json& data, const std::optional<database::players::player>& player)
+		virtual nlohmann::json execute(nlohmann::json& data, const std::optional<database::users::user>& user)
 		{
 			throw std::runtime_error("unimplemented command");
 		};
 
-		virtual bool needs_player()
-		{
-			return false;
-		}
-
-		virtual bool needs_ip_address()
+		virtual bool needs_user()
 		{
 			return false;
 		}
@@ -34,6 +30,5 @@ namespace emulator
 	nlohmann::json player_info(const std::uint64_t player_id, const std::uint64_t account_id);
 	nlohmann::json player_info(const database::players::player& player);
 	nlohmann::json player_info(const std::optional<database::players::player>& player);
-	std::optional<database::players::player> get_target_player(const nlohmann::json& target, bool* has_id = nullptr);
 	void merge_json(nlohmann::json& data, const nlohmann::json& extra_data);
 }

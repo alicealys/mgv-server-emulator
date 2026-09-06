@@ -3,8 +3,6 @@
 #include "status.hpp"
 #include "database/auth.hpp"
 #include "database/models/players.hpp"
-#include "database/models/player_data.hpp"
-#include "database/models/fob_events.hpp"
 #include "server.hpp"
 
 #include <utils/http.hpp>
@@ -21,18 +19,7 @@ namespace emulator
 		const auto uptime_s = std::chrono::duration_cast<std::chrono::seconds>(uptime).count();
 
 		result["uptime"] = uptime_s;
-		result["online_player_count"] = database::players::get_online_player_count();
-		result["total_player_count"] = database::players::get_player_count();
-		result["nuke_count"] = database::player_data::get_nuke_count();
 		result["version"] = VERSION;
-
-		const auto current_event = database::fob_events::get_current_event();
-		if (current_event.has_value())
-		{
-			result["event"]["start_date"] = current_event->date_range.start.count();
-			result["event"]["end_date"] = current_event->date_range.end.count();
-			result["event"]["server_text"] = current_event->server_text;
-		}
 
 		return result;
 	}

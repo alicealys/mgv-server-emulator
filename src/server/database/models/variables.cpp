@@ -111,7 +111,7 @@ namespace database::variables
 	public:
 		void create(database_t& database) override
 		{
-			database.run_query("mgstpp.variables.create");
+			database.run_query("mgvdb.variables.create");
 		}
 
 		void post_start(database_t& database) override

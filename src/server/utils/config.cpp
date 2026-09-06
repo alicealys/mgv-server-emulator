@@ -33,12 +33,11 @@ namespace config
 			{define_field("database_password", field_type::string, "root")},
 			{define_field("database_host", field_type::string, "127.0.0.1")},
 			{define_field("database_port", field_type::number_unsigned, 3306)},
-			{define_field("database_name", field_type::string, "mgstpp")},
+			{define_field("database_name", field_type::string, "mgvdb")},
 			{define_field("auth_mode", field_type::string, "offline", auth::validate_auth_mode)},
 			{define_field("cert_file", field_type::string, "")},
 			{define_field("key_file", field_type::string, "")},
 			{define_field("use_tmp_folder", field_type::boolean, true)},
-			{define_field("use_lua_scripts", field_type::boolean, true)},
 			{define_field("http_client_ip_header", field_type::string, "")},
 			{define_field("enable_web_api", field_type::boolean, true)},
 		};

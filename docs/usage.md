@@ -3,21 +3,17 @@
 ## Installation
 
 - Download binary 
-  - **[Windows x64](https://github.alicent.cat/tpp-server-emulator/tpp-server-emulator-windows_x64.tar)**  
-  - **[Linux x64](https://github.alicent.cat/tpp-server-emulator/tpp-server-emulator-linux_x64.tar)**  
-- \***OPTIONAL**\* Setup a mysql server with a database called `mgstpp`.
+  - **[Windows x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-windows_x64.tar)**  
+  - **[Linux x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-linux_x64.tar)**  
+- \***OPTIONAL**\* Setup a mysql server with a database called `mgvdb`.
 - In the EXE's path create a file called `config.json` and add the following values:
     * `database_type`: (default: `"mysql"`, options: "mysql", "sqlite3")
     * `database_user`: (default: `"root"`)
     * `database_password`: (default: `"root"`)
     * `database_host`: (default: `"localhost"`)
     * `database_port`: (default: `3306`)
-    * `database_name`: (default: `"mgstpp"`)
-- TPP:
-  Change the string `"https://mgstpp-game.konamionline.com/tppstm/gate"` in `mgsvtpp.exe` to `"{your base url}/tppstm/gate"`.  
-- MGO:
-  Change the string `"https://mgstpp-game.konamionline.com/mgostm/gate"` in `mgsvmgo.exe` to `"{your base url}/mgostm/gate"`.  
-  Alternatively (recommended), run [tpp-mod](https://github.com/alicealys/tpp-mod) with the `+net_custom_server <url>` command line param.
+    * `database_name`: (default: `"mgvdb"`)
+- Run [mgv-mod](https://github.com/alicealys/mgv-mod) with the `+net_custom_server <url>` command line param.
 
 ## Config
 
@@ -32,15 +28,11 @@ Example config
     "key_file": "",
     "database_type": "sqlite3",
     "database_password": "root",
-    "database_name": "mgstpp",
+    "database_name": "mgvdb",
     "auth_mode": "offline",
     "vars": {
         "session_heartbeat": 60,
-        "session_timeout": 200,
-        "nuclear_find_probability": 1.0,
-        "max_server_gmp": 25000000,
-        "item_dev_limit": 4,
-        "unlock_all_items": false
+        "session_timeout": 200
     }
 }
 ```
@@ -61,30 +53,14 @@ Example config
 | database_password | database password | "root" |
 | database_host | database hostname | "localhost" |
 | database_port | database port | 3306 |
-| database_name | database name | "mgstpp" |
+| database_name | database name | "mgsmgv" |
 | auth_mode | authentication mode, must be one of: "offline", "konami", "custom", "hybrid", **if set to `offline` steam tickets will not be verified** | "offline" |
 | vars.session_heartbeat | interval between each CMD_UPDATE_SESSION sent by the client (in seconds) | 60 |
 | vars.session_timeout | time until client is considered offline (seconds) | 200 |
-| vars.nuclear_find_probability | probability that a player with nukes will appear in the nuke tab (0.0-1.0) | 1.0 |
-| vars.wormhole_duration | wormhole duration in days | 31 |
-| vars.max_server_gmp | maximum server gmp | 25000000 |
-| vars.item_dev_limit | maximum number of concurrent items in development | 4 |
-| vars.unlock_all_items | unlock all items | false |
-| vars.cost_factor_generic | factor to calculate mb coins to reduce dev time (remaning_seconds * factor) | 0.01565 |
-| vars.cost_factor_item_dev | factor to calculate mb coins to reduce dev time of **items** | vars.cost_factor_generic |
-| vars.cost_factor_platform_construction | factor to calculate mb coins to reduce dev time of **platform construction** | vars.cost_factor_generic |
-| vars.cost_factor_troops_completion | factor to calculate mb coins to reduce dev time of **troops completion** | vars.cost_factor_generic |
-| vars.server_version_tpp | tpp server version | 18 |
-| vars.server_version_mgo | mgo server version | 15 |
-| vars.signup_bonus | award new players with resources and fobs | false |
-| vars.no_fob_damage | disable fob infiltration damage | false |
-| vars.pvp_mode | enable pvp mode | false |
-| vars.run_pf_league | enable pf league logic | true |
-| vars.use_real_client_ip | store actual client ip adress (workaround for steam networking p2p) | false |
 
 ### Authentication mode
 
-tpp-server-emulator allows for 4 different authentication modes to verify players that log in:
+mgv-server-emulator allows for 4 different authentication modes to verify players that log in:
 
 - **offline**: no verification is done, steam id is extracted from the steam ticket.
 - **konami**: steam ticket is relayed to KONAMI servers, and verified.
@@ -124,7 +100,7 @@ tpp-server-emulator allows for 4 different authentication modes to verify player
 
 ## Web API
 
-tpp-server-emulator exposes some web APIs that can be accessed through regular HTTP requests (not using the game's protocol or format).  
+mgv-server-emulator exposes some web APIs that can be accessed through regular HTTP requests (not using the game's protocol or format).  
 The API is enabled by default, but can be disabled by setting `enable_web_api` to `false` in the config.  
 All APIs return in JSON format.  
 
@@ -137,13 +113,13 @@ All APIs return in JSON format.
 
 ## Resource files
 
-Files in https://github.com/alicealys/tpp-server-emulator/tree/main/src/server/resources/data can be overridden if they exist on the disk.  
-These files contain data that is sent to the client, such as item lists, fob area lists, ...  
+Files in https://github.com/alicealys/mgv-server-emulator/tree/main/src/server/resources/data can be overridden if they exist on the disk.  
+These files contain data that is sent to the client.  
 Example file structure:
 
 ```
 [root]
-├── tpp-server-emulator.exe
+├── mgv-server-emulator.exe
 ├── config.json
 ├── allow_list.json
 ├── deny_list.json
@@ -151,18 +127,11 @@ Example file structure:
 ├── libmysql.dll
 ├── libssl-3-x64.dll
 └── resources
-    └── data
-        └── area_list.json  
+    └── data 
         └── ...
 ```
 
-Most resource files should not be modified, however some can be customized to your liking:
-- `tpp_informationlist2.json`: list of messages visible when loading tpp.  
-- `mgo_informationlist2.json`: list of messages visible when loading mgo.  
-    available format variables:
-    - {online_players}: replaced with online player count
-    - {total_players}: replaced with total player count
-
+Most resource files should not be modified, however some can be customized to your liking.
 Feel free to explore the rest of the files and tweak any setting you want.
 
 ## Allow/Deny lists
@@ -185,11 +154,7 @@ Example:
 
 ## Commands
 
-- `set_motd_title`: Sets the message of the day title (visible in iDroid)
-- `set_motd_text`: Sets the message of the day text
-- `max_resources <player_id>`: Gives all resources to the player
 - `reload_lists`: Reloads allow/deny lists
-- `reload_scripts`: Reloads scripts
 - `query`: Runs an SQL query (mysql only)
 - `quit`: Shuts down the server
 

@@ -13,7 +13,7 @@ namespace emulator
 		{
 		}
 
-		virtual std::optional<nlohmann::json> decrypt_request(const std::string& data, std::optional<database::players::player>& player)
+		virtual std::optional<nlohmann::json> decrypt_request(const std::string& data, std::optional<database::users::user>& player)
 		{
 			return {};
 		}
@@ -23,7 +23,7 @@ namespace emulator
 			return false;
 		}
 
-		virtual std::optional<std::string> encrypt_response(nlohmann::json& request, nlohmann::json& data, const std::optional<database::players::player>& player)
+		virtual std::optional<std::string> encrypt_response(nlohmann::json& request, nlohmann::json& data, const std::optional<database::users::user>& player)
 		{
 			return {};
 		}

@@ -220,7 +220,7 @@ newaction {
 
 dependencies.load()
 
-workspace "tpp-server-emulator"
+workspace "mgv-server-emulator"
 	startproject "server"
 		location "./build"
 		objdir "%{wks.location}/obj"
@@ -319,7 +319,7 @@ workspace "tpp-server-emulator"
 			kind "ConsoleApp"
 			language "C++"
 
-			targetname "tpp-server-emulator"
+			targetname "mgv-server-emulator"
 
 			pchheader "std_include.hpp"
 			pchsource "src/server/std_include.cpp"

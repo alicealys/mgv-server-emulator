@@ -3,7 +3,7 @@
 #include "steam_openid.hpp"
 #include "delete_account.hpp"
 #include "database/auth.hpp"
-#include "database/models/steam_users.hpp"
+#include "database/models/users.hpp"
 
 #include <utils/http.hpp>
 
@@ -18,7 +18,7 @@ namespace emulator
 		const auto is_valid = steam_openid::verify_user(params, steam_id);
 		if (is_valid)
 		{
-			result["result"] = database::steam_users::delete_all_user_data(steam_id);
+			result["result"] = database::users::delete_all_user_data(steam_id);
 		}
 
 		return result;

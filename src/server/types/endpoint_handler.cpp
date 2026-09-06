@@ -4,14 +4,12 @@
 
 #include "component/console.hpp"
 
-#include "scripting/engine.hpp"
-
 namespace emulator
 {
 	std::optional<std::string> endpoint_handler::handle_command(const utils::request_params& params)
 	{
-		std::optional<database::players::player> player;
-		auto json_req_opt = this->decrypt_request(params.body, player);
+		std::optional<database::users::user> user;
+		auto json_req_opt = this->decrypt_request(params.body, user);
 		if (!json_req_opt.has_value())
 		{
 			return {};
@@ -34,7 +32,7 @@ namespace emulator
 
 		if (handler == this->handlers_.end())
 		{
-			console::warning("[Endpoint] Missing handler for \"%s\"\n", msgid_str.data());
+			console::warning("[Endpoint %s] Missing handler for \"%s\"\n", this->platform_.data(), msgid_str.data());
 			return {};
 		}
 
@@ -54,37 +52,14 @@ namespace emulator
 
 		auto get_json_response = [&]
 		{
-			const auto execute_command = [&]
+			if (handler->second->needs_user() && !user.has_value())
 			{
-				if (handler->second->needs_ip_address())
-				{
-					if (!params.address.is_valid)
-					{
-						console::warning("[Endpoint] Client doesn't have a valid ip address\n");
-						return error(ERR_INVALIDARG);
-					}
-
-					json_req["data"]["ip"] = std::format("{}.{}.{}.{}",
-						params.address.ip[0], params.address.ip[1], params.address.ip[2], params.address.ip[3]);
-				}
-
-				if (handler->second->needs_player() && !player.has_value())
-				{
-					return error(ERR_INVALID_SESSION);
-				}
-				else
-				{
-					return handler->second->execute(json_req["data"], player);
-				}
-			};
-
-			const auto json_opt = scripting::execute_command_hook(msgid_str, json_req["data"], player, execute_command);
-			if (json_opt.has_value())
-			{
-				return json_opt.value();
+				return error(ERR_INVALID_SESSION);
 			}
-
-			return execute_command();
+			else
+			{
+				return handler->second->execute(json_req["data"], user);
+			}
 		};
 
 		auto json_res = get_json_response();
@@ -100,7 +75,7 @@ namespace emulator
 		console::debug("[Endpoint] Command \"%s\" (%lli) result: %s\n", msgid_str.data(), id, result.data());
 #endif
 
-		return this->encrypt_response(json_req, json_res, player);
+		return this->encrypt_response(json_req, json_res, user);
 	}
 
 	void endpoint_handler::print_handler_name([[ maybe_unused ]] const std::string& name)

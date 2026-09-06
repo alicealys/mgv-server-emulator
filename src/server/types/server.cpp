@@ -2,9 +2,8 @@
 
 #include "server.hpp"
 
-#include "platforms/mgostm/mgostm_handler.hpp"
-#include "platforms/tppstm/tppstm_handler.hpp"
-#include "platforms/tppstmweb/tppstmweb_handler.hpp"
+#include "platforms/ssdstm/ssdstm_handler.hpp"
+#include "platforms/ssdstmweb/ssdstmweb_handler.hpp"
 #include "platforms/api/api_handler.hpp"
 
 #include "utils/encoding.hpp"
@@ -19,9 +18,8 @@ namespace emulator
 {
 	server::server()
 	{
-		this->register_handler<mgo::mgostm_handler>("mgostm");
-		this->register_handler<tpp::tppstm_handler>("tppstm");
-		this->register_handler<tppstmweb_handler>("tppstmweb");
+		this->register_handler<ssd::ssdstm_handler>("ssdstm");
+		this->register_handler<ssdstmweb_handler>("ssdstmweb");
 		this->register_handler<api_handler>("api");
 	}
 
