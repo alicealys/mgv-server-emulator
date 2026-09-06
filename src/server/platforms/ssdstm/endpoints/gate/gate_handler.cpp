@@ -15,6 +15,6 @@ namespace emulator::ssd
 		this->register_handler<cmd_get_urllist>("CMD_GET_URLLIST");
 		this->register_handler<cmd_get_svrlist>("CMD_GET_SVRLIST");
 		this->register_handler<cmd_get_svrtime>("CMD_GET_SVRTIME");
-		this->register_handler<cmd_maintenance_get_schedule>("CMD_MAINTENANCE_GET_SCHEDULE"); 
+		this->register_handler<cmd_maintenance_get_schedule>("CMD_MAINTENANCE_GET_SCHEDULE");
 	}
 }
