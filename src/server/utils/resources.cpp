@@ -14,6 +14,7 @@ namespace utils::resources
 		{
 			{RESOURCE_DATA, "resources/data/data.json"},
 			{RESOURCE_GDPR_CHECK, "resources/data/gdpr_check.json"},
+			{RESOURCE_PRODUCT_LIST, "resources/data/product_list.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},

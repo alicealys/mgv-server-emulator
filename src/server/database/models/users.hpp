@@ -75,6 +75,9 @@ namespace database::users
 		std::string get_nat() const;
 		std::uint64_t get_id() const;
 
+		const std::optional<players::player>& get_current_player() const;
+		std::optional<players::player>& get_current_player();
+
 	private:
 		std::uint32_t nat_{};
 		std::optional<players::player> current_player_{};
@@ -91,10 +94,12 @@ namespace database::users
 	bool generate_password(const std::uint64_t user_id, std::string& password);
 	bool generate_session(const std::uint64_t user_id, std::string& session_id, std::string& crypto_key);
 
-	void set_ip_and_port(const std::uint64_t player_id, const std::string& ex_ip, const std::uint16_t ex_port,
+	void set_ip_and_port(const std::uint64_t user_id, const std::string& ex_ip, const std::uint16_t ex_port,
 		const std::string& in_ip, const std::uint16_t in_port, const std::string& nat_type);
 
 	bool update_session(const user& user);
+
+	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id);
 
 	bool delete_all_user_data(const std::uint64_t account_id);
 }

@@ -2,13 +2,16 @@
 
 #include "cmd_dlc_get_flag.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	nlohmann::json cmd_dlc_get_flag::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
 	{
 		nlohmann::json result;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+
+		// TODO
+		result["consumable_count"] = {0, 0, 0, 0, 0, 0, 0, 0};
+        result["flag"] = 3759946752;
+
         return result;
 	}
 }

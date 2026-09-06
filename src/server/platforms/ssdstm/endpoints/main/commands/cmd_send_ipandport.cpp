@@ -32,4 +32,9 @@ namespace emulator::ssd
 
         return result;
 	}
+
+	bool cmd_send_ipandport::needs_user()
+	{
+		return true;
+	}
 }

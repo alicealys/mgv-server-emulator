@@ -99,6 +99,7 @@ RESOURCE_DLL_LIBSSL               RCDATA "../../deps/mysql/bin/libssl-3-x64.dll"
 
 RESOURCE_DATA                     RCDATA "resources/data/data.json"
 RESOURCE_GDPR_CHECK               RCDATA "resources/data/gdpr_check.json"
+RESOURCE_PRODUCT_LIST             RCDATA "resources/data/product_list.json"
 
 RESOURCE_SQL_MYSQL                RCDATA "resources/sql/mysql.sql"
 RESOURCE_SQL_SQLITE3              RCDATA "resources/sql/sqlite3.sql"

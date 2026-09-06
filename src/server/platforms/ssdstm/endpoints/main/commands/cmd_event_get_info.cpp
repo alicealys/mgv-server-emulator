@@ -2,13 +2,16 @@
 
 #include "cmd_event_get_info.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	nlohmann::json cmd_event_get_info::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
 	{
 		nlohmann::json result;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+
+		// TODO
+		result["event_list"] = nlohmann::json::array();
+		result["season_flag"] = 0;
+
         return result;
 	}
 }

@@ -12,7 +12,7 @@ create table if not exists `users`
 	ex_port					int unsigned	default 0,
 	in_port					int unsigned	default 0,
 	nat						int unsigned	default 0,
-	current_player_id		bigint unsigned default null,
+	current_player_id		bigint unsigned default null unique,
 	last_update				datetime        not null,
 	user_creation_date		datetime        not null
 )
@@ -23,6 +23,14 @@ create table if not exists `players`
 	f_user_id				bigint unsigned unique,
 	player_index			bigint unsigned unique default null,
 	player_creation_date	datetime        not null,
+	playtime				int unsigned default 0,
+	point					int unsigned default 0,
+	nameplate				int unsigned default 0,
+	avatar					blob default null,
+	loadout					blob default null,
+	mission_info			blob default null,
+	inventory				blob default null,
+	nonstackable_list		blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger
@@ -39,6 +47,23 @@ begin
         where f_user_id = NEW.f_user_id
     )
     where player_id = NEW.player_id;
+end
+-- query:mgssd.users.add_player_foreign_key
+alter table users
+add constraint current_player_id_fk 
+foreign key (`current_player_id`) references `players`(`player_id`)
+-- query:mgssd.users.remove_update_trigger
+drop trigger if exists players_insert_trigger
+-- query:mgssd.users.add_update_trigger
+create trigger players_insert_trigger
+before update on players
+for each row
+begin
+    select raise(fail, 'current_player_id check fail')
+    where not exists (
+        select 1 from players 
+        where player_id = NEW.current_player_id and f_user_id = NEW.user_id
+    );
 end
 -- query:mgssd.variables.create
 create table if not exists `variables`

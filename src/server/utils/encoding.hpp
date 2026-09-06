@@ -1,6 +1,7 @@
 #pragma once
 
 #include "http_server.hpp"
+#include <utils/cryptography.hpp>
 
 namespace utils::encoding
 {
@@ -16,5 +17,12 @@ namespace utils::encoding
 	{
 		const auto buffer = reinterpret_cast<char*>(reinterpret_cast<size_t>(&data));
 		return encode_as_hex(buffer, sizeof(T));
+	}
+
+	template <typename T>
+	std::string encode_base64(const T& data)
+	{
+		const auto buffer = reinterpret_cast<std::uint8_t*>(reinterpret_cast<size_t>(&data));
+		return utils::cryptography::base64::encode(buffer, sizeof(T));
 	}
 }

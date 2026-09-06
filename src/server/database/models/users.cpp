@@ -62,7 +62,14 @@ namespace database::users
 		namespace exp
 		{
 			const auto select =
-				sqlpp::select(sqlpp::all_of(user::table), sqlpp::all_of(players::player::table))
+				sqlpp::select(sqlpp::all_of(user::table), 
+						players::player::table.player_id, 
+						players::player::table.f_user_id, 
+						players::player::table.player_index, 
+						players::player::table.playtime, 
+						players::player::table.point, 
+						players::player::table.nameplate,
+						players::player::table.player_creation_date)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
 		}
 	}
@@ -89,6 +96,16 @@ namespace database::users
 	std::uint64_t user::get_id() const
 	{
 		return this->user_id_;
+	}
+
+	const std::optional<players::player>& user::get_current_player() const
+	{
+		return this->current_player_;
+	}
+
+	std::optional<players::player>& user::get_current_player()
+	{
+		return this->current_player_;
 	}
 
 	namespace impl
@@ -280,7 +297,7 @@ namespace database::users
 		}
 
 		template <database_type_t Type>
-		void set_ip_and_port(const std::uint64_t player_id, const std::string& ex_ip, const std::uint16_t ex_port,
+		void set_ip_and_port(const std::uint64_t user_id, const std::string& ex_ip, const std::uint16_t ex_port,
 			const std::string& in_ip, const std::uint16_t in_port, const std::string& nat_type)
 		{
 			const auto nat_type_id = get_nat_type_id(nat_type);
@@ -294,7 +311,20 @@ namespace database::users
 							 user::table.ex_port = ex_port,
 							 user::table.in_port = in_port,
 							 user::table.nat = nat_type_id)
-								.where(user::table.user_id == player_id));
+								.where(user::table.user_id == user_id));
+			});
+		}
+
+		template <database_type_t Type>
+		bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id)
+		{
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.current_player_id = player_id)
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
 			});
 		}
 	}
@@ -334,15 +364,20 @@ namespace database::users
 		RUN_IMPL(impl::generate_session, user_id, session_id, crypto_key);
 	}
 
-	void set_ip_and_port(const std::uint64_t player_id, const std::string& ex_ip, const std::uint16_t ex_port,
+	void set_ip_and_port(const std::uint64_t user_id, const std::string& ex_ip, const std::uint16_t ex_port,
 		const std::string& in_ip, const std::uint16_t in_port, const std::string& nat_type)
 	{
-		RUN_IMPL(impl::set_ip_and_port, player_id, ex_ip, ex_port, in_ip, in_port, nat_type);
+		RUN_IMPL(impl::set_ip_and_port, user_id, ex_ip, ex_port, in_ip, in_port, nat_type);
 	}
 
 	bool update_session(const user& user)
 	{
 		RUN_IMPL(impl::update_session, user);
+	}
+
+	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::set_current_player, user_id, player_id);
 	}
 
 	void delete_user_data(const std::uint64_t user_id)
