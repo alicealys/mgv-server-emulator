@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "endpoints/var_handler.hpp"
+#include "endpoints/parameter_handler.hpp"
 
 #include "ssdstmweb_handler.hpp"
 
@@ -13,5 +14,6 @@ namespace emulator
 		this->register_handler<var_handler>("gdpr", "gdpr/privacy.var", "null");
 		this->register_handler<var_handler>("privacy", "privacy/privacy.var", "null");
 		this->register_handler<var_handler>("privacy_jp", "privacy_jp/privacy.var", "null");
+		this->register_handler<parameter_handler>("parameter");
 	}
 }

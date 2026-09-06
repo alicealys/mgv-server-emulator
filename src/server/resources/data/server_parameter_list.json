@@ -1,0 +1,156 @@
+{
+    "unknown_list": [
+        {
+            "key": 554518978,
+            "value": 3
+        },
+        {
+            "key": 587298700,
+            "value": 20
+        },
+        {
+            "key": 684370535,
+            "value": 69
+        },
+        {
+            "key": 744952886,
+            "value": 10000
+        },
+        {
+            "key": 745868894,
+            "value": 150
+        },
+        {
+            "key": 778416320,
+            "value": 69
+        },
+        {
+            "key": 846360154,
+            "value": 5
+        },
+        {
+            "key": 1061220277,
+            "value": 15000
+        },
+        {
+            "key": 1129159320,
+            "value": 300
+        },
+        {
+            "key": 1146547764,
+            "value": 4
+        },
+        {
+            "key": 1258072605,
+            "value": 5000
+        },
+        {
+            "key": 1349653411,
+            "value": 10
+        },
+        {
+            "key": 1607752237,
+            "value": 15
+        },
+        {
+            "key": 1676289653,
+            "value": 45
+        },
+        {
+            "key": 1863494147,
+            "value": 45
+        },
+        {
+            "key": 2148278751,
+            "value": 600
+        },
+        {
+            "key": 2167793619,
+            "value": 200
+        },
+        {
+            "key": 2284863584,
+            "value": 15
+        },
+        {
+            "key": 2311914412,
+            "value": 2000
+        },
+        {
+            "key": 2578573372,
+            "value": 65536
+        },
+        {
+            "key": 2866099136,
+            "value": 300
+        },
+        {
+            "key": 2948817257,
+            "value": 15
+        },
+        {
+            "key": 2985096443,
+            "value": 450
+        },
+        {
+            "key": 3245852181,
+            "value": 1
+        },
+        {
+            "key": 3288016206,
+            "value": 2
+        },
+        {
+            "key": 3369752853,
+            "value": 45
+        },
+        {
+            "key": 3481480057,
+            "value": 300
+        },
+        {
+            "key": 3682853084,
+            "value": 69
+        },
+        {
+            "key": 3983762766,
+            "value": 0
+        },
+        {
+            "key": 4067774259,
+            "value": 15
+        }
+    ],
+    "file_list": [
+        "SsdBuildingParameterTable.param",
+        "DefenseGameBaseDigging.param",
+        "DefenseGameQuest.param",
+        "SsdBaseDefenseSettings.param",
+        "SsdBuffParameter.param",
+        "SsdBuffParameter_debug.param",
+        "SsdCollectionItems.param",
+        "SsdCombatDeployParameterTable.param",
+        "SsdEquipParameters.param",
+        "SsdEquipParameters_debug.param",
+        "SsdEquipParameters_opt.param",
+        "SsdPlayerParameters.param",
+        "SsdReplayMissionInfo_opt.param",
+        "SsdWalkerGearParameters.param",
+        "SsdWeaponParameters.param",
+        "SsdWeaponParameters_debug.param",
+        "SsdWeaponParameters_opt.param",
+        "SsdCrewGeneratorTable.param",
+        "SsdNpcLevelParameters.param",
+        "SsdDamageParameter.param",
+        "SsdDamageParameter_debug.param",
+        "SsdDamageParameter_opt.param",
+        "DefenseGameEmbeddedMission.param",
+        "SsdSbmParameters.param",
+        "SsdSbmParameters_debug.param",
+        "SsdSbmParameters_opt.param",
+        "DefenseGameEventMission.param",
+        "SsdBuffParameter_opt.param",
+        "SsdDlcMissionSettings.param",
+        "SsdUiCoopMissionInfo.param"
+    ]
+}
