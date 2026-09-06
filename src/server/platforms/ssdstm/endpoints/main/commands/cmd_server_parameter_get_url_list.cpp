@@ -11,7 +11,7 @@ namespace emulator::ssd
 		const auto base_url = config::get<std::string>("base_url");
 		auto list = resource(RESOURCE_SERVER_PARAMETER_LIST);
 
-		for (auto i = 0; i < list["file_list"].size(); i++)
+		for (auto i = 0ull; i < list["file_list"].size(); i++)
 		{
 			const auto name = list["file_list"][i].get<std::string>();
 			const auto path = std::format("resources/data/parameter/{}", name);
