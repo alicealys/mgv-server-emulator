@@ -10,12 +10,23 @@ discord server
 https://discord.gg/hYfW9MEEGF
 
 ## Downloads
+- [mgv-server-emulator-linux_x64.tar](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-linux_x64.tar)
+- [mgv-server-emulator-windows_x64.tar](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-windows_x64.tar)
 
 ### Binary only
 
+- [mgv-server-emulator.exe](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator.exe)
+- [mgv-server-emulator](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator) (linux x64)
+
 ### Version history
 
+https://archive.alicent.cat/mgv-server-emulator
+
 ## Documentation
+
+- [Usage/Installation](https://github.com/alicealys/mgv-server-emulator/blob/main/docs/usage.md)
+- [Progress](https://github.com/alicealys/mgv-server-emulator/blob/main/docs/progress.md)
+
 
 ## Compile from source
 
