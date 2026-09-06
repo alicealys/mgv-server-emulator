@@ -270,15 +270,21 @@ namespace auth
 		const auto user = database::users::find_or_insert(account_id);
 
 		auth_ticket_response response{};
+		if (!database::users::generate_password(user.get_user_id(), response.password))
+		{
+			return {};
+		}
+
 		response.account_id = std::to_string(account_id);
 		response.currency = user.get_currency();
-		response.password = database::users::generate_password(user.get_id());
 
 		return {response};
 	}
 
 	std::optional<auth_response> authenticate_user(const std::string& account_id, const std::string& password)
 	{
+		auth_response response{};
+
 		const auto account_id_int = std::strtoull(account_id.data(), nullptr, 10);
 		const auto user_opt = database::users::find_from_account(account_id_int);
 		if (!user_opt.has_value())
@@ -287,19 +293,19 @@ namespace auth
 		}
 
 		const auto& user = user_opt.value();
-
-		auth_response response{};
-
 		response.success = password == user.get_password_hash();
 		if (!response.success)
 		{
-			return {response};
+			return {};
 		}
 
-		response.user_id = user.get_id();
-		response.session_id = database::users::generate_session_id(account_id_int);
-		response.crypto_key = database::users::generate_crypto_key(account_id_int);
+		response.success = database::users::generate_session(user.get_user_id(), response.session_id, response.crypto_key);
+		if (!response.success)
+		{
+			return {};
+		}
 
+		response.user_id = user.get_user_id();
 		return {response};
 	}
 

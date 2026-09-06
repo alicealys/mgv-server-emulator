@@ -40,14 +40,14 @@ namespace database::auth_tokens
 
 			return database::access<bool>([&](database_t& db)
 			{
-				const auto exists = db.get_database<Type>()->operator()(
+				const auto exists = db.exec<Type>(
 					sqlpp::select(auth_token::table.id)
 						.from(auth_token::table)
 							.where(auth_token::table.type == type && auth_token::table.account_id == account_id));
 
 				if (exists.empty())
 				{
-					auto results = db.get_database<Type>()->operator()(
+					auto results = db.exec<Type>(
 						sqlpp::insert_into(auth_token::table)
 							.set(auth_token::table.account_id = account_id,
 								 auth_token::table.type = type,
@@ -58,7 +58,7 @@ namespace database::auth_tokens
 				}
 				else
 				{
-					auto results = db.get_database<Type>()->operator()(
+					auto results = db.exec<Type>(
 						sqlpp::update(auth_token::table)
 							.set(auth_token::table.token_hash = hash,
 							     auth_token::table.type = type,
@@ -76,7 +76,7 @@ namespace database::auth_tokens
 			const auto hash = utils::cryptography::sha256::compute(auth_token, true);
 			return database::access<bool>([&](database_t& db)
 			{
-				auto results = db.get_database<Type>()->operator()(
+				auto results = db.exec<Type>(
 					sqlpp::select(auth_token::table.account_id)
 						.from(auth_token::table)
 							.where(auth_token::table.type == type &&
@@ -94,7 +94,7 @@ namespace database::auth_tokens
 		{
 			return database::access([&](database_t& db)
 			{
-				db.get_database<Type>()->operator()(
+				db.exec<Type>(
 					sqlpp::remove_from(auth_token::table)
 						.where(auth_token::table.account_id == account_id));
 			});
@@ -121,7 +121,7 @@ namespace database::auth_tokens
 	public:
 		void create(database_t& database) override
 		{
-			database.run_query("mgvdb.auth_tokens.create");
+			database.run_query("mgssd.auth_tokens.create");
 		}
 	};
 }

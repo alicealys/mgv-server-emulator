@@ -15,7 +15,6 @@ namespace auth
 		std::uint64_t user_id;
 		std::string session_id;
 		std::string crypto_key;
-		std::string smart_device_id;
 	};
 
 	struct auth_ticket_custom_t

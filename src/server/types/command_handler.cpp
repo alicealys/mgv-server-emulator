@@ -43,7 +43,7 @@ namespace emulator
 
 	nlohmann::json player_info(const database::players::player& player)
 	{
-		return player_info(player.get_id(), player.get_account_id());
+		return player_info(player.get_player_id(), player.get_account_id());
 	}
 
 	nlohmann::json player_info(const std::optional<database::players::player>& player)

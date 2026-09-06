@@ -68,7 +68,7 @@ namespace utils::string
 			}
 			else
 			{
-				result.append(std::format("{:02X}", data[i] & 0xFF));
+				result.append(std::format("{:02x}", data[i] & 0xFF));
 			}
 		}
 

@@ -5,14 +5,14 @@
 - Download binary 
   - **[Windows x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-windows_x64.tar)**  
   - **[Linux x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-linux_x64.tar)**  
-- \***OPTIONAL**\* Setup a mysql server with a database called `mgvdb`.
+- \***OPTIONAL**\* Setup a mysql server with a database called `mgssd`.
 - In the EXE's path create a file called `config.json` and add the following values:
     * `database_type`: (default: `"mysql"`, options: "mysql", "sqlite3")
     * `database_user`: (default: `"root"`)
     * `database_password`: (default: `"root"`)
     * `database_host`: (default: `"localhost"`)
     * `database_port`: (default: `3306`)
-    * `database_name`: (default: `"mgvdb"`)
+    * `database_name`: (default: `"mgssd"`)
 - Run [mgv-mod](https://github.com/alicealys/mgv-mod) with the `+net_custom_server <url>` command line param.
 
 ## Config
@@ -28,7 +28,7 @@ Example config
     "key_file": "",
     "database_type": "sqlite3",
     "database_password": "root",
-    "database_name": "mgvdb",
+    "database_name": "mgssd",
     "auth_mode": "offline",
     "vars": {
         "session_heartbeat": 60,
