@@ -52,14 +52,18 @@ namespace emulator
 
 		auto get_json_response = [&]
 		{
-			if (handler->second->needs_user() && !user.has_value())
+			const auto flags = handler->second->flags();
+			if ((flags & CMD_NEEDS_USER) && !user.has_value())
 			{
 				return error(ERR_INVALID_SESSION);
 			}
-			else
+
+			if ((flags & CMD_NEEDS_PLAYER) && (!user.has_value() || !user->current_player.has_value()))
 			{
-				return handler->second->execute(json_req["data"], user);
+				return error(ERR_INVALID_SESSION);
 			}
+
+			return handler->second->execute(json_req["data"], user);
 		};
 
 		auto json_res = get_json_response();

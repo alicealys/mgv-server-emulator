@@ -129,3 +129,36 @@ public: \
 		return this->__name__##_; \
 	} \
 
+#define DEF_BINARY_GET(__table__, __type__, __name__) \
+		template <database_type_t Type> \
+		void get_##__name__(const std::uint64_t __table__##_id, __type__& __name__) \
+		{ \
+			std::memset(&__name__, 0, sizeof(__type__)); \
+			database::access([&](database::database_t& db) \
+			{ \
+				auto results = db.get_database<Type>()->operator()( \
+					sqlpp::select(__table__::table.__name__) \
+							.from(__table__::table) \
+								.where(__table__::table.__table__##_id == __table__##_id)); \
+				if (results.empty()) \
+				{ \
+					return; \
+				} \
+				const auto data = results.front().__name__.value(); \
+				load_binary_field(&__name__, data); \
+			}); \
+		} \
+
+#define DEF_BINARY_SET(__table__, __type__, __name__) \
+		template <database_type_t Type> \
+		bool set_##__name__(const std::uint64_t __table__##id, __type__& __name__) \
+		{ \
+			return database::access<bool>([&](database::database_t& db) \
+			{ \
+				auto result = db.get_database<Type>()->operator()( \
+					sqlpp::update(__table__::table) \
+							.set(__table__::table.__name__ = sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(__name__))) \
+								.where(__table__::table.__table__##_id == __table__##id)); \
+				return result != 0ull; \
+			}); \
+		} \

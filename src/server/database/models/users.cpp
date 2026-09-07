@@ -5,6 +5,9 @@
 #include "variables.hpp"
 #include "../auth.hpp"
 
+#include "utils/encoding.hpp"
+#include "utils/json_utils.hpp"
+
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
 
@@ -69,9 +72,99 @@ namespace database::users
 						players::player::table.playtime, 
 						players::player::table.point, 
 						players::player::table.nameplate,
+						players::player::table.loadout_count,
+						players::player::table.current_loadout,
 						players::player::table.player_creation_date)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
 		}
+
+		const nlohmann::json& get_default_data()
+		{
+			static const auto data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
+			return data;
+		}
+
+		const nlohmann::json& get_default_data(const std::string_view& key)
+		{
+			const auto& data = get_default_data();
+			return data[key];
+		}
+	}
+
+	void user_inventory_t::initialize()
+	{
+		static const auto default_inventory = []()
+		{
+			static user_inventory_t data{};
+
+			const auto& default_data = get_default_data("inventory_user_info");
+			const auto load = [&]<typename T>(const std::string_view& key, T& buffer)
+			{
+				auto data = default_data[key].get<std::string>();
+				data = utils::cryptography::base64::decode(data);
+
+				if (data.size() != sizeof(T))
+				{
+					throw std::runtime_error("invalid user inventory data");
+				}
+
+				std::memcpy(buffer, data.data(), sizeof(T));
+			};
+
+			load("archive_new", data.archive_new);
+			load("archive_obtained", data.archive_obtained);
+			load("battle_pack_opened", data.battle_pack_opened);
+			load("cassette_new", data.cassette_new);
+			load("cassette_obtained", data.cassette_obtained);
+			load("command_marker_obtained", data.command_marker_obtained);
+			load("face_paint_new", data.face_paint_new);
+			load("face_paint_obtained", data.face_paint_obtained);
+			load("food_used", data.food_used);
+			load("gesture_new", data.gesture_new);
+			load("gesture_obtained", data.gesture_obtained);
+			load("name_plate_new", data.name_plate_new);
+			load("name_plate_obtained", data.name_plate_obtained);
+			load("preset_radio_obtained", data.preset_radio_obtained);
+			load("production_opened", data.production_opened);
+			load("recipe_new", data.recipe_new);
+			load("recipe_new_for_db", data.recipe_new_for_db);
+			load("recipe_opened", data.recipe_opened);
+			load("recipe_used", data.recipe_used);
+			load("resource_opened", data.resource_opened);
+
+			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].get<std::uint8_t>();
+
+			return &data;
+		}();
+
+		std::memcpy(this, default_inventory, sizeof(user_inventory_t));
+	}
+
+	void user_inventory_t::to_json(nlohmann::json& data)
+	{
+		data["archive_new"] = utils::encoding::encode_base64(this->archive_new);
+		data["archive_obtained"] = utils::encoding::encode_base64(this->archive_obtained);
+		data["battle_pack_opened"] = utils::encoding::encode_base64(this->battle_pack_opened);
+		data["cassette_new"] = utils::encoding::encode_base64(this->cassette_new);
+		data["cassette_obtained"] = utils::encoding::encode_base64(this->cassette_obtained);
+		data["command_marker_new"] = utils::encoding::encode_base64(this->command_marker_new);
+		data["command_marker_obtained"] = utils::encoding::encode_base64(this->command_marker_obtained);
+		data["face_paint_new"] = utils::encoding::encode_base64(this->face_paint_new);
+		data["face_paint_obtained"] = utils::encoding::encode_base64(this->face_paint_obtained);
+		data["food_used"] = utils::encoding::encode_base64(this->food_used);
+		data["gesture_new"] = utils::encoding::encode_base64(this->gesture_new);
+		data["gesture_obtained"] = utils::encoding::encode_base64(this->gesture_obtained);
+		data["name_plate_new"] = utils::encoding::encode_base64(this->name_plate_new);
+		data["name_plate_obtained"] = utils::encoding::encode_base64(this->name_plate_obtained);
+		data["preset_radio_new"] = utils::encoding::encode_base64(this->preset_radio_new);
+		data["preset_radio_obtained"] = utils::encoding::encode_base64(this->preset_radio_obtained);
+		data["production_opened"] = utils::encoding::encode_base64(this->production_opened);
+		data["recipe_new"] = utils::encoding::encode_base64(this->recipe_new);
+		data["recipe_new_for_db"] = utils::encoding::encode_base64(this->recipe_new_for_db);
+		data["recipe_opened"] = utils::encoding::encode_base64(this->recipe_opened);
+		data["recipe_used"] = utils::encoding::encode_base64(this->recipe_used);
+		data["resource_opened"] = utils::encoding::encode_base64(this->resource_opened);
+		data["bgm_my_list_setting"] = this->bgm_my_list_setting;
 	}
 
 	GET_FIELD_C(user, std::uint64_t, user_id);
@@ -85,8 +178,61 @@ namespace database::users
 	GET_FIELD_C(user, std::string, in_ip);
 	GET_FIELD_C(user, std::uint16_t, ex_port);
 	GET_FIELD_C(user, std::uint16_t, in_port);
+	GET_FIELD_C(user, std::uint32_t, user_flag);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
+
+	bool user_inventory_t::parse_save(nlohmann::json& data)
+	{
+		const auto try_parse_part = [&]<typename T>(const std::string_view& name, T& dest)
+		{
+			auto& value_j = data[name];
+			if (!value_j.is_array() || value_j.size() <= 0)
+			{
+				return;
+			}
+
+			value_j = value_j[0];
+			if (!value_j.is_object())
+			{
+				return;
+			}
+
+			auto& data_j = value_j[name];
+			if (!value_j.is_string())
+			{
+				return;
+			}
+
+			utils::json::parse_base64(data_j, dest, true);
+		};
+
+		try_parse_part("archive_new", this->archive_new);
+		try_parse_part("archive_obtained", this->archive_obtained);
+		try_parse_part("battle_pack_opened", this->battle_pack_opened);
+		try_parse_part("cassette_new", this->cassette_new);
+		try_parse_part("cassette_obtained", this->cassette_obtained);
+		try_parse_part("command_marker_new", this->command_marker_new);
+		try_parse_part("command_marker_obtained", this->command_marker_obtained);
+		try_parse_part("face_paint_new", this->face_paint_new);
+		try_parse_part("face_paint_obtained", this->face_paint_obtained);
+		try_parse_part("food_used", this->food_used);
+		try_parse_part("gesture_new", this->gesture_new);
+		try_parse_part("gesture_obtained", this->gesture_obtained);
+		try_parse_part("name_plate_new", this->name_plate_new);
+		try_parse_part("name_plate_obtained", this->name_plate_obtained);
+		try_parse_part("preset_radio_new", this->preset_radio_new);
+		try_parse_part("preset_radio_obtained", this->preset_radio_obtained);
+		try_parse_part("production_opened", this->production_opened);
+		try_parse_part("recipe_new", this->recipe_new);
+		try_parse_part("recipe_new_for_db", this->recipe_new_for_db);
+		try_parse_part("recipe_opened", this->recipe_opened);
+		try_parse_part("recipe_used", this->recipe_used);
+		try_parse_part("resource_opened", this->resource_opened);
+
+		utils::json::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		return true;
+	}
 
 	std::string user::get_nat() const
 	{
@@ -96,16 +242,6 @@ namespace database::users
 	std::uint64_t user::get_id() const
 	{
 		return this->user_id_;
-	}
-
-	const std::optional<players::player>& user::get_current_player() const
-	{
-		return this->current_player_;
-	}
-
-	std::optional<players::player>& user::get_current_player()
-	{
-		return this->current_player_;
 	}
 
 	namespace impl
@@ -203,12 +339,20 @@ namespace database::users
 				}
 			}
 
+			static const auto default_inventory = []()
+			{
+				static user_inventory_t inventory{};
+				inventory.initialize();
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(inventory));
+			}();
+
 			database::access([&](database::database_t& db)
 			{
 				db.exec<Type>(
 					sqlpp::insert_into(user::table)
 						.set(user::table.account_id = account_id,
 							 user::table.currency = "EUR",
+							 user::table.user_inventory = default_inventory,
 							 user::table.last_update = std::chrono::system_clock::now(),
 							 user::table.user_creation_date = std::chrono::system_clock::now()));
 			});
@@ -327,6 +471,32 @@ namespace database::users
 				return result != 0ull;
 			});
 		}
+
+		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
+		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
+
+		DEF_BINARY_SET(user, user_inventory_t, user_inventory);
+		DEF_BINARY_SET(user, user_play_record_t, user_play_record);
+	}
+
+	void user::get_inventory(user_inventory_t& user_inventory) const
+	{
+		RUN_IMPL(impl::get_user_inventory, this->get_user_id(), user_inventory);
+	}
+
+	void user::get_play_record(user_play_record_t& play_record) const
+	{
+		RUN_IMPL(impl::get_user_play_record, this->get_user_id(), play_record);
+	}
+
+	bool user::set_inventory(user_inventory_t& user_inventory) const
+	{
+		RUN_IMPL(impl::set_user_inventory, this->get_user_id(), user_inventory);
+	}
+
+	bool user::set_play_record(user_play_record_t& play_record) const
+	{
+		RUN_IMPL(impl::set_user_play_record, this->get_user_id(), play_record);
 	}
 
 	std::optional<user> find(const std::uint64_t user_id)

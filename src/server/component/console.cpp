@@ -809,7 +809,7 @@ namespace console
 	public:
 		void pre_start() override
 		{
-			SetConsoleTitle("tpp-server-emulator");
+			SetConsoleTitle("mgv-server-emulator");
 
 			SetConsoleCtrlHandler(console_ctrl_handler, TRUE);
 

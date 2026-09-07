@@ -5,6 +5,43 @@
 
 namespace database::users
 {
+	struct user_inventory_t
+	{
+		std::uint8_t archive_new[32];
+		std::uint8_t archive_obtained[32];
+		std::uint8_t battle_pack_opened[128];
+		std::uint8_t bgm_my_list_setting;
+		std::uint8_t cassette_new[64];
+		std::uint8_t cassette_obtained[64];
+		std::uint8_t command_marker_new[16];
+		std::uint8_t command_marker_obtained[16];
+		std::uint8_t face_paint_new[8];
+		std::uint8_t face_paint_obtained[8];
+		std::uint8_t food_used[128];
+		std::uint8_t gesture_new[16];
+		std::uint8_t gesture_obtained[16];
+		std::uint8_t name_plate_new[32];
+		std::uint8_t name_plate_obtained[32];
+		std::uint8_t preset_radio_new[32];
+		std::uint8_t preset_radio_obtained[32]; // all FF
+		std::uint8_t production_opened[256];
+		std::uint8_t recipe_new[256];
+		std::uint8_t recipe_new_for_db[256];
+		std::uint8_t recipe_opened[256];
+		std::uint8_t recipe_used[256];
+		std::uint8_t resource_opened[128];
+
+		void initialize();
+		bool parse_save(nlohmann::json& data);
+		void to_json(nlohmann::json& data);
+	};
+
+	struct user_play_record_t
+	{
+		std::uint32_t first[191];
+		std::uint32_t additional[46];
+	};
+
 	class user
 	{
 	public:
@@ -22,6 +59,9 @@ namespace database::users
 		DEFINE_FIELD(nat, sqlpp::integer_unsigned);
 		DEFINE_FIELD(last_update, sqlpp::time_point);
 		DEFINE_FIELD(user_creation_date, sqlpp::time_point);
+		DEFINE_FIELD(user_flag, sqlpp::integer_unsigned);
+		DEFINE_FIELD(user_inventory, sqlpp::binary);
+		DEFINE_FIELD(user_play_record, sqlpp::binary);
 		DEFINE_TABLE(users,
 			user_id_field_t, 
 			account_id_field_t, session_id_field_t, 
@@ -29,7 +69,8 @@ namespace database::users
 			password_hash_field_t, crypto_key_field_t,
 			currency_field_t,
 			ex_ip_field_t, ex_port_field_t, in_ip_field_t, in_port_field_t, nat_field_t,
-			last_update_field_t, user_creation_date_field_t
+			last_update_field_t, user_creation_date_field_t, user_flag_field_t,
+			user_inventory_field_t, user_play_record_field_t
 		);
 
 		inline static table_t table;
@@ -51,10 +92,11 @@ namespace database::users
 			this->nat_ = static_cast<std::uint32_t>(row.nat);
 			this->last_update_ = row.last_update.value().time_since_epoch();
 			this->creation_date_ = row.user_creation_date.value().time_since_epoch();
+			this->user_flag_ = static_cast<std::uint32_t>(row.user_flag);
 
 			if (!row.player_id.is_null())
 			{
-				this->current_player_.emplace(players::player(row));
+				this->current_player.emplace(players::player(row));
 			}
 		}
 
@@ -69,18 +111,23 @@ namespace database::users
 		GET_FIELD_H(std::string, in_ip);
 		GET_FIELD_H(std::uint16_t, ex_port);
 		GET_FIELD_H(std::uint16_t, in_port);
+		GET_FIELD_H(std::uint32_t, user_flag);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
 		std::string get_nat() const;
 		std::uint64_t get_id() const;
 
-		const std::optional<players::player>& get_current_player() const;
-		std::optional<players::player>& get_current_player();
+		void get_inventory(user_inventory_t& inventory) const;
+		void get_play_record(user_play_record_t& play_record) const;
+
+		bool set_inventory(user_inventory_t& inventory) const;
+		bool set_play_record(user_play_record_t& play_record) const;
+
+		std::optional<players::player> current_player{};
 
 	private:
 		std::uint32_t nat_{};
-		std::optional<players::player> current_player_{};
 
 	};
 

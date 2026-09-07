@@ -4,6 +4,8 @@
 
 #include "database/models/players.hpp"
 
+#include "utils/encoding.hpp"
+
 namespace emulator::ssd
 {
 	nlohmann::json cmd_get_playerlist::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
@@ -11,8 +13,8 @@ namespace emulator::ssd
 		nlohmann::json result;
 
 		auto avatar = std::make_unique<database::players::avatar_t>();
-		auto loadout = std::make_unique<database::players::loadout_t>();
-		auto inventory = std::make_unique<database::players::inventory_t>();
+		auto loadout_list = std::make_unique<database::players::loadout_list_t>();
+		auto inventory = std::make_unique<database::players::player_inventory_t>();
 		auto mission_info = std::make_unique<database::players::mission_info_t>();
 		auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
 
@@ -26,21 +28,24 @@ namespace emulator::ssd
 			auto& status = entry["avatar_status_info"];
 
 			player.get_avatar(*avatar);
-			player.get_loadout(*loadout);
+			player.get_loadout_list(*loadout_list);
 			player.get_inventory(*inventory);
 			player.get_mission_info(*mission_info);
 			player.get_nonstackable_list(*nonstackable_list);
 
+			const auto current_loadout_idx = player.get_current_loadout();
+			const auto& current_loadout = loadout_list->list[current_loadout_idx];
+
 			avatar->to_json(entry["avatar_info"]);
-			loadout->to_json(equipment_info["loadout"]);
+			current_loadout.to_json(equipment_info["loadout"], current_loadout_idx);
 			nonstackable_list->to_json(equipment_info["nonstackable_list"]);
 
-			for (auto o = 0; o < 5; o++)
+			for (auto o = 0ull; o < ARRAYSIZE(inventory->energy_invested); o++)
 			{
 				equipment_info["energy_invested"][o] = inventory->energy_invested[o];
 			}
 
-			equipment_info["skill_status"] = ""; // TODO !!!!
+			equipment_info["skill_status"] = utils::encoding::encode_base64(inventory->skill_status);
 
 			status["equipment_slot"] = mission_info->equipment_slot;
 			status["hunger"] = mission_info->hunger;
@@ -49,7 +54,7 @@ namespace emulator::ssd
 			status["oxygen"] = mission_info->oxygen;
 			status["sequence_number"] = mission_info->sequence_number;
 			status["stamina"] = mission_info->stamina;
-			status["story_sequence"] = 0; // todo!!
+			status["story_sequence"] = mission_info->story_sequence_number;
 			status["thirst"] = mission_info->thirst;
 			status["tiredness"] = mission_info->tiredness;
 
@@ -71,8 +76,8 @@ namespace emulator::ssd
         return result;
 	}
 
-	bool cmd_get_playerlist::needs_user()
+	std::uint32_t cmd_get_playerlist::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

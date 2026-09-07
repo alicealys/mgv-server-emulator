@@ -16,7 +16,7 @@ namespace emulator::ssd
         return result;
 	}
 
-	bool cmd_update_session::needs_user()
+	std::uint32_t cmd_update_session::flags()
 	{
 		return true;
 	}

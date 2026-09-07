@@ -8,21 +8,20 @@ namespace emulator::ssd
 	{
 		nlohmann::json result;
 
-		const auto& player = user->get_current_player();
-		if (!player.has_value())
+		if (!user->current_player.has_value())
 		{
 			return error(ERR_PLAYER_NOTFOUND);
 		}
 
 		auto avatar = std::make_unique<database::players::avatar_t>();
-		player->get_avatar(*avatar);
+		user->current_player->get_avatar(*avatar);
 		avatar->to_json(result["avatar"]);
 
         return result;
 	}
 
-	bool cmd_avatar_load::needs_user()
+	std::uint32_t cmd_avatar_load::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

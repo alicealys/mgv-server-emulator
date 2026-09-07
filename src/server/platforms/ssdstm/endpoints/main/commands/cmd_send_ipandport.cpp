@@ -33,8 +33,8 @@ namespace emulator::ssd
         return result;
 	}
 
-	bool cmd_send_ipandport::needs_user()
+	std::uint32_t cmd_send_ipandport::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

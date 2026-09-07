@@ -28,8 +28,8 @@ namespace emulator::ssd
         return result;
 	}
 
-	bool cmd_create_player::needs_user()
+	std::uint32_t cmd_create_player::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

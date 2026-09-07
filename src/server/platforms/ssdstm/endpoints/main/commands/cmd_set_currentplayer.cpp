@@ -35,8 +35,8 @@ namespace emulator::ssd
         return result;
 	}
 
-	bool cmd_set_currentplayer::needs_user()
+	std::uint32_t cmd_set_currentplayer::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

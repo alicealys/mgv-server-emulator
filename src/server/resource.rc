@@ -101,6 +101,7 @@ RESOURCE_DATA                     RCDATA "resources/data/data.json"
 RESOURCE_GDPR_CHECK               RCDATA "resources/data/gdpr_check.json"
 RESOURCE_PRODUCT_LIST             RCDATA "resources/data/product_list.json"
 RESOURCE_SERVER_PARAMETER_LIST    RCDATA "resources/data/server_parameter_list.json"
+RESOURCE_DEFAULT_DATA             RCDATA "resources/data/default_data.json"
 
 RESOURCE_SQL_MYSQL                RCDATA "resources/sql/mysql.sql"
 RESOURCE_SQL_SQLITE3              RCDATA "resources/sql/sqlite3.sql"

@@ -15,6 +15,9 @@ create table if not exists `users`
 	current_player_id		bigint unsigned default null unique,
 	last_update				datetime		default null,
 	user_creation_date		datetime		default null,
+	user_flag				int unsigned 	default 0,
+	user_inventory			blob			default null,
+	user_play_record		blob			default null,
 	primary key (`user_id`)
 )
 -- query:mgssd.players.create
@@ -27,11 +30,17 @@ create table if not exists `players`
 	playtime				int unsigned default 0,
 	point					int unsigned default 0,
 	nameplate				int unsigned default 0,
+	current_loadout			int unsigned default 0,
+	loadout_count			int unsigned default 4,
 	avatar					blob default null,
-	loadout					blob default null,
+	loadout_list			blob default null,
 	mission_info			blob default null,
 	inventory				blob default null,
 	nonstackable_list		blob default null,
+	gimmick_info			blob default null,
+	gimmick_data_afghan		blob default null,
+	gimmick_data_africa		blob default null,
+	player_play_record		blob default null,
 	primary key (`player_id`),
 	foreign key (`f_user_id`) references `users`(`user_id`)
 )

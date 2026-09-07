@@ -6,6 +6,12 @@
 
 namespace emulator
 {
+	enum command_flags_t
+	{
+		CMD_NEEDS_USER = (1 << 0),
+		CMD_NEEDS_PLAYER = (1 << 1),
+	};
+
 	class command_handler
 	{
 	public:
@@ -18,9 +24,9 @@ namespace emulator
 			throw std::runtime_error("unimplemented command");
 		};
 
-		virtual bool needs_user()
+		virtual std::uint32_t flags()
 		{
-			return false;
+			return 0u;
 		}
 	};
 
