@@ -7,7 +7,7 @@ namespace emulator
 	public:
 		parameter_handler();
 
-		std::optional<std::string> handle_command(const utils::request_params& params) override;
+		void handle_command(const utils::request_params& request, utils::response_params& response) override;
 
 	private:
 		std::unordered_map<std::string, std::string> parameters_;

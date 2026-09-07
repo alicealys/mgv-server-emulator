@@ -767,7 +767,7 @@ namespace utils::cryptography
 		const auto decoded_data = utils::cryptography::base64::decode(data);
 		if (decoded_data.size() == 0 || (decoded_data.size() % 8) != 0)
 		{
-			throw std::runtime_error("invalid data");
+			return {};
 		}
 
 		std::string text;

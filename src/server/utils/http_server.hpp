@@ -33,8 +33,15 @@ namespace utils
 		request_query query;
 	};
 
+	enum response_type_t
+	{
+		response_text = 0,
+		response_file = 1,
+	};
+
 	struct response_params
 	{
+		response_type_t type{};
 		std::uint32_t code{};
 		std::string headers;
 		std::string body;

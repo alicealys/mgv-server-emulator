@@ -226,7 +226,20 @@ namespace utils
 		{
 			auto data = reinterpret_cast<mg_str*>(ev_data);
 			auto response = *reinterpret_cast<response_params**>(data->buf);
-			mg_http_reply(c, response->code, response->headers.data(), "%s", response->body.data());
+			switch (response->type)
+			{
+			case response_file:
+			{
+				mg_http_serve_opts options{};
+				const auto http_message = static_cast<mg_http_message*>(ev_data);
+				mg_http_serve_file(c, http_message, response->body.data(), &options);
+				break;
+			}
+			default:
+			case response_text:
+				mg_http_reply(c, response->code, response->headers.data(), "%s", response->body.data());
+				break;
+			}
 			break;
 		}
 		case MG_EV_CLOSE:

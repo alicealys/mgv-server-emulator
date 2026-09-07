@@ -6,25 +6,25 @@
 
 namespace emulator
 {
-	std::optional<std::string> endpoint_handler::handle_command(const utils::request_params& params)
+	void endpoint_handler::handle_command(const utils::request_params& request, utils::response_params& response)
 	{
 		std::optional<database::users::user> user;
-		auto json_req_opt = this->decrypt_request(params.body, user);
+		auto json_req_opt = this->decrypt_request(request.body, user);
 		if (!json_req_opt.has_value())
 		{
-			return {};
+			return;
 		}
 
 		auto& json_req = json_req_opt.value();
 		if (!this->verify_request(json_req))
 		{
-			return {};
+			return;
 		}
 
 		const auto& session_key = json_req["session_key"];
 		if (!session_key.is_string())
 		{
-			return {};
+			return;
 		}
 
 		const auto msgid_str = json_req["data"]["msgid"].get<std::string>();
@@ -33,7 +33,7 @@ namespace emulator
 		if (handler == this->handlers_.end())
 		{
 			console::warning("[Endpoint %s] Missing handler for \"%s\"\n", this->platform_.data(), msgid_str.data());
-			return {};
+			return;
 		}
 
 #ifdef DEBUG
@@ -79,7 +79,11 @@ namespace emulator
 		console::debug("[Endpoint] Command \"%s\" (%lli) result: %s\n", msgid_str.data(), id, result.data());
 #endif
 
-		return this->encrypt_response(json_req, json_res, user);
+		const auto encrypt = this->encrypt_response(json_req, json_res, user);
+		if (encrypt.has_value())
+		{
+			response.body = encrypt.value();
+		}
 	}
 
 	void endpoint_handler::print_handler_name([[ maybe_unused ]] const std::string& name)

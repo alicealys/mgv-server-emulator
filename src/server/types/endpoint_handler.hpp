@@ -28,7 +28,7 @@ namespace emulator
 			return {};
 		}
 
-		virtual std::optional<std::string> handle_command(const utils::request_params& params);
+		virtual void handle_command(const utils::request_params& request, utils::response_params& response);
 
 		void print_handler_name([[ maybe_unused ]] const std::string& name) override;
 

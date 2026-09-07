@@ -10,13 +10,13 @@ namespace emulator
 	{
 	}
 
-	std::optional<std::string> var_handler::handle_command(const utils::request_params& params)
+	void var_handler::handle_command(const utils::request_params& request, utils::response_params& response)
 	{
-		if (params.uri == "/ssdstmweb/"s + this->name_)
-		{
-			return {this->value_};
-		}
+		response.headers.append("Content-Type: text/plain\n");
 
-		return {};
+		if (request.uri == "/ssdstmweb/"s + this->name_)
+		{
+			response.body = this->value_;
+		}
 	}
 }

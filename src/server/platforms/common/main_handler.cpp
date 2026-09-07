@@ -22,17 +22,26 @@ namespace emulator
 	{
 		const auto decoded_data = utils::encoding::decode_url_string(data);
 		const auto str = this->blow_.decrypt(decoded_data);
-		auto json = nlohmann::json::parse(str);
+		if (str.empty())
+		{
+			return {};
+		}
+
+		auto json = nlohmann::json::parse(str, nullptr, false);
+		if (json.is_discarded())
+		{
+			return {};
+		}
 
 		if (!json["data"].is_string())
 		{
-			return json;
+			return {json};
 		}
 
 		const auto& compressed_val = json["compress"];
 		if (!compressed_val.is_boolean())
 		{
-			return json;
+			return {json};
 		}
 
 		const auto compressed = compressed_val.get<bool>();
@@ -46,7 +55,7 @@ namespace emulator
 			if (!user.has_value())
 			{
 				json["data"] = {};
-				return json;
+				return {json};
 			}
 
 			utils::cryptography::blowfish session_blow;
@@ -83,7 +92,7 @@ namespace emulator
 			}
 		}
 
-		return json;
+		return {json};
 	}
 
 	bool main_handler::verify_request(nlohmann::json& request)

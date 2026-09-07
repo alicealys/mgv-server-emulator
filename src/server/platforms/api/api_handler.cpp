@@ -10,10 +10,11 @@
 
 namespace emulator
 {
-	std::optional<std::string> api_endpoint::handle_command(const utils::request_params& params)
+	void api_endpoint::handle_command(const utils::request_params& request, utils::response_params& response)
 	{
-		const auto result = this->handle_request(params);
-		return result.dump();
+		const auto result = this->handle_request(request);
+		response.body = result.dump();
+		response.headers.append("Content-Type: application/json\n");
 	}
 
 	api_handler::api_handler()
@@ -24,7 +25,6 @@ namespace emulator
 			return;
 		}
 
-		this->set_content_type("application/json");
 		this->register_handler<steam_openid>("steam_openid");
 		this->register_handler<steam_openid_url>("steam_openid_url");
 		this->register_handler<status>("status");

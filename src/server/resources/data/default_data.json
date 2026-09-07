@@ -24994,5 +24994,672 @@
     "tips_open_info": {
         "data": "AA=="
     },
-    "user_flag": 0
+    "user_flag": 0,
+    "cell_info": {
+        "center_info": [
+            {
+                "column": 27,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 308,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 2
+            },
+            {
+                "column": 21,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 2000,
+                "max_life": 2000,
+                "production_id": 303,
+                "recovery_time": 0,
+                "rotation": 3,
+                "row": 3
+            },
+            {
+                "column": 8,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 305,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 4
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 305,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 4
+            },
+            {
+                "column": 2,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 308,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 6
+            },
+            {
+                "column": 16,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 306,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 6
+            },
+            {
+                "column": 4,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 305,
+                "recovery_time": 0,
+                "rotation": 3,
+                "row": 7
+            },
+            {
+                "column": 10,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 306,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 7
+            },
+            {
+                "column": 23,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1,
+                "max_life": 1,
+                "production_id": 314,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 7
+            },
+            {
+                "column": 25,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 305,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 7
+            },
+            {
+                "column": 18,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 9
+            },
+            {
+                "column": 28,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 301,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 9
+            },
+            {
+                "column": 9,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 301,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 11
+            },
+            {
+                "column": 6,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 3,
+                "row": 12
+            },
+            {
+                "column": 21,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 12
+            },
+            {
+                "column": 25,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 306,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 12
+            },
+            {
+                "column": 29,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 307,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 14
+            },
+            {
+                "column": 4,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 305,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 15
+            },
+            {
+                "column": 9,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 308,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 16
+            },
+            {
+                "column": 11,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1500,
+                "max_life": 1500,
+                "production_id": 85,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 16
+            },
+            {
+                "column": 23,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 306,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 16
+            },
+            {
+                "column": 11,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1500,
+                "max_life": 1500,
+                "production_id": 83,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 17
+            },
+            {
+                "column": 6,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 3,
+                "row": 18
+            },
+            {
+                "column": 11,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1500,
+                "max_life": 1500,
+                "production_id": 81,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 18
+            },
+            {
+                "column": 12,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1500,
+                "max_life": 1500,
+                "production_id": 77,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 18
+            },
+            {
+                "column": 19,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 307,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 18
+            },
+            {
+                "column": 26,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 300,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 18
+            },
+            {
+                "column": 9,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 301,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 20
+            },
+            {
+                "column": 22,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 301,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 20
+            },
+            {
+                "column": 26,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 306,
+                "recovery_time": 0,
+                "rotation": 3,
+                "row": 21
+            },
+            {
+                "column": 18,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 22
+            },
+            {
+                "column": 23,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1,
+                "max_life": 1,
+                "production_id": 314,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 23
+            },
+            {
+                "column": 12,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 304,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 24
+            },
+            {
+                "column": 28,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 2000,
+                "max_life": 2000,
+                "production_id": 303,
+                "recovery_time": 0,
+                "rotation": 0,
+                "row": 24
+            },
+            {
+                "column": 8,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 500,
+                "max_life": 500,
+                "production_id": 307,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 25
+            },
+            {
+                "column": 25,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 1,
+                "max_life": 1,
+                "production_id": 314,
+                "recovery_time": 0,
+                "rotation": 2,
+                "row": 25
+            },
+            {
+                "column": 3,
+                "completion_remaining_time": 0,
+                "extra_data": 0,
+                "life": 2000,
+                "max_life": 2000,
+                "production_id": 303,
+                "recovery_time": 0,
+                "rotation": 1,
+                "row": 27
+            }
+        ],
+        "left_edge_info": [
+            {
+                "column": 19,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 11
+            },
+            {
+                "column": 19,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 12
+            },
+            {
+                "column": 19,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 14
+            },
+            {
+                "column": 20,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 16
+            }
+        ],
+        "upper_edge_info": [
+            {
+                "column": 14,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 8
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 8
+            },
+            {
+                "column": 17,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 8
+            },
+            {
+                "column": 18,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 8
+            },
+            {
+                "column": 12,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 10
+            },
+            {
+                "column": 13,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 10
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 10
+            },
+            {
+                "column": 16,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 10
+            },
+            {
+                "column": 13,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 11
+            },
+            {
+                "column": 14,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 11
+            },
+            {
+                "column": 16,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 11
+            },
+            {
+                "column": 17,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 11
+            },
+            {
+                "column": 12,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 19
+            },
+            {
+                "column": 13,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 19
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 19
+            },
+            {
+                "column": 16,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 19
+            },
+            {
+                "column": 14,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 20
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 20
+            },
+            {
+                "column": 17,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 20
+            },
+            {
+                "column": 18,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 20
+            },
+            {
+                "column": 12,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 22
+            },
+            {
+                "column": 13,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 22
+            },
+            {
+                "column": 15,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 22
+            },
+            {
+                "column": 16,
+                "completion_remaining_time": 0,
+                "life": 600,
+                "max_life": 600,
+                "production_id": 66,
+                "recovery_time": 0,
+                "row": 22
+            }
+        ]
+    }
 }

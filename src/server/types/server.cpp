@@ -27,6 +27,7 @@ namespace emulator
 	{
 		try
 		{
+			response.type = utils::response_text;
 			response.code = 200;
 
 			const auto endpoint_params = utils::string::split(request.uri.substr(1), '/');
@@ -44,19 +45,10 @@ namespace emulator
 				return;
 			}
 
-			const auto result_opt = handler->second->handle_endpoint(request, endpoint);
-			if (!result_opt.has_value())
-			{
-				return;
-			}
+			response.headers.append("Keep-Alive: timeout=5, max=100\r\n");
+			response.headers.append("Connection: Keep-Alive\r\n");
 
-			std::string headers;
-			headers.append(std::format("Content-Type: {}\r\n", handler->second->get_content_type()));
-			headers.append("Keep-Alive: timeout=5, max=100\r\n");
-			headers.append("Connection: Keep-Alive\r\n");
-
-			response.headers = headers;
-			response.body = result_opt.value();
+			handler->second->handle_endpoint(endpoint, request, response);
 		}
 		catch (const std::exception& e)
 		{

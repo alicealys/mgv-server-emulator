@@ -19,7 +19,16 @@ namespace emulator
 	{
 		const auto decoded_data = utils::encoding::decode_url_string(data);
 		const auto str = this->blow_.decrypt(decoded_data);
-		auto json = nlohmann::json::parse(str);
+		if (str.empty())
+		{
+			return {};
+		}
+
+		auto json = nlohmann::json::parse(str, nullptr, false);
+		if (json.is_discarded())
+		{
+			return {};
+		}
 		
 		const auto& compressed_val = json["compress"];
 		if (!compressed_val.is_boolean())

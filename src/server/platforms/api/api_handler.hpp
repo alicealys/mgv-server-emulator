@@ -7,7 +7,7 @@ namespace emulator
 	class api_endpoint : public endpoint_handler
 	{
 	public:
-		std::optional<std::string> handle_command(const utils::request_params& params) override;
+		void handle_command(const utils::request_params& request, utils::response_params& response) override;
 		virtual nlohmann::json handle_request(const utils::request_params& params) = 0;
 	};
 
