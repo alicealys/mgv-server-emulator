@@ -324,7 +324,7 @@ namespace database::players
 		{
 			auto& entry = gadget_list_j[i];
 			entry["count"] = this->gadget_list[i].count;
-			entry["idx"] = this->gadget_list[i].idx;
+			entry["production_idx"] = this->gadget_list[i].idx;
 		}
 
 		auto& gear_info_j = data["gear_info"];
@@ -373,7 +373,12 @@ namespace database::players
 			entry["slot"] = this->skill_list[i].slot;
 		}
 
-		data["survival_list"] = this->survival_list;
+		auto& survival_list_j = data["survival_list"];
+		for (auto i = 0ull; i < ARRAYSIZE(this->survival_list); i++)
+		{
+			auto& entry = survival_list_j[i];
+			entry[i] = this->survival_list[i];
+		}
 	}
 
 	bool nonstackbable_t::parse(nlohmann::json& data, const bool parse_arrays)
@@ -449,6 +454,11 @@ namespace database::players
 	{
 		for (auto i = 0; i < 4; i++)
 		{
+			if (this->list[i].production_id == 0)
+			{
+				continue;
+			}
+
 			this->list[i].to_json(data[i]);
 		}
 	}
