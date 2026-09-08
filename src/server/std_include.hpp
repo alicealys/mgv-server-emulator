@@ -98,7 +98,7 @@ using namespace std::literals;
 #endif
 extern "C++"
 template <typename T, size_t N>
-char (*countof(__unaligned T(&)[N]))[N]
+char (*countof(T(&)[N]))[N]
 {
 	return N;
 }
