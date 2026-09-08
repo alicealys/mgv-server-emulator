@@ -83,7 +83,12 @@ namespace utils::json
 		}
 
 		const auto string = src.get<std::string>();
-		strncpy_s(dest, sizeof(dest), string.data(), _TRUNCATE);
+		if (string.size() > N - 1)
+		{
+			return false;
+		}
+
+		std::memcpy(dest, string.data(), string.size());
 		return true;
 	}
 }

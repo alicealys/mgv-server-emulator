@@ -90,13 +90,13 @@ namespace emulator::ssd
 		result["order_expired_list"] = {0, 0, 0, 0, 0};
 		result["order_task_list"] = nlohmann::json::array();
 
-		for (auto i = 0; i < ARRAYSIZE(player_play_record->first); i++)
+		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->first); i++)
 		{
 			result["play_record_player"][i] = player_play_record->first[i];
 			result["play_record_user_total"][i] = user_play_record->first[i];
 		}
 
-		for (auto i = 0; i < ARRAYSIZE(player_play_record->additional); i++)
+		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->additional); i++)
 		{
 			result["play_record_player_additional_130"][i] = player_play_record->additional[i];
 			result["play_record_user_total_additional_130"][i] = user_play_record->additional[i];

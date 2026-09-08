@@ -216,7 +216,7 @@ namespace database::players
 	{
 		std::memset(this, 0, sizeof(loadout_t));
 
-		_snprintf_s(this->name, sizeof(this->name), "LOAD OUT %i", index);
+		snprintf(this->name, sizeof(this->name), "LOAD OUT %i", index);
 
 		this->gear_info.arm_inventory_index = 0xFFFF;
 		this->gear_info.body_inventory_index = 0xFFFF;
@@ -561,7 +561,7 @@ namespace database::players
 		data["injury_recovery_time"] = this->injury_recovery_time;
 
 		auto& status_buffer_j = data["status_buffer"];
-		for (auto i = 0; i < ARRAYSIZE(this->status_buffer); i++)
+		for (auto i = 0ull; i < ARRAYSIZE(this->status_buffer); i++)
 		{
 			auto& entry = status_buffer_j[i];
 			entry["buffer_type"] = this->status_buffer[i].buffer_type;
