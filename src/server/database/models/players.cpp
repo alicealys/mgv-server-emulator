@@ -266,7 +266,7 @@ namespace database::players
 		if (!utils::json::parse_array(gadget_list_j, this->gadget_list, [](item_t& dest, nlohmann::json& src)
 			{
 				utils::json::get_or(src["count"], dest.count);
-				utils::json::get_or(src["idx"], dest.idx);
+				utils::json::get_or(src["production_idx"], dest.idx);
 			}))
 		{
 			return false;
@@ -319,7 +319,7 @@ namespace database::players
 		data["class_info"] = this->class_info;
 		data["index"] = index;
 
-		auto& gadget_list_j = data["gadget_lst"];
+		auto& gadget_list_j = data["gadget_list"];
 		for (auto i = 0ull; i < ARRAYSIZE(this->gadget_list); i++)
 		{
 			auto& entry = gadget_list_j[i];
@@ -376,8 +376,7 @@ namespace database::players
 		auto& survival_list_j = data["survival_list"];
 		for (auto i = 0ull; i < ARRAYSIZE(this->survival_list); i++)
 		{
-			auto& entry = survival_list_j[i];
-			entry[i] = this->survival_list[i];
+			survival_list_j[i] = this->survival_list[i];
 		}
 	}
 
@@ -452,6 +451,7 @@ namespace database::players
 
 	void nonstackable_list_t::to_json(nlohmann::json& data) const
 	{
+		auto idx = 0;
 		for (auto i = 0; i < 4; i++)
 		{
 			if (this->list[i].production_id == 0)
@@ -459,7 +459,7 @@ namespace database::players
 				continue;
 			}
 
-			this->list[i].to_json(data[i]);
+			this->list[i].to_json(data[idx++]);
 		}
 	}
 

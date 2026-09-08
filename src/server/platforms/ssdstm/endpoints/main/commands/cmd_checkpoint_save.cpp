@@ -11,6 +11,7 @@ namespace emulator::ssd
 		const auto mission_info = std::make_unique<database::players::mission_info_t>();
 
 		auto& player_inventory_j = data["inventory_player_info_save"];
+		auto& user_inventory_j = data["inventory_user_info_save"];
 		auto& loadout_list_j = data["load_out_list"];
 		auto& gimmick_timer_info_j = data["gimmick_timer_info"];
 		auto& gimmick_save_info_j = data["gimmick_save_info"];
@@ -54,8 +55,13 @@ namespace emulator::ssd
 			user->current_player->set_mission_info(*mission_info);
 		}
 
-		const auto new_loadout = std::make_unique<database::players::loadout_t>();
-		const auto loadout_count = std::min(static_cast<std::size_t>(user->current_player->get_loadout_count()), loadout_list_j.size());
+		if (user_inventory_j.is_object())
+		{
+			const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
+			user->get_inventory(*user_inventory);
+			user_inventory->parse_save(user_inventory_j);
+			user->set_inventory(*user_inventory);
+		}
 
 		if (player_inventory_j.is_object())
 		{
@@ -71,6 +77,9 @@ namespace emulator::ssd
 
 		if (loadout_list_j.is_array())
 		{
+			const auto new_loadout = std::make_unique<database::players::loadout_t>();
+			const auto loadout_count = std::min(static_cast<std::size_t>(user->current_player->get_loadout_count()), loadout_list_j.size());
+
 			const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 			user->current_player->get_loadout_list(*loadout_list);
 

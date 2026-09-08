@@ -30,6 +30,7 @@ namespace emulator::ssd
 		player->get_inventory(*player_inventory);
 		player->get_loadout_list(*loadout_list);
 		player->get_play_record(*player_play_record);
+		player->get_nonstackable_list(*nonstackable_list);
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);

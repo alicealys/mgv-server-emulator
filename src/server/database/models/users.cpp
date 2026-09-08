@@ -199,7 +199,7 @@ namespace database::users
 			}
 
 			auto& data_j = value_j[name];
-			if (!value_j.is_string())
+			if (!data_j.is_string())
 			{
 				return;
 			}

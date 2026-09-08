@@ -10,14 +10,10 @@ namespace emulator::ssd
 	{
 		nlohmann::json result;
 
-		const auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
-
 		auto& player_inventory_j = data["inventory_player_info_save"];
 		auto& user_inventory_j = data["inventory_user_info_save"];
 		auto& loadout_list_j = data["load_out_list"];
 		auto& nonstackable_list_j = data["nonstackable_add_list"];
-
-		user->current_player->get_nonstackable_list(*nonstackable_list);
 
 		if (player_inventory_j.is_object())
 		{
@@ -62,13 +58,16 @@ namespace emulator::ssd
 				}
 
 				std::memcpy(&loadout_list->list[index], new_loadout.get(), sizeof(database::players::loadout_t));
-				
-				user->current_player->set_loadout_list(*loadout_list);
 			}
+
+			user->current_player->set_loadout_list(*loadout_list);
 		}
 
 		if (nonstackable_list_j.is_array())
 		{
+			const auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
+			user->current_player->get_nonstackable_list(*nonstackable_list);
+
 			const auto nonstackable_count = std::min(ARRAYSIZE(nonstackable_list->list), nonstackable_list_j.size());
 			for (auto i = 0ull; i < nonstackable_count; i++)
 			{
