@@ -90,4 +90,89 @@ namespace game
 
 	std::uint8_t* get_static_key(const std::uint32_t type = key_type_ssd);
 	std::size_t get_static_key_len();
+
+	struct production_t
+	{
+		bool parse(nlohmann::json& data);
+
+		std::uint32_t id;
+		std::uint32_t index;
+		std::uint32_t type;
+		std::uint32_t craft_category;
+		std::uint32_t rarity;
+		std::uint32_t lv_need;
+		std::uint32_t stock;
+		std::uint32_t life;
+		std::uint32_t customize;
+		std::uint32_t conv_use;
+		std::uint32_t base_c_water;
+		std::uint32_t base_food;
+		std::uint32_t base_medicine;
+		std::uint32_t sup_combat;
+		std::uint32_t sup_survival;
+		std::uint32_t related_id;
+		bool only_flag;
+		bool countable;
+		bool eqp_hip;
+		bool eqp_back;
+		bool eqp_sec;
+		bool eqp_sup;
+		bool pri_r_slot;
+		bool show_info;
+		float weight;
+		float crew_inj_food_poison;
+		float crew_inj_dysentery;
+		float crew_inj_physical;
+		float crew_inj_fatigue;
+		float prv_r_x;
+		float prv_r_y;
+		float prv_r_y_min;
+		float prv_r_y_max;
+		float prv_r_z_off;
+		float prv_zm_min;
+		float prv_zm;
+		float prv_zm_max;
+		std::uint64_t lang_name;
+		std::uint64_t lang_name2;
+		std::uint64_t lang_name3;
+		std::uint64_t lang_info;
+		std::uint64_t icon_path;
+		std::uint32_t perk[3];
+		std::string id_str;
+	};
+
+	struct recipe_t
+	{
+		bool parse(nlohmann::json& data);
+
+		struct cost_t
+		{
+			std::uint32_t id;
+			std::uint32_t type;
+			std::uint32_t count;
+		};
+
+		struct leftover_t
+		{
+			std::uint32_t id;
+			std::uint32_t count;
+		};
+
+		bool opened;
+		bool junk;
+		std::uint32_t index;
+		std::uint32_t group;
+		std::uint32_t dev_level;
+		std::uint32_t count;
+		std::uint32_t trans_time;
+		std::uint32_t price;
+		std::uint32_t potential_id;
+		std::uint32_t id;
+		std::string id_str;
+		leftover_t leftover[1];
+		cost_t cost[6];
+		std::uint32_t production_id;
+
+		std::shared_ptr<production_t> production;
+	};
 }

@@ -6,14 +6,14 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_inventory_save::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	void cmd_inventory_save::do_save(nlohmann::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
-
 		auto& player_inventory_j = data["inventory_player_info_save"];
 		auto& user_inventory_j = data["inventory_user_info_save"];
 		auto& loadout_list_j = data["load_out_list"];
 		auto& nonstackable_list_j = data["nonstackable_add_list"];
+		auto& stackable_list_j = data["stackable_list"];
+		auto& resource_list_j = data["resource_list"];
 
 		if (player_inventory_j.is_object())
 		{
@@ -65,24 +65,34 @@ namespace emulator::ssd
 
 		if (nonstackable_list_j.is_array())
 		{
-			const auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
-			user->current_player->get_nonstackable_list(*nonstackable_list);
-
-			const auto nonstackable_count = std::min(ARRAYSIZE(nonstackable_list->list), nonstackable_list_j.size());
-			for (auto i = 0ull; i < nonstackable_count; i++)
-			{
-				if (nonstackable_list->list[i].production_id != 0)
-				{
-					continue;
-				}
-
-				nonstackable_list->list[i].parse(nonstackable_list_j[i], false);
-			}
-
-			user->current_player->set_nonstackable_list(*nonstackable_list);
+			const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
+			user->current_player->get_nonstackable_item_list(*nonstackable_list);
+			nonstackable_list->parse_diff(nonstackable_list_j);
+			user->current_player->set_nonstackable_item_list(*nonstackable_list);
 		}
 
-		// TODO resource_list
+		if (stackable_list_j.is_array())
+		{
+			const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
+			user->current_player->get_stackable_item_list(*stackable_list);
+			stackable_list->parse_diff(stackable_list_j);
+			user->current_player->set_stackable_item_list(*stackable_list);
+		}
+
+		if (resource_list_j.is_array())
+		{
+			const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
+			user->current_player->get_inventory_resource_list(*resource_list);
+			resource_list->parse_diff(resource_list_j);
+			user->current_player->set_inventory_resource_list(*resource_list);
+		}
+	}
+
+	nlohmann::json cmd_inventory_save::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	{
+		nlohmann::json result;
+
+		this->do_save(data, user);
 
         return result;
 	}

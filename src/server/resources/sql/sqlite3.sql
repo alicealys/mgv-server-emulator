@@ -35,10 +35,15 @@ create table if not exists `players`
 	mission_info			blob default null,
 	inventory				blob default null,
 	nonstackable_list		blob default null,
+	nonstackable_item_list  blob default null,
+	stackable_item_list  	blob default null,
 	gimmick_info			blob default null,
 	gimmick_data_afghan		blob default null,
 	gimmick_data_africa		blob default null,
 	base_resources  		blob default null,
+	story_unlock_info  		blob default null,
+	mission_record_list  	blob default null,
+	inventory_resource_list blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger

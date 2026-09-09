@@ -18,7 +18,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		database::players::set_avatar(user->get_current_player_id(), avatar);
+		user->current_player->set_avatar(avatar);
 
         return result;
 	}

@@ -16,7 +16,7 @@ namespace emulator::ssd
 		auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 		auto inventory = std::make_unique<database::players::player_inventory_t>();
 		auto mission_info = std::make_unique<database::players::mission_info_t>();
-		auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
+		auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
 
 		const auto players = database::players::get_player_list(user->get_user_id());
 		for (auto i = 0ull; i < players.size(); i++)
@@ -31,7 +31,7 @@ namespace emulator::ssd
 			player.get_loadout_list(*loadout_list);
 			player.get_inventory(*inventory);
 			player.get_mission_info(*mission_info);
-			player.get_nonstackable_list(*nonstackable_list);
+			player.get_nonstackable_item_list(*nonstackable_list);
 
 			const auto current_loadout_idx = player.get_current_loadout();
 			const auto& current_loadout = loadout_list->list[current_loadout_idx];

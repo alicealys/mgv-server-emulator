@@ -472,6 +472,19 @@ namespace database::users
 			});
 		}
 
+		template <database_type_t Type>
+		bool reset_current_player(const std::uint64_t user_id)
+		{
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.current_player_id = sqlpp::value_or_null<sqlpp::integer_unsigned>(sqlpp::null))
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
+
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
 
@@ -550,6 +563,11 @@ namespace database::users
 		RUN_IMPL(impl::set_current_player, user_id, player_id);
 	}
 
+	bool reset_current_player(const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::reset_current_player, user_id);
+	}
+
 	void delete_user_data(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::delete_user_data, user_id);
@@ -563,13 +581,15 @@ namespace database::users
 			return false;
 		}
 
-		delete_user_data(user->get_user_id());
+		reset_current_player(user->get_id());
 
 		const auto players = players::get_player_list(user->get_user_id());
 		for (const auto& player : players)
 		{
 			players::delete_player_data(player.get_player_id());
 		}
+
+		delete_user_data(user->get_user_id());
 
 		return true;
 	}

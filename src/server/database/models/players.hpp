@@ -9,6 +9,7 @@ namespace database::players
 	constexpr const auto max_loadout_count = 8u;
 	constexpr const auto initial_loadout_count = 4u;
 
+#pragma pack(push, 1)
 	struct avatar_t
 	{
 		std::uint8_t accessory;
@@ -39,68 +40,23 @@ namespace database::players
 		void to_json(nlohmann::json& data) const;
 	};
 
-	struct avatar_status_t
+	struct nonstackbable_item_t
 	{
-		std::uint16_t equipment_slot;
-		std::uint16_t hunger;
-		std::uint16_t injury_whole;
-		std::uint16_t life;
-		std::uint16_t oxygen;
-		std::uint16_t sequence_number;
-		std::uint16_t stamina;
-		std::uint16_t story_sequence;
-		std::uint16_t thirst;
-		std::uint16_t tiredness;
-		std::uint16_t injury_part[8];
-	};
+		struct option_t
+		{
+			std::uint32_t option_id;
+			std::uint8_t obtained;
+		};
 
-	struct item_t
-	{
-		std::uint32_t count;
-		std::uint32_t idx;
-	};
+		struct perk_t
+		{
+			std::uint32_t perk_id;
+			std::uint8_t perk_level;
+		};
 
-	struct weapon_t
-	{
-		std::uint16_t ammo_count;
-		std::uint16_t ammo_idx;
-		std::uint16_t init_ammo_count;
-		std::uint16_t init_ammo_idx;
-		std::uint16_t inventory_index;
-	};
-
-	struct gear_info_t
-	{
-		std::uint16_t arm_inventory_index;
-		std::uint16_t body_inventory_index;
-		std::uint16_t ext_head_production_idx;
-		std::uint16_t ext_suit_production_idx;
-		std::uint16_t head_inventory_index;
-		std::uint16_t leg_inventory_index;
-	};
-
-	struct skill_t
-	{
-		std::uint16_t slot[8];
-	};
-
-	struct nonstackable_option_t
-	{
-		std::uint8_t obtained;
-		std::uint16_t option_id;
-	};
-
-	struct perk_t
-	{
-		std::uint16_t perk_id;
-		std::uint16_t perk_level;
-	};
-
-	struct nonstackbable_t
-	{
-		std::uint16_t color;
-		std::uint16_t color2;
-		std::uint16_t flag;
+		std::uint8_t color;
+		std::uint8_t color2;
+		std::uint8_t flag;
 		std::uint16_t grade;
 		std::uint16_t inventory_index;
 		std::uint16_t life;
@@ -108,12 +64,11 @@ namespace database::players
 		std::uint16_t obtain_order;
 		std::uint16_t option_slot;
 		std::uint16_t spec;
-		std::uint64_t production_id;
-		nonstackable_option_t option_list[8];
+		std::uint32_t production_id;
+		option_t option_list[8];
 		perk_t perk_list[5];
-		std::uint8_t reserved[256];
 
-		bool parse(nlohmann::json& data, const bool parse_arrays);
+		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
 	};
 
@@ -126,7 +81,7 @@ namespace database::players
 		std::uint16_t inventory_index;
 		std::uint16_t inventory_type;
 		std::uint16_t obtain_order;
-		std::uint64_t production_id;
+		std::uint32_t production_id;
 
 		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
@@ -134,6 +89,36 @@ namespace database::players
 
 	struct loadout_t
 	{
+		struct item_t
+		{
+			std::uint32_t count;
+			std::uint32_t idx;
+		};
+
+		struct weapon_t
+		{
+			std::uint16_t ammo_count;
+			std::uint16_t ammo_idx;
+			std::uint16_t init_ammo_count;
+			std::uint16_t init_ammo_idx;
+			std::uint16_t inventory_index;
+		};
+
+		struct gear_info_t
+		{
+			std::uint16_t arm_inventory_index;
+			std::uint16_t body_inventory_index;
+			std::uint16_t ext_head_production_idx;
+			std::uint16_t ext_suit_production_idx;
+			std::uint16_t head_inventory_index;
+			std::uint16_t leg_inventory_index;
+		};
+
+		struct skill_t
+		{
+			std::uint16_t slot[8];
+		};
+
 		bool valid;
 		std::uint16_t class_info;
 		gear_info_t gear_info;
@@ -225,17 +210,6 @@ namespace database::players
 		void to_json(nlohmann::json& data, const std::uint16_t nameplate = 0u) const;
 	};
 
-	struct loadout_list_t
-	{
-		loadout_t list[max_loadout_count];
-	};
-
-	struct nonstackable_list_t
-	{
-		nonstackbable_t list[4];
-		void to_json(nlohmann::json& data) const;
-	};
-
 	struct gimmick_save_data_t
 	{
 		struct instant_t
@@ -276,6 +250,29 @@ namespace database::players
 		resource_shared_t resource_shared[4];
 
 		void to_json(nlohmann::json& data, const std::uint32_t map_location) const;
+	};
+
+	struct loadout_list_t
+	{
+		loadout_t list[max_loadout_count];
+	};
+
+	struct nonstackable_item_list_t
+	{
+		nonstackbable_item_t list[1024];
+
+		bool parse_diff(nlohmann::json& data);
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
+	};
+
+	struct stackable_item_list_t
+	{
+		stackable_item_t list[1024];
+
+		bool parse_diff(nlohmann::json& data);
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
 	};
 
 	struct gimmick_resource_info_t
@@ -346,11 +343,17 @@ namespace database::players
 		std::uint32_t flag;
 		std::uint32_t obtain_order;
 		std::uint32_t resource_id;
+
+		bool parse(nlohmann::json& data);
 	};
 
-	struct inventory_resources_t
+	struct inventory_resource_list_t
 	{
-		inventory_resource_t resources[255];
+		inventory_resource_t list[1024];
+
+		bool parse_diff(nlohmann::json& data);
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
 	};
 
 	struct player_play_record_t
@@ -358,6 +361,47 @@ namespace database::players
 		std::uint32_t first[191];
 		std::uint32_t additional[46];
 	};
+
+	struct mission_record_t
+	{
+		bool valid;
+		std::uint32_t clear_flag;
+		std::uint32_t clear_rank;
+		std::uint32_t clear_time;
+		std::uint32_t mission_code;
+		std::uint32_t new_flag;
+		std::uint32_t score;
+	};
+
+	struct mission_record_list_t
+	{
+		mission_record_t list[255];
+
+		bool add(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
+	};
+
+	struct story_unlock_info_t
+	{
+		struct map_unlock_t
+		{
+			std::uint32_t value[2048];
+		};
+
+		std::uint32_t demo_open_flag;
+		std::uint32_t facility_new_flag;
+		std::uint32_t marker_map_location;
+		std::uint32_t oxygen_supply_unlock;
+		std::uint32_t story_sequence_number;
+		std::uint8_t fast_travel_unlock[8];
+		std::uint8_t marker_afghan[522];
+		std::uint8_t marker_africa[522];
+		map_unlock_t map_unlocks[2];
+
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
+	};
+#pragma pack(pop)
 
 	class player
 	{
@@ -374,13 +418,17 @@ namespace database::players
 		DEFINE_FIELD(avatar, sqlpp::binary);
 		DEFINE_FIELD(mission_info, sqlpp::binary);
 		DEFINE_FIELD(loadout_list, sqlpp::binary);
-		DEFINE_FIELD(inventory, sqlpp::binary);
-		DEFINE_FIELD(nonstackable_list, sqlpp::binary);
+		DEFINE_FIELD(player_inventory, sqlpp::binary);
+		DEFINE_FIELD(nonstackable_item_list, sqlpp::binary);
 		DEFINE_FIELD(gimmick_info, sqlpp::binary);
 		DEFINE_FIELD(gimmick_data_afghan, sqlpp::binary);
 		DEFINE_FIELD(gimmick_data_africa, sqlpp::binary);
 		DEFINE_FIELD(player_play_record, sqlpp::binary);
 		DEFINE_FIELD(base_resources, sqlpp::binary);
+		DEFINE_FIELD(story_unlock_info, sqlpp::binary);
+		DEFINE_FIELD(mission_record_list, sqlpp::binary);
+		DEFINE_FIELD(inventory_resource_list, sqlpp::binary);
+		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -389,13 +437,17 @@ namespace database::players
 			avatar_field_t, 
 			mission_info_field_t, 
 			loadout_list_field_t,
-			inventory_field_t,
-			nonstackable_list_field_t,
+			player_inventory_field_t,
+			nonstackable_item_list_field_t,
 			gimmick_info_field_t,
 			gimmick_data_afghan_field_t,
 			gimmick_data_africa_field_t,
 			player_play_record_field_t,
-			base_resources_field_t
+			base_resources_field_t,
+			story_unlock_info_field_t,
+			mission_record_list_field_t,
+			inventory_resource_list_field_t,
+			stackable_item_list_field_t
 		);
 
 		inline static table_t table;
@@ -433,21 +485,29 @@ namespace database::players
 		void get_loadout_list(loadout_list_t& loadout) const;
 		void get_mission_info(mission_info_t& mission_info) const;
 		void get_inventory(player_inventory_t& inventory) const;
-		void get_nonstackable_list(nonstackable_list_t& nonstackable_list) const;
+		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		void get_gimmick_info(gimmick_info_t& gimmick_info) const;
 		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		void get_play_record(player_play_record_t& play_record) const;
 		void get_base_resources(base_resources_t& base_resources) const;
+		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
+		void get_mission_record_list(mission_record_list_t& mission_record_list) const;
+		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
+		void get_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
 		bool set_mission_info(mission_info_t& mission_info) const;
 		bool set_inventory(player_inventory_t& inventory) const;
-		bool set_nonstackable_list(nonstackable_list_t& nonstackable_list) const;
+		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_gimmick_info(gimmick_info_t& gimmick_info) const;
 		bool set_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		bool set_play_record(player_play_record_t& play_record) const;
 		bool set_base_resources(base_resources_t& base_resources) const;
+		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
+		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
+		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
+		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 
@@ -459,16 +519,4 @@ namespace database::players
 	std::optional<player> create(const std::uint64_t user_id);
 
 	void delete_player_data(const std::uint64_t player_id);
-
-	void get_avatar(const std::uint64_t player_id, avatar_t& avatar);
-	void get_loadout_list(const std::uint64_t player_id, loadout_list_t& loadout_list);
-	void get_mission_info(const std::uint64_t player_id, mission_info_t& mission_info);
-	void get_inventory(const std::uint64_t player_id, player_inventory_t& inventory);
-	void get_nonstackable_list(const std::uint64_t player_id, nonstackable_list_t& nonstackable_list);
-
-	bool set_avatar(const std::uint64_t player_id, avatar_t& avatar);
-	bool set_loadout_list(const std::uint64_t player_id, loadout_list_t& loadout_list);
-	bool set_mission_info(const std::uint64_t player_id, mission_info_t& mission_info);
-	bool set_inventory(const std::uint64_t player_id, player_inventory_t& inventory);
-	bool set_nonstackable_list(const std::uint64_t player_id, nonstackable_list_t& nonstackable_list);
 }

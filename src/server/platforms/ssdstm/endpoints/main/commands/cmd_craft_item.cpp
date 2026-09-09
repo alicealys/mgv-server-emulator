@@ -33,7 +33,7 @@ namespace emulator::ssd
 		}
 
 		const auto craft_num = std::min(std::uint16_t(8u), craft_num_j.get<std::uint16_t>());
-		const auto recipe_id = recipe_id_j.get<std::uint64_t>();
+		const auto recipe_id = recipe_id_j.get<std::uint32_t>();
 
 		const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(recipe_id);
 		if (iter == game::parameters_table.ssd_sbm_parameters->recipes.end())
@@ -43,7 +43,7 @@ namespace emulator::ssd
 
 		// todo: check if player can craft
 
-		database::players::nonstackbable_t nonstackable_item{};
+		database::players::nonstackbable_item_t nonstackable_item{};
 		if (!iter->second->production->countable)
 		{
 			nonstackable_item.life = static_cast<std::uint16_t>(iter->second->production->life);

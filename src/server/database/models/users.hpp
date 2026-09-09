@@ -147,6 +147,7 @@ namespace database::users
 	bool update_session(const user& user);
 
 	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id);
+	bool reset_current_player(const std::uint64_t user_id);
 
 	bool delete_all_user_data(const std::uint64_t account_id);
 }

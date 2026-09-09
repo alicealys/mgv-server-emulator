@@ -15,11 +15,15 @@ namespace emulator::ssd
 		const auto gimmick_data_africa = std::make_unique<database::players::gimmick_save_data_t>();
 		const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
-		const auto nonstackable_list = std::make_unique<database::players::nonstackable_list_t>();
+		const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
 		const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
 		const auto user_play_record = std::make_unique<database::users::user_play_record_t>();
 		const auto player_play_record = std::make_unique<database::players::player_play_record_t>();
+		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
+		const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
+		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
+		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 
 		const auto& player = user->current_player;
 
@@ -30,7 +34,9 @@ namespace emulator::ssd
 		player->get_inventory(*player_inventory);
 		player->get_loadout_list(*loadout_list);
 		player->get_play_record(*player_play_record);
-		player->get_nonstackable_list(*nonstackable_list);
+		player->get_nonstackable_item_list(*nonstackable_list);
+		player->get_story_unlock_info(*story_unlock_info);
+		player->get_mission_record_list(*mission_record_list);
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -84,7 +90,7 @@ namespace emulator::ssd
 			loadout_list->list[i].to_json(loadout_list_j[i], static_cast<std::uint16_t>(i));
 		}
 
-		result["mission_record_info_list"] = nlohmann::json::array();
+		mission_record_list->to_json(result["mission_record_info_list"]);
 		nonstackable_list->to_json(result["nonstackable_list"]);
 
 		result["order_expired_list"] = {0, 0, 0, 0, 0};
@@ -120,19 +126,9 @@ namespace emulator::ssd
 		result["resource_list"] = nlohmann::json::array();
 		result["stackable_list"] = nlohmann::json::array();
 
-		result["story_unlock_info"]["demo_open_flag"] = 0;
-		result["story_unlock_info"]["facility_new_flag"] = 0;
-		result["story_unlock_info"]["fast_travel_unlock"] = "";
-		result["story_unlock_info"]["map_unlock_list"][0]["location_index"] = 1;
-		result["story_unlock_info"]["map_unlock_list"][0]["map_unlock"][0] = 0;
-		result["story_unlock_info"]["marker_afghan"] = "";
-		result["story_unlock_info"]["marker_africa"] = "";
-		result["story_unlock_info"]["marker_map_location"] = 0;
-		result["story_unlock_info"]["oxygen_supply_unlock"] = 0;
-		result["story_unlock_info"]["story_sequence_number"] = 0;
+		story_unlock_info->to_json(result["story_unlock_info"]);
 		
 		result["tips_open_info"]["data"] = "";
-
 		result["user_flag"] = user->get_user_flag();
 
         return result;

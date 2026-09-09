@@ -499,9 +499,9 @@ namespace console
 
 		std::string format(va_list* ap, const char* message)
 		{
-			static thread_local char buffer[0x1000];
+			static thread_local char buffer[0x1000]{};
 
-			const auto count = _vsnprintf_s(buffer, sizeof(buffer), sizeof(buffer), message, *ap);
+			const auto count = _vsnprintf_s(buffer, sizeof(buffer), _TRUNCATE, message, *ap);
 			if (count < 0)
 			{
 				return {};
