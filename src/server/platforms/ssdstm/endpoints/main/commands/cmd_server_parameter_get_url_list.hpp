@@ -6,7 +6,6 @@ namespace emulator::ssd
 	class cmd_server_parameter_get_url_list final : public command_handler
 	{
 	public:
-		cmd_server_parameter_get_url_list();
 		nlohmann::json execute(nlohmann::json& data, const std::optional<database::users::user>& user) override;
 
 	private:

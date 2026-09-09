@@ -82,6 +82,12 @@ namespace game
 	std::string get_error(const std::uint32_t error);
 	const std::unordered_map<std::uint32_t, std::string>& get_error_map();
 
-	std::uint8_t* get_static_key();
+	enum static_key_t
+	{
+		key_type_ssd = 0,
+		key_type_tpp = 1,
+	};
+
+	std::uint8_t* get_static_key(const std::uint32_t type = key_type_ssd);
 	std::size_t get_static_key_len();
 }

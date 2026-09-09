@@ -1,8 +1,6 @@
 #include "memory.hpp"
 #include "compression.hpp"
 
-#include <zlib.h>
-
 #include <gsl/gsl>
 
 #include "io.hpp"
@@ -92,7 +90,7 @@ namespace utils::compression
 			return buffer;
 		}
 
-		std::string compress(const std::string& data, const std::uint32_t extra_bound)
+		std::string compress(const std::string& data, const std::uint32_t extra_bound, const std::int32_t method)
 		{
 			std::string result{};
 			auto length = compressBound(static_cast<uLong>(data.size()));
@@ -100,7 +98,7 @@ namespace utils::compression
 
 			if (compress2(reinterpret_cast<Bytef*>(result.data()), &length,
 			              reinterpret_cast<const Bytef*>(data.data()), static_cast<uLong>(data.size()),
-			              Z_BEST_COMPRESSION) != Z_OK)
+			              method) != Z_OK)
 			{
 				return {};
 			}

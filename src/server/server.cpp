@@ -5,6 +5,7 @@
 #include "types/server.hpp"
 #include "database/database.hpp"
 #include "database/auth.hpp"
+#include "game/parameters.hpp"
 
 #include "component/console.hpp"
 #include "component/command.hpp"
@@ -45,6 +46,7 @@ namespace emulator
 		}
 
 		auth::initialize_lists();
+		game::initialize_parameters_table();
 
 		server s;
 		if (!s.start())

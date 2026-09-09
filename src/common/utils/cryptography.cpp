@@ -727,74 +727,81 @@ namespace utils::cryptography
 			reinterpret_cast<size_t>(key.data())), key.size());
 	}
 
-	std::string blowfish::encrypt(const std::string& data_)
+	std::string blowfish::encrypt(const std::string& data)
 	{
-		std::string data = data_;
-		const auto mod = (data.size() % 8);
-		if (mod != 0)
-		{
-			const auto byte_count = 8 - mod;
-			for (auto i = 0ull; i < byte_count; i++)
-			{
-				data += static_cast<char>(byte_count);
-			}
-		}
-
-		std::string text;
-		for (auto offset = 0u; offset < data.size(); offset += 8)
-		{
-			const auto chunk = data.substr(offset, 8);
-			auto chunk_l = chunk.substr(0, 4);
-			auto chunk_r = chunk.substr(4, 4);
-
-			auto xl = static_cast<std::uint32_t>(BSWAP32(*reinterpret_cast<std::uint32_t*>(chunk_l.data())));
-			auto xr = static_cast<std::uint32_t>(BSWAP32(*reinterpret_cast<std::uint32_t*>(chunk_r.data())));
-
-			this->encrypt_single(xl, xr);
-
-			xl = BSWAP32(xl);
-			xr = BSWAP32(xr);
-
-			text.append(reinterpret_cast<char*>(&xl), 4);
-			text.append(reinterpret_cast<char*>(&xr), 4);
-		}
-
-		return utils::cryptography::base64::encode(text);
+		const auto result = this->encrypt_internal(data);
+		return base64::encode(result);
 	}
 
 	std::string blowfish::decrypt(const std::string& data)
 	{
 		const auto decoded_data = utils::cryptography::base64::decode(data);
-		if (decoded_data.size() == 0 || (decoded_data.size() % 8) != 0)
+		return this->decrypt_internal(decoded_data);
+	}
+
+	std::string blowfish::encrypt_internal(const std::string& data)
+	{
+		const auto pad_size = (8 - (data.size() & 7));
+		const auto padded_size = data.size() + pad_size;
+
+		std::string result(padded_size, 0);
+		std::memcpy(result.data(), data.data(), data.size());
+
+		for (auto i = 0ull; i < pad_size; i++)
+		{
+			result[data.size() + i] = static_cast<char>(pad_size);
+		}
+
+		for (auto offset = 0u; offset < padded_size; offset += 8)
+		{
+			auto chunk = &result.at(offset);
+			auto chunk_l = reinterpret_cast<std::uint32_t*>(chunk);
+			auto chunk_r = reinterpret_cast<std::uint32_t*>(chunk + 4);
+
+			auto xl = static_cast<std::uint32_t>(BSWAP32(*chunk_l));
+			auto xr = static_cast<std::uint32_t>(BSWAP32(*chunk_r));
+
+			this->encrypt_single(xl, xr);
+
+			*chunk_l = BSWAP32(xl);
+			*chunk_r = BSWAP32(xr);
+		}
+
+		return result;
+	}
+
+	std::string blowfish::decrypt_internal(const std::string& data)
+	{
+		if (data.size() == 0 || (data.size() % 8) != 0)
 		{
 			return {};
 		}
 
-		std::string text;
-		for (auto offset = 0u; offset < decoded_data.size(); offset += 8)
-		{
-			const auto chunk = decoded_data.substr(offset, 8);
-			auto chunk_l = chunk.substr(0, 4);
-			auto chunk_r = chunk.substr(4, 4);
+		std::string result;
+		result.resize(data.size());
 
-			auto xl = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<std::uint32_t*>(chunk_l.data())));
-			auto xr = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<std::uint32_t*>(chunk_r.data())));
+		for (auto offset = 0u; offset < data.size(); offset += 8)
+		{
+			const auto dest_chunk = &result.at(offset);
+			const auto chunk = &data.at(offset);
+			auto chunk_l = chunk;
+			auto chunk_r = chunk + 4;
+
+			auto xl = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<const std::uint32_t*>(chunk_l)));
+			auto xr = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<const std::uint32_t*>(chunk_r)));
 
 			this->decrypt_single(xl, xr);
 
-			xl = BSWAP32(xl);
-			xr = BSWAP32(xr);
-
-			text.append(reinterpret_cast<char*>(&xl), 4);
-			text.append(reinterpret_cast<char*>(&xr), 4);
+			*reinterpret_cast<std::uint32_t*>(dest_chunk) = BSWAP32(xl);
+			*reinterpret_cast<std::uint32_t*>(dest_chunk + 4) = BSWAP32(xr);
 		}
 
-		const auto last_char = text[text.size() - 1];
+		const auto last_char = result[result.size() - 1];
 		if (last_char <= 8)
 		{
-			text = text.substr(0, text.size() - static_cast<size_t>(last_char));
+			result = result.substr(0, result.size() - static_cast<size_t>(last_char));
 		}
 
-		return text;
+		return result;
 	}
 }

@@ -12,6 +12,7 @@ namespace game
 	{
 		// mgv.exe fox::ncl::NclHttpCodec::EndEncode
 		std::uint8_t static_key[16] = {0x17, 0xF0, 0xF7, 0xA6, 0x2E, 0x8F, 0xEE, 0x67, 0x78, 0x66, 0x79, 0xD0, 0x8C, 0x8A, 0x0A, 0x1C};
+		std::uint8_t static_key_tpp[16] = {0xD8, 0x89, 0x0A, 0xF0, 0x66, 0xC9, 0x6B, 0x40, 0xD7, 0x01, 0xAE, 0xFC, 0x43, 0x6F, 0xF9, 0xFE};
 
 		std::unordered_map<std::uint32_t, std::string> error_map =
 		{
@@ -103,9 +104,16 @@ namespace game
 		return error_map;
 	}
 
-	std::uint8_t* get_static_key()
+	std::uint8_t* get_static_key(const std::uint32_t type)
 	{
-		return static_key;
+		switch (type)
+		{
+		case key_type_tpp:
+			return static_key_tpp;
+		default:
+		case key_type_ssd:
+			return static_key;
+		}
 	}
 
 	std::size_t get_static_key_len()

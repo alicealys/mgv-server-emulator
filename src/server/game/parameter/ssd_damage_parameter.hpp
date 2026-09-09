@@ -1,0 +1,13 @@
+#pragma once
+
+#include "base_parameter.hpp"
+
+namespace game::parameters
+{
+	class ssd_damage_parameter : public base_parameter
+	{
+	public:
+		ssd_damage_parameter();
+		bool parse(const nlohmann::json& data) override;
+	};
+}

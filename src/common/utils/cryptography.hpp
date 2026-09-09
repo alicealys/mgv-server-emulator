@@ -334,8 +334,10 @@ namespace utils::cryptography
 		void set_key(std::uint8_t* key, const size_t len);
 		void set_key(const std::string& key_b64);
 
-		std::string encrypt(const std::string& data_);
+		std::string encrypt(const std::string& data);
+		std::string encrypt_internal(const std::string& data);
 		std::string decrypt(const std::string& data);
+		std::string decrypt_internal(const std::string& data);
 
 	private:
 		std::uint32_t n_ = 16;

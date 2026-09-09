@@ -1,0 +1,1168 @@
+{
+    "bodySpec": [
+        {
+            "life": 2400,
+            "stamina": 2400,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2460,
+            "stamina": 2460,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2520,
+            "stamina": 2520,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2580,
+            "stamina": 2580,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2640,
+            "stamina": 2640,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2700,
+            "stamina": 2700,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2760,
+            "stamina": 2760,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2820,
+            "stamina": 2820,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2880,
+            "stamina": 2880,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 2940,
+            "stamina": 2940,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 3000,
+            "stamina": 3000,
+            "strength": 0.0,
+            "move_speed": 85.0,
+            "hold_speed": 87.0,
+            "draw_speed": 50.0
+        },
+        {
+            "life": 3060,
+            "stamina": 3060,
+            "strength": 1.0,
+            "move_speed": 85.5,
+            "hold_speed": 87.8,
+            "draw_speed": 51.0
+        },
+        {
+            "life": 3120,
+            "stamina": 3120,
+            "strength": 2.0,
+            "move_speed": 86.0,
+            "hold_speed": 88.6,
+            "draw_speed": 52.0
+        },
+        {
+            "life": 3180,
+            "stamina": 3180,
+            "strength": 3.0,
+            "move_speed": 86.5,
+            "hold_speed": 89.4,
+            "draw_speed": 53.0
+        },
+        {
+            "life": 3240,
+            "stamina": 3240,
+            "strength": 4.0,
+            "move_speed": 87.0,
+            "hold_speed": 90.2,
+            "draw_speed": 54.0
+        },
+        {
+            "life": 3300,
+            "stamina": 3300,
+            "strength": 5.0,
+            "move_speed": 87.5,
+            "hold_speed": 91.0,
+            "draw_speed": 55.0
+        },
+        {
+            "life": 3360,
+            "stamina": 3360,
+            "strength": 6.0,
+            "move_speed": 88.0,
+            "hold_speed": 91.8,
+            "draw_speed": 56.0
+        },
+        {
+            "life": 3420,
+            "stamina": 3420,
+            "strength": 7.0,
+            "move_speed": 88.5,
+            "hold_speed": 92.6,
+            "draw_speed": 57.0
+        },
+        {
+            "life": 3480,
+            "stamina": 3480,
+            "strength": 8.0,
+            "move_speed": 89.0,
+            "hold_speed": 93.4,
+            "draw_speed": 58.0
+        },
+        {
+            "life": 3540,
+            "stamina": 3540,
+            "strength": 9.0,
+            "move_speed": 89.5,
+            "hold_speed": 94.2,
+            "draw_speed": 59.0
+        },
+        {
+            "life": 3600,
+            "stamina": 3600,
+            "strength": 10.0,
+            "move_speed": 90.0,
+            "hold_speed": 95.0,
+            "draw_speed": 60.0
+        },
+        {
+            "life": 3660,
+            "stamina": 3660,
+            "strength": 11.0,
+            "move_speed": 90.5,
+            "hold_speed": 95.8,
+            "draw_speed": 61.0
+        },
+        {
+            "life": 3720,
+            "stamina": 3720,
+            "strength": 12.0,
+            "move_speed": 91.0,
+            "hold_speed": 96.6,
+            "draw_speed": 62.0
+        },
+        {
+            "life": 3780,
+            "stamina": 3780,
+            "strength": 13.0,
+            "move_speed": 91.5,
+            "hold_speed": 97.4,
+            "draw_speed": 63.0
+        },
+        {
+            "life": 3840,
+            "stamina": 3840,
+            "strength": 14.0,
+            "move_speed": 92.0,
+            "hold_speed": 98.2,
+            "draw_speed": 64.0
+        },
+        {
+            "life": 3900,
+            "stamina": 3900,
+            "strength": 15.0,
+            "move_speed": 92.5,
+            "hold_speed": 99.0,
+            "draw_speed": 65.0
+        },
+        {
+            "life": 3960,
+            "stamina": 3960,
+            "strength": 16.0,
+            "move_speed": 93.0,
+            "hold_speed": 99.8,
+            "draw_speed": 66.0
+        },
+        {
+            "life": 4020,
+            "stamina": 4020,
+            "strength": 17.0,
+            "move_speed": 93.5,
+            "hold_speed": 100.6,
+            "draw_speed": 67.0
+        },
+        {
+            "life": 4080,
+            "stamina": 4080,
+            "strength": 18.0,
+            "move_speed": 94.0,
+            "hold_speed": 101.4,
+            "draw_speed": 68.0
+        },
+        {
+            "life": 4140,
+            "stamina": 4140,
+            "strength": 19.0,
+            "move_speed": 94.5,
+            "hold_speed": 102.2,
+            "draw_speed": 69.0
+        },
+        {
+            "life": 4200,
+            "stamina": 4200,
+            "strength": 20.0,
+            "move_speed": 95.0,
+            "hold_speed": 103.0,
+            "draw_speed": 70.0
+        },
+        {
+            "life": 4260,
+            "stamina": 4260,
+            "strength": 21.0,
+            "move_speed": 95.5,
+            "hold_speed": 103.8,
+            "draw_speed": 71.0
+        },
+        {
+            "life": 4320,
+            "stamina": 4320,
+            "strength": 22.0,
+            "move_speed": 96.0,
+            "hold_speed": 104.6,
+            "draw_speed": 72.0
+        },
+        {
+            "life": 4380,
+            "stamina": 4380,
+            "strength": 23.0,
+            "move_speed": 96.5,
+            "hold_speed": 105.4,
+            "draw_speed": 73.0
+        },
+        {
+            "life": 4440,
+            "stamina": 4440,
+            "strength": 24.0,
+            "move_speed": 97.0,
+            "hold_speed": 106.2,
+            "draw_speed": 74.0
+        },
+        {
+            "life": 4500,
+            "stamina": 4500,
+            "strength": 25.0,
+            "move_speed": 97.5,
+            "hold_speed": 107.0,
+            "draw_speed": 75.0
+        },
+        {
+            "life": 4570,
+            "stamina": 4570,
+            "strength": 26.0,
+            "move_speed": 98.0,
+            "hold_speed": 107.8,
+            "draw_speed": 76.0
+        },
+        {
+            "life": 4640,
+            "stamina": 4640,
+            "strength": 27.0,
+            "move_speed": 98.5,
+            "hold_speed": 108.6,
+            "draw_speed": 77.0
+        },
+        {
+            "life": 4710,
+            "stamina": 4710,
+            "strength": 28.0,
+            "move_speed": 99.0,
+            "hold_speed": 109.4,
+            "draw_speed": 78.0
+        },
+        {
+            "life": 4780,
+            "stamina": 4780,
+            "strength": 29.0,
+            "move_speed": 99.5,
+            "hold_speed": 110.2,
+            "draw_speed": 79.0
+        },
+        {
+            "life": 4850,
+            "stamina": 4850,
+            "strength": 30.0,
+            "move_speed": 100.0,
+            "hold_speed": 111.0,
+            "draw_speed": 80.0
+        },
+        {
+            "life": 4920,
+            "stamina": 4920,
+            "strength": 31.0,
+            "move_speed": 100.5,
+            "hold_speed": 111.8,
+            "draw_speed": 81.0
+        },
+        {
+            "life": 4990,
+            "stamina": 4990,
+            "strength": 32.0,
+            "move_speed": 101.0,
+            "hold_speed": 112.6,
+            "draw_speed": 82.0
+        },
+        {
+            "life": 5060,
+            "stamina": 5060,
+            "strength": 33.0,
+            "move_speed": 101.5,
+            "hold_speed": 113.4,
+            "draw_speed": 83.0
+        },
+        {
+            "life": 5130,
+            "stamina": 5130,
+            "strength": 34.0,
+            "move_speed": 102.0,
+            "hold_speed": 114.2,
+            "draw_speed": 84.0
+        },
+        {
+            "life": 5200,
+            "stamina": 5200,
+            "strength": 35.0,
+            "move_speed": 102.5,
+            "hold_speed": 115.0,
+            "draw_speed": 85.0
+        },
+        {
+            "life": 5270,
+            "stamina": 5270,
+            "strength": 36.0,
+            "move_speed": 103.0,
+            "hold_speed": 115.8,
+            "draw_speed": 86.0
+        },
+        {
+            "life": 5340,
+            "stamina": 5340,
+            "strength": 37.0,
+            "move_speed": 103.5,
+            "hold_speed": 116.6,
+            "draw_speed": 87.0
+        },
+        {
+            "life": 5410,
+            "stamina": 5410,
+            "strength": 38.0,
+            "move_speed": 104.0,
+            "hold_speed": 117.4,
+            "draw_speed": 88.0
+        },
+        {
+            "life": 5480,
+            "stamina": 5480,
+            "strength": 39.0,
+            "move_speed": 104.5,
+            "hold_speed": 118.2,
+            "draw_speed": 89.0
+        },
+        {
+            "life": 5550,
+            "stamina": 5550,
+            "strength": 40.0,
+            "move_speed": 105.0,
+            "hold_speed": 119.0,
+            "draw_speed": 90.0
+        },
+        {
+            "life": 5620,
+            "stamina": 5620,
+            "strength": 41.0,
+            "move_speed": 105.5,
+            "hold_speed": 119.8,
+            "draw_speed": 91.0
+        },
+        {
+            "life": 5690,
+            "stamina": 5690,
+            "strength": 42.0,
+            "move_speed": 106.0,
+            "hold_speed": 120.6,
+            "draw_speed": 92.0
+        },
+        {
+            "life": 5760,
+            "stamina": 5760,
+            "strength": 43.0,
+            "move_speed": 106.5,
+            "hold_speed": 121.4,
+            "draw_speed": 93.0
+        },
+        {
+            "life": 5830,
+            "stamina": 5830,
+            "strength": 44.0,
+            "move_speed": 107.0,
+            "hold_speed": 122.2,
+            "draw_speed": 94.0
+        },
+        {
+            "life": 5900,
+            "stamina": 5900,
+            "strength": 45.0,
+            "move_speed": 107.5,
+            "hold_speed": 123.0,
+            "draw_speed": 95.0
+        },
+        {
+            "life": 5970,
+            "stamina": 5970,
+            "strength": 46.0,
+            "move_speed": 108.0,
+            "hold_speed": 123.8,
+            "draw_speed": 96.0
+        },
+        {
+            "life": 6040,
+            "stamina": 6040,
+            "strength": 47.0,
+            "move_speed": 108.5,
+            "hold_speed": 124.6,
+            "draw_speed": 97.0
+        },
+        {
+            "life": 6110,
+            "stamina": 6110,
+            "strength": 48.0,
+            "move_speed": 109.0,
+            "hold_speed": 125.4,
+            "draw_speed": 98.0
+        },
+        {
+            "life": 6180,
+            "stamina": 6180,
+            "strength": 49.0,
+            "move_speed": 109.5,
+            "hold_speed": 126.2,
+            "draw_speed": 99.0
+        },
+        {
+            "life": 6250,
+            "stamina": 6250,
+            "strength": 50.0,
+            "move_speed": 110.0,
+            "hold_speed": 127.0,
+            "draw_speed": 100.0
+        },
+        {
+            "life": 6320,
+            "stamina": 6320,
+            "strength": 51.0,
+            "move_speed": 110.5,
+            "hold_speed": 127.8,
+            "draw_speed": 101.0
+        },
+        {
+            "life": 6390,
+            "stamina": 6390,
+            "strength": 52.0,
+            "move_speed": 111.0,
+            "hold_speed": 128.6,
+            "draw_speed": 102.0
+        },
+        {
+            "life": 6460,
+            "stamina": 6460,
+            "strength": 53.0,
+            "move_speed": 111.5,
+            "hold_speed": 129.4,
+            "draw_speed": 103.0
+        },
+        {
+            "life": 6530,
+            "stamina": 6530,
+            "strength": 54.0,
+            "move_speed": 112.0,
+            "hold_speed": 130.2,
+            "draw_speed": 104.0
+        },
+        {
+            "life": 6600,
+            "stamina": 6600,
+            "strength": 55.0,
+            "move_speed": 112.5,
+            "hold_speed": 131.0,
+            "draw_speed": 105.0
+        },
+        {
+            "life": 6670,
+            "stamina": 6670,
+            "strength": 56.0,
+            "move_speed": 113.0,
+            "hold_speed": 131.8,
+            "draw_speed": 106.0
+        },
+        {
+            "life": 6740,
+            "stamina": 6740,
+            "strength": 57.0,
+            "move_speed": 113.5,
+            "hold_speed": 132.6,
+            "draw_speed": 107.0
+        },
+        {
+            "life": 6810,
+            "stamina": 6810,
+            "strength": 58.0,
+            "move_speed": 114.0,
+            "hold_speed": 133.4,
+            "draw_speed": 108.0
+        },
+        {
+            "life": 6880,
+            "stamina": 6880,
+            "strength": 59.0,
+            "move_speed": 114.5,
+            "hold_speed": 134.2,
+            "draw_speed": 109.0
+        },
+        {
+            "life": 6950,
+            "stamina": 6950,
+            "strength": 60.0,
+            "move_speed": 115.0,
+            "hold_speed": 135.0,
+            "draw_speed": 110.0
+        },
+        {
+            "life": 7020,
+            "stamina": 7020,
+            "strength": 61.0,
+            "move_speed": 115.5,
+            "hold_speed": 135.8,
+            "draw_speed": 111.0
+        },
+        {
+            "life": 7090,
+            "stamina": 7090,
+            "strength": 62.0,
+            "move_speed": 116.0,
+            "hold_speed": 136.6,
+            "draw_speed": 112.0
+        },
+        {
+            "life": 7160,
+            "stamina": 7160,
+            "strength": 63.0,
+            "move_speed": 116.5,
+            "hold_speed": 137.4,
+            "draw_speed": 113.0
+        },
+        {
+            "life": 7230,
+            "stamina": 7230,
+            "strength": 64.0,
+            "move_speed": 117.0,
+            "hold_speed": 138.2,
+            "draw_speed": 114.0
+        },
+        {
+            "life": 7300,
+            "stamina": 7300,
+            "strength": 65.0,
+            "move_speed": 117.5,
+            "hold_speed": 139.0,
+            "draw_speed": 115.0
+        },
+        {
+            "life": 7370,
+            "stamina": 7370,
+            "strength": 66.0,
+            "move_speed": 118.0,
+            "hold_speed": 139.8,
+            "draw_speed": 116.0
+        },
+        {
+            "life": 7440,
+            "stamina": 7440,
+            "strength": 67.0,
+            "move_speed": 118.5,
+            "hold_speed": 140.6,
+            "draw_speed": 117.0
+        },
+        {
+            "life": 7510,
+            "stamina": 7510,
+            "strength": 68.0,
+            "move_speed": 119.0,
+            "hold_speed": 141.4,
+            "draw_speed": 118.0
+        },
+        {
+            "life": 7580,
+            "stamina": 7580,
+            "strength": 69.0,
+            "move_speed": 119.5,
+            "hold_speed": 142.2,
+            "draw_speed": 119.0
+        },
+        {
+            "life": 7650,
+            "stamina": 7650,
+            "strength": 70.0,
+            "move_speed": 120.0,
+            "hold_speed": 143.0,
+            "draw_speed": 120.0
+        },
+        {
+            "life": 7720,
+            "stamina": 7720,
+            "strength": 71.0,
+            "move_speed": 120.5,
+            "hold_speed": 143.8,
+            "draw_speed": 121.0
+        },
+        {
+            "life": 7790,
+            "stamina": 7790,
+            "strength": 72.0,
+            "move_speed": 121.0,
+            "hold_speed": 144.6,
+            "draw_speed": 122.0
+        },
+        {
+            "life": 7860,
+            "stamina": 7860,
+            "strength": 73.0,
+            "move_speed": 121.5,
+            "hold_speed": 145.4,
+            "draw_speed": 123.0
+        },
+        {
+            "life": 7930,
+            "stamina": 7930,
+            "strength": 74.0,
+            "move_speed": 122.0,
+            "hold_speed": 146.2,
+            "draw_speed": 124.0
+        },
+        {
+            "life": 8000,
+            "stamina": 8000,
+            "strength": 75.0,
+            "move_speed": 122.5,
+            "hold_speed": 147.0,
+            "draw_speed": 125.0
+        },
+        {
+            "life": 8070,
+            "stamina": 8070,
+            "strength": 76.0,
+            "move_speed": 123.0,
+            "hold_speed": 147.8,
+            "draw_speed": 126.0
+        },
+        {
+            "life": 8140,
+            "stamina": 8140,
+            "strength": 77.0,
+            "move_speed": 123.5,
+            "hold_speed": 148.6,
+            "draw_speed": 127.0
+        },
+        {
+            "life": 8210,
+            "stamina": 8210,
+            "strength": 78.0,
+            "move_speed": 124.0,
+            "hold_speed": 149.4,
+            "draw_speed": 128.0
+        },
+        {
+            "life": 8280,
+            "stamina": 8280,
+            "strength": 79.0,
+            "move_speed": 124.5,
+            "hold_speed": 150.2,
+            "draw_speed": 129.0
+        },
+        {
+            "life": 8350,
+            "stamina": 8350,
+            "strength": 80.0,
+            "move_speed": 125.0,
+            "hold_speed": 151.0,
+            "draw_speed": 130.0
+        },
+        {
+            "life": 8420,
+            "stamina": 8420,
+            "strength": 81.0,
+            "move_speed": 125.5,
+            "hold_speed": 151.8,
+            "draw_speed": 131.0
+        },
+        {
+            "life": 8490,
+            "stamina": 8490,
+            "strength": 82.0,
+            "move_speed": 126.0,
+            "hold_speed": 152.6,
+            "draw_speed": 132.0
+        },
+        {
+            "life": 8560,
+            "stamina": 8560,
+            "strength": 83.0,
+            "move_speed": 126.5,
+            "hold_speed": 153.4,
+            "draw_speed": 133.0
+        },
+        {
+            "life": 8630,
+            "stamina": 8630,
+            "strength": 84.0,
+            "move_speed": 127.0,
+            "hold_speed": 154.2,
+            "draw_speed": 134.0
+        },
+        {
+            "life": 8700,
+            "stamina": 8700,
+            "strength": 85.0,
+            "move_speed": 127.5,
+            "hold_speed": 155.0,
+            "draw_speed": 135.0
+        },
+        {
+            "life": 8770,
+            "stamina": 8770,
+            "strength": 86.0,
+            "move_speed": 128.0,
+            "hold_speed": 155.8,
+            "draw_speed": 136.0
+        },
+        {
+            "life": 8840,
+            "stamina": 8840,
+            "strength": 87.0,
+            "move_speed": 128.5,
+            "hold_speed": 156.6,
+            "draw_speed": 137.0
+        },
+        {
+            "life": 8910,
+            "stamina": 8910,
+            "strength": 88.0,
+            "move_speed": 129.0,
+            "hold_speed": 157.4,
+            "draw_speed": 138.0
+        },
+        {
+            "life": 8980,
+            "stamina": 8980,
+            "strength": 89.0,
+            "move_speed": 129.5,
+            "hold_speed": 158.2,
+            "draw_speed": 139.0
+        }
+    ],
+    "scriptParam": [
+        {
+            "name": 1684611078,
+            "value": 5.0
+        },
+        {
+            "name": 3261857501,
+            "value": 120.0
+        },
+        {
+            "name": 2154299197,
+            "value": 72.0
+        },
+        {
+            "name": 1707632754,
+            "value": 72.0
+        },
+        {
+            "name": 2729843615,
+            "value": 300.0
+        }
+    ],
+    "staminaUse": [
+        {
+            "type": 3107697510,
+            "useValue": 8.0,
+            "useValueWithMask": 8.0,
+            "disableRecovery": 0.0
+        },
+        {
+            "type": 244962479,
+            "useValue": 60.0,
+            "useValueWithMask": 300.0,
+            "disableRecovery": 1.0
+        },
+        {
+            "type": 251237137,
+            "useValue": 6.0,
+            "useValueWithMask": 30.0,
+            "disableRecovery": 0.25
+        },
+        {
+            "type": 1559586187,
+            "useValue": 30.0,
+            "useValueWithMask": 150.0,
+            "disableRecovery": 0.25
+        },
+        {
+            "type": 590812589,
+            "useValue": 120.0,
+            "useValueWithMask": 600.0,
+            "disableRecovery": 1.0
+        },
+        {
+            "type": 3934641558,
+            "useValue": 600.0,
+            "useValueWithMask": 900.0,
+            "disableRecovery": 1.0
+        },
+        {
+            "type": 4236268288,
+            "useValue": 200.0,
+            "useValueWithMask": 300.0,
+            "disableRecovery": 1.0
+        },
+        {
+            "type": 1368696892,
+            "useValue": 450.0,
+            "useValueWithMask": 675.0,
+            "disableRecovery": 2.0
+        },
+        {
+            "type": 1895490291,
+            "useValue": 450.0,
+            "useValueWithMask": 675.0,
+            "disableRecovery": 2.0
+        },
+        {
+            "type": 2408122058,
+            "useValue": 450.0,
+            "useValueWithMask": 675.0,
+            "disableRecovery": 2.0
+        },
+        {
+            "type": 3852447436,
+            "useValue": 600.0,
+            "useValueWithMask": 900.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 137674585,
+            "useValue": 800.0,
+            "useValueWithMask": 1200.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 1694845813,
+            "useValue": 1400.0,
+            "useValueWithMask": 2100.0,
+            "disableRecovery": 4.0
+        },
+        {
+            "type": 640450671,
+            "useValue": 600.0,
+            "useValueWithMask": 600.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 1607475095,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 3697036705,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 5.0
+        },
+        {
+            "type": 1425259207,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 5.0
+        },
+        {
+            "type": 38519889,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 1521993148,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 5.0
+        },
+        {
+            "type": 4223986145,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 3.0
+        },
+        {
+            "type": 3923004224,
+            "useValue": 1000.0,
+            "useValueWithMask": 1000.0,
+            "disableRecovery": 5.0
+        },
+        {
+            "type": 2008847485,
+            "useValue": 500.0,
+            "useValueWithMask": 750.0,
+            "disableRecovery": 5.0
+        },
+        {
+            "type": 4220083707,
+            "useValue": 600.0,
+            "useValueWithMask": 900.0,
+            "disableRecovery": 5.0
+        }
+    ],
+    "activeSkill": [
+        {
+            "type": 65723272,
+            "chargeTime": 25.0,
+            "coolDownTime": 1.0,
+            "staminaUseType": 1607475095
+        },
+        {
+            "type": 1342587011,
+            "chargeTime": 30.0,
+            "coolDownTime": 3.0,
+            "staminaUseType": 640450671
+        },
+        {
+            "type": 1059992667,
+            "chargeTime": 20.0,
+            "coolDownTime": 3.0,
+            "staminaUseType": 38519889
+        },
+        {
+            "type": 3105479325,
+            "chargeTime": 30.0,
+            "coolDownTime": 3.0,
+            "staminaUseType": 1521993148
+        },
+        {
+            "type": 2311457818,
+            "chargeTime": 25.0,
+            "coolDownTime": 3.0,
+            "staminaUseType": 4223986145
+        },
+        {
+            "type": 4210340185,
+            "chargeTime": 30.0,
+            "coolDownTime": 1.0,
+            "staminaUseType": 3923004224
+        },
+        {
+            "type": 1514934675,
+            "chargeTime": 30.0,
+            "coolDownTime": 3.0,
+            "staminaUseType": 104983832
+        },
+        {
+            "type": 1042299143,
+            "chargeTime": 30.0,
+            "coolDownTime": 1.0,
+            "staminaUseType": 104983832
+        }
+    ],
+    "badCondition": [
+        {
+            "type": 724383910,
+            "cureMinutes": 18.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 1839975497,
+            "cureMinutes": 26.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 50.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 3414206245,
+            "cureMinutes": 18.0,
+            "lifeMaxReduce": 5.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 3659342845,
+            "cureMinutes": 18.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 5.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 3624728030,
+            "cureMinutes": 1.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 3757814521,
+            "cureMinutes": 18.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.5,
+            "attackId": 4135272681
+        },
+        {
+            "type": 203549332,
+            "cureMinutes": 9.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 2.0,
+            "attackId": 4135272681
+        },
+        {
+            "type": 2964502261,
+            "cureMinutes": 26.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 30.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 2927156189,
+            "cureMinutes": 26.0,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 30.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 1821288934,
+            "cureMinutes": 0.33,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 0.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 4.0,
+            "attackId": 2670866900
+        },
+        {
+            "type": 435424396,
+            "cureMinutes": 0.5,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 20.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        },
+        {
+            "type": 2560410764,
+            "cureMinutes": 0.5,
+            "lifeMaxReduce": 0.0,
+            "staminaMaxReduce": 20.0,
+            "hungerMaxReduce": 0.0,
+            "thirstMaxReduce": 0.0,
+            "slipDamageRate": 0.0,
+            "attackId": 0
+        }
+    ],
+    "buff": [
+        {
+            "default": 2547048339
+        },
+        {
+            "default": 3803335245
+        }
+    ],
+    "durabilityDefenseRate": [
+        {
+            "durabilityRate": 0.0,
+            "defenseValueRate": 10
+        },
+        {
+            "durabilityRate": 0.3,
+            "defenseValueRate": 30
+        },
+        {
+            "durabilityRate": 0.5,
+            "defenseValueRate": 70
+        },
+        {
+            "durabilityRate": 0.7,
+            "defenseValueRate": 90
+        },
+        {
+            "durabilityRate": 1.0,
+            "defenseValueRate": 100
+        }
+    ]
+}

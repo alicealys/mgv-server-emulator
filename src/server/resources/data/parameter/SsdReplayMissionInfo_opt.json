@@ -1,0 +1,626 @@
+{
+    "missions": [
+        {
+            "id": 981934197,
+            "difficulty": 3983179204,
+            "missionId": 10010,
+            "storySequence": 0,
+            "enemyLevel": 0,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 1,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 197922391805612,
+            "explainLangId": 41510192989742,
+            "texturePathId": 1543179666847185064
+        },
+        {
+            "id": 429481191,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 0,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 1,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                665754865,
+                2783170463,
+                1414413152,
+                2096721072,
+                3642082373,
+                1434117290,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 207647315066802,
+            "explainLangId": 57806978527012,
+            "texturePathId": 1543406159318051975
+        },
+        {
+            "id": 1589578594,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 0,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 1,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                665754865,
+                2783170463,
+                1414413152,
+                2096721072,
+                3642082373,
+                1434117290,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 90529828159182,
+            "explainLangId": 179573598083899,
+            "texturePathId": 1543175445767681626
+        },
+        {
+            "id": 310614394,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 1,
+            "enemyLevelRandRange": 1,
+            "uiEnemyLevel": 2,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                665754865,
+                2783170463,
+                1414413152,
+                2096721072,
+                3642082373,
+                1434117290,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 65552801514150,
+            "explainLangId": 191255655725707,
+            "texturePathId": 1542631485018584416
+        },
+        {
+            "id": 3195580955,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 3,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 4,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                665754865,
+                2783170463,
+                1414413152,
+                2096721072,
+                3642082373,
+                1434117290,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 173825298093994,
+            "explainLangId": 168484026119065,
+            "texturePathId": 1542763352764649422
+        },
+        {
+            "id": 733902871,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 3,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 4,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                1414413152,
+                3642082373,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                1258601063
+            ],
+            "captionLangId": 179791749607380,
+            "explainLangId": 267749334131905,
+            "texturePathId": 1542591401953715536
+        },
+        {
+            "id": 3100104707,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 4,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 5,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                3642082373,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 103920357428501,
+            "explainLangId": 133670311111704,
+            "texturePathId": 1542973646769349463
+        },
+        {
+            "id": 2951666991,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 6,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 7,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                3642082373,
+                2642026894,
+                1030129796,
+                3990674732,
+                3888208947
+            ],
+            "openedQuest": [
+                3268597726
+            ],
+            "captionLangId": 63309135959377,
+            "explainLangId": 98960391968097,
+            "texturePathId": 1543130945149163882
+        },
+        {
+            "id": 694281863,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 4,
+            "enemyLevelRandRange": 4,
+            "uiEnemyLevel": 9,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                2642026894,
+                3990674732,
+                3888208947,
+                3205930904
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 220535658126303,
+            "explainLangId": 174278064150131,
+            "texturePathId": 1542550069740390940
+        },
+        {
+            "id": 797733207,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 8,
+            "enemyLevelRandRange": 3,
+            "uiEnemyLevel": 12,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                2642026894,
+                3990674732,
+                3888208947,
+                3205930904
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 114844251695355,
+            "explainLangId": 194470597143248,
+            "texturePathId": 1543288040024494666
+        },
+        {
+            "id": 412954190,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 10,
+            "enemyLevelRandRange": 1,
+            "uiEnemyLevel": 12,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                2642026894,
+                3990674732,
+                3888208947,
+                3205930904
+            ],
+            "openedQuest": [
+                3032828004
+            ],
+            "captionLangId": 34046896387637,
+            "explainLangId": 250310905831150,
+            "texturePathId": 1542791458347435092
+        },
+        {
+            "id": 1438536160,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 12,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 13,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                3888208947
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 85214432586142,
+            "explainLangId": 65675306636750,
+            "texturePathId": 1543477694082688076
+        },
+        {
+            "id": 3911057849,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 14,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 15,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                3888208947
+            ],
+            "openedQuest": [
+                3163913922
+            ],
+            "captionLangId": 46585431693308,
+            "explainLangId": 213124167872787,
+            "texturePathId": 1543360904404896260
+        },
+        {
+            "id": 3981547170,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 15,
+            "enemyLevelRandRange": 1,
+            "uiEnemyLevel": 17,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 188316391334488,
+            "explainLangId": 276974162605426,
+            "texturePathId": 1543256804761332128
+        },
+        {
+            "id": 866339401,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 16,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 17,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 125087198060942,
+            "explainLangId": 2718109461067,
+            "texturePathId": 1543366456503297756
+        },
+        {
+            "id": 3539540375,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 16,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 17,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 33982957004658,
+            "explainLangId": 257574257109293,
+            "texturePathId": 1543002352151379369
+        },
+        {
+            "id": 779975433,
+            "difficulty": 3983179204,
+            "missionId": 10035,
+            "storySequence": 0,
+            "enemyLevel": 16,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 17,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 22312629082525,
+            "explainLangId": 759882081161,
+            "texturePathId": 1543113576467325633
+        },
+        {
+            "id": 847042613,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 18,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 19,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                784801054,
+                1580268973,
+                1152497772,
+                1013017821,
+                1787854730,
+                3016891822,
+                1698942371
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 133272017247293,
+            "explainLangId": 169810040803924,
+            "texturePathId": 1542483141572550349
+        },
+        {
+            "id": 3090860362,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 19,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 20,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                784801054,
+                1580268973,
+                1152497772,
+                1013017821,
+                1787854730,
+                3016891822,
+                1698942371
+            ],
+            "openedQuest": [
+                2613398378
+            ],
+            "captionLangId": 66762425526111,
+            "explainLangId": 174751618893462,
+            "texturePathId": 1543434761637396984
+        },
+        {
+            "id": 781622451,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 20,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 21,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                1013017821,
+                1787854730,
+                3016891822,
+                1698942371
+            ],
+            "openedQuest": [
+                3746718347,
+                2266533648
+            ],
+            "captionLangId": 114573499312884,
+            "explainLangId": 150041376467765,
+            "texturePathId": 1543235712405908931
+        },
+        {
+            "id": 3008413821,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 14,
+            "enemyLevelRandRange": 7,
+            "uiEnemyLevel": 22,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                1787854730,
+                3016891822
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 53444969915127,
+            "explainLangId": 178784366278551,
+            "texturePathId": 1543018641004523940
+        },
+        {
+            "id": 4092409957,
+            "difficulty": 3983179204,
+            "missionId": 10050,
+            "storySequence": 0,
+            "enemyLevel": 14,
+            "enemyLevelRandRange": 7,
+            "uiEnemyLevel": 22,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 61707332268284,
+            "explainLangId": 137288820648568,
+            "texturePathId": 1543067130071523474
+        },
+        {
+            "id": 2482859690,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 21,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 22,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                1787854730,
+                3016891822
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 117650335850815,
+            "explainLangId": 60762252967681,
+            "texturePathId": 1542580883710869626
+        },
+        {
+            "id": 2825071897,
+            "difficulty": 3983179204,
+            "missionId": 30020,
+            "storySequence": 0,
+            "enemyLevel": 17,
+            "enemyLevelRandRange": 2,
+            "uiEnemyLevel": 20,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 41543306266529,
+            "explainLangId": 267418173791061,
+            "texturePathId": 1543258849246655728
+        },
+        {
+            "id": 3004778638,
+            "difficulty": 3983179204,
+            "missionId": 30010,
+            "storySequence": 0,
+            "enemyLevel": 22,
+            "enemyLevelRandRange": 0,
+            "uiEnemyLevel": 23,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 187200120824350,
+            "explainLangId": 133351246089752,
+            "texturePathId": 1542889785482427734
+        },
+        {
+            "id": 2735052974,
+            "difficulty": 3983179204,
+            "missionId": 10060,
+            "storySequence": 0,
+            "enemyLevel": 17,
+            "enemyLevelRandRange": 4,
+            "uiEnemyLevel": 22,
+            "missionBuffName": [
+                0
+            ],
+            "lockedFastTravel": [
+                0
+            ],
+            "openedQuest": [
+                0
+            ],
+            "captionLangId": 99824728630442,
+            "explainLangId": 177760368829512,
+            "texturePathId": 1542725982918892721
+        }
+    ]
+}

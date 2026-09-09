@@ -1,0 +1,2012 @@
+{
+    "missionSettings": [
+        {
+            "waveTime": [
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 3,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 2,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 17,
+            "missionId": 50500,
+            "interval": [],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 1243,
+                    "AttackPower_NE": 1344,
+                    "AttackPower_SE": 1615,
+                    "AttackPower_SW": 0
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 9,
+                    "level_min": 7,
+                    "level_average": 8
+                }
+            ],
+            "openCondition": 0,
+            "autoDefenseScore": [
+                36000
+            ],
+            "rankRewardThreashold": [
+                35680,
+                28520,
+                21360,
+                14200,
+                7040
+            ],
+            "waveCountMax": 1
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 2,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 1,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 51010,
+            "interval": [
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 399,
+                    "AttackPower_NE": 1614,
+                    "AttackPower_SE": 2696,
+                    "AttackPower_SW": 426
+                },
+                {
+                    "AttackPower_NW": 213,
+                    "AttackPower_NE": 852,
+                    "AttackPower_SE": 2743,
+                    "AttackPower_SW": 1713
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 14,
+                    "level_min": 9,
+                    "level_average": 13
+                },
+                {
+                    "level_max": 14,
+                    "level_min": 10,
+                    "level_average": 13
+                }
+            ],
+            "openCondition": 50500,
+            "autoDefenseScore": [
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                71360,
+                57040,
+                42720,
+                28400,
+                14080
+            ],
+            "waveCountMax": 2
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 3,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 2,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 51510,
+            "interval": [
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 2682,
+                    "AttackPower_NE": 0,
+                    "AttackPower_SE": 3710,
+                    "AttackPower_SW": 0
+                },
+                {
+                    "AttackPower_NW": 1500,
+                    "AttackPower_NE": 0,
+                    "AttackPower_SE": 1087,
+                    "AttackPower_SW": 3631
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 17,
+                    "level_min": 6,
+                    "level_average": 15
+                },
+                {
+                    "level_max": 17,
+                    "level_min": 11,
+                    "level_average": 15
+                }
+            ],
+            "openCondition": 51010,
+            "autoDefenseScore": [
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                71360,
+                57040,
+                42720,
+                28400,
+                14080
+            ],
+            "waveCountMax": 2
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 3,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 52010,
+            "interval": [
+                22,
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 266,
+                    "AttackPower_NE": 3768,
+                    "AttackPower_SE": 2596,
+                    "AttackPower_SW": 0
+                },
+                {
+                    "AttackPower_NW": 3738,
+                    "AttackPower_NE": 3671,
+                    "AttackPower_SE": 3693,
+                    "AttackPower_SW": 3814
+                },
+                {
+                    "AttackPower_NW": 5416,
+                    "AttackPower_NE": 0,
+                    "AttackPower_SE": 0,
+                    "AttackPower_SW": 5133
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 19,
+                    "level_min": 14,
+                    "level_average": 18
+                },
+                {
+                    "level_max": 19,
+                    "level_min": 15,
+                    "level_average": 18
+                },
+                {
+                    "level_max": 19,
+                    "level_min": 19,
+                    "level_average": 19
+                }
+            ],
+            "openCondition": 51510,
+            "autoDefenseScore": [
+                36000,
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                107040,
+                85560,
+                64080,
+                42600,
+                21120
+            ],
+            "waveCountMax": 3
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 3,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 52510,
+            "interval": [
+                22,
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 0,
+                    "AttackPower_NE": 2838,
+                    "AttackPower_SE": 8217,
+                    "AttackPower_SW": 0
+                },
+                {
+                    "AttackPower_NW": 1493,
+                    "AttackPower_NE": 1493,
+                    "AttackPower_SE": 2490,
+                    "AttackPower_SW": 1991
+                },
+                {
+                    "AttackPower_NW": 4316,
+                    "AttackPower_NE": 4083,
+                    "AttackPower_SE": 1535,
+                    "AttackPower_SW": 2639
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 22,
+                    "level_min": 22,
+                    "level_average": 22
+                },
+                {
+                    "level_max": 22,
+                    "level_min": 22,
+                    "level_average": 22
+                },
+                {
+                    "level_max": 22,
+                    "level_min": 22,
+                    "level_average": 22
+                }
+            ],
+            "openCondition": 52010,
+            "autoDefenseScore": [
+                36000,
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                107040,
+                85560,
+                64080,
+                42600,
+                21120
+            ],
+            "waveCountMax": 3
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0,
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 4,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 3,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 53010,
+            "interval": [
+                22,
+                22,
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 5880,
+                    "AttackPower_NE": 5565,
+                    "AttackPower_SE": 0,
+                    "AttackPower_SW": 0
+                },
+                {
+                    "AttackPower_NW": 1732,
+                    "AttackPower_NE": 0,
+                    "AttackPower_SE": 5670,
+                    "AttackPower_SW": 2677
+                },
+                {
+                    "AttackPower_NW": 4725,
+                    "AttackPower_NE": 1575,
+                    "AttackPower_SE": 3832,
+                    "AttackPower_SW": 2467
+                },
+                {
+                    "AttackPower_NW": 2887,
+                    "AttackPower_NE": 472,
+                    "AttackPower_SE": 1470,
+                    "AttackPower_SW": 4567
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 25,
+                    "level_min": 25,
+                    "level_average": 25
+                },
+                {
+                    "level_max": 25,
+                    "level_min": 25,
+                    "level_average": 25
+                },
+                {
+                    "level_max": 25,
+                    "level_min": 25,
+                    "level_average": 25
+                },
+                {
+                    "level_max": 25,
+                    "level_min": 25,
+                    "level_average": 25
+                }
+            ],
+            "openCondition": 52510,
+            "autoDefenseScore": [
+                36000,
+                36000,
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                142720,
+                114080,
+                85440,
+                56800,
+                28160
+            ],
+            "waveCountMax": 4
+        },
+        {
+            "waveTime": [
+                360.0,
+                360.0,
+                360.0,
+                360.0
+            ],
+            "missionType": 3738616465,
+            "uiRewardInfo": {
+                "rank_reward_info": [
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "S"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 5,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 4,
+                                "icon_type": 233591301
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "A"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 3,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "B"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 2,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 1619391130
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "C"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 1,
+                                "icon_type": 2417994215
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "D"
+                    },
+                    {
+                        "line_info": [
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            },
+                            {
+                                "rarity": 0,
+                                "icon_type": 535803692
+                            }
+                        ],
+                        "rank": "E"
+                    }
+                ]
+            },
+            "enemyBaseLevel": 21,
+            "missionId": 53510,
+            "interval": [
+                22,
+                22,
+                22
+            ],
+            "autoDefensePower": [
+                {
+                    "AttackPower_NW": 14572,
+                    "AttackPower_NE": 18326,
+                    "AttackPower_SE": 2760,
+                    "AttackPower_SW": 8721
+                },
+                {
+                    "AttackPower_NW": 8390,
+                    "AttackPower_NE": 6844,
+                    "AttackPower_SE": 19430,
+                    "AttackPower_SW": 1104
+                },
+                {
+                    "AttackPower_NW": 14572,
+                    "AttackPower_NE": 3753,
+                    "AttackPower_SE": 4140,
+                    "AttackPower_SW": 11647
+                },
+                {
+                    "AttackPower_NW": 1545,
+                    "AttackPower_NE": 12033,
+                    "AttackPower_SE": 16835,
+                    "AttackPower_SW": 6789
+                }
+            ],
+            "enemyLevelSettings": [
+                {
+                    "level_max": 28,
+                    "level_min": 28,
+                    "level_average": 28
+                },
+                {
+                    "level_max": 28,
+                    "level_min": 28,
+                    "level_average": 28
+                },
+                {
+                    "level_max": 28,
+                    "level_min": 28,
+                    "level_average": 28
+                },
+                {
+                    "level_max": 28,
+                    "level_min": 28,
+                    "level_average": 28
+                }
+            ],
+            "openCondition": 53010,
+            "autoDefenseScore": [
+                36000,
+                36000,
+                36000,
+                36000
+            ],
+            "rankRewardThreashold": [
+                142720,
+                114080,
+                85440,
+                56800,
+                28160
+            ],
+            "waveCountMax": 4
+        }
+    ]
+}

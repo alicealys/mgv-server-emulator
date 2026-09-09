@@ -315,6 +315,23 @@ namespace database::players
 		// update_remaining_time?
 	};
 
+	struct inventory_resource_t
+	{
+		std::uint16_t inventory_index;
+		std::uint16_t inventory_type;
+		std::uint32_t cbox_index;
+		std::uint32_t count;
+		std::uint32_t damaged_in_count;
+		std::uint32_t flag;
+		std::uint32_t obtain_order;
+		std::uint32_t resource_id;
+	};
+
+	struct inventory_resources_t
+	{
+		inventory_resource_t resources[255];
+	};
+
 	struct player_play_record_t
 	{
 		std::uint32_t first[191];
