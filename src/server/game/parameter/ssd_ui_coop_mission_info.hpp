@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_ui_coop_mission_info : public base_parameter
+	class ssd_ui_coop_mission_info final : public base_parameter
 	{
 	public:
 		ssd_ui_coop_mission_info();

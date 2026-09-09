@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class defense_game_base_digging : public base_parameter
+	class defense_game_base_digging final : public base_parameter
 	{
 	public:
 		defense_game_base_digging();

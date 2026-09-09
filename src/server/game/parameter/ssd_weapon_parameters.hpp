@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_weapon_parameters : public base_parameter
+	class ssd_weapon_parameters final : public base_parameter
 	{
 	public:
 		ssd_weapon_parameters();

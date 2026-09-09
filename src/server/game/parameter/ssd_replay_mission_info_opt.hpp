@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_replay_mission_info_opt : public base_parameter
+	class ssd_replay_mission_info_opt final : public base_parameter
 	{
 	public:
 		ssd_replay_mission_info_opt();

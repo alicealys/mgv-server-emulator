@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_base_defense_settings : public base_parameter
+	class ssd_base_defense_settings final : public base_parameter
 	{
 	public:
 		ssd_base_defense_settings();

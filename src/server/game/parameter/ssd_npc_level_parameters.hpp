@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_npc_level_parameters : public base_parameter
+	class ssd_npc_level_parameters final : public base_parameter
 	{
 	public:
 		ssd_npc_level_parameters();

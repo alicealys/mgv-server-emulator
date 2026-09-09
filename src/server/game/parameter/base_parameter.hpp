@@ -5,6 +5,10 @@ namespace game::parameters
 	class base_parameter : std::enable_shared_from_this<base_parameter>
 	{
 	public:
+		virtual ~base_parameter()
+		{
+		}
+
 		const std::string& get_data_path();
 		const std::string& get_data_md5();
 		const std::string& name();

@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_buff_parameter : public base_parameter
+	class ssd_buff_parameter final : public base_parameter
 	{
 	public:
 		ssd_buff_parameter();

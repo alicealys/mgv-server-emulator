@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_walker_gear_parameters : public base_parameter
+	class ssd_walker_gear_parameters final : public base_parameter
 	{
 	public:
 		ssd_walker_gear_parameters();

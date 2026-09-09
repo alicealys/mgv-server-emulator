@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_building_parameter_table : public base_parameter
+	class ssd_building_parameter_table final : public base_parameter
 	{
 	public:
 		ssd_building_parameter_table();

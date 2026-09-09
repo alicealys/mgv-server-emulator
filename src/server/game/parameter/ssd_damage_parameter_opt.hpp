@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_damage_parameter_opt : public base_parameter
+	class ssd_damage_parameter_opt final : public base_parameter
 	{
 	public:
 		ssd_damage_parameter_opt();

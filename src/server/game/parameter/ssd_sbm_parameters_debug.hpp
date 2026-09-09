@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_sbm_parameters_debug : public base_parameter
+	class ssd_sbm_parameters_debug final : public base_parameter
 	{
 	public:
 		ssd_sbm_parameters_debug();

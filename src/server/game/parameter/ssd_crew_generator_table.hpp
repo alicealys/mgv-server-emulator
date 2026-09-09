@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_crew_generator_table : public base_parameter
+	class ssd_crew_generator_table final : public base_parameter
 	{
 	public:
 		ssd_crew_generator_table();

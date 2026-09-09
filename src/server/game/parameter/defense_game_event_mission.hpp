@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class defense_game_event_mission : public base_parameter
+	class defense_game_event_mission final : public base_parameter
 	{
 	public:
 		defense_game_event_mission();

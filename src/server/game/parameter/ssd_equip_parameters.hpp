@@ -4,7 +4,7 @@
 
 namespace game::parameters
 {
-	class ssd_equip_parameters : public base_parameter
+	class ssd_equip_parameters final : public base_parameter
 	{
 	public:
 		ssd_equip_parameters();
