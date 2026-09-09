@@ -463,6 +463,32 @@ namespace database::players
 		}
 	}
 
+	bool stackable_item_t::parse(nlohmann::json& data)
+	{
+		std::memset(this, 0, sizeof(stackable_item_t));
+		utils::json::get_or(data["cbox_index"], this->cbox_index);
+		utils::json::get_or(data["count"], this->count);
+		utils::json::get_or(data["damaged_in_count"], this->damaged_in_count);
+		utils::json::get_or(data["flag"], this->flag);
+		utils::json::get_or(data["inventory_index"], this->inventory_index);
+		utils::json::get_or(data["inventory_type"], this->inventory_type);
+		utils::json::get_or(data["obtain_order"], this->obtain_order);
+		utils::json::get_or(data["production_id"], this->production_id);
+		return true;
+	}
+
+	void stackable_item_t::to_json(nlohmann::json& data) const
+	{
+		data["cbox_index"] = this->cbox_index;
+		data["count"] = this->count;
+		data["damaged_in_count"] = this->damaged_in_count;
+		data["flag"] = this->flag;
+		data["inventory_index"] = this->inventory_index;
+		data["inventory_type"] = this->inventory_type;
+		data["obtain_order"] = this->obtain_order;
+		data["production_id"] = this->production_id;
+	}
+
 	void mission_info_t::initialize()
 	{
 		std::memset(this, 0, sizeof(mission_info_t));
@@ -618,6 +644,101 @@ namespace database::players
 		data["resource_timer_global_africa"] = this->resource_timer_global_africa;
 		data["resource_timer_stock_afghan"] = this->resource_timer_stock_afghan;
 		data["resource_timer_stock_africa"] = this->resource_timer_stock_africa;
+	}
+
+	bool base_resources_t::parse_base(nlohmann::json& base)
+	{
+		utils::json::get_or(base["bad_status_1_risk"], this->params.bad_status_1_risk);
+		utils::json::get_or(base["bad_status_2_risk"], this->params.bad_status_2_risk);
+		utils::json::get_or(base["bad_status_3_risk"], this->params.bad_status_3_risk);
+		utils::json::get_or(base["bad_status_4_risk"], this->params.bad_status_4_risk);
+		utils::json::get_or(base["clean_water"], this->params.clean_water);
+		utils::json::get_or(base["dirty_water"], this->params.dirty_water);
+		utils::json::get_or(base["food"], this->params.food);
+		utils::json::get_or(base["medical_supplies"], this->params.medical_supplies);
+		utils::json::get_or(base["party_item_id"], this->params.party_item_id);
+		utils::json::get_or(base["party_item_updates"], this->params.party_item_updates);
+		utils::json::get_or(base["total_number_of_updates"], this->params.total_number_of_updates);
+		return true;
+	}
+
+	bool base_resources_t::parse_counts(nlohmann::json& count)
+	{
+		for (auto i = 0ull; i < ARRAYSIZE(this->resource_counts); i++)
+		{
+			const auto key = std::format("c{:02}", i);
+			utils::json::get_or(count[key], this->resource_counts[i]);
+		}
+
+		utils::json::get_or(count["next_update_time"], this->next_update_time);
+		utils::json::get_or(count["update_remaining_time"], this->update_remaining_time);
+		return true;
+	}
+
+	bool base_resources_t::parse_animals(nlohmann::json& animal_list)
+	{
+		if (!animal_list.is_array())
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < animal_list.size(); i++)
+		{
+			auto& entry = animal_list[i];
+			auto& animal_kind_j = entry["animal_kind"];
+			auto& num_j = entry["num"];
+
+			if (!animal_kind_j.is_number_unsigned() || !num_j.is_number_unsigned())
+			{
+				continue;
+			}
+
+			const auto animal_kind = animal_kind_j.get<std::uint32_t>();
+			const auto num = num_j.get<std::uint32_t>();
+
+			if (animal_kind >= ARRAYSIZE(this->animals))
+			{
+				continue;
+			}
+
+			this->animals[animal_kind] = num;
+		}
+
+		return true;
+	}
+
+	void base_resources_t::to_json(nlohmann::json& data) const
+	{
+		auto& base_resource_j = data["base_resource"];
+		auto& resource_count_j = data["base_resource_count"];
+		auto& animals_j = data["animal_list"];
+
+		base_resource_j["bad_status_1_risk"] = this->params.bad_status_1_risk;
+		base_resource_j["bad_status_2_risk"] = this->params.bad_status_2_risk;
+		base_resource_j["bad_status_3_risk"] = this->params.bad_status_3_risk;
+		base_resource_j["bad_status_4_risk"] = this->params.bad_status_4_risk;
+		base_resource_j["clean_water"] = this->params.clean_water;
+		base_resource_j["dirty_water"] = this->params.dirty_water;
+		base_resource_j["food"] = this->params.food;
+		base_resource_j["medical_supplies"] = this->params.medical_supplies;
+		base_resource_j["party_item_id"] = this->params.party_item_id;
+		base_resource_j["party_item_updates"] = this->params.party_item_updates;
+		base_resource_j["total_number_of_updates"] = this->params.total_number_of_updates;
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->animals); i++)
+		{
+			animals_j[i]["animal_kind"] = i;
+			animals_j[i]["num"] = this->animals[i];
+		}
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->resource_counts); i++)
+		{
+			const auto key = std::format("c{:02}", i);
+			resource_count_j[key] = this->resource_counts[i];
+		}
+
+		resource_count_j["next_update_time"] = this->next_update_time;
+		resource_count_j["update_remaining_time"] = this->update_remaining_time;
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);
@@ -791,6 +912,7 @@ namespace database::players
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_africa);
 		DEF_BINARY_GET(player, player_play_record_t, player_play_record);
+		DEF_BINARY_GET(player, base_resources_t, base_resources);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -801,6 +923,7 @@ namespace database::players
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_africa);
 		DEF_BINARY_SET(player, player_play_record_t, player_play_record);
+		DEF_BINARY_SET(player, base_resources_t, base_resources);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const
@@ -846,6 +969,11 @@ namespace database::players
 			RUN_IMPL(impl::get_gimmick_data_africa, this->get_player_id(), gimmick_data);
 		}
 		}
+	}
+
+	void player::get_base_resources(base_resources_t& base_resources) const
+	{
+		RUN_IMPL(impl::get_base_resources, this->get_player_id(), base_resources);
 	}
 
 	void player::get_play_record(player_play_record_t& play_record) const
@@ -903,6 +1031,11 @@ namespace database::players
 	bool player::set_play_record(player_play_record_t& play_record) const
 	{
 		RUN_IMPL(impl::set_player_play_record, this->get_user_id(), play_record);
+	}
+
+	bool player::set_base_resources(base_resources_t& base_resources) const
+	{
+		RUN_IMPL(impl::set_base_resources, this->get_user_id(), base_resources);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const

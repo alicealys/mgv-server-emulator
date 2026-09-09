@@ -41,6 +41,7 @@ create table if not exists `players`
 	gimmick_data_afghan		blob default null,
 	gimmick_data_africa		blob default null,
 	player_play_record		blob default null,
+	base_resources  		blob default null,
 	primary key (`player_id`),
 	foreign key (`f_user_id`) references `users`(`user_id`)
 )

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../game.hpp"
+
 namespace game::parameters
 {
 	class base_parameter : std::enable_shared_from_this<base_parameter>

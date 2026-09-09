@@ -13,6 +13,116 @@
 
 namespace game
 {
+	namespace
+	{
+		void generate_structs(const std::string& name, nlohmann::json& data)
+		{
+			std::string buffer;
+			
+			const auto get_primitive_type_name = [](const std::string& name, nlohmann::json& value)
+			{
+				switch (value.type())
+				{
+				case nlohmann::json::value_t::number_integer:
+				{
+					if (name == "id")
+					{
+						return "std::uint64_t";
+					}
+
+					const auto value_int32 = value.get<std::int32_t>();
+					const auto value_int64 = value.get<std::int64_t>();
+					if (value_int32 == value_int64)
+					{
+						return "std::int32_t";
+					}
+					else
+					{
+						return "std::int64_t";
+					}
+				}
+				case nlohmann::json::value_t::boolean:
+					return "bool";
+				case nlohmann::json::value_t::number_float:
+					return "float";
+				case nlohmann::json::value_t::string:
+					return "std::string";
+				}
+
+				return "unknown";
+			};
+
+			const auto line = [&](const std::string& text)
+			{
+				buffer.append(std::format("{}\r\n", text));
+
+			};
+
+			const auto struct_begin = [&](const std::string& name)
+			{
+				line(std::format("struct {}_t", name));
+				line("{");
+			};
+
+			const auto struct_end = [&](const std::string& name)
+			{
+				line("};");
+			};
+
+			const auto add_field = [&](const std::string& name, nlohmann::json& value)
+			{
+				switch (value.type())
+				{
+				case nlohmann::json::value_t::number_integer:
+					line(std::format("\t{} {};", get_primitive_type_name(name, value), name));
+					break;
+				case nlohmann::json::value_t::boolean:
+					line(std::format("\t{} {};", get_primitive_type_name(name, value), name));
+					break;
+				case nlohmann::json::value_t::number_float:
+					line(std::format("\t{} {};", get_primitive_type_name(name, value), name));
+					break;
+				case nlohmann::json::value_t::string:
+					line(std::format("\t{} {};", get_primitive_type_name(name, value), name));
+					break;
+				case nlohmann::json::value_t::array:
+				{
+					const auto& is_primitive = value[0].is_primitive();
+					if (!is_primitive)
+					{
+						console::warning("field %s has array of non primitives", name.data());
+						line(std::format("\tchar {}[1]; // FIXME\r\n", name));
+					}
+					else
+					{
+						line(std::format("\t{} {}[{}];", get_primitive_type_name("", value[0]), name, value.size()));
+					}
+				}
+					break;
+				}
+			};
+
+			for (auto& [key, value] : data.items())
+			{
+				if (!value.is_array())
+				{
+					continue;
+				}
+
+				struct_begin(key);
+
+				for (auto& [field, field_value] : value[0].items())
+				{
+					add_field(field, field_value);
+				}
+
+				struct_end(key);
+			}
+
+			utils::io::write_file(std::format("structs/{}/structs.hpp", name), buffer);
+		}
+	}
+
 	parameters_table_t parameters_table;
 	std::vector<std::shared_ptr<parameters::base_parameter>> parameters_list;
 	std::unordered_map<std::string, std::shared_ptr<parameters::base_parameter>> parameters_map;

@@ -16,6 +16,9 @@ namespace emulator::ssd
 		auto& gimmick_timer_info_j = data["gimmick_timer_info"];
 		auto& gimmick_save_info_j = data["gimmick_save_info"];
 		auto& mission_info_j = data["current_mission_info"];
+		auto& base_resource_j = data["base_resource"];
+		auto& base_resource_count_j = data["base_resource_count"];
+		auto& animal_list_j = data["animal_list"];
 
 		if (gimmick_timer_info_j.is_object() && gimmick_save_info_j.is_object())
 		{
@@ -103,8 +106,25 @@ namespace emulator::ssd
 			user->current_player->set_loadout_list(*loadout_list);
 		}
 
+		const auto base_resources = std::make_unique<database::players::base_resources_t>();
+		user->current_player->get_base_resources(*base_resources);
+
+		if (base_resource_count_j.is_array() && base_resource_count_j.size())
+		{
+			base_resources->parse_counts(base_resource_count_j[0]);
+		}
+
+		if (base_resource_j.is_array() && base_resource_j.size())
+		{
+			base_resources->parse_base(base_resource_j[0]);
+		}
+
+		if (animal_list_j.is_array() && animal_list_j.size())
+		{
+			//base_resources->parse_animals(animal_list_j[0]);
+		}
+
 		// TODO
-		// base_resource_count
 		// group_level
 		// open_list
 		// play_record_additional_130_checkpoint

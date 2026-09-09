@@ -38,6 +38,7 @@ create table if not exists `players`
 	gimmick_info			blob default null,
 	gimmick_data_afghan		blob default null,
 	gimmick_data_africa		blob default null,
+	base_resources  		blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger

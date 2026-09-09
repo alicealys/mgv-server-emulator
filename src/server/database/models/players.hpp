@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../database.hpp"
+#include "game/game.hpp"
 
 namespace database::players
 {
@@ -107,12 +108,27 @@ namespace database::players
 		std::uint16_t obtain_order;
 		std::uint16_t option_slot;
 		std::uint16_t spec;
-		std::uint32_t production_id;
+		std::uint64_t production_id;
 		nonstackable_option_t option_list[8];
 		perk_t perk_list[5];
 		std::uint8_t reserved[256];
 
 		bool parse(nlohmann::json& data, const bool parse_arrays);
+		void to_json(nlohmann::json& data) const;
+	};
+
+	struct stackable_item_t
+	{
+		std::uint16_t cbox_index;
+		std::uint16_t count;
+		std::uint16_t damaged_in_count;
+		std::uint16_t flag;
+		std::uint16_t inventory_index;
+		std::uint16_t inventory_type;
+		std::uint16_t obtain_order;
+		std::uint64_t production_id;
+
+		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
 	};
 
@@ -291,28 +307,33 @@ namespace database::players
 		gimmick_timer_info_t timer;
 	};
 
-	struct base_resource_params_t
+	struct base_resources_t
 	{
-		std::uint16_t bad_status_1_risk;
-		std::uint16_t bad_status_2_risk;
-		std::uint16_t bad_status_3_risk;
-		std::uint16_t bad_status_4_risk;
-		std::uint16_t clean_water;
-		std::uint16_t dirty_water;
-		std::uint16_t food;
-		std::uint16_t medical_supplies;
-		std::uint16_t party_item_id;
-		std::uint16_t party_item_updates;
-		std::uint16_t total_number_of_updates;
-	};
+		struct base_resource_params_t
+		{
+			std::uint16_t bad_status_1_risk;
+			std::uint16_t bad_status_2_risk;
+			std::uint16_t bad_status_3_risk;
+			std::uint16_t bad_status_4_risk;
+			std::uint16_t clean_water;
+			std::uint16_t dirty_water;
+			std::uint16_t food;
+			std::uint16_t medical_supplies;
+			std::uint16_t party_item_id;
+			std::uint16_t party_item_updates;
+			std::uint16_t total_number_of_updates;
+		};
 
-	struct base_resource_t
-	{
 		std::uint32_t animals[57];
 		std::uint32_t resource_counts[32];
+		std::uint64_t next_update_time;
+		std::uint64_t update_remaining_time;
 		base_resource_params_t params;
-		// next_update_time?
-		// update_remaining_time?
+
+		bool parse_base(nlohmann::json& base);
+		bool parse_counts(nlohmann::json& count);
+		bool parse_animals(nlohmann::json& animals);
+		void to_json(nlohmann::json& data) const;
 	};
 
 	struct inventory_resource_t
@@ -359,6 +380,7 @@ namespace database::players
 		DEFINE_FIELD(gimmick_data_afghan, sqlpp::binary);
 		DEFINE_FIELD(gimmick_data_africa, sqlpp::binary);
 		DEFINE_FIELD(player_play_record, sqlpp::binary);
+		DEFINE_FIELD(base_resources, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -372,7 +394,8 @@ namespace database::players
 			gimmick_info_field_t,
 			gimmick_data_afghan_field_t,
 			gimmick_data_africa_field_t,
-			player_play_record_field_t
+			player_play_record_field_t,
+			base_resources_field_t
 		);
 
 		inline static table_t table;
@@ -414,6 +437,7 @@ namespace database::players
 		void get_gimmick_info(gimmick_info_t& gimmick_info) const;
 		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		void get_play_record(player_play_record_t& play_record) const;
+		void get_base_resources(base_resources_t& base_resources) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
@@ -423,6 +447,7 @@ namespace database::players
 		bool set_gimmick_info(gimmick_info_t& gimmick_info) const;
 		bool set_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		bool set_play_record(player_play_record_t& play_record) const;
+		bool set_base_resources(base_resources_t& base_resources) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 

@@ -3,6 +3,7 @@
 #include "game.hpp"
 
 #include "utils/resources.hpp"
+#include "utils/json_utils.hpp"
 
 namespace game
 {
@@ -119,5 +120,79 @@ namespace game
 	std::size_t get_static_key_len()
 	{
 		return sizeof(static_key);
+	}
+
+	bool production_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["str"], this->id_str);	
+		utils::json::get_or(data["id"], this->id);
+		utils::json::get_or(data["index"], this->index);
+		utils::json::get_or(data["type"], this->type);
+		utils::json::get_or(data["only_flag"], this->only_flag);
+		utils::json::get_or(data["craftCategory"], this->craft_category);
+		utils::json::get_or(data["rarity"], this->rarity);
+		utils::json::get_or(data["lv_need"], this->lv_need);
+		utils::json::get_or(data["countable"], this->countable);
+		utils::json::get_or(data["stock"], this->stock);
+		utils::json::get_or(data["life"], this->life);
+		utils::json::get_or(data["weight"], this->weight);
+		utils::json::get_or(data["customize"], this->customize);
+		utils::json::get_or(data["conv_use"], this->conv_use);
+		utils::json::get_or(data["base_c_water"], this->base_c_water);
+		utils::json::get_or(data["base_food"], this->base_food);
+		utils::json::get_or(data["base_medicine"], this->base_medicine);
+		utils::json::get_or(data["sup_combat"], this->sup_combat);
+		utils::json::get_or(data["sup_survival"], this->sup_survival);
+		utils::json::get_or(data["crew_inj_food_poison"], this->crew_inj_food_poison);
+		utils::json::get_or(data["crew_inj_dysentery"], this->crew_inj_dysentery);
+		utils::json::get_or(data["crew_inj_physical"], this->crew_inj_physical);
+		utils::json::get_or(data["crew_inj_fatigue"], this->crew_inj_fatigue);
+		utils::json::get_or(data["related_id"], this->related_id);
+		utils::json::get_or(data["eqp_hip"], this->eqp_hip);
+		utils::json::get_or(data["eqp_back"], this->eqp_back);
+		utils::json::get_or(data["eqp_sec"], this->eqp_sec);
+		utils::json::get_or(data["eqp_sup"], this->eqp_sup);
+		utils::json::get_or(data["pri_r_slot"], this->pri_r_slot);
+		utils::json::get_or(data["lang_name"], this->lang_name);
+		utils::json::get_or(data["lang_name2"], this->lang_name2);
+		utils::json::get_or(data["lang_name3"], this->lang_name3);
+		utils::json::get_or(data["lang_info"], this->lang_info);
+		utils::json::get_or(data["show_info"], this->show_info);
+		utils::json::get_or(data["icon_path"], this->icon_path);
+		utils::json::get_or(data["prv_r_x"], this->prv_r_x);
+		utils::json::get_or(data["prv_r_y"], this->prv_r_y);
+		utils::json::get_or(data["prv_r_y_min"], this->prv_r_y_min);
+		utils::json::get_or(data["prv_r_y_max"], this->prv_r_y_max);
+		utils::json::get_or(data["prv_r_z_off"], this->prv_r_z_off);
+		utils::json::get_or(data["prv_zm_min"], this->prv_zm_min);
+		utils::json::get_or(data["prv_zm"], this->prv_zm);
+		utils::json::get_or(data["prv_zm_max"], this->prv_zm_max);
+		utils::json::parse_array(data["perk"], this->perk);
+		return true;
+	}
+
+	bool recipe_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["opened"], this->opened);
+		utils::json::get_or(data["junk"], this->junk);
+		utils::json::get_or(data["index"], this->index);
+		utils::json::get_or(data["group"], this->group);
+		utils::json::get_or(data["dev_level"], this->dev_level);
+		utils::json::get_or(data["count"], this->count);
+		utils::json::get_or(data["transTime"], this->trans_time);
+		utils::json::get_or(data["price"], this->price);
+		utils::json::get_or(data["potentialId"], this->potential_id);
+		utils::json::get_or(data["id"], this->id);
+		utils::json::get_or(data["id_str"], this->id_str);
+		utils::json::get_or(data["production"], this->production_id);
+
+		utils::json::parse_array(data["cost"], this->cost, [](recipe_t::cost_t& dest, nlohmann::json& src)
+		{
+			utils::json::get_or(src["count"], dest.count);
+			utils::json::get_or(src["type"], dest.type);
+			utils::json::get_or(src["id"], dest.id);
+		});
+
+		return true;
 	}
 }
