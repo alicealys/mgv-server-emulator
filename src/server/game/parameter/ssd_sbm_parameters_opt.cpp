@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdSbmParameters_opt");
 	}
 
-	bool ssd_sbm_parameters_opt::parse(const nlohmann::json& data)
+	bool ssd_sbm_parameters_opt::parse(nlohmann::json& data)
 	{
 		return true;
 	}

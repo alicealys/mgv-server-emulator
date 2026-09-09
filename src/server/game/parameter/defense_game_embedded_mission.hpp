@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		defense_game_embedded_mission();
-		bool parse(const nlohmann::json& data) override;
+		bool parse(nlohmann::json& data) override;
 	};
 }

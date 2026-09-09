@@ -15,7 +15,7 @@ namespace game::parameters
 
 	protected:
 		void load(const std::string& name);
-		virtual bool parse(const nlohmann::json& data) = 0;
+		virtual bool parse(nlohmann::json& data) = 0;
 
 	private:
 		std::string data_path_;

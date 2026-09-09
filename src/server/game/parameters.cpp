@@ -46,7 +46,7 @@ namespace game
 		}
 
 		const auto data = utils::resources::load(resource_id.value());
-		const auto json = nlohmann::json::parse(data, nullptr, false);
+		auto json = nlohmann::json::parse(data, nullptr, false);
 
 		if (json.is_discarded() || !this->parse(json))
 		{
@@ -65,33 +65,6 @@ namespace game
 		this->data_md5_ = utils::string::to_lower(utils::cryptography::md5::compute(encrypted_data, true));
 
 		utils::io::write_file(this->data_path_, encrypted_data);
-	}
-
-	void test()
-	{
-		const auto files = utils::io::list_files("parameter");
-		for (const auto& file : files)
-		{
-			if (!file.ends_with(".param"))
-			{
-				continue;
-			}
-
-			const auto data = utils::io::read_file(file);
-			utils::cryptography::blowfish blow;
-			blow.set_key(game::get_static_key(game::key_type_tpp), game::get_static_key_len());
-
-			auto decrypted1 = blow.decrypt_internal(data);
-			auto decomp1 = utils::compression::zlib::decompress(decrypted1);
-
-			auto a = nlohmann::ordered_json::parse(decomp1);
-			auto b = a.dump(4);
-
-			const auto start_pos = file.find_last_of('/');
-			const auto end_pos = file.find_last_of('.');
-			const auto base_name = file.substr(start_pos, (end_pos - start_pos));
-			utils::io::write_file(std::format("parameter/decrypted/{}.json", base_name), b);
-		}
 	}
 
 	void initialize_parameters_table()

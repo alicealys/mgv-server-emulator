@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_weapon_parameters_debug();
-		bool parse(const nlohmann::json& data) override;
+		bool parse(nlohmann::json& data) override;
 	};
 }

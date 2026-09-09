@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdEquipParameters_debug");
 	}
 
-	bool ssd_equip_parameters_debug::parse(const nlohmann::json& data)
+	bool ssd_equip_parameters_debug::parse(nlohmann::json& data)
 	{
 		return true;
 	}

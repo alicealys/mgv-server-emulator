@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdReplayMissionInfo_opt");
 	}
 
-	bool ssd_replay_mission_info_opt::parse(const nlohmann::json& data)
+	bool ssd_replay_mission_info_opt::parse(nlohmann::json& data)
 	{
 		return true;
 	}

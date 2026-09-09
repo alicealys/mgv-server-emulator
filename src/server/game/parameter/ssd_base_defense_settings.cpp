@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdBaseDefenseSettings");
 	}
 
-	bool ssd_base_defense_settings::parse(const nlohmann::json& data)
+	bool ssd_base_defense_settings::parse(nlohmann::json& data)
 	{
 		return true;
 	}

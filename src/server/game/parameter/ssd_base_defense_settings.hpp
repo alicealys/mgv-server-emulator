@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_base_defense_settings();
-		bool parse(const nlohmann::json& data) override;
+		bool parse(nlohmann::json& data) override;
 	};
 }

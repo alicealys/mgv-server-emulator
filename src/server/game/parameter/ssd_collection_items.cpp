@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdCollectionItems");
 	}
 
-	bool ssd_collection_items::parse(const nlohmann::json& data)
+	bool ssd_collection_items::parse(nlohmann::json& data)
 	{
 		return true;
 	}

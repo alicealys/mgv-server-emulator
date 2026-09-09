@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_damage_parameter_debug();
-		bool parse(const nlohmann::json& data) override;
+		bool parse(nlohmann::json& data) override;
 	};
 }

@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdCrewGeneratorTable");
 	}
 
-	bool ssd_crew_generator_table::parse(const nlohmann::json& data)
+	bool ssd_crew_generator_table::parse(nlohmann::json& data)
 	{
 		return true;
 	}

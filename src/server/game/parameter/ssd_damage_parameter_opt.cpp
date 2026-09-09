@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdDamageParameter_opt");
 	}
 
-	bool ssd_damage_parameter_opt::parse(const nlohmann::json& data)
+	bool ssd_damage_parameter_opt::parse(nlohmann::json& data)
 	{
 		return true;
 	}

@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdUiCoopMissionInfo");
 	}
 
-	bool ssd_ui_coop_mission_info::parse(const nlohmann::json& data)
+	bool ssd_ui_coop_mission_info::parse(nlohmann::json& data)
 	{
 		return true;
 	}

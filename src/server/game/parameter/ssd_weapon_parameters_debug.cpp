@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdWeaponParameters_debug");
 	}
 
-	bool ssd_weapon_parameters_debug::parse(const nlohmann::json& data)
+	bool ssd_weapon_parameters_debug::parse(nlohmann::json& data)
 	{
 		return true;
 	}

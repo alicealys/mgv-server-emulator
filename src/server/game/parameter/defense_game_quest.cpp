@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("DefenseGameQuest");
 	}
 
-	bool defense_game_quest::parse(const nlohmann::json& data)
+	bool defense_game_quest::parse(nlohmann::json& data)
 	{
 		return true;
 	}
