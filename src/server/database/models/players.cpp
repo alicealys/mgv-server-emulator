@@ -438,118 +438,6 @@ namespace database::players
 		}
 	}
 
-	void nonstackable_item_list_t::to_json(nlohmann::json& data) const
-	{
-		auto idx = 0;
-		data = nlohmann::json::array();
-
-		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
-		{
-			if (this->list[i].production_id == 0)
-			{
-				continue;
-			}
-
-			this->list[i].to_json(data[idx++]);
-		}
-	}
-
-	bool nonstackable_item_list_t::parse_diff(nlohmann::json& data)
-	{
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(data.size(), ARRAYSIZE(this->list));
-		for (auto i = 0ull; i < count; i++)
-		{
-			nonstackable_item_t new_item{};
-			if (!new_item.parse(data[i]) || new_item.production_id == 0 || new_item.inventory_index > ARRAYSIZE(this->list))
-			{
-				continue;
-			}
-
-			std::memcpy(&this->list[new_item.inventory_index], &new_item, sizeof(nonstackable_item_t));
-		}
-
-		return true;
-	}
-
-	bool nonstackable_item_list_t::parse(nlohmann::json& data)
-	{
-		std::memset(this, 0, sizeof(stackable_item_list_t));
-
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(ARRAYSIZE(this->list), data.size());
-		for (auto i = 0ull; i < count; i++)
-		{
-			this->list[i].parse(data);
-		}
-
-		return true;
-	}
-
-	bool stackable_item_list_t::parse(nlohmann::json& data)
-	{
-		std::memset(this, 0, sizeof(stackable_item_list_t));
-
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(ARRAYSIZE(this->list), data.size());
-		for (auto i = 0ull; i < count; i++)
-		{
-			this->list[i].parse(data);
-		}
-		
-		return true;
-	}
-
-	bool stackable_item_list_t::parse_diff(nlohmann::json& data)
-	{
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(data.size(), ARRAYSIZE(this->list));
-		for (auto i = 0ull; i < count; i++)
-		{
-			stackable_item_t new_item{};
-			if (!new_item.parse(data[i]) || new_item.production_id == 0 || new_item.inventory_index > ARRAYSIZE(this->list))
-			{
-				continue;
-			}
-
-			std::memcpy(&this->list[new_item.inventory_index], &new_item, sizeof(stackable_item_t));
-		}
-
-		return true;
-	}
-
-	void stackable_item_list_t::to_json(nlohmann::json& data) const
-	{
-		auto idx = 0;
-		data = nlohmann::json::array();
-
-		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
-		{
-			if (this->list[i].production_id == 0)
-			{
-				continue;
-			}
-
-			this->list[i].to_json(data[idx++]);
-		}
-	}
-
 	bool stackable_item_t::parse(nlohmann::json& data)
 	{
 		std::memset(this, 0, sizeof(stackable_item_t));
@@ -599,59 +487,6 @@ namespace database::players
 		data["flag"] = this->flag;
 		data["obtain_order"] = this->obtain_order;
 		data["resource_id"] = this->resource_id;
-	}
-
-	bool inventory_resource_list_t::parse_diff(nlohmann::json& data)
-	{
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(data.size(), ARRAYSIZE(this->list));
-		for (auto i = 0ull; i < count; i++)
-		{
-			inventory_resource_t new_resource{};
-			if (!new_resource.parse(data[i]) || new_resource.resource_id == 0 || new_resource.inventory_index > ARRAYSIZE(this->list))
-			{
-				continue;
-			}
-
-			std::memcpy(&this->list[new_resource.inventory_index], &new_resource, sizeof(inventory_resource_t));
-		}
-
-		return true;
-	}
-
-	bool inventory_resource_list_t::parse(nlohmann::json& data)
-	{
-		std::memset(this, 0, sizeof(inventory_resource_list_t));
-
-		if (!data.is_array())
-		{
-			return false;
-		}
-
-		const auto count = std::min(data.size(), ARRAYSIZE(this->list));
-		for (auto i = 0ull; i < count; i++)
-		{
-			this->list[i].parse(data[i]);
-		}
-		
-		return true;
-	}
-
-	void inventory_resource_list_t::to_json(nlohmann::json& data) const
-	{
-		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
-		{
-			if (this->list[i].resource_id == 0)
-			{
-				continue;
-			}
-
-			this->list[i].to_json(data[i]);
-		}
 	}
 
 	void mission_info_t::initialize()
@@ -1226,7 +1061,6 @@ namespace database::players
 		DEF_BINARY_GET(player, loadout_list_t, loadout_list);
 		DEF_BINARY_GET(player, mission_info_t, mission_info);
 		DEF_BINARY_GET(player, player_inventory_t, player_inventory);
-		DEF_BINARY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_BINARY_GET(player, gimmick_info_t, gimmick_info);
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_africa);
@@ -1234,14 +1068,11 @@ namespace database::players
 		DEF_BINARY_GET(player, base_resources_t, base_resources);
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_GET(player, mission_record_list_t, mission_record_list);
-		DEF_BINARY_GET(player, inventory_resource_list_t, inventory_resource_list);
-		DEF_BINARY_GET(player, stackable_item_list_t, stackable_item_list);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
 		DEF_BINARY_SET(player, mission_info_t, mission_info);
 		DEF_BINARY_SET(player, player_inventory_t, player_inventory);
-		DEF_BINARY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_BINARY_SET(player, gimmick_info_t, gimmick_info);
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_africa);
@@ -1249,8 +1080,14 @@ namespace database::players
 		DEF_BINARY_SET(player, base_resources_t, base_resources);
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_SET(player, mission_record_list_t, mission_record_list);
-		DEF_BINARY_SET(player, inventory_resource_list_t, inventory_resource_list);
-		DEF_BINARY_SET(player, stackable_item_list_t, stackable_item_list);
+
+		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
+		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
+		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
+
+		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
+		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
+		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const

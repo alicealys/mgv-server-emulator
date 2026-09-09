@@ -2,6 +2,7 @@
 
 #include "../database.hpp"
 #include "game/game.hpp"
+#include "utils/encoding.hpp"
 
 namespace database::players
 {
@@ -258,24 +259,6 @@ namespace database::players
 		loadout_t list[max_loadout_count];
 	};
 
-	struct nonstackable_item_list_t
-	{
-		nonstackable_item_t list[1024];
-
-		bool parse_diff(nlohmann::json& data);
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
-	};
-
-	struct stackable_item_list_t
-	{
-		stackable_item_t list[1024];
-
-		bool parse_diff(nlohmann::json& data);
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
-	};
-
 	struct gimmick_resource_info_t
 	{
 		std::uint32_t resource_event_tail;
@@ -349,15 +332,6 @@ namespace database::players
 		void to_json(nlohmann::json& data) const;
 	};
 
-	struct inventory_resource_list_t
-	{
-		inventory_resource_t list[1024];
-
-		bool parse_diff(nlohmann::json& data);
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
-	};
-
 	struct player_play_record_t
 	{
 		std::uint32_t first[191];
@@ -404,6 +378,154 @@ namespace database::players
 		void to_json(nlohmann::json& data) const;
 	};
 #pragma pack(pop)
+
+	template <typename T>
+	class generic_item_list : public utils::encoding::database_array<T, 16, 2048>
+	{
+	public:
+		bool parse_diff(nlohmann::json& data)
+		{
+			if (!data.is_array())
+			{
+				return false;
+			}
+
+			const auto count = std::min(data.size(), this->max_size());
+			for (auto i = 0ull; i < count; i++)
+			{
+				T new_item{};
+				if (!new_item.parse(data[i]) || this->is_element_empty(new_item))
+				{
+					continue;
+				}
+
+				std::int64_t free_index = -1;
+				for (auto o = 0ull; o < this->size(); o++)
+				{
+					if (this->are_elements_equal(new_item, this->operator[](o)))
+					{
+						std::memcpy(&this->operator[](o), &new_item, sizeof(T));
+						break;
+					}
+					else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+					{
+						free_index = static_cast<std::int64_t>(o);
+					}
+				}
+
+				if (free_index != -1)
+				{
+					std::memcpy(&this->operator[](free_index), &new_item, sizeof(T));
+					continue;
+				}
+
+				if (!this->push(new_item))
+				{
+					break;
+				}
+			}
+
+			return true;
+		}
+
+		bool parse(nlohmann::json& data)
+		{
+			std::memset(this->data(), 0, this->size() * sizeof(T));
+
+			if (!data.is_array())
+			{
+				return false;
+			}
+
+			const auto count = std::min(this->max_size(), data.size());
+			this->resize(count);
+
+			for (auto i = 0ull; i < count; i++)
+			{
+				this->operator[](i).parse(data);
+			}
+
+			return true;
+		}
+
+		void to_json(nlohmann::json& data) const
+		{
+			auto idx = 0;
+			data = nlohmann::json::array();
+
+			const auto list = this->data();
+			for (auto i = 0ull; i < this->size(); i++)
+			{
+				if (this->is_element_empty(list[i]))
+				{
+					continue;
+				}
+
+				list[i].to_json(data[idx++]);
+			}
+		}
+
+		virtual inline bool is_element_empty(const T& value) const
+		{
+			return false;
+		}
+
+		virtual inline bool are_elements_equal(const T& l, const T& r) const
+		{
+			return false;
+		}
+
+		inline bool skip_element(const T& value) const override
+		{
+			return this->is_element_empty(value);
+		}
+
+	};
+
+	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t>
+	{
+	public:
+		inline bool are_elements_equal(const nonstackable_item_t& l, const nonstackable_item_t& r) const override
+		{
+			return l.production_id == r.production_id;
+		}
+
+		inline bool is_element_empty(const nonstackable_item_t& value) const override
+		{
+			return value.production_id == 0;
+		}
+
+	};
+
+	class stackable_item_list_t final : public generic_item_list<stackable_item_t>
+	{
+	public:
+		inline bool are_elements_equal(const stackable_item_t& l, const stackable_item_t& r) const override
+		{
+			return l.production_id == r.production_id;
+		}
+
+		inline bool is_element_empty(const stackable_item_t& value) const override
+		{
+			return value.production_id == 0;
+		}
+
+	};
+
+	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t>
+	{
+	public:
+		inline bool are_elements_equal(const inventory_resource_t& l, const inventory_resource_t& r) const override
+		{
+			return l.resource_id == r.resource_id;
+		}
+
+		inline bool is_element_empty(const inventory_resource_t& value) const override
+		{
+			return value.resource_id == 0;
+		}
+
+	};
 
 	class player
 	{

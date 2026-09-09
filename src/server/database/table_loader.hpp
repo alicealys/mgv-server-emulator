@@ -162,3 +162,36 @@ public: \
 				return result != 0ull; \
 			}); \
 		} \
+
+#define DEF_ARRAY_GET(__table__, __type__, __name__) \
+		template <database_type_t Type> \
+		void get_##__name__(const std::uint64_t __table__##_id, __type__& __name__) \
+		{ \
+			database::access([&](database::database_t& db) \
+			{ \
+				auto results = db.get_database<Type>()->operator()( \
+					sqlpp::select(__table__::table.__name__) \
+							.from(__table__::table) \
+								.where(__table__::table.__table__##_id == __table__##_id)); \
+				if (results.empty()) \
+				{ \
+					return; \
+				} \
+				const auto data = results.front().__name__.value(); \
+				__name__.deserialize(data); \
+			}); \
+		} \
+
+#define DEF_ARRAY_SET(__table__, __type__, __name__) \
+		template <database_type_t Type> \
+		bool set_##__name__(const std::uint64_t __table__##id, const __type__& __name__) \
+		{ \
+			return database::access<bool>([&](database::database_t& db) \
+			{ \
+				auto result = db.get_database<Type>()->operator()( \
+					sqlpp::update(__table__::table) \
+							.set(__table__::table.__name__ = sqlpp::verbatim<sqlpp::binary>(__name__.serialize())) \
+								.where(__table__::table.__table__##_id == __table__##id)); \
+				return result != 0ull; \
+			}); \
+		} \
