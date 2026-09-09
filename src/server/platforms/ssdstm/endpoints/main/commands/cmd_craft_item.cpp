@@ -43,7 +43,7 @@ namespace emulator::ssd
 
 		// todo: check if player can craft
 
-		database::players::nonstackbable_item_t nonstackable_item{};
+		database::players::nonstackable_item_t nonstackable_item{};
 		if (!iter->second->production->countable)
 		{
 			nonstackable_item.life = static_cast<std::uint16_t>(iter->second->production->life);

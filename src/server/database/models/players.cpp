@@ -380,9 +380,9 @@ namespace database::players
 		}
 	}
 
-	bool nonstackbable_item_t::parse(nlohmann::json& data)
+	bool nonstackable_item_t::parse(nlohmann::json& data)
 	{
-		std::memset(this, 0, sizeof(nonstackbable_item_t));
+		std::memset(this, 0, sizeof(nonstackable_item_t));
 
 		utils::json::get_or(data["color"], this->color);
 		utils::json::get_or(data["color2"], this->color2);
@@ -396,7 +396,7 @@ namespace database::players
 		utils::json::get_or(data["spec"], this->spec);
 		utils::json::get_or(data["production_id"], this->production_id);
 
-		utils::json::parse_array(data["option_list"], this->option_list, [](nonstackbable_item_t::option_t& dest, nlohmann::json& src)
+		utils::json::parse_array(data["option_list"], this->option_list, [](nonstackable_item_t::option_t& dest, nlohmann::json& src)
 		{
 			utils::json::get_or(src, dest.obtained);
 			utils::json::get_or(src, dest.option_id);
@@ -411,7 +411,7 @@ namespace database::players
 		return true;
 	}
 
-	void nonstackbable_item_t::to_json(nlohmann::json& data) const
+	void nonstackable_item_t::to_json(nlohmann::json& data) const
 	{
 		data["color"] = this->color;
 		data["color2"] = this->color2;
@@ -441,6 +441,8 @@ namespace database::players
 	void nonstackable_item_list_t::to_json(nlohmann::json& data) const
 	{
 		auto idx = 0;
+		data = nlohmann::json::array();
+
 		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
 		{
 			if (this->list[i].production_id == 0)
@@ -462,13 +464,13 @@ namespace database::players
 		const auto count = std::min(data.size(), ARRAYSIZE(this->list));
 		for (auto i = 0ull; i < count; i++)
 		{
-			stackable_item_t new_item{};
+			nonstackable_item_t new_item{};
 			if (!new_item.parse(data[i]) || new_item.production_id == 0 || new_item.inventory_index > ARRAYSIZE(this->list))
 			{
 				continue;
 			}
 
-			std::memcpy(&this->list[new_item.inventory_index], &new_item, sizeof(stackable_item_t));
+			std::memcpy(&this->list[new_item.inventory_index], &new_item, sizeof(nonstackable_item_t));
 		}
 
 		return true;
@@ -535,6 +537,8 @@ namespace database::players
 	void stackable_item_list_t::to_json(nlohmann::json& data) const
 	{
 		auto idx = 0;
+		data = nlohmann::json::array();
+
 		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
 		{
 			if (this->list[i].production_id == 0)
@@ -585,6 +589,18 @@ namespace database::players
 		return true;
 	}
 
+	void inventory_resource_t::to_json(nlohmann::json& data) const
+	{
+		data["inventory_index"] = this->inventory_index;
+		data["inventory_type"] = this->inventory_type;
+		data["cbox_index"] = this->cbox_index;
+		data["count"] = this->count;
+		data["damaged_in_count"] = this->damaged_in_count;
+		data["flag"] = this->flag;
+		data["obtain_order"] = this->obtain_order;
+		data["resource_id"] = this->resource_id;
+	}
+
 	bool inventory_resource_list_t::parse_diff(nlohmann::json& data)
 	{
 		if (!data.is_array())
@@ -623,6 +639,19 @@ namespace database::players
 		}
 		
 		return true;
+	}
+
+	void inventory_resource_list_t::to_json(nlohmann::json& data) const
+	{
+		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
+		{
+			if (this->list[i].resource_id == 0)
+			{
+				continue;
+			}
+
+			this->list[i].to_json(data[i]);
+		}
 	}
 
 	void mission_info_t::initialize()
@@ -731,6 +760,26 @@ namespace database::players
 		}
 
 		data["vars"] = utils::encoding::encode_base64(this->vars);
+	}
+
+	bool gimmick_save_data_t::parse(nlohmann::json& data)
+	{
+		if (!data.is_object())
+		{
+			return false;
+		}
+
+		for (auto i = 0; i < 4; i++)
+		{
+			utils::json::parse_base64(data["instant"][i]["instant"], this->instant[i].data);
+			utils::json::parse_base64(data["permanent"][i]["permanent"], this->permanent[i].data);
+			utils::json::parse_base64(data["resource_event"][i]["resource_event"], this->resource_event[i].data);
+			utils::json::parse_base64(data["resource_normal"][i]["resource_normal"], this->resource_normal[i].data);
+			utils::json::parse_base64(data["resource_rare"][i]["resource_rare"], this->resource_rare[i].data);
+			utils::json::parse_base64(data["resource_shared"][i]["resource_shared"], this->resource_shared[i].data);
+		}
+
+		return true;
 	}
 
 	void gimmick_save_data_t::to_json(nlohmann::json& data, const std::uint32_t map_location) const

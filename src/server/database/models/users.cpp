@@ -484,6 +484,18 @@ namespace database::users
 				return result != 0ull;
 			});
 		}
+		
+		template <database_type_t Type>
+		void set_user_flag(const std::uint64_t user_id, const std::uint32_t flag)
+		{
+			database::access([&](database::database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.user_flag = flag)
+							.where(user::table.user_id == user_id));
+			});
+		}
 
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
@@ -510,6 +522,11 @@ namespace database::users
 	bool user::set_play_record(user_play_record_t& play_record) const
 	{
 		RUN_IMPL(impl::set_user_play_record, this->get_user_id(), play_record);
+	}
+
+	void user::set_user_flag(const std::uint32_t flag) const
+	{
+		RUN_IMPL(impl::set_user_flag, this->get_user_id(), flag);
 	}
 
 	std::optional<user> find(const std::uint64_t user_id)

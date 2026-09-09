@@ -19,16 +19,23 @@ namespace emulator::ssd
 		auto& animal_list_j = data["animal_list"];
 		auto& story_unlock_info_j = data["story_unlock_info"];
 
-		if (gimmick_timer_info_j.is_object() && gimmick_save_info_j.is_object())
+		if (gimmick_save_info_j.is_object())
 		{
-			const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 			auto& map_location_j = gimmick_save_info_j["map_location"];
 			if (!map_location_j.is_number_integer())
 			{
 				return error(ERR_INVALIDARG);
 			}
 
+			const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
+			user->current_player->get_gimmick_info(*gimmick_info);
+
 			const auto map_location = map_location_j.get<std::uint32_t>();
+			if (map_location > 1)
+			{
+				return error(ERR_INVALIDARG);
+			}
+
 			switch (map_location)
 			{
 			case 0:
@@ -37,25 +44,18 @@ namespace emulator::ssd
 			case 1:
 				gimmick_info->resource_africa.parse(gimmick_timer_info_j);
 				break;
-			default:
-				return error(ERR_INVALIDARG);
 			}
 
-			gimmick_info->timer.parse(gimmick_timer_info_j);
-			user->current_player->set_gimmick_info(*gimmick_info);
-		}
-
-		if (mission_info_j.is_object())
-		{
-			const auto mission_info = std::make_unique<database::players::mission_info_t>();
-			user->current_player->get_mission_info(*mission_info);
-
-			if (!mission_info->parse(mission_info_j))
+			if (gimmick_timer_info_j.is_object())
 			{
-				return error(ERR_INVALIDARG);
+				gimmick_info->timer.parse(gimmick_timer_info_j);
 			}
 
-			user->current_player->set_mission_info(*mission_info);
+			user->current_player->set_gimmick_info(*gimmick_info);
+
+			const auto gimmick_data = std::make_unique<database::players::gimmick_save_data_t>();
+			gimmick_data->parse(gimmick_save_info_j);
+			user->current_player->set_gimmick_save_data(*gimmick_data, map_location);
 		}
 
 		const auto base_resources = std::make_unique<database::players::base_resources_t>();
@@ -76,12 +76,34 @@ namespace emulator::ssd
 			//base_resources->parse_animals(animal_list_j[0]);
 		}
 
+		user->current_player->set_base_resources(*base_resources);
+
+		auto story_sequence_number = -1;
 		if (story_unlock_info_j.is_object())
 		{
 			const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 			user->current_player->get_story_unlock_info(*story_unlock_info);
 			story_unlock_info->parse(story_unlock_info_j);
 			user->current_player->set_story_unlock_info(*story_unlock_info);
+			story_sequence_number = story_unlock_info->story_sequence_number;
+		}
+
+		if (mission_info_j.is_object())
+		{
+			const auto mission_info = std::make_unique<database::players::mission_info_t>();
+			user->current_player->get_mission_info(*mission_info);
+
+			if (story_sequence_number != -1)
+			{
+				mission_info->story_sequence_number = static_cast<std::uint16_t>(story_sequence_number);
+			}
+
+			if (!mission_info->parse(mission_info_j))
+			{
+				return error(ERR_INVALIDARG);
+			}
+
+			user->current_player->set_mission_info(*mission_info);
 		}
 
 		// TODO

@@ -124,6 +124,8 @@ namespace database::users
 		bool set_inventory(user_inventory_t& inventory) const;
 		bool set_play_record(user_play_record_t& play_record) const;
 
+		void set_user_flag(const std::uint32_t flag) const;
+
 		std::optional<players::player> current_player{};
 
 	private:

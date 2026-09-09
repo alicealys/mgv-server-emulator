@@ -40,7 +40,7 @@ namespace database::players
 		void to_json(nlohmann::json& data) const;
 	};
 
-	struct nonstackbable_item_t
+	struct nonstackable_item_t
 	{
 		struct option_t
 		{
@@ -249,6 +249,7 @@ namespace database::players
 		resource_rare_t resource_rare[4];
 		resource_shared_t resource_shared[4];
 
+		bool parse(nlohmann::json& parse);
 		void to_json(nlohmann::json& data, const std::uint32_t map_location) const;
 	};
 
@@ -259,7 +260,7 @@ namespace database::players
 
 	struct nonstackable_item_list_t
 	{
-		nonstackbable_item_t list[1024];
+		nonstackable_item_t list[1024];
 
 		bool parse_diff(nlohmann::json& data);
 		bool parse(nlohmann::json& data);
@@ -345,6 +346,7 @@ namespace database::players
 		std::uint32_t resource_id;
 
 		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
 	};
 
 	struct inventory_resource_list_t

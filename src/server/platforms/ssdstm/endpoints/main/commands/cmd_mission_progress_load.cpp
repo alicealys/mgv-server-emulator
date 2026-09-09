@@ -35,6 +35,8 @@ namespace emulator::ssd
 		player->get_loadout_list(*loadout_list);
 		player->get_play_record(*player_play_record);
 		player->get_nonstackable_item_list(*nonstackable_list);
+		player->get_inventory_resource_list(*inventory_resources);
+		player->get_stackable_item_list(*stackable_item_list);
 		player->get_story_unlock_info(*story_unlock_info);
 		player->get_mission_record_list(*mission_record_list);
 
@@ -123,9 +125,8 @@ namespace emulator::ssd
 		result["replay_mission_info"]["replay_mission_return_location_code"] = 0;
 		result["replay_mission_info"]["replay_mission_return_mission_code"] = 0;
 
-		result["resource_list"] = nlohmann::json::array();
-		result["stackable_list"] = nlohmann::json::array();
-
+		inventory_resources->to_json(result["resource_list"]);
+		stackable_item_list->to_json(result["stackable_list"]);
 		story_unlock_info->to_json(result["story_unlock_info"]);
 		
 		result["tips_open_info"]["data"] = "";
