@@ -18,6 +18,7 @@ namespace emulator::ssd
 		auto& base_resource_count_j = data["base_resource_count"];
 		auto& animal_list_j = data["animal_list"];
 		auto& story_unlock_info_j = data["story_unlock_info"];
+		auto& open_list_j = data["open_list"];
 
 		if (gimmick_save_info_j.is_object())
 		{
@@ -104,6 +105,30 @@ namespace emulator::ssd
 			}
 
 			user->current_player->set_mission_info(*mission_info);
+		}
+
+		if (open_list_j.is_object())
+		{
+			auto& mission_code_list_j = open_list_j["mission_code_list"];
+			if (mission_code_list_j.is_array())
+			{
+				const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
+				user->current_player->get_mission_record_list(*mission_record_list);
+
+				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
+				{
+					auto& mission_code_j = mission_code_list_j[i];
+					if (!mission_code_j.is_number_unsigned())
+					{
+						continue;
+					}
+
+					const auto mission_code = mission_code_j.get<std::uint32_t>();
+					mission_record_list->open_mission(mission_code);
+				}
+
+				user->current_player->set_mission_record_list(*mission_record_list);
+			}
 		}
 
 		// TODO

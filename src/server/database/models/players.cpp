@@ -762,47 +762,32 @@ namespace database::players
 		resource_count_j["update_remaining_time"] = this->update_remaining_time;
 	}
 
-	bool mission_record_list_t::add(nlohmann::json& data)
+	bool mission_record_list_t::open_mission(const std::uint32_t mission_code)
 	{
-		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
-		{
-			if (this->list[i].valid)
-			{
-				continue;
-			}
-
-			this->list[i].valid = true;
-
-			utils::json::get_or(data["clear_flag"], this->list[i].clear_flag);
-			utils::json::get_or(data["clear_rank"], this->list[i].clear_rank);
-			utils::json::get_or(data["clear_time"], this->list[i].clear_time);
-			utils::json::get_or(data["mission_code"], this->list[i].mission_code);
-			utils::json::get_or(data["new_flag"], this->list[i].new_flag);
-			utils::json::get_or(data["score"], this->list[i].score);
-
-			return true;
-		}
-		
-		return false;
+		mission_record_t record{};
+		record.mission_code = mission_code;
+		return this->try_add_item(record);
 	}
 
-	void mission_record_list_t::to_json(nlohmann::json& data) const
+	bool mission_record_t::parse(nlohmann::json& data)
 	{
-		for (auto i = 0ull; i < ARRAYSIZE(this->list); i++)
-		{
-			if (!this->list[i].valid)
-			{
-				break;
-			}
+		utils::json::get_or(data["clear_flag"], this->clear_flag);
+		utils::json::get_or(data["clear_rank"], this->clear_rank);
+		utils::json::get_or(data["clear_time"], this->clear_time);
+		utils::json::get_or(data["mission_code"], this->mission_code);
+		utils::json::get_or(data["new_flag"], this->new_flag);
+		utils::json::get_or(data["score"], this->score);
+		return true;
+	}
 
-			auto& entry = data[i];
-			entry["clear_flag"] = this->list[i].clear_flag;
-			entry["clear_rank"] = this->list[i].clear_rank;
-			entry["clear_time"] = this->list[i].clear_time;
-			entry["mission_code"] = this->list[i].mission_code;
-			entry["new_flag"] = this->list[i].new_flag;
-			entry["score"] = this->list[i].score;
-		}
+	void mission_record_t::to_json(nlohmann::json& data) const
+	{
+		data["clear_flag"] = this->clear_flag;
+		data["clear_rank"] = this->clear_rank;
+		data["clear_time"] = this->clear_time;
+		data["mission_code"] = this->mission_code;
+		data["new_flag"] = this->new_flag;
+		data["score"] = this->score;
 	}
 
 	bool story_unlock_info_t::parse(nlohmann::json& data)
@@ -874,7 +859,7 @@ namespace database::players
 		data["oxygen_supply_unlock"] = this->oxygen_supply_unlock;
 		data["story_sequence_number"] = this->story_sequence_number;
 
-		const auto do_map = [&](map_unlock_t& unlock, const std::uint32_t index)
+		const auto do_map = [&](const map_unlock_t& unlock, const std::uint32_t index)
 		{
 			auto& entry = data["map_unlock_list"][index];
 			entry["location_index"] = index;
@@ -889,6 +874,9 @@ namespace database::players
 				entry["map_unlock"][i] = unlock.value[i];
 			}
 		};
+
+		do_map(this->map_unlocks[0], 0);
+		do_map(this->map_unlocks[1], 1);
 
 		data["marker_afghan"] = utils::encoding::encode_base64(this->marker_afghan);
 		data["marker_africa"] = utils::encoding::encode_base64(this->marker_africa);
@@ -1067,7 +1055,6 @@ namespace database::players
 		DEF_BINARY_GET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_GET(player, base_resources_t, base_resources);
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
-		DEF_BINARY_GET(player, mission_record_list_t, mission_record_list);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -1079,15 +1066,16 @@ namespace database::players
 		DEF_BINARY_SET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_SET(player, base_resources_t, base_resources);
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
-		DEF_BINARY_SET(player, mission_record_list_t, mission_record_list);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
+		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
+		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const

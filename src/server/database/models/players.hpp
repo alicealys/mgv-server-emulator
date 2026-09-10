@@ -340,20 +340,14 @@ namespace database::players
 
 	struct mission_record_t
 	{
-		bool valid;
 		std::uint32_t clear_flag;
 		std::uint32_t clear_rank;
 		std::uint32_t clear_time;
 		std::uint32_t mission_code;
 		std::uint32_t new_flag;
 		std::uint32_t score;
-	};
 
-	struct mission_record_list_t
-	{
-		mission_record_t list[255];
-
-		bool add(nlohmann::json& data);
+		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
 	};
 
@@ -379,10 +373,35 @@ namespace database::players
 	};
 #pragma pack(pop)
 
-	template <typename T>
-	class generic_item_list : public utils::encoding::database_array<T, 16, 2048>
+	template <typename T, std::size_t AddSize = 16, std::size_t MaxSize = 2048>
+	class generic_item_list : public utils::encoding::database_array<T, AddSize, MaxSize>
 	{
 	public:
+		bool try_add_item(const T& item)
+		{
+			std::int64_t free_index = -1;
+			for (auto o = 0ull; o < this->size(); o++)
+			{
+				if (this->are_elements_equal(item, this->operator[](o)))
+				{
+					std::memcpy(&this->operator[](o), &item, sizeof(T));
+					return true;
+				}
+				else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+				{
+					free_index = static_cast<std::int64_t>(o);
+				}
+			}
+
+			if (free_index != -1)
+			{
+				std::memcpy(&this->operator[](free_index), &item, sizeof(T));
+				return true;
+			}
+
+			return this->push(item);
+		}
+
 		bool parse_diff(nlohmann::json& data)
 		{
 			if (!data.is_array())
@@ -399,27 +418,7 @@ namespace database::players
 					continue;
 				}
 
-				std::int64_t free_index = -1;
-				for (auto o = 0ull; o < this->size(); o++)
-				{
-					if (this->are_elements_equal(new_item, this->operator[](o)))
-					{
-						std::memcpy(&this->operator[](o), &new_item, sizeof(T));
-						break;
-					}
-					else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
-					{
-						free_index = static_cast<std::int64_t>(o);
-					}
-				}
-
-				if (free_index != -1)
-				{
-					std::memcpy(&this->operator[](free_index), &new_item, sizeof(T));
-					continue;
-				}
-
-				if (!this->push(new_item))
+				if (!try_add_item(new_item))
 				{
 					break;
 				}
@@ -524,6 +523,23 @@ namespace database::players
 		{
 			return value.resource_id == 0;
 		}
+
+	};
+
+	class mission_record_list_t final : public generic_item_list<mission_record_t, 8, 256>
+	{
+	public:
+		inline bool are_elements_equal(const mission_record_t& l, const mission_record_t& r) const override
+		{
+			return l.mission_code == r.mission_code;
+		}
+
+		inline bool is_element_empty(const mission_record_t& value) const override
+		{
+			return value.mission_code == 0;
+		}
+
+		bool open_mission(const std::uint32_t mission_code);
 
 	};
 
