@@ -790,6 +790,17 @@ namespace database::players
 		data["score"] = this->score;
 	}
 
+	bool map_unlock_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data, this->value); 
+		return true;
+	}
+
+	void map_unlock_t::to_json(nlohmann::json& data) const
+	{
+		data = this->value;
+	}
+
 	bool story_unlock_info_t::parse(nlohmann::json& data)
 	{
 		utils::json::get_or(data["demo_open_flag"], this->demo_open_flag);
@@ -801,53 +812,6 @@ namespace database::players
 		utils::json::parse_base64(data["marker_africa"], this->marker_africa);
 		utils::json::parse_base64(data["marker_afghan"], this->marker_afghan);
 		utils::json::parse_base64(data["fast_travel_unlock"], this->marker_afghan);
-
-		auto& map_unlock_list_j = data["map_unlock_list"];
-		if (!map_unlock_list_j.is_array())
-		{
-			return true;
-		}
-
-		for (auto i = 0ull; i < map_unlock_list_j.size(); i++)
-		{
-			if (i >= 2)
-			{
-				break;
-			}
-
-			auto& entry = map_unlock_list_j[i];
-			auto& location_index_j = entry["location_index"];
-			auto& map_unlock_j = entry["map_unlock"];
-
-			if (!location_index_j.is_number_unsigned() || !map_unlock_j.is_array())
-			{
-				continue;
-			}
-
-			const auto location_index = location_index_j.get<std::uint32_t>();
-			auto& unlocks = this->map_unlocks[location_index];
-			auto beg = 1ull;
-
-			for (; beg < ARRAYSIZE(unlocks.value); ++beg)
-			{
-				if (unlocks.value[beg] == 0)
-				{
-					break;
-				}
-			}
-
-			for (auto o = 0ull; o < map_unlock_j.size(); o++)
-			{
-				auto& value_j = map_unlock_j[o];
-				if (!value_j.is_number_unsigned())
-				{
-					continue;
-				}
-
-				unlocks.value[++beg] = value_j.get<std::uint32_t>();
-			}
-		}
-
 		return true;
 	}
 
@@ -858,26 +822,6 @@ namespace database::players
 		data["marker_map_location"] = this->marker_map_location;
 		data["oxygen_supply_unlock"] = this->oxygen_supply_unlock;
 		data["story_sequence_number"] = this->story_sequence_number;
-
-		const auto do_map = [&](const map_unlock_t& unlock, const std::uint32_t index)
-		{
-			auto& entry = data["map_unlock_list"][index];
-			entry["location_index"] = index;
-
-			for (auto i = 0ull; i < ARRAYSIZE(unlock.value); i++)
-			{
-				if (unlock.value[i] == 0 && i > 0)
-				{
-					break;
-				}
-
-				entry["map_unlock"][i] = unlock.value[i];
-			}
-		};
-
-		do_map(this->map_unlocks[0], 0);
-		do_map(this->map_unlocks[1], 1);
-
 		data["marker_afghan"] = utils::encoding::encode_base64(this->marker_afghan);
 		data["marker_africa"] = utils::encoding::encode_base64(this->marker_africa);
 		data["fast_travel_unlock"] = utils::encoding::encode_base64(this->fast_travel_unlock);
@@ -1071,11 +1015,15 @@ namespace database::players
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
+		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
+		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_africa);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
+		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
+		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_africa);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const
@@ -1153,6 +1101,16 @@ namespace database::players
 		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list, size_add);
 	}
 
+	void player::get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_map_unlock_list_afghan, this->get_user_id(), map_unlock_list, size_add);
+	}
+
+	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list, size_add);
+	}
+
 	bool player::set_avatar(avatar_t& avatar) const
 	{
 		RUN_IMPL(impl::set_avatar, this->get_player_id(), avatar);
@@ -1228,6 +1186,16 @@ namespace database::players
 	bool player::set_stackable_item_list(stackable_item_list_t& stackable_item_list) const
 	{
 		RUN_IMPL(impl::set_stackable_item_list, this->get_user_id(), stackable_item_list);
+	}
+
+	bool player::set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const
+	{
+		RUN_IMPL(impl::set_map_unlock_list_afghan, this->get_user_id(), map_unlock_list);
+	}
+
+	bool player::set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
+	{
+		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const

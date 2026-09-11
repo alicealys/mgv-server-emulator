@@ -351,13 +351,15 @@ namespace database::players
 		void to_json(nlohmann::json& data) const;
 	};
 
+	struct map_unlock_t
+	{
+		std::uint16_t value;
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
+	};
+
 	struct story_unlock_info_t
 	{
-		struct map_unlock_t
-		{
-			std::uint32_t value[2048];
-		};
-
 		std::uint32_t demo_open_flag;
 		std::uint32_t facility_new_flag;
 		std::uint32_t marker_map_location;
@@ -366,7 +368,6 @@ namespace database::players
 		std::uint8_t fast_travel_unlock[8];
 		std::uint8_t marker_afghan[522];
 		std::uint8_t marker_africa[522];
-		map_unlock_t map_unlocks[2];
 
 		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
@@ -447,7 +448,7 @@ namespace database::players
 			return true;
 		}
 
-		void to_json(nlohmann::json& data) const
+		virtual void to_json(nlohmann::json& data) const
 		{
 			auto idx = 0;
 			data = nlohmann::json::array();
@@ -539,6 +540,37 @@ namespace database::players
 
 	};
 
+	class map_unlock_list_t final : public generic_item_list<map_unlock_t, 21904>
+	{
+	public:
+		inline bool are_elements_equal(const map_unlock_t& l, const map_unlock_t& r) const override
+		{
+			return l.value == r.value;
+		}
+
+		inline bool is_element_empty(const map_unlock_t& value) const override
+		{
+			return value.value == 0u;
+		}
+
+		virtual void to_json(nlohmann::json& data) const
+		{
+			auto idx = 1;
+			data[0] = 0;
+
+			const auto list = this->data();
+			for (auto i = 0ull; i < this->size(); i++)
+			{
+				if (this->is_element_empty(list[i]))
+				{
+					continue;
+				}
+
+				list[i].to_json(data[idx++]);
+			}
+		}
+	};
+
 	class player
 	{
 	public:
@@ -565,6 +597,8 @@ namespace database::players
 		DEFINE_FIELD(mission_record_list, sqlpp::binary);
 		DEFINE_FIELD(inventory_resource_list, sqlpp::binary);
 		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
+		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
+		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -583,7 +617,9 @@ namespace database::players
 			story_unlock_info_field_t,
 			mission_record_list_field_t,
 			inventory_resource_list_field_t,
-			stackable_item_list_field_t
+			stackable_item_list_field_t,
+			map_unlock_list_afghan_field_t,
+			map_unlock_list_africa_field_t
 		);
 
 		inline static table_t table;
@@ -631,20 +667,25 @@ namespace database::players
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
+		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
+		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
 		bool set_mission_info(mission_info_t& mission_info) const;
 		bool set_inventory(player_inventory_t& inventory) const;
-		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_gimmick_info(gimmick_info_t& gimmick_info) const;
 		bool set_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		bool set_play_record(player_play_record_t& play_record) const;
 		bool set_base_resources(base_resources_t& base_resources) const;
 		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
+
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
+		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
+		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
+		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 

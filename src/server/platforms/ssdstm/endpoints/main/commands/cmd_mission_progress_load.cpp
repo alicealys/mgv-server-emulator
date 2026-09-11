@@ -24,6 +24,8 @@ namespace emulator::ssd
 		const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
 		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
+		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
+		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
 
 		const auto& player = user->current_player;
 
@@ -39,6 +41,8 @@ namespace emulator::ssd
 		player->get_stackable_item_list(*stackable_item_list);
 		player->get_story_unlock_info(*story_unlock_info);
 		player->get_mission_record_list(*mission_record_list);
+		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
+		player->get_map_unlock_list_africa(*map_unlock_list_africa);
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -128,6 +132,12 @@ namespace emulator::ssd
 		inventory_resources->to_json(result["resource_list"]);
 		stackable_item_list->to_json(result["stackable_list"]);
 		story_unlock_info->to_json(result["story_unlock_info"]);
+
+		result["story_unlock_info"]["map_unlock_list"][0]["location_index"] = 0;
+		map_unlock_list_afghan->to_json(result["story_unlock_info"]["map_unlock_list"][0]["map_unlock"]);
+
+		result["story_unlock_info"]["map_unlock_list"][1]["location_index"] = 1;
+		map_unlock_list_africa->to_json(result["story_unlock_info"]["map_unlock_list"][1]["map_unlock"]);
 		
 		result["tips_open_info"]["data"] = "";
 		result["user_flag"] = user->get_user_flag();

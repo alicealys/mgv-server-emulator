@@ -47,6 +47,8 @@ create table if not exists `players`
 	stackable_item_list  	blob default null,
 	inventory_resource_list blob default null,
 	nonstackable_item_list	mediumblob default null,
+	map_unlock_list_afghan	mediumblob default null,
+	map_unlock_list_africa	mediumblob default null,
 	primary key (`player_id`),
 	foreign key (`f_user_id`) references `users`(`user_id`)
 )

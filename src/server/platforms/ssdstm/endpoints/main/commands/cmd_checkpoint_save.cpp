@@ -79,6 +79,58 @@ namespace emulator::ssd
 
 		user->current_player->set_base_resources(*base_resources);
 
+		const auto parse_map_unlock_list = [&](nlohmann::json& story_unlock_info_j)
+		{
+			auto& map_unlock_list_j = story_unlock_info_j["map_unlock_list"];
+			if (!map_unlock_list_j.is_array())
+			{
+				return;
+			}
+
+			for (auto i = 0ull; i < map_unlock_list_j.size(); i++)
+			{
+				auto& entry = map_unlock_list_j[i];
+				if (!entry.is_object())
+				{
+					continue;
+				}
+
+				auto& location_index_j = entry["location_index"];
+				auto& map_unlock_j = entry["map_unlock"];
+				if (!location_index_j.is_number_unsigned() || !map_unlock_j.is_array() || map_unlock_j.size() == 0)
+				{
+					continue;
+				}
+
+				const auto location_index = location_index_j.get<std::uint32_t>();
+				const auto map_unlock_list = std::make_unique<database::players::map_unlock_list_t>();
+
+				switch (location_index)
+				{
+				case 0:
+					user->current_player->get_map_unlock_list_afghan(*map_unlock_list, map_unlock_j.size());
+					break;
+				case 1:
+					user->current_player->get_map_unlock_list_africa(*map_unlock_list, map_unlock_j.size());
+					break;
+				default:
+					continue;
+				}
+
+				map_unlock_list->parse_diff(map_unlock_j);
+
+				switch (location_index)
+				{
+				case 0:
+					user->current_player->set_map_unlock_list_afghan(*map_unlock_list);
+					break;
+				case 1:
+					user->current_player->set_map_unlock_list_africa(*map_unlock_list);
+					break;
+				}
+			}
+		};
+
 		auto story_sequence_number = -1;
 		if (story_unlock_info_j.is_object())
 		{
@@ -87,6 +139,7 @@ namespace emulator::ssd
 			story_unlock_info->parse(story_unlock_info_j);
 			user->current_player->set_story_unlock_info(*story_unlock_info);
 			story_sequence_number = story_unlock_info->story_sequence_number;
+			parse_map_unlock_list(story_unlock_info_j);
 		}
 
 		if (mission_info_j.is_object())
