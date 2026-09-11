@@ -165,7 +165,7 @@ public: \
 
 #define DEF_ARRAY_GET(__table__, __type__, __name__) \
 		template <database_type_t Type> \
-		void get_##__name__(const std::uint64_t __table__##_id, __type__& __name__) \
+		void get_##__name__(const std::uint64_t __table__##_id, __type__& __name__, const std::size_t size_add) \
 		{ \
 			database::access([&](database::database_t& db) \
 			{ \
@@ -178,7 +178,7 @@ public: \
 					return; \
 				} \
 				const auto data = results.front().__name__.value(); \
-				__name__.deserialize(data); \
+				__name__.deserialize(data, size_add); \
 			}); \
 		} \
 

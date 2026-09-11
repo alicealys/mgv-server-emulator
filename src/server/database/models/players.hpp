@@ -373,8 +373,8 @@ namespace database::players
 	};
 #pragma pack(pop)
 
-	template <typename T, std::size_t AddSize = 16, std::size_t MaxSize = 2048>
-	class generic_item_list : public utils::encoding::database_array<T, AddSize, MaxSize>
+	template <typename T, std::size_t MaxSize = 2048>
+	class generic_item_list : public utils::encoding::database_array<T, MaxSize>
 	{
 	public:
 		bool try_add_item(const T& item)
@@ -522,7 +522,7 @@ namespace database::players
 		}
 	};
 
-	class mission_record_list_t final : public generic_item_list<mission_record_t, 8, 256>
+	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>
 	{
 	public:
 		inline bool are_elements_equal(const mission_record_t& l, const mission_record_t& r) const override
@@ -621,15 +621,16 @@ namespace database::players
 		void get_loadout_list(loadout_list_t& loadout) const;
 		void get_mission_info(mission_info_t& mission_info) const;
 		void get_inventory(player_inventory_t& inventory) const;
-		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		void get_gimmick_info(gimmick_info_t& gimmick_info) const;
 		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
 		void get_play_record(player_play_record_t& play_record) const;
 		void get_base_resources(base_resources_t& base_resources) const;
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
-		void get_mission_record_list(mission_record_list_t& mission_record_list) const;
-		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
-		void get_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
+
+		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
+		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
+		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
+		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;

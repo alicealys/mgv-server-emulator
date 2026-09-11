@@ -66,7 +66,7 @@ namespace emulator::ssd
 		if (nonstackable_list_j.is_array())
 		{
 			const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
-			user->current_player->get_nonstackable_item_list(*nonstackable_list);
+			user->current_player->get_nonstackable_item_list(*nonstackable_list, nonstackable_list_j.size());
 			nonstackable_list->parse_diff(nonstackable_list_j);
 			user->current_player->set_nonstackable_item_list(*nonstackable_list);
 		}
@@ -74,7 +74,7 @@ namespace emulator::ssd
 		if (stackable_list_j.is_array())
 		{
 			const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
-			user->current_player->get_stackable_item_list(*stackable_list);
+			user->current_player->get_stackable_item_list(*stackable_list, stackable_list_j.size());
 			stackable_list->parse_diff(stackable_list_j);
 			user->current_player->set_stackable_item_list(*stackable_list);
 		}
@@ -82,7 +82,7 @@ namespace emulator::ssd
 		if (resource_list_j.is_array())
 		{
 			const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
-			user->current_player->get_inventory_resource_list(*resource_list);
+			user->current_player->get_inventory_resource_list(*resource_list, resource_list_j.size());
 			resource_list->parse_diff(resource_list_j);
 			user->current_player->set_inventory_resource_list(*resource_list);
 		}

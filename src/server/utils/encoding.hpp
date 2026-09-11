@@ -44,7 +44,7 @@ namespace utils::encoding
 		return utils::cryptography::base64::encode(buffer, sizeof(T));
 	}
 
-	template <typename T, std::size_t SizeAdd, std::size_t MaxSize>
+	template <typename T, std::size_t MaxSize>
 	class database_array : private std::vector<T>
 	{
 		static_assert(std::is_trivially_copyable<T>::value, "type must be trivially copyable");
@@ -59,7 +59,7 @@ namespace utils::encoding
 		{
 		}
 
-		virtual bool deserialize(const std::string& data)
+		virtual bool deserialize(const std::string& data, const std::size_t add_size = 0ull)
 		{
 			if ((data.size() % sizeof(T)) != 0)
 			{
@@ -67,7 +67,7 @@ namespace utils::encoding
 			}
 
 			const auto size = data.size() / sizeof(T);
-			this->resize(std::min(MaxSize, size + SizeAdd));
+			this->resize(std::min(MaxSize, size + add_size));
 			std::memcpy(this->data(), data.data(), data.size());
 			return true;
 		}

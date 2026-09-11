@@ -113,7 +113,7 @@ namespace emulator::ssd
 			if (mission_code_list_j.is_array())
 			{
 				const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-				user->current_player->get_mission_record_list(*mission_record_list);
+				user->current_player->get_mission_record_list(*mission_record_list, mission_code_list_j.size());
 
 				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 				{

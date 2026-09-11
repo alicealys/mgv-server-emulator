@@ -1098,9 +1098,9 @@ namespace database::players
 		RUN_IMPL(impl::get_player_inventory, this->get_player_id(), inventory);
 	}
 
-	void player::get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_item_list) const
+	void player::get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_item_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_nonstackable_item_list, this->get_player_id(), nonstackable_item_list);
+		RUN_IMPL(impl::get_nonstackable_item_list, this->get_player_id(), nonstackable_item_list, size_add);
 	}
 
 	void player::get_gimmick_info(gimmick_info_t& gimmick_info) const
@@ -1138,19 +1138,19 @@ namespace database::players
 		RUN_IMPL(impl::get_story_unlock_info, this->get_user_id(), story_unlock_info);
 	}
 
-	void player::get_mission_record_list(mission_record_list_t& mission_record_list) const
+	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list);
+		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
 	}
 
-	void player::get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const
+	void player::get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_inventory_resource_list, this->get_user_id(), inventory_resource_list);
+		RUN_IMPL(impl::get_inventory_resource_list, this->get_user_id(), inventory_resource_list, size_add);
 	}
 
-	void player::get_stackable_item_list(stackable_item_list_t& stackable_item_list) const
+	void player::get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list);
+		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list, size_add);
 	}
 
 	bool player::set_avatar(avatar_t& avatar) const
