@@ -47,6 +47,8 @@ create table if not exists `players`
 	nonstackable_item_list	blob default null,
 	map_unlock_list_afghan	blob default null,
 	map_unlock_list_africa	blob default null,
+	building_info_afghan	blob default null,
+	building_info_africa	blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger

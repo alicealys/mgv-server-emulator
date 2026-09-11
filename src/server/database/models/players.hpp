@@ -372,20 +372,65 @@ namespace database::players
 		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data) const;
 	};
+
+	constexpr const auto building_grid_size = 32u;
+	
+	enum edge_type_t
+	{
+		edge_type_center = 0,
+		edge_type_upper = 1,
+		edge_type_left = 2,
+		edge_type_count = 3,
+	};
+
+	struct building_info_t
+	{
+		struct cell_edge_t
+		{
+			std::uint8_t rotation;
+			std::uint16_t extra_data;
+			std::uint16_t life;
+			std::uint16_t max_life;
+			std::uint16_t production_index;
+			std::uint32_t completion_remaining_time;
+			std::uint32_t recovery_time;
+
+			bool parse(nlohmann::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
+			void to_json(nlohmann::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
+		};
+
+		struct cell_t
+		{
+			cell_edge_t edges[edge_type_count];
+		};
+
+		cell_t cells[building_grid_size][building_grid_size];
+
+		bool parse_type(nlohmann::json& data, const std::uint32_t type);
+		bool parse(nlohmann::json& data, const bool is_diff);
+
+		void to_json(nlohmann::json& data, const std::uint32_t type) const;
+		void to_json(nlohmann::json& data) const;
+
+		void load_default(const std::uint32_t map_location);
+	};
 #pragma pack(pop)
 
 	template <typename T, std::size_t MaxSize = 2048>
 	class generic_item_list : public utils::encoding::database_array<T, MaxSize>
 	{
 	public:
-		bool try_add_item(const T& item)
+		bool try_add_item(const T& item, const bool overwrite_existing = true)
 		{
 			std::int64_t free_index = -1;
 			for (auto o = 0ull; o < this->size(); o++)
 			{
 				if (this->are_elements_equal(item, this->operator[](o)))
 				{
-					std::memcpy(&this->operator[](o), &item, sizeof(T));
+					if (overwrite_existing)
+					{
+						std::memcpy(&this->operator[](o), &item, sizeof(T));
+					}
 					return true;
 				}
 				else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
@@ -599,6 +644,8 @@ namespace database::players
 		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
+		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
+		DEFINE_FIELD(building_info_africa, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -619,7 +666,9 @@ namespace database::players
 			inventory_resource_list_field_t,
 			stackable_item_list_field_t,
 			map_unlock_list_afghan_field_t,
-			map_unlock_list_africa_field_t
+			map_unlock_list_africa_field_t,
+			building_info_afghan_field_t,
+			building_info_africa_field_t
 		);
 
 		inline static table_t table;
@@ -658,10 +707,11 @@ namespace database::players
 		void get_mission_info(mission_info_t& mission_info) const;
 		void get_inventory(player_inventory_t& inventory) const;
 		void get_gimmick_info(gimmick_info_t& gimmick_info) const;
-		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const;
+		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map_location) const;
 		void get_play_record(player_play_record_t& play_record) const;
 		void get_base_resources(base_resources_t& base_resources) const;
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
+		void get_building_info(building_info_t& building, const std::uint32_t map_location) const;
 
 		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
@@ -679,6 +729,7 @@ namespace database::players
 		bool set_play_record(player_play_record_t& play_record) const;
 		bool set_base_resources(base_resources_t& base_resources) const;
 		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
+		bool set_building_info(building_info_t& building, const std::uint32_t map_location) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;

@@ -766,7 +766,7 @@ namespace database::players
 	{
 		mission_record_t record{};
 		record.mission_code = mission_code;
-		return this->try_add_item(record);
+		return this->try_add_item(record, false);
 	}
 
 	bool mission_record_t::parse(nlohmann::json& data)
@@ -825,6 +825,125 @@ namespace database::players
 		data["marker_afghan"] = utils::encoding::encode_base64(this->marker_afghan);
 		data["marker_africa"] = utils::encoding::encode_base64(this->marker_africa);
 		data["fast_travel_unlock"] = utils::encoding::encode_base64(this->fast_travel_unlock);
+	}
+
+	bool building_info_t::cell_edge_t::parse(nlohmann::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
+	{
+		if (type == edge_type_center)
+		{
+			utils::json::get_or(data["extra_data"], this->extra_data, this->extra_data);
+			utils::json::get_or(data["rotation"], this->rotation, this->rotation);
+		}
+
+		utils::json::get_or(data["life"], this->life, this->life);
+		utils::json::get_or(data["max_life"], this->max_life, this->max_life);
+		utils::json::get_or(data["production_id"], this->production_index, this->production_index);
+		utils::json::get_or(data["completion_remaining_time"], this->completion_remaining_time, this->completion_remaining_time);
+		utils::json::get_or(data["recovery_time"], this->recovery_time, this->recovery_time);
+		utils::json::get_or(data["row"], row);
+		utils::json::get_or(data["column"], column);
+
+		if (row >= building_grid_size || column >= building_grid_size)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	void building_info_t::cell_edge_t::to_json(nlohmann::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const
+	{
+		if (type == edge_type_center)
+		{
+			data["rotation"] = this->rotation;
+			data["extra_data"] = this->extra_data;
+		}
+
+		data["life"] = this->life;
+		data["max_life"] = this->max_life;
+		data["production_id"] = this->production_index;
+		data["completion_remaining_time"] = this->completion_remaining_time;
+		data["recovery_time"] = this->recovery_time;
+		data["row"] = row;
+		data["column"] = column;
+	}
+
+	bool building_info_t::parse_type(nlohmann::json& data, const std::uint32_t type)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		const auto count = std::min(data.size(), static_cast<std::size_t>(building_grid_size));
+		for (auto i = 0ull; i < count; i++)
+		{
+			cell_edge_t cell_edge{};
+			std::uint32_t row{};
+			std::uint32_t column{};
+			if (!cell_edge.parse(data[i], row, column, type))
+			{
+				continue;
+			}
+
+			std::memcpy(&this->cells[row][column].edges[type], &cell_edge, sizeof(cell_edge_t));
+		}
+
+		return true;
+	}
+
+	bool building_info_t::parse(nlohmann::json& data, const bool is_diff)
+	{
+		if (!is_diff)
+		{
+			std::memset(this, 0, sizeof(building_info_t));
+		}
+
+		this->parse_type(data["center_info"], edge_type_center);
+		this->parse_type(data["upper_edge_info"], edge_type_upper);
+		this->parse_type(data["left_edge_info"], edge_type_left);
+		return true;
+	}
+
+	void building_info_t::to_json(nlohmann::json& data, const std::uint32_t type) const
+	{
+		auto idx = 0;
+		for (auto row = 0u; row < building_grid_size; row++)
+		{
+			for (auto col = 0u; col < building_grid_size; col++)
+			{
+				if (this->cells[row][col].edges[type].life == 0)
+				{
+					continue;
+				}
+
+				this->cells[row][col].edges[type].to_json(data[idx++], row, col, type);
+			}
+		}
+	}
+
+	void building_info_t::to_json(nlohmann::json& data) const
+	{
+		this->to_json(data["center_info"], edge_type_center);
+		this->to_json(data["upper_edge_info"], edge_type_upper);
+		this->to_json(data["left_edge_info"], edge_type_left);
+	}
+
+	void building_info_t::load_default(const std::uint32_t map_location)
+	{
+		static const auto default_building = [&]()
+		{
+			static building_info_t data{};
+
+			nlohmann::json default_data = get_default_data("building_info");
+			data.parse_type(default_data[map_location]["center_info"], edge_type_center);
+			data.parse_type(default_data[map_location]["upper_edge_info"], edge_type_upper);
+			data.parse_type(default_data[map_location]["left_edge_info"], edge_type_left);
+
+			return &data;
+		}();
+
+		std::memcpy(this, default_building, sizeof(building_info_t));
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);
@@ -926,6 +1045,20 @@ namespace database::players
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(list));
 			}();
 
+			static const auto building_info_africa = []()
+			{
+				static building_info_t building{};
+				building.load_default(0);
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
+			}();
+
+			static const auto building_info_afghan = []()
+			{
+				static building_info_t building{};
+				building.load_default(1);
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
+			}();
+
 			const auto id = database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				return db.exec<Type>(
@@ -933,6 +1066,8 @@ namespace database::players
 						.set(player::table.f_user_id = user_id,
 							 player::table.player_inventory = default_inventory,
 							 player::table.loadout_list = loadout_list,
+							 player::table.building_info_afghan = building_info_afghan,
+							 player::table.building_info_africa = building_info_africa,
 							 player::table.current_loadout = 0,
 							 player::table.loadout_count = initial_loadout_count,
 							 player::table.player_creation_date = std::chrono::system_clock::now()));
@@ -999,6 +1134,8 @@ namespace database::players
 		DEF_BINARY_GET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_GET(player, base_resources_t, base_resources);
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
+		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
+		DEF_BINARY_GET(player, building_info_t, building_info_africa);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -1010,6 +1147,8 @@ namespace database::players
 		DEF_BINARY_SET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_SET(player, base_resources_t, base_resources);
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
+		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
+		DEF_BINARY_SET(player, building_info_t, building_info_africa);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
@@ -1056,9 +1195,9 @@ namespace database::players
 		RUN_IMPL(impl::get_gimmick_info, this->get_player_id(), gimmick_info);
 	}
 
-	void player::get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const
+	void player::get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map_location) const
 	{
-		switch (map)
+		switch (map_location)
 		{
 		case 0:
 		{
@@ -1084,6 +1223,21 @@ namespace database::players
 	void player::get_story_unlock_info(story_unlock_info_t& story_unlock_info) const
 	{
 		RUN_IMPL(impl::get_story_unlock_info, this->get_user_id(), story_unlock_info);
+	}
+
+	void player::get_building_info(building_info_t& building, const std::uint32_t map_location) const
+	{
+		switch (map_location)
+		{
+		case 0:
+		{
+			RUN_IMPL(impl::get_building_info_afghan, this->get_player_id(), building);
+		}
+		case 1:
+		{
+			RUN_IMPL(impl::get_building_info_africa, this->get_player_id(), building);
+		}
+		}
 	}
 
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
@@ -1141,9 +1295,9 @@ namespace database::players
 		RUN_IMPL(impl::set_gimmick_info, this->get_player_id(), gimmick_info);
 	}
 
-	bool player::set_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map) const
+	bool player::set_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map_location) const
 	{
-		switch (map)
+		switch (map_location)
 		{
 		case 0:
 		{
@@ -1196,6 +1350,23 @@ namespace database::players
 	bool player::set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
 		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
+	}
+
+	bool player::set_building_info(building_info_t& building, const std::uint32_t map_location) const
+	{
+		switch (map_location)
+		{
+		case 0:
+		{
+			RUN_IMPL(impl::set_building_info_afghan, this->get_player_id(), building);
+		}
+		case 1:
+		{
+			RUN_IMPL(impl::set_building_info_africa, this->get_player_id(), building);
+		}
+		}
+
+		return false;
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const
