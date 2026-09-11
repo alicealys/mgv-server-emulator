@@ -8,10 +8,14 @@ namespace emulator::ssd
 	{
 		nlohmann::json result;
 
-		// TODO
 		result["consumable_count"] = {0, 0, 0, 0, 0, 0, 0, 0};
-        result["flag"] = 3759946752;
+		result["flag"] = user->get_dlc_flag();
 
-        return result;
+		return result;
+	}
+
+	std::uint32_t cmd_dlc_get_flag::flags()
+	{
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
 	}
 }

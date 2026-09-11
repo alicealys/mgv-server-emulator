@@ -16,7 +16,9 @@ create table if not exists `users`
 	last_update				datetime        not null,
 	user_creation_date		datetime        not null
 	user_flag				int unsigned 	default 0,
+	dlc_flag				int unsigned 	default 0,
 	user_inventory			blob			default null,
+	user_play_record		blob			default null,
 )
 -- query:mgssd.players.create
 create table if not exists `players`

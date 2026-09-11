@@ -16,6 +16,7 @@ create table if not exists `users`
 	last_update				datetime		default null,
 	user_creation_date		datetime		default null,
 	user_flag				int unsigned 	default 0,
+	dlc_flag				int unsigned 	default 0,
 	user_inventory			blob			default null,
 	user_play_record		blob			default null,
 	primary key (`user_id`)

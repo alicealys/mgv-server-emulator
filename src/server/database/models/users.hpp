@@ -60,6 +60,7 @@ namespace database::users
 		DEFINE_FIELD(last_update, sqlpp::time_point);
 		DEFINE_FIELD(user_creation_date, sqlpp::time_point);
 		DEFINE_FIELD(user_flag, sqlpp::integer_unsigned);
+		DEFINE_FIELD(dlc_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
 		DEFINE_FIELD(user_play_record, sqlpp::binary);
 		DEFINE_TABLE(users,
@@ -69,7 +70,7 @@ namespace database::users
 			password_hash_field_t, crypto_key_field_t,
 			currency_field_t,
 			ex_ip_field_t, ex_port_field_t, in_ip_field_t, in_port_field_t, nat_field_t,
-			last_update_field_t, user_creation_date_field_t, user_flag_field_t,
+			last_update_field_t, user_creation_date_field_t, user_flag_field_t, dlc_flag_field_t,
 			user_inventory_field_t, user_play_record_field_t
 		);
 
@@ -93,6 +94,7 @@ namespace database::users
 			this->last_update_ = row.last_update.value().time_since_epoch();
 			this->creation_date_ = row.user_creation_date.value().time_since_epoch();
 			this->user_flag_ = static_cast<std::uint32_t>(row.user_flag);
+			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
 
 			if (!row.player_id.is_null())
 			{
@@ -112,6 +114,7 @@ namespace database::users
 		GET_FIELD_H(std::uint16_t, ex_port);
 		GET_FIELD_H(std::uint16_t, in_port);
 		GET_FIELD_H(std::uint32_t, user_flag);
+		GET_FIELD_H(std::uint32_t, dlc_flag);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
@@ -125,6 +128,7 @@ namespace database::users
 		bool set_play_record(user_play_record_t& play_record) const;
 
 		void set_user_flag(const std::uint32_t flag) const;
+		void set_dlc_flag(const std::uint32_t flag) const;
 
 		std::optional<players::player> current_player{};
 

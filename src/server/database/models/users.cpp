@@ -179,6 +179,7 @@ namespace database::users
 	GET_FIELD_C(user, std::uint16_t, ex_port);
 	GET_FIELD_C(user, std::uint16_t, in_port);
 	GET_FIELD_C(user, std::uint32_t, user_flag);
+	GET_FIELD_C(user, std::uint32_t, dlc_flag);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
 
@@ -496,6 +497,18 @@ namespace database::users
 							.where(user::table.user_id == user_id));
 			});
 		}
+				
+		template <database_type_t Type>
+		void set_dlc_flag(const std::uint64_t user_id, const std::uint32_t flag)
+		{
+			database::access([&](database::database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.dlc_flag = flag)
+							.where(user::table.user_id == user_id));
+			});
+		}
 
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
@@ -527,6 +540,11 @@ namespace database::users
 	void user::set_user_flag(const std::uint32_t flag) const
 	{
 		RUN_IMPL(impl::set_user_flag, this->get_user_id(), flag);
+	}
+
+	void user::set_dlc_flag(const std::uint32_t flag) const
+	{
+		RUN_IMPL(impl::set_dlc_flag, this->get_user_id(), flag);
 	}
 
 	std::optional<user> find(const std::uint64_t user_id)
