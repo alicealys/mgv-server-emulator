@@ -478,7 +478,6 @@ namespace database::players
 		{
 			return this->is_element_empty(value);
 		}
-
 	};
 
 	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t>
@@ -486,14 +485,13 @@ namespace database::players
 	public:
 		inline bool are_elements_equal(const nonstackable_item_t& l, const nonstackable_item_t& r) const override
 		{
-			return l.production_id == r.production_id;
+			return l.inventory_index == r.inventory_index;
 		}
 
 		inline bool is_element_empty(const nonstackable_item_t& value) const override
 		{
 			return value.production_id == 0;
 		}
-
 	};
 
 	class stackable_item_list_t final : public generic_item_list<stackable_item_t>
@@ -501,14 +499,13 @@ namespace database::players
 	public:
 		inline bool are_elements_equal(const stackable_item_t& l, const stackable_item_t& r) const override
 		{
-			return l.production_id == r.production_id;
+			return l.inventory_index == r.inventory_index;
 		}
 
 		inline bool is_element_empty(const stackable_item_t& value) const override
 		{
 			return value.production_id == 0;
 		}
-
 	};
 
 	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t>
@@ -516,14 +513,13 @@ namespace database::players
 	public:
 		inline bool are_elements_equal(const inventory_resource_t& l, const inventory_resource_t& r) const override
 		{
-			return l.resource_id == r.resource_id;
+			return l.inventory_index == r.inventory_index;
 		}
 
 		inline bool is_element_empty(const inventory_resource_t& value) const override
 		{
 			return value.resource_id == 0;
 		}
-
 	};
 
 	class mission_record_list_t final : public generic_item_list<mission_record_t, 8, 256>
