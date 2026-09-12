@@ -26,7 +26,6 @@ namespace emulator::ssd
 		if (current_mission_info_j.is_object())
 		{
 			const auto mission_info = std::make_unique<database::players::mission_info_t>();
-			mission_info->story_sequence_number = 0u;
 			mission_info->parse(current_mission_info_j);
 			user->current_player->set_mission_info(*mission_info);
 		}

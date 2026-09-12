@@ -17,6 +17,7 @@ namespace emulator::ssd
 		auto inventory = std::make_unique<database::players::player_inventory_t>();
 		auto mission_info = std::make_unique<database::players::mission_info_t>();
 		auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
+		auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 
 		const auto players = database::players::get_player_list(user->get_user_id());
 		for (auto i = 0ull; i < players.size(); i++)
@@ -32,6 +33,7 @@ namespace emulator::ssd
 			player.get_inventory(*inventory);
 			player.get_mission_info(*mission_info);
 			player.get_nonstackable_item_list(*nonstackable_list);
+			player.get_story_unlock_info(*story_unlock_info);
 
 			const auto current_loadout_idx = player.get_current_loadout();
 			const auto& current_loadout = loadout_list->list[current_loadout_idx];
@@ -54,7 +56,7 @@ namespace emulator::ssd
 			status["oxygen"] = mission_info->oxygen;
 			status["sequence_number"] = mission_info->sequence_number;
 			status["stamina"] = mission_info->stamina;
-			status["story_sequence"] = mission_info->story_sequence_number;
+			status["story_sequence"] = story_unlock_info->story_sequence_number;
 			status["thirst"] = mission_info->thirst;
 			status["tiredness"] = mission_info->tiredness;
 

@@ -10,6 +10,7 @@
 #include "commands/cmd_create_player.hpp"
 #include "commands/cmd_gdpr_check.hpp"
 #include "commands/cmd_reqauth_sessionsvr.hpp"
+#include "commands/cmd_restore_save.hpp"
 #include "commands/cmd_send_heartbeat.hpp"
 #include "commands/cmd_error_info_send.hpp"
 #include "commands/cmd_error_lang_id_send.hpp"
@@ -180,6 +181,7 @@ namespace emulator::ssd
 		this->register_handler<cmd_create_player>("CMD_CREATE_PLAYER");
 		this->register_handler<cmd_gdpr_check>("CMD_GDPR_CHECK");
 		this->register_handler<cmd_reqauth_sessionsvr>("CMD_REQAUTH_SESSIONSVR");
+		this->register_handler<cmd_restore_save>("CMD_RESTORE_SAVE"); // custom cmd
 		this->register_handler<cmd_send_heartbeat>("CMD_SEND_HEARTBEAT");
 		this->register_handler<cmd_error_info_send>("CMD_ERROR_INFO_SEND");
 		this->register_handler<cmd_error_lang_id_send>("CMD_ERROR_LANG_ID_SEND");

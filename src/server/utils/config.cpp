@@ -40,6 +40,7 @@ namespace config
 			{define_field("use_tmp_folder", field_type::boolean, true)},
 			{define_field("http_client_ip_header", field_type::string, "")},
 			{define_field("enable_web_api", field_type::boolean, true)},
+			{define_field("allow_save_restore", field_type::boolean, true)},
 		};
 
 		std::string get_config_file_path()

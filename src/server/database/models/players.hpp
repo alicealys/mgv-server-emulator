@@ -64,9 +64,9 @@ namespace database::players
 		std::uint16_t inventory_index;
 		std::uint16_t life;
 		std::uint16_t life_max;
-		std::uint16_t obtain_order;
 		std::uint16_t option_slot;
 		std::uint16_t spec;
+		std::uint32_t obtain_order;
 		std::uint32_t production_id;
 		option_t option_list[8];
 		perk_t perk_list[5];
@@ -83,7 +83,7 @@ namespace database::players
 		std::uint16_t flag;
 		std::uint16_t inventory_index;
 		std::uint16_t inventory_type;
-		std::uint16_t obtain_order;
+		std::uint32_t obtain_order;
 		std::uint32_t production_id;
 
 		bool parse(nlohmann::json& data);
@@ -491,7 +491,7 @@ namespace database::players
 
 			for (auto i = 0ull; i < count; i++)
 			{
-				this->operator[](i).parse(data);
+				this->operator[](i).parse(data[i]);
 			}
 
 			return true;
@@ -544,7 +544,7 @@ namespace database::players
 		}
 
 		bool parse_life_diff(nlohmann::json& data);
-		bool find_free_index(std::uint16_t& index, std::uint16_t& obtain_order);
+		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
 	};
 
@@ -562,7 +562,7 @@ namespace database::players
 		}
 
 		stackable_item_t* find_item(const std::uint32_t production_id);
-		bool find_free_index(std::uint16_t& index, std::uint16_t& obtain_order);
+		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
 	};
 

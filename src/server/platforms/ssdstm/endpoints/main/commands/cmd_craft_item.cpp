@@ -63,7 +63,7 @@ namespace emulator::ssd
 			user->current_player->get_nonstackable_item_list(*nonstackable_item_list, 1);
 
 			std::uint16_t free_index{};
-			std::uint16_t obtain_order{};
+			std::uint32_t obtain_order{};
 			if (!nonstackable_item_list->find_free_index(free_index, obtain_order))
 			{
 				return error(ERR_DATABASE);
@@ -96,7 +96,7 @@ namespace emulator::ssd
 			else
 			{
 				std::uint16_t free_index{};
-				std::uint16_t obtain_order{};
+				std::uint32_t obtain_order{};
 				if (!stackable_item_list->find_free_index(free_index, obtain_order))
 				{
 					return error(ERR_DATABASE);

@@ -98,7 +98,7 @@ namespace database::users
 			static user_inventory_t data{};
 
 			const auto& default_data = get_default_data("inventory_user_info");
-			const auto load = [&]<typename T>(const std::string_view& key, T& buffer, const bool or_ = false)
+			const auto load = [&]<typename T>(const std::string_view& key, T& buffer)
 			{
 				auto data = default_data[key].get<std::string>();
 				data = utils::cryptography::base64::decode(data);
@@ -108,43 +108,29 @@ namespace database::users
 					throw std::runtime_error("invalid user inventory data");
 				}
 
-				// idk if this is right
-				if (!or_)
-				{
-					std::memcpy(buffer, data.data(), sizeof(T));
-				}
-				else
-				{
-					auto dst = reinterpret_cast<std::uint8_t*>(&buffer);
-					auto src = reinterpret_cast<std::uint8_t*>(data.data());
-
-					for (auto i = 0ull; i < sizeof(T); i++)
-					{
-						dst[i] |= src[i];
-					} 
-				}
+				std::memcpy(buffer, data.data(), sizeof(T));
 			};
 
 			load("archive_new", data.archive_new);
-			load("archive_obtained", data.archive_obtained, true);
-			load("battle_pack_opened", data.battle_pack_opened, true);
+			load("archive_obtained", data.archive_obtained);
+			load("battle_pack_opened", data.battle_pack_opened);
 			load("cassette_new", data.cassette_new);
-			load("cassette_obtained", data.cassette_obtained, true);
-			load("command_marker_obtained", data.command_marker_obtained, true);
+			load("cassette_obtained", data.cassette_obtained);
+			load("command_marker_obtained", data.command_marker_obtained);
 			load("face_paint_new", data.face_paint_new);
-			load("face_paint_obtained", data.face_paint_obtained, true);
+			load("face_paint_obtained", data.face_paint_obtained);
 			load("food_used", data.food_used);
 			load("gesture_new", data.gesture_new);
-			load("gesture_obtained", data.gesture_obtained, true);
+			load("gesture_obtained", data.gesture_obtained);
 			load("name_plate_new", data.name_plate_new);
-			load("name_plate_obtained", data.name_plate_obtained, true);
-			load("preset_radio_obtained", data.preset_radio_obtained, true);
-			load("production_opened", data.production_opened, true);
+			load("name_plate_obtained", data.name_plate_obtained);
+			load("preset_radio_obtained", data.preset_radio_obtained);
+			load("production_opened", data.production_opened);
 			load("recipe_new", data.recipe_new);
 			load("recipe_new_for_db", data.recipe_new_for_db);
-			load("recipe_opened", data.recipe_opened, true);
+			load("recipe_opened", data.recipe_opened);
 			load("recipe_used", data.recipe_used);
-			load("resource_opened", data.resource_opened, true);
+			load("resource_opened", data.resource_opened);
 
 			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].get<std::uint8_t>();
 
@@ -199,7 +185,7 @@ namespace database::users
 
 	bool user_inventory_t::parse_save(nlohmann::json& data)
 	{
-		const auto try_parse_part = [&]<typename T>(const std::string_view& name, T& dest)
+		const auto try_parse_part = [&]<typename T>(const std::string_view& name, T& dest, const bool or_ = false)
 		{
 			auto& value_j = data[name];
 			if (!value_j.is_array() || value_j.size() <= 0)
@@ -219,31 +205,76 @@ namespace database::users
 				return;
 			}
 
-			utils::json::parse_base64(data_j, dest, true);
+			if (or_)
+			{
+				T new_data{};
+				utils::json::parse_base64(data_j, new_data, true);
+
+				auto dst = reinterpret_cast<std::uint8_t*>(&new_data);
+				auto src = reinterpret_cast<std::uint8_t*>(&dest);
+
+				for (auto i = 0ull; i < sizeof(T); i++)
+				{
+					dst[i] |= src[i];
+				}
+			}
+			else
+			{
+				utils::json::parse_base64(data_j, dest, true);
+			}
 		};
 
 		try_parse_part("archive_new", this->archive_new);
-		try_parse_part("archive_obtained", this->archive_obtained);
-		try_parse_part("battle_pack_opened", this->battle_pack_opened);
+		try_parse_part("archive_obtained", this->archive_obtained, true);
+		try_parse_part("battle_pack_opened", this->battle_pack_opened, true);
 		try_parse_part("cassette_new", this->cassette_new);
-		try_parse_part("cassette_obtained", this->cassette_obtained);
+		try_parse_part("cassette_obtained", this->cassette_obtained, true);
 		try_parse_part("command_marker_new", this->command_marker_new);
-		try_parse_part("command_marker_obtained", this->command_marker_obtained);
+		try_parse_part("command_marker_obtained", this->command_marker_obtained, true);
 		try_parse_part("face_paint_new", this->face_paint_new);
-		try_parse_part("face_paint_obtained", this->face_paint_obtained);
+		try_parse_part("face_paint_obtained", this->face_paint_obtained, true);
 		try_parse_part("food_used", this->food_used);
 		try_parse_part("gesture_new", this->gesture_new);
-		try_parse_part("gesture_obtained", this->gesture_obtained);
+		try_parse_part("gesture_obtained", this->gesture_obtained, true);
 		try_parse_part("name_plate_new", this->name_plate_new);
-		try_parse_part("name_plate_obtained", this->name_plate_obtained);
+		try_parse_part("name_plate_obtained", this->name_plate_obtained, true);
 		try_parse_part("preset_radio_new", this->preset_radio_new);
-		try_parse_part("preset_radio_obtained", this->preset_radio_obtained);
-		try_parse_part("production_opened", this->production_opened);
+		try_parse_part("preset_radio_obtained", this->preset_radio_obtained, true);
+		try_parse_part("production_opened", this->production_opened, true);
 		try_parse_part("recipe_new", this->recipe_new);
 		try_parse_part("recipe_new_for_db", this->recipe_new_for_db);
-		try_parse_part("recipe_opened", this->recipe_opened);
+		try_parse_part("recipe_opened", this->recipe_opened, true);
 		try_parse_part("recipe_used", this->recipe_used);
-		try_parse_part("resource_opened", this->resource_opened);
+		try_parse_part("resource_opened", this->resource_opened, true);
+
+		utils::json::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		return true;
+	}
+
+	bool user_inventory_t::parse(nlohmann::json& data)
+	{
+		utils::json::parse_base64(data["archive_new"], this->archive_new);
+		utils::json::parse_base64(data["archive_obtained"], this->archive_obtained);
+		utils::json::parse_base64(data["battle_pack_opened"], this->battle_pack_opened);
+		utils::json::parse_base64(data["cassette_new"], this->cassette_new);
+		utils::json::parse_base64(data["cassette_obtained"], this->cassette_obtained);
+		utils::json::parse_base64(data["command_marker_new"], this->command_marker_new);
+		utils::json::parse_base64(data["command_marker_obtained"], this->command_marker_obtained);
+		utils::json::parse_base64(data["face_paint_new"], this->face_paint_new);
+		utils::json::parse_base64(data["face_paint_obtained"], this->face_paint_obtained);
+		utils::json::parse_base64(data["food_used"], this->food_used);
+		utils::json::parse_base64(data["gesture_new"], this->gesture_new);
+		utils::json::parse_base64(data["gesture_obtained"], this->gesture_obtained);
+		utils::json::parse_base64(data["name_plate_new"], this->name_plate_new);
+		utils::json::parse_base64(data["name_plate_obtained"], this->name_plate_obtained);
+		utils::json::parse_base64(data["preset_radio_new"], this->preset_radio_new);
+		utils::json::parse_base64(data["preset_radio_obtained"], this->preset_radio_obtained);
+		utils::json::parse_base64(data["production_opened"], this->production_opened);
+		utils::json::parse_base64(data["recipe_new"], this->recipe_new);
+		utils::json::parse_base64(data["recipe_new_for_db"], this->recipe_new_for_db);
+		utils::json::parse_base64(data["recipe_opened"], this->recipe_opened);
+		utils::json::parse_base64(data["recipe_used"], this->recipe_used);
+		utils::json::parse_base64(data["resource_opened"], this->resource_opened);
 
 		utils::json::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
 		return true;

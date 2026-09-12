@@ -923,6 +923,8 @@ namespace database::players
 
 	void building_info_t::to_json(nlohmann::json& data, const std::uint32_t type) const
 	{
+		data = nlohmann::json::array();
+
 		auto idx = 0;
 		for (auto row = 0u; row < building_grid_size; row++)
 		{
@@ -991,7 +993,7 @@ namespace database::players
 		return true;
 	}
 
-	bool nonstackable_item_list_t::find_free_index(std::uint16_t& index, std::uint16_t& obtain_order)
+	bool nonstackable_item_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
 	{
 		index = 0u;
 		obtain_order = 0u;
@@ -1056,7 +1058,7 @@ namespace database::players
 		return nullptr;
 	}
 
-	bool stackable_item_list_t::find_free_index(std::uint16_t& index, std::uint16_t& obtain_order)
+	bool stackable_item_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
 	{
 		index = 0u;
 		obtain_order = 0u;

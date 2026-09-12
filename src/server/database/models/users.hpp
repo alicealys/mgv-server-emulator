@@ -33,6 +33,7 @@ namespace database::users
 
 		void initialize();
 		bool parse_save(nlohmann::json& data);
+		bool parse(nlohmann::json& data);
 		void to_json(nlohmann::json& data);
 	};
 

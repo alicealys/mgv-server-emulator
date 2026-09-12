@@ -131,14 +131,12 @@ namespace emulator::ssd
 			}
 		};
 
-		auto story_sequence_number = -1;
 		if (story_unlock_info_j.is_object())
 		{
 			const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 			user->current_player->get_story_unlock_info(*story_unlock_info);
 			story_unlock_info->parse(story_unlock_info_j);
 			user->current_player->set_story_unlock_info(*story_unlock_info);
-			story_sequence_number = story_unlock_info->story_sequence_number;
 			parse_map_unlock_list(story_unlock_info_j);
 		}
 
@@ -146,11 +144,6 @@ namespace emulator::ssd
 		{
 			const auto mission_info = std::make_unique<database::players::mission_info_t>();
 			user->current_player->get_mission_info(*mission_info);
-
-			if (story_sequence_number != -1)
-			{
-				mission_info->story_sequence_number = static_cast<std::uint16_t>(story_sequence_number);
-			}
 
 			if (!mission_info->parse(mission_info_j))
 			{
