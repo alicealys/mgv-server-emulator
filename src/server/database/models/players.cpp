@@ -4,6 +4,8 @@
 #include "users.hpp"
 #include "../auth.hpp"
 
+#include "game/parameters.hpp"
+
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
 
@@ -944,6 +946,143 @@ namespace database::players
 		}();
 
 		std::memcpy(this, default_building, sizeof(building_info_t));
+	}
+
+	bool nonstackable_item_list_t::parse_life_diff(nlohmann::json& data)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		const auto count = std::min(data.size(), this->max_size());
+		for (auto i = 0ull; i < count; i++)
+		{
+			nonstackable_item_t target_item{};
+			if (!target_item.parse(data[i]))
+			{
+				continue;
+			}
+
+			for (auto o = 0ull; o < this->size(); o++)
+			{
+				auto& item = this->operator[](o);
+				if (item.inventory_index == target_item.inventory_index)
+				{
+					item.life = target_item.life;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	bool nonstackable_item_list_t::find_free_index(std::uint16_t& index, std::uint16_t& obtain_order)
+	{
+		index = 0u;
+		obtain_order = 0u;
+
+		for (auto i = 0u; i < this->size(); )
+		{
+			auto& entry = this->operator[](i);
+			obtain_order = std::max(obtain_order, entry.obtain_order);
+
+			if (entry.inventory_index == index)
+			{
+				++index;
+				i = 0u;
+				continue;
+			}
+			else
+			{
+				++i;
+			}
+		}
+
+		++obtain_order;
+		return index < 2048;
+	}
+
+	stackable_item_t* stackable_item_list_t::find_item(const std::uint32_t production_id)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			if (this->operator[](i).production_id == production_id)
+			{
+				return &this->operator[](i);
+			}
+		}
+
+		return nullptr;
+	}
+
+	bool stackable_item_list_t::find_free_index(std::uint16_t& index, std::uint16_t& obtain_order)
+	{
+		index = 0u;
+		obtain_order = 0u;
+
+		for (auto i = 0u; i < this->size(); )
+		{
+			auto& entry = this->operator[](i);
+			obtain_order = std::max(obtain_order, entry.obtain_order);
+
+			if (entry.inventory_index == index)
+			{
+				++index;
+				i = 0u;
+				continue;
+			}
+			else
+			{
+				++i;
+			}
+		}
+
+		++obtain_order;
+		return index < 2048;
+	}
+
+	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list)
+	{
+		for (auto i = 0ull; i < ARRAYSIZE(recipe.cost); i++)
+		{
+			if (recipe.cost[i].id == 0)
+			{
+				continue;
+			}
+
+			auto found = false;
+
+			for (auto o = 0ull; o < resource_list.size(); o++)
+			{
+				if (recipe.cost[i].id == resource_list[o].resource_id && recipe.cost[i].count <= resource_list[o].count)
+				{
+					found = true;
+					resource_list[o].count -= recipe.cost[i].count;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				for (auto o = 0ull; o < stackable_item_list.size(); o++)
+				{
+					if (recipe.cost[i].id == stackable_item_list[o].production_id && recipe.cost[i].count <= stackable_item_list[o].count)
+					{
+						found = true;
+						stackable_item_list[o].count -= static_cast<std::uint16_t>(recipe.cost[i].count);
+						break;
+					}
+				}
+			}
+
+			if (!found)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);

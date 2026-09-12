@@ -12,6 +12,7 @@ namespace game::parameters
 
 		std::unordered_map<std::uint64_t, std::shared_ptr<production_t>> productions;
 		std::unordered_map<std::uint64_t, std::shared_ptr<recipe_t>> recipes;
+		std::array<gradeup_spec_t, 255> gradeup_spec;
 
 	};
 }

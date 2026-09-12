@@ -175,4 +175,17 @@ namespace game
 
 		std::shared_ptr<production_t> production;
 	};
+
+	struct gradeup_spec_t
+	{
+		bool parse(nlohmann::json& data);
+
+		std::uint8_t rarity;
+		std::uint16_t atk;
+		std::uint16_t w_life;
+		std::uint16_t def;
+		std::uint16_t a_life;
+	};
+
+	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade);
 }

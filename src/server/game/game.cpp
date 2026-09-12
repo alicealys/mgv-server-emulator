@@ -195,4 +195,19 @@ namespace game
 
 		return true;
 	}
+
+	bool gradeup_spec_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["rarity"], this->rarity);
+		utils::json::get_or(data["atk"], this->atk);
+		utils::json::get_or(data["w_life"], this->w_life);
+		utils::json::get_or(data["def"], this->def);
+		utils::json::get_or(data["a_life"], this->a_life);
+		return true;
+	}
+
+	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade)
+	{
+		return static_cast<std::uint16_t>(static_cast<float>(base_life) * 0.01f * static_cast<float>(grade) + static_cast<float>(base_life));
+	}
 }

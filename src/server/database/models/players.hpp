@@ -2,6 +2,7 @@
 
 #include "../database.hpp"
 #include "game/game.hpp"
+#include "game/parameters.hpp"
 #include "utils/encoding.hpp"
 
 namespace database::players
@@ -127,7 +128,7 @@ namespace database::players
 		weapon_t sub_weapon_list[3];
 		skill_t skill_list[5];
 		item_t gadget_list[16];
-		std::uint16_t survival_list[16];
+		std::uint16_t survival_list[8];
 		item_t porch_list[20];
 		char name[64];
 		std::uint8_t reserved[256];
@@ -538,6 +539,10 @@ namespace database::players
 		{
 			return value.production_id == 0;
 		}
+
+		bool parse_life_diff(nlohmann::json& data);
+		bool find_free_index(std::uint16_t& index, std::uint16_t& obtain_order);
+
 	};
 
 	class stackable_item_list_t final : public generic_item_list<stackable_item_t>
@@ -545,13 +550,17 @@ namespace database::players
 	public:
 		inline bool are_elements_equal(const stackable_item_t& l, const stackable_item_t& r) const override
 		{
-			return l.inventory_index == r.inventory_index;
+			return l.inventory_index == r.inventory_index && l.inventory_type == r.inventory_type;
 		}
 
 		inline bool is_element_empty(const stackable_item_t& value) const override
 		{
-			return value.production_id == 0;
+			return value.production_id == 0 || value.count == 0;
 		}
+
+		stackable_item_t* find_item(const std::uint32_t production_id);
+		bool find_free_index(std::uint16_t& index, std::uint16_t& obtain_order);
+
 	};
 
 	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t>
@@ -559,12 +568,12 @@ namespace database::players
 	public:
 		inline bool are_elements_equal(const inventory_resource_t& l, const inventory_resource_t& r) const override
 		{
-			return l.inventory_index == r.inventory_index;
+			return l.inventory_index == r.inventory_index && l.inventory_type == r.inventory_type;
 		}
 
 		inline bool is_element_empty(const inventory_resource_t& value) const override
 		{
-			return value.resource_id == 0;
+			return value.resource_id == 0 || value.count == 0;
 		}
 	};
 
@@ -598,7 +607,7 @@ namespace database::players
 			return value.value == 0u;
 		}
 
-		virtual void to_json(nlohmann::json& data) const
+		virtual void to_json(nlohmann::json& data) const override
 		{
 			auto idx = 1;
 			data[0] = 0;
@@ -615,6 +624,8 @@ namespace database::players
 			}
 		}
 	};
+
+	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list);
 
 	class player
 	{

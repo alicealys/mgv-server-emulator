@@ -12,6 +12,7 @@ namespace emulator::ssd
 		auto& user_inventory_j = data["inventory_user_info_save"];
 		auto& loadout_list_j = data["load_out_list"];
 		auto& nonstackable_list_j = data["nonstackable_add_list"];
+		auto& nonstackable_life_update_list_j = data["nonstackable_life_update_list"];
 		auto& stackable_list_j = data["stackable_list"];
 		auto& resource_list_j = data["resource_list"];
 
@@ -85,6 +86,14 @@ namespace emulator::ssd
 			user->current_player->get_inventory_resource_list(*resource_list, resource_list_j.size());
 			resource_list->parse_diff(resource_list_j);
 			user->current_player->set_inventory_resource_list(*resource_list);
+		}
+
+		if (nonstackable_life_update_list_j.is_array())
+		{
+			const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
+			user->current_player->get_nonstackable_item_list(*nonstackable_list, nonstackable_list_j.size());
+			nonstackable_list->parse_life_diff(nonstackable_life_update_list_j);
+			user->current_player->set_nonstackable_item_list(*nonstackable_list);
 		}
 	}
 

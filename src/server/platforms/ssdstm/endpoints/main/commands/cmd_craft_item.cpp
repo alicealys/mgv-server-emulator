@@ -41,16 +41,40 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		// todo: check if player can craft
+		auto resources = std::make_unique<database::players::inventory_resource_list_t>();
+		auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
+
+		user->current_player->get_inventory_resource_list(*resources);
+		user->current_player->get_stackable_item_list(*stackable_item_list, 1);
+
+		if (!database::players::craft_recipe(*iter->second, *resources, *stackable_item_list))
+		{
+			return error(ERR_DATABASE);
+		}
 
 		database::players::nonstackable_item_t nonstackable_item{};
 		if (!iter->second->production->countable)
 		{
+			auto nonstackable_item_list = std::make_unique<database::players::nonstackable_item_list_t>();
+			user->current_player->get_nonstackable_item_list(*nonstackable_item_list, 1);
+
+			std::uint16_t free_index{};
+			std::uint16_t obtain_order{};
+			if (!nonstackable_item_list->find_free_index(free_index, obtain_order))
+			{
+				return error(ERR_DATABASE);
+			}
+
 			nonstackable_item.life = static_cast<std::uint16_t>(iter->second->production->life);
 			nonstackable_item.life_max = static_cast<std::uint16_t>(iter->second->production->life);
 			nonstackable_item.production_id = iter->second->production->id;
-			nonstackable_item.spec = 1000; // ?
-			nonstackable_item.flag = 1; // ?
+			nonstackable_item.inventory_index = free_index;
+			//nonstackable_item.obtain_order = obtain_order;
+			nonstackable_item.spec = 1000;
+			nonstackable_item.flag = 1;
+
+			nonstackable_item_list->push(nonstackable_item);
+			user->current_player->set_nonstackable_item_list(*nonstackable_item_list);
 		}
 		else
 		{
@@ -58,10 +82,32 @@ namespace emulator::ssd
 			stackable_item.production_id = iter->second->production->id;
 			stackable_item.flag = 1;
 			stackable_item.count = craft_num;
-			stackable_item.inventory_index = 0; // ?
+
+			const auto slot = stackable_item_list->find_item(iter->second->production->id);
+			if (slot != nullptr && slot->count < 99)
+			{
+				stackable_item.inventory_index = slot->inventory_index;
+				slot->count += craft_num;
+			}
+			else
+			{
+				std::uint16_t free_index{};
+				std::uint16_t obtain_order{};
+				if (!stackable_item_list->find_free_index(free_index, obtain_order))
+				{
+					return error(ERR_DATABASE);
+				}
+
+				stackable_item.inventory_index = free_index;
+				//stackable_item.obtain_order = obtain_order;
+				stackable_item_list->push(stackable_item);
+			}
+
 			stackable_item.to_json(result["crafted_stackable_items"][0]);
+			user->current_player->set_stackable_item_list(*stackable_item_list);
 		}
 
+		user->current_player->set_inventory_resource_list(*resources);
 		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
 
 		result["inventory_index_junk"] = 0xFFFF;

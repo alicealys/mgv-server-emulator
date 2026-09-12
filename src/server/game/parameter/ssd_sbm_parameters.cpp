@@ -38,6 +38,13 @@ namespace game::parameters
 			this->recipes[recipe->id] = recipe;
 		}
 
+		for (auto i = 0ull; i < data["gradeup_spec"].size(); i++)
+		{
+			gradeup_spec_t spec{};
+			spec.parse(data["gradeup_spec"][i]);
+			this->gradeup_spec[spec.rarity] = spec;
+		}
+
 		return true;
 	}
 }
