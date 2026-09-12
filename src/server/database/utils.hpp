@@ -104,7 +104,7 @@ namespace database
 		const auto& db_name = database::get_database_name();
 		sqlite3_blob* blob{};
 		sqlite3_blob_open(db.get_sqlite3()->native_handle(), db_name.data(), table.data(), column.data(), id, 1, &blob);
-		return sqlite3_blob_write(blob, reinterpret_cast<void>(&data), static_cast<int>(sizeof(T)), static_cast<int>(offset)) == SQLITE_OK;
+		return sqlite3_blob_write(blob, reinterpret_cast<void*>(&data), static_cast<int>(sizeof(T)), static_cast<int>(offset)) == SQLITE_OK;
 	}
 
 #ifdef MYSQL_SUPPORTED
