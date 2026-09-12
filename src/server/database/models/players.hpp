@@ -4,6 +4,7 @@
 #include "game/game.hpp"
 #include "game/parameters.hpp"
 #include "utils/encoding.hpp"
+#include "../utils.hpp"
 
 namespace database::players
 {
@@ -210,6 +211,8 @@ namespace database::players
 		bool parse(nlohmann::json& data, std::uint16_t& nameplate);
 		bool parse_save(nlohmann::json& data, std::uint16_t& nameplate);
 		void to_json(nlohmann::json& data, const std::uint16_t nameplate = 0u) const;
+		void set_survival_obtained(const std::uint32_t index, bool obtained);
+
 	};
 
 	struct gimmick_save_data_t
@@ -418,7 +421,7 @@ namespace database::players
 #pragma pack(pop)
 
 	template <typename T, std::size_t MaxSize = 2048>
-	class generic_item_list : public utils::encoding::database_array<T, MaxSize>
+	class generic_item_list : public database_array<T, MaxSize>
 	{
 	public:
 		bool try_add_item(const T& item, const bool overwrite_existing = true)
@@ -575,6 +578,9 @@ namespace database::players
 		{
 			return value.resource_id == 0 || value.count == 0;
 		}
+
+		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
+
 	};
 
 	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>
@@ -750,7 +756,6 @@ namespace database::players
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
-
 	};
 
 	std::optional<player> find(const std::uint64_t id);

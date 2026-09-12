@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "game.hpp"
+#include "parameters.hpp"
 
 #include "utils/resources.hpp"
 #include "utils/json_utils.hpp"
@@ -171,6 +172,17 @@ namespace game
 		return true;
 	}
 
+	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
+	{
+		const auto iter = parameters_table.ssd_sbm_parameters->survival_gears.find(this->related_id);
+		if (iter == parameters_table.ssd_sbm_parameters->survival_gears.end())
+		{
+			return nullptr;
+		}
+
+		return iter->second;
+	}
+
 	bool recipe_t::parse(nlohmann::json& data)
 	{
 		utils::json::get_or(data["opened"], this->opened);
@@ -209,5 +221,16 @@ namespace game
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade)
 	{
 		return static_cast<std::uint16_t>(static_cast<float>(base_life) * 0.01f * static_cast<float>(grade) + static_cast<float>(base_life));
+	}
+
+	bool survival_gear_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["sveId"], this->id);
+		utils::json::get_or(data["index"], this->index);
+		utils::json::get_or(data["typeId"], this->type_id);
+		utils::json::get_or(data["targetId"], this->target_id);
+		utils::json::get_or(data["valueu1"], this->value_u1);
+		utils::json::get_or(data["mesh"], this->mesh);
+		return true;
 	}
 }

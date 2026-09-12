@@ -91,9 +91,33 @@ namespace game
 	std::uint8_t* get_static_key(const std::uint32_t type = key_type_ssd);
 	std::size_t get_static_key_len();
 
+	struct gradeup_spec_t
+	{
+		bool parse(nlohmann::json& data);
+
+		std::uint8_t rarity;
+		std::uint16_t atk;
+		std::uint16_t w_life;
+		std::uint16_t def;
+		std::uint16_t a_life;
+	};
+
+	struct survival_gear_t
+	{
+		bool parse(nlohmann::json& data);
+
+		std::uint32_t id;
+		std::uint32_t index;
+		std::uint32_t type_id;
+		std::uint32_t target_id;
+		std::uint32_t value_u1;
+		std::uint32_t mesh;
+	};
+
 	struct production_t
 	{
 		bool parse(nlohmann::json& data);
+		std::shared_ptr<survival_gear_t> get_survival_gear();
 
 		std::uint32_t id;
 		std::uint32_t index;
@@ -176,16 +200,6 @@ namespace game
 		std::shared_ptr<production_t> production;
 	};
 
-	struct gradeup_spec_t
-	{
-		bool parse(nlohmann::json& data);
-
-		std::uint8_t rarity;
-		std::uint16_t atk;
-		std::uint16_t w_life;
-		std::uint16_t def;
-		std::uint16_t a_life;
-	};
 
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade);
 }

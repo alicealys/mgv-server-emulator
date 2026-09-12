@@ -45,6 +45,13 @@ namespace game::parameters
 			this->gradeup_spec[spec.rarity] = spec;
 		}
 
+		for (auto i = 0ull; i < data["survival"].size(); i++)
+		{
+			auto survival_gear = std::make_shared<survival_gear_t>();
+			survival_gear->parse(data["survival"][i]);
+			this->survival_gears[survival_gear->id] = survival_gear;
+		}
+
 		return true;
 	}
 }

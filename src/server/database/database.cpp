@@ -101,7 +101,7 @@ namespace database
 		return config;
 	}
 
-	std::string get_database_name()
+	const std::string& get_database_name()
 	{
 		return get_config().database_name;
 	}

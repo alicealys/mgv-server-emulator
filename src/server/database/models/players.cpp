@@ -3,6 +3,7 @@
 #include "players.hpp"
 #include "users.hpp"
 #include "../auth.hpp"
+#include "component/command.hpp"
 
 #include "game/parameters.hpp"
 
@@ -128,6 +129,19 @@ namespace database::players
 		data["skill_status"] = utils::encoding::encode_base64(this->skill_status);
 		data["survival_slot_new"] = utils::encoding::encode_base64(this->survival_slot_new);
 		data["survival_new"] = utils::encoding::encode_base64(this->survival_new);
+	}
+
+	void player_inventory_t::set_survival_obtained(const std::uint32_t index, bool obtained)
+	{
+		const auto byte_index = (index >> 3);
+		if (obtained)
+		{
+			this->survival_obtained[byte_index] |= (1 << (index & 7));
+		}
+		else
+		{
+			this->survival_obtained[byte_index] &= ~(1 << (index & 7));
+		}
 	}
 
 	void avatar_t::to_json(nlohmann::json& data) const
@@ -1003,6 +1017,32 @@ namespace database::players
 		return index < 2048;
 	}
 
+	bool inventory_resource_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
+	{
+		index = 0u;
+		obtain_order = 0u;
+
+		for (auto i = 0u; i < this->size(); )
+		{
+			auto& entry = this->operator[](i);
+			obtain_order = std::max(obtain_order, entry.obtain_order);
+
+			if (entry.inventory_index == index)
+			{
+				++index;
+				i = 0u;
+				continue;
+			}
+			else
+			{
+				++i;
+			}
+		}
+
+		++obtain_order;
+		return index < 2048;
+	}
+
 	stackable_item_t* stackable_item_list_t::find_item(const std::uint32_t production_id)
 	{
 		for (auto i = 0u; i < this->size(); i++)
@@ -1557,6 +1597,30 @@ namespace database::players
 
 			database.run_query("mgssd.users.remove_update_trigger");
 			database.run_query("mgssd.users.add_update_trigger");
+
+			command::add("give_resource", [](const command::params& params)
+			{
+				const auto player_id = params.get_uint64(1);
+				const auto resource_id = params.get_uint64(2);
+				const auto amount = params.get_int(3);
+
+				const auto player = find(player_id);
+				if (!player.has_value())
+				{
+					console::log("player not found\n");
+					return;
+				}
+
+				auto resource_list = std::make_unique<inventory_resource_list_t>();
+				player->get_inventory_resource_list(*resource_list, 1);
+				inventory_resource_t resource{};
+				resource.resource_id = static_cast<std::uint32_t>(resource_id);
+				resource.count = static_cast<std::uint32_t>(amount);
+				resource.flag = 1;
+				resource_list->find_free_index(resource.inventory_index, resource.obtain_order);
+				resource_list->try_add_item(resource);
+				player->set_inventory_resource_list(*resource_list);
+			});
 		}
 	};
 }

@@ -52,9 +52,13 @@ namespace emulator::ssd
 			return error(ERR_DATABASE);
 		}
 
+		const auto survival_gear = iter->second->production->get_survival_gear();
+
 		database::players::nonstackable_item_t nonstackable_item{};
 		if (!iter->second->production->countable)
 		{
+			assert(survival_gear == nullptr);
+
 			auto nonstackable_item_list = std::make_unique<database::players::nonstackable_item_list_t>();
 			user->current_player->get_nonstackable_item_list(*nonstackable_item_list, 1);
 
@@ -104,7 +108,18 @@ namespace emulator::ssd
 			}
 
 			stackable_item.to_json(result["crafted_stackable_items"][0]);
-			user->current_player->set_stackable_item_list(*stackable_item_list);
+
+			if (survival_gear == nullptr)
+			{
+				user->current_player->set_stackable_item_list(*stackable_item_list);
+			}
+			else
+			{
+				auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
+				user->current_player->get_inventory(*player_inventory_info);
+				player_inventory_info->set_survival_obtained(survival_gear->index, true);
+				user->current_player->set_inventory(*player_inventory_info);
+			}
 		}
 
 		user->current_player->set_inventory_resource_list(*resources);
