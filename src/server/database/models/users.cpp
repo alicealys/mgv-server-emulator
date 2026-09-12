@@ -98,7 +98,7 @@ namespace database::users
 			static user_inventory_t data{};
 
 			const auto& default_data = get_default_data("inventory_user_info");
-			const auto load = [&]<typename T>(const std::string_view& key, T& buffer)
+			const auto load = [&]<typename T>(const std::string_view& key, T& buffer, const bool or_ = false)
 			{
 				auto data = default_data[key].get<std::string>();
 				data = utils::cryptography::base64::decode(data);
@@ -108,29 +108,43 @@ namespace database::users
 					throw std::runtime_error("invalid user inventory data");
 				}
 
-				std::memcpy(buffer, data.data(), sizeof(T));
+				// idk if this is right
+				if (!or_)
+				{
+					std::memcpy(buffer, data.data(), sizeof(T));
+				}
+				else
+				{
+					auto dst = reinterpret_cast<std::uint8_t*>(&buffer);
+					auto src = reinterpret_cast<std::uint8_t*>(data.data());
+
+					for (auto i = 0ull; i < sizeof(T); i++)
+					{
+						dst[i] |= src[i];
+					} 
+				}
 			};
 
 			load("archive_new", data.archive_new);
-			load("archive_obtained", data.archive_obtained);
-			load("battle_pack_opened", data.battle_pack_opened);
+			load("archive_obtained", data.archive_obtained, true);
+			load("battle_pack_opened", data.battle_pack_opened, true);
 			load("cassette_new", data.cassette_new);
-			load("cassette_obtained", data.cassette_obtained);
-			load("command_marker_obtained", data.command_marker_obtained);
+			load("cassette_obtained", data.cassette_obtained, true);
+			load("command_marker_obtained", data.command_marker_obtained, true);
 			load("face_paint_new", data.face_paint_new);
-			load("face_paint_obtained", data.face_paint_obtained);
+			load("face_paint_obtained", data.face_paint_obtained, true);
 			load("food_used", data.food_used);
 			load("gesture_new", data.gesture_new);
-			load("gesture_obtained", data.gesture_obtained);
+			load("gesture_obtained", data.gesture_obtained, true);
 			load("name_plate_new", data.name_plate_new);
-			load("name_plate_obtained", data.name_plate_obtained);
-			load("preset_radio_obtained", data.preset_radio_obtained);
-			load("production_opened", data.production_opened);
+			load("name_plate_obtained", data.name_plate_obtained, true);
+			load("preset_radio_obtained", data.preset_radio_obtained, true);
+			load("production_opened", data.production_opened, true);
 			load("recipe_new", data.recipe_new);
 			load("recipe_new_for_db", data.recipe_new_for_db);
-			load("recipe_opened", data.recipe_opened);
+			load("recipe_opened", data.recipe_opened, true);
 			load("recipe_used", data.recipe_used);
-			load("resource_opened", data.resource_opened);
+			load("resource_opened", data.resource_opened, true);
 
 			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].get<std::uint8_t>();
 
