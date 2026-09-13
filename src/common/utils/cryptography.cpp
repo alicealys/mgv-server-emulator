@@ -23,6 +23,7 @@ namespace utils::cryptography
 
 				register_cipher(&aes_desc);
 				register_cipher(&des3_desc);
+				register_cipher(&blowfish_desc);
 
 				register_prng(&sprng_desc);
 				register_prng(&fortuna_desc);
@@ -633,91 +634,17 @@ namespace utils::cryptography
 
 	blowfish::blowfish()
 	{
-		std::memcpy(this->s_, initial_s, sizeof(initial_s));
 	}
 
-	std::uint32_t blowfish::f(std::uint32_t x)
+	blowfish::~blowfish()
 	{
-		const auto a = (x >> 24) & 0x00FF;
-		const auto b = (x >> 16) & 0x00FF;
-		const auto c = (x >> 8) & 0x00FF;
-		const auto d = x & 0x00FF;
-
-		auto y = (this->s_[0][a] + this->s_[1][b]) & 0xFFFFFFFF;
-		y = y ^ (this->s_[2][c] & 0xFFFFFFFF);
-		y = (y + this->s_[3][d]) & 0xFFFFFFFF;
-
-		return y;
+		ecb_done(&this->ecb_);
 	}
 
-	void blowfish::encrypt_single(std::uint32_t& xl, std::uint32_t& xr)
+	void blowfish::set_key(std::uint8_t* key, const std::size_t len)
 	{
-		for (auto i = 0u; i < this->n_; i++)
-		{
-			xl ^= this->p_[i];
-			xr = this->f(xl) ^ xr;
-			std::swap(xl, xr);
-		}
-
-		std::swap(xl, xr);
-		xr ^= this->p_[this->n_];
-		xl ^= this->p_[this->n_ + 1];
-	}
-
-	void blowfish::decrypt_single(std::uint32_t& xl, std::uint32_t& xr)
-	{
-		for (auto i = this->n_ + 1; i > 1; i--)
-		{
-			xl ^= this->p_[i];
-			xr = this->f(xl) ^ xr;
-			std::swap(xl, xr);
-		}
-
-		std::swap(xl, xr);
-		xr ^= this->p_[1];
-		xl ^= this->p_[0];
-	}
-
-	void blowfish::set_key(std::uint8_t* key, const size_t len)
-	{
-		auto j = 0ull;
-		for (auto i = 0u; i < this->n_ + 2; i++)
-		{
-			std::uint32_t data{};
-			for (auto o = 0; o < 4; o++)
-			{
-				data = data << 8;
-				data |= (key[j] & 0x000000FF);
-				j++;
-
-				if (j >= len)
-				{
-					j = 0;
-				}
-			}
-
-			this->p_[i] = initial_p[i] ^ data;
-		}
-
-		std::uint32_t datal{};
-		std::uint32_t datar{};
-
-		for (auto i = 0u; i < this->n_ + 2; i += 2)
-		{
-			this->encrypt_single(datal, datar);
-			this->p_[i] = datal;
-			this->p_[i + 1] = datar;
-		}
-
-		for (auto i = 0u; i < 4; i++)
-		{
-			for (auto o = 0u; o < 256; o += 2)
-			{
-				this->encrypt_single(datal, datar);
-				this->s_[i][o] = datal;
-				this->s_[i][o + 1] = datar;
-			}
-		}
+		const auto cipher = find_cipher("blowfish");
+		ecb_start(cipher, key, static_cast<int>(len), 0, &this->ecb_);
 	}
 
 	void blowfish::set_key(const std::string& key_b64)
@@ -741,30 +668,23 @@ namespace utils::cryptography
 
 	std::string blowfish::encrypt_internal(const std::string& data)
 	{
-		const auto pad_size = (8 - (data.size() & 7));
-		const auto padded_size = data.size() + pad_size;
+		const auto size = data.size();
+		const auto pad_size = (8 - (size & 7));
+		const auto padded_size = size + pad_size;
 
-		std::string result(padded_size, 0);
+		std::string result;
+		result.resize(padded_size);
 		std::memcpy(result.data(), data.data(), data.size());
 
 		for (auto i = 0ull; i < pad_size; i++)
 		{
-			result[data.size() + i] = static_cast<char>(pad_size);
+			result[size + i] = static_cast<char>(pad_size);
 		}
 
-		for (auto offset = 0u; offset < padded_size; offset += 8)
+		if (ecb_encrypt(reinterpret_cast<const unsigned char*>(result.data()),
+			reinterpret_cast<unsigned char*>(result.data()), static_cast<unsigned long>(padded_size), &this->ecb_) != CRYPT_OK)
 		{
-			auto chunk = &result.at(offset);
-			auto chunk_l = reinterpret_cast<std::uint32_t*>(chunk);
-			auto chunk_r = reinterpret_cast<std::uint32_t*>(chunk + 4);
-
-			auto xl = static_cast<std::uint32_t>(BSWAP32(*chunk_l));
-			auto xr = static_cast<std::uint32_t>(BSWAP32(*chunk_r));
-
-			this->encrypt_single(xl, xr);
-
-			*chunk_l = BSWAP32(xl);
-			*chunk_r = BSWAP32(xr);
+			return {};
 		}
 
 		return result;
@@ -772,34 +692,26 @@ namespace utils::cryptography
 
 	std::string blowfish::decrypt_internal(const std::string& data)
 	{
-		if (data.size() == 0 || (data.size() % 8) != 0)
+		std::string result;
+
+		const auto size = data.size();
+		if (size % 8 != 0)
+		{
+			return result;
+		}
+
+		result.resize(size);
+
+		if (ecb_decrypt(reinterpret_cast<const unsigned char*>(data.data()),
+			reinterpret_cast<unsigned char*>(result.data()), static_cast<unsigned long>(data.size()), &this->ecb_) != CRYPT_OK)
 		{
 			return {};
 		}
 
-		std::string result;
-		result.resize(data.size());
-
-		for (auto offset = 0u; offset < data.size(); offset += 8)
-		{
-			const auto dest_chunk = &result.at(offset);
-			const auto chunk = &data.at(offset);
-			auto chunk_l = chunk;
-			auto chunk_r = chunk + 4;
-
-			auto xl = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<const std::uint32_t*>(chunk_l)));
-			auto xr = static_cast<std::uint32_t>(BSWAP(*reinterpret_cast<const std::uint32_t*>(chunk_r)));
-
-			this->decrypt_single(xl, xr);
-
-			*reinterpret_cast<std::uint32_t*>(dest_chunk) = BSWAP32(xl);
-			*reinterpret_cast<std::uint32_t*>(dest_chunk + 4) = BSWAP32(xr);
-		}
-
-		const auto last_char = result[result.size() - 1];
+		const auto last_char = result[size - 1];
 		if (last_char <= 8)
 		{
-			result = result.substr(0, result.size() - static_cast<size_t>(last_char));
+			result.resize(size - static_cast<size_t>(last_char));
 		}
 
 		return result;

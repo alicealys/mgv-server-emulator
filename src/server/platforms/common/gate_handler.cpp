@@ -37,18 +37,18 @@ namespace emulator
 		}
 
 		const auto compressed = compressed_val.get<bool>();
-		const auto data_str = json["data"].get<std::string>();
+		auto& json_data = json["data"];
 
-		if (!json["data"].is_string())
+		if (!json_data.is_string())
 		{
 			return {};
 		}
 
+		const auto data_str = json_data.get<std::string>();
 		if (!compressed)
 		{
 			const auto unescaped_data = utils::encoding::unescape_json(data_str);
-			const auto data_json = nlohmann::json::parse(unescaped_data);
-			json["data"] = data_json;
+			json_data = nlohmann::json::parse(unescaped_data);
 
 		}
 		else
@@ -56,10 +56,10 @@ namespace emulator
 			const auto decoded = utils::cryptography::base64::decode(data_str);
 			const auto decompressed = utils::compression::zlib::decompress(decoded);
 			const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-			json["data"] = nlohmann::json::parse(unescaped_data);
+			json_data = nlohmann::json::parse(unescaped_data);
 		}
 
-		return {json};
+		return std::make_optional(std::move(json));
 	}
 
 	bool gate_handler::verify_request(nlohmann::json& request)
@@ -82,15 +82,8 @@ namespace emulator
 			return false;
 		}
 
-		if (session_crypto.get<bool>() && (session_key.get<std::string>().empty()))
-		{
-			return false;
-		}
-
 		auto& msgid = data["msgid"];
-		auto& rq_id = data["rqid"];
-
-		if (!msgid.is_string() || !rq_id.is_number_integer())
+		if (!msgid.is_string())
 		{
 			return false;
 		}
@@ -128,9 +121,9 @@ namespace emulator
 		response["session_key"] = {};
 
 		const auto response_str = response.dump();
-		const auto str = this->blow_.encrypt(response_str);
+		const auto encrypted = this->blow_.encrypt(response_str);
+		auto encoded = utils::encoding::split_into_lines(encrypted);
 
-		const auto encoded = utils::encoding::split_into_lines(str);
-		return {encoded};
+		return std::make_optional(std::move(encoded));
 	}
 }

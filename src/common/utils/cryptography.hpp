@@ -325,11 +325,7 @@ namespace utils::cryptography
 	{
 	public:
 		blowfish();
-
-		std::uint32_t f(std::uint32_t x);
-
-		void encrypt_single(std::uint32_t& xl, std::uint32_t& xr);
-		void decrypt_single(std::uint32_t& xl, std::uint32_t& xr);
+		~blowfish();
 
 		void set_key(std::uint8_t* key, const size_t len);
 		void set_key(const std::string& key_b64);
@@ -340,8 +336,7 @@ namespace utils::cryptography
 		std::string decrypt_internal(const std::string& data);
 
 	private:
-		std::uint32_t n_ = 16;
-		std::uint32_t p_[18]{};
-		std::uint32_t s_[4][256]{};
+		symmetric_ECB ecb_{};
+
 	};
 }

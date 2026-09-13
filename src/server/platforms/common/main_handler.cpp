@@ -46,7 +46,8 @@ namespace emulator
 
 		const auto compressed = compressed_val.get<bool>();
 		const auto& session_crypto = json["session_crypto"];
-		const auto data_str = json["data"].get<std::string>();
+		auto& json_data = json["data"];
+		const auto data_str = json_data.get<std::string>();
 
 		if (session_crypto.is_boolean() && session_crypto.get<bool>())
 		{
@@ -54,7 +55,7 @@ namespace emulator
 			user = database::users::find_by_session_id(session_key, false);
 			if (!user.has_value())
 			{
-				json["data"] = {};
+				json_data = {};
 				return {json};
 			}
 
@@ -65,13 +66,13 @@ namespace emulator
 			if (!compressed)
 			{
 				const auto unescaped_data = utils::encoding::unescape_json(decrypted);
-				json["data"] = nlohmann::json::parse(unescaped_data);
+				json_data = nlohmann::json::parse(unescaped_data);
 			}
 			else
 			{
 				const auto decompressed = utils::compression::zlib::decompress(decrypted);
 				const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-				json["data"] = nlohmann::json::parse(unescaped_data);
+				json_data = nlohmann::json::parse(unescaped_data);
 			}
 		}
 		else
@@ -80,7 +81,7 @@ namespace emulator
 			{
 				const auto unescaped_data = utils::encoding::unescape_json(data_str);
 				const auto data_json = nlohmann::json::parse(unescaped_data);
-				json["data"] = data_json;
+				json_data = data_json;
 
 			}
 			else
@@ -88,11 +89,11 @@ namespace emulator
 				const auto decoded = utils::cryptography::base64::decode(data_str);
 				const auto decompressed = utils::compression::zlib::decompress(decoded);
 				const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-				json["data"] = nlohmann::json::parse(unescaped_data);
+				json_data = nlohmann::json::parse(unescaped_data);
 			}
 		}
 
-		return {json};
+		return std::make_optional(std::move(json));
 	}
 
 	bool main_handler::verify_request(nlohmann::json& request)
@@ -110,15 +111,13 @@ namespace emulator
 			return false;
 		}
 
-		if (session_crypto.get<bool>() && (!session_key.is_string() || session_key.get<std::string>().empty()))
+		if (session_crypto.get<bool>() && !session_key.is_string())
 		{
 			return false;
 		}
 
 		auto& msgid = data["msgid"];
-		auto& rq_id = data["rqid"];
-
-		if (!msgid.is_string() || !rq_id.is_number_integer())
+		if (!msgid.is_string())
 		{
 			return false;
 		}
@@ -178,13 +177,13 @@ namespace emulator
 		response["compress"] = true;
 		response["data"] = utils::encoding::split_into_lines(data_dump);
 		response["original_size"] = original_size;
-		response["session_crypto"] = request["session_crypto"];
+		response["session_crypto"] = session_crypto_val;
 		response["session_key"] = request["session_key"];
 
 		const auto response_str = response.dump();
-		const auto str = this->blow_.encrypt(response_str);
-
-		const auto encoded = utils::encoding::split_into_lines(str);
-		return {encoded};
+		const auto encrypted = this->blow_.encrypt(response_str);
+		auto encoded = utils::encoding::split_into_lines(encrypted);
+		
+		return std::make_optional(std::move(encoded));
 	}
 }
