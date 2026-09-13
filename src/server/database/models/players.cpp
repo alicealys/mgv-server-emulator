@@ -110,6 +110,51 @@ namespace database::players
 		utils::json::parse_array(data["cbox_updated"], this->cbox_updated);
 		utils::json::parse_array(data["energy_invested"], this->energy_invested);
 
+		const auto try_parse_part = [&]<typename T>(const std::string_view & name, T & dest, const bool or_ = false)
+		{
+			auto& value_j = data[name];
+			if (!value_j.is_array() || value_j.size() <= 0)
+			{
+				return;
+			}
+
+			value_j = value_j[0];
+			if (!value_j.is_object())
+			{
+				return;
+			}
+
+			auto& data_j = value_j[name];
+			if (!data_j.is_string())
+			{
+				return;
+			}
+
+			if (or_)
+			{
+				T new_data{};
+				utils::json::parse_base64(data_j, new_data, true);
+
+				auto src = reinterpret_cast<std::uint8_t*>(&new_data);
+				auto dst = reinterpret_cast<std::uint8_t*>(&dest);
+
+				for (auto i = 0ull; i < sizeof(T); i++)
+				{
+					dst[i] |= src[i];
+				}
+			}
+			else
+			{
+				utils::json::parse_base64(data_j, dest, true);
+			}
+		};
+
+		try_parse_part("event_obtained", this->event_obtained, true);
+		try_parse_part("survival_slot_new", this->survival_slot_new);
+		try_parse_part("survival_obtained", this->survival_obtained, true);
+		try_parse_part("survival_new", this->survival_new);
+		try_parse_part("skill_status", this->skill_status, true);
+
 		return true;
 	}
 
@@ -1084,7 +1129,7 @@ namespace database::players
 		return index < 2048;
 	}
 
-	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list)
+	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
 	{
 		for (auto i = 0ull; i < ARRAYSIZE(recipe.cost); i++)
 		{
@@ -1094,6 +1139,10 @@ namespace database::players
 			}
 
 			auto found = false;
+			if (game::is_event_obtained_res(recipe.cost[i].id, inventory_info.event_obtained, &found) && found)
+			{
+				continue;
+			}
 
 			for (auto o = 0ull; o < resource_list.size(); o++)
 			{
@@ -1125,6 +1174,264 @@ namespace database::players
 		}
 
 		return true;
+	}
+
+	bool crew_member_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["ability_accessory"], this->ability_accessory);
+		utils::json::get_or(data["ability_animal"], this->ability_animal);
+		utils::json::get_or(data["ability_base_defense"], this->ability_base_defense);
+		utils::json::get_or(data["ability_defense_unit"], this->ability_defense_unit);
+		utils::json::get_or(data["ability_develop"], this->ability_develop);
+		utils::json::get_or(data["ability_expedition"], this->ability_expedition);
+		utils::json::get_or(data["ability_food"], this->ability_food);
+		utils::json::get_or(data["ability_gadget"], this->ability_gadget);
+		utils::json::get_or(data["ability_medical"], this->ability_medical);
+		utils::json::get_or(data["ability_plant"], this->ability_plant);
+		utils::json::get_or(data["condition"], this->condition);
+		utils::json::get_or(data["current_group"], this->current_group);
+		utils::json::get_or(data["first_name_index"], this->first_name_index);
+		utils::json::get_or(data["health_flag"], this->health_flag);
+		utils::json::get_or(data["initial_max_life"], this->initial_max_life);
+		utils::json::get_or(data["injury_id_1"], this->injury_id_1);
+		utils::json::get_or(data["injury_id_2"], this->injury_id_2);
+		utils::json::get_or(data["injury_time_1"], this->injury_time_1);
+		utils::json::get_or(data["injury_time_2"], this->injury_time_2);
+		utils::json::get_or(data["item1_count"], this->item1_count);
+		utils::json::get_or(data["item2_count"], this->item2_count);
+		utils::json::get_or(data["item3_count"], this->item3_count);
+		utils::json::get_or(data["item4_count"], this->item4_count);
+		utils::json::get_or(data["item5_count"], this->item5_count);
+		utils::json::get_or(data["item6_count"], this->item6_count);
+		utils::json::get_or(data["last_name_index"], this->last_name_index);
+		utils::json::get_or(data["life"], this->life);
+		utils::json::get_or(data["map_location"], this->map_location);
+		utils::json::get_or(data["max_life"], this->max_life);
+		utils::json::get_or(data["previous_group"], this->previous_group);
+		utils::json::get_or(data["previous_job"], this->previous_job);
+		utils::json::get_or(data["race_id"], this->race_id);
+		utils::json::get_or(data["resistance_food_shortage"], this->resistance_food_shortage);
+		utils::json::get_or(data["resistance_sleepless"], this->resistance_sleepless);
+		utils::json::get_or(data["resistance_water_shortage"], this->resistance_water_shortage);
+		utils::json::get_or(data["sanity"], this->sanity);
+		utils::json::get_or(data["sickness_id_1"], this->sickness_id_1);
+		utils::json::get_or(data["sickness_id_2"], this->sickness_id_2);
+		utils::json::get_or(data["sickness_time_1"], this->sickness_time_1);
+		utils::json::get_or(data["sickness_time_2"], this->sickness_time_2);
+		utils::json::get_or(data["skill"], this->skill);
+		utils::json::get_or(data["survival_days"], this->survival_days);
+		utils::json::get_or(data["voice_type"], this->voice_type);
+		utils::json::get_or(data["body_id"], this->body_id);
+		utils::json::get_or(data["face_id"], this->face_id);
+		utils::json::get_or(data["generation_date"], this->generation_date);
+		utils::json::get_or(data["unique_id"], this->unique_id);
+		utils::json::get_or(data["sex_id"], this->sex_id);
+		utils::json::get_or(data["unique_index"], this->unique_index);
+		utils::json::parse_array(data["motivation_history_event"], this->motivation_history_event);
+		utils::json::parse_array(data["motivation_history_value"], this->motivation_history_value);
+		utils::json::parse_string(data["nickname"], this->nickname);
+		return true;
+	}
+	
+	void crew_member_t::apply_update(const crew_member_t& diff)
+	{
+		this->condition = diff.condition;
+		this->health_flag = diff.health_flag;
+		this->injury_id_1 = diff.injury_id_1;
+		this->injury_id_2 = diff.injury_id_2;
+		this->injury_time_1 = diff.injury_time_1;
+		this->injury_time_2 = diff.injury_time_2;
+		this->life = diff.life;
+		this->max_life = diff.max_life;
+		this->previous_group = diff.previous_group;
+		this->sanity = diff.sanity;
+		this->sickness_id_1 = diff.sickness_id_1;
+		this->sickness_id_2 = diff.sickness_id_2;
+		this->sickness_time_1 = diff.sickness_time_1;
+		this->sickness_time_2 = diff.sickness_time_2;
+		this->survival_days = diff.survival_days;
+		std::memcpy(this->motivation_history_event, diff.motivation_history_event, sizeof(this->motivation_history_event));
+		std::memcpy(this->motivation_history_value, diff.motivation_history_value, sizeof(this->motivation_history_value));
+	}
+
+	bool crew_member_t::parse_update(nlohmann::json& data)
+	{
+		utils::json::get_or(data["condition"], this->condition);
+		utils::json::get_or(data["health_flag"], this->health_flag);
+		utils::json::get_or(data["injury_id_1"], this->injury_id_1);
+		utils::json::get_or(data["injury_id_2"], this->injury_id_2);
+		utils::json::get_or(data["injury_time_1"], this->injury_time_1);
+		utils::json::get_or(data["injury_time_2"], this->injury_time_2);
+		utils::json::get_or(data["life"], this->life);
+		utils::json::get_or(data["max_life"], this->max_life);
+		utils::json::get_or(data["previous_group"], this->previous_group);
+		utils::json::get_or(data["sanity"], this->sanity);
+		utils::json::get_or(data["sickness_id_1"], this->sickness_id_1);
+		utils::json::get_or(data["sickness_id_2"], this->sickness_id_2);
+		utils::json::get_or(data["sickness_time_1"], this->sickness_time_1);
+		utils::json::get_or(data["sickness_time_2"], this->sickness_time_2);
+		utils::json::get_or(data["survival_days"], this->survival_days);
+		utils::json::parse_array(data["motivation_history_event"], this->motivation_history_event);
+		utils::json::parse_array(data["motivation_history_value"], this->motivation_history_value);
+		return true;
+	}
+
+	bool crew_member_t::parse_add_param(nlohmann::json& data)
+	{
+		//utils::json::get_or(data["banish_unique_id"], this->banish_unique_id);
+        utils::json::get_or(data["body_id"], this->body_id);
+        //utils::json::get_or(data["crew_type_code"], this->crew_type_code);
+        utils::json::get_or(data["face_id"], this->face_id);
+        //utils::json::get_or(data["first_name_id"], this->first_name_id);
+        utils::json::get_or(data["generation_date"], this->generation_date);
+        utils::json::get_or(data["item1_count"], this->item1_count);
+        utils::json::get_or(data["item2_count"], this->item2_count);
+        utils::json::get_or(data["item3_count"], this->item3_count);
+        utils::json::get_or(data["item4_count"], this->item4_count);
+        utils::json::get_or(data["item5_count"], this->item5_count);
+        utils::json::get_or(data["item6_count"], this->item6_count);
+        //utils::json::get_or(data["last_name_id"], this->last_name_id);
+        utils::json::get_or(data["map_location"], this->map_location);
+        utils::json::get_or(data["race_id"], this->race_id);
+        utils::json::get_or(data["sex_id"], this->sex_id);
+
+		if (this->map_location > 1)
+		{
+			return false;
+		}
+
+		std::uint32_t crew_type_code{};
+		std::uint32_t unique_type_code{};
+
+		utils::json::get_or(data["crew_type_code"], crew_type_code);
+		utils::json::get_or(data["unique_type_code"], unique_type_code);
+
+		if (crew_type_code != 0u)
+		{
+			this->unique_index = crew_type_code;
+		}
+		else if (unique_type_code != 0u)
+		{
+			this->unique_index = unique_type_code;
+		}
+		else
+		{
+			return false;
+		}
+
+		utils::json::get_or(data["voice_type"], this->voice_type);
+		return true;
+	}
+
+	void crew_member_t::to_json(nlohmann::json& data) const
+	{
+		data["ability_accessory"] = this->ability_accessory;
+		data["ability_animal"] = this->ability_animal;
+		data["ability_base_defense"] = this->ability_base_defense;
+		data["ability_defense_unit"] = this->ability_defense_unit;
+		data["ability_develop"] = this->ability_develop;
+		data["ability_expedition"] = this->ability_expedition;
+		data["ability_food"] = this->ability_food;
+		data["ability_gadget"] = this->ability_gadget;
+		data["ability_medical"] = this->ability_medical;
+		data["ability_plant"] = this->ability_plant;
+		data["condition"] = this->condition;
+		data["current_group"] = this->current_group;
+		data["first_name_index"] = this->first_name_index;
+		data["health_flag"] = this->health_flag;
+		data["initial_max_life"] = this->initial_max_life;
+		data["injury_id_1"] = this->injury_id_1;
+		data["injury_id_2"] = this->injury_id_2;
+		data["injury_time_1"] = this->injury_time_1;
+		data["injury_time_2"] = this->injury_time_2;
+		data["item1_count"] = this->item1_count;
+		data["item2_count"] = this->item2_count;
+		data["item3_count"] = this->item3_count;
+		data["item4_count"] = this->item4_count;
+		data["item5_count"] = this->item5_count;
+		data["item6_count"] = this->item6_count;
+		data["last_name_index"] = this->last_name_index;
+		data["life"] = this->life;
+		data["map_location"] = this->map_location;
+		data["max_life"] = this->max_life;
+		data["previous_group"] = this->previous_group;
+		data["previous_job"] = this->previous_job;
+		data["race_id"] = this->race_id;
+		data["resistance_food_shortage"] = this->resistance_food_shortage;
+		data["resistance_sleepless"] = this->resistance_sleepless;
+		data["resistance_water_shortage"] = this->resistance_water_shortage;
+		data["sanity"] = this->sanity;
+		data["sickness_id_1"] = this->sickness_id_1;
+		data["sickness_id_2"] = this->sickness_id_2;
+		data["sickness_time_1"] = this->sickness_time_1;
+		data["sickness_time_2"] = this->sickness_time_2;
+		data["skill"] = this->skill;
+		data["survival_days"] = this->survival_days;
+		data["voice_type"] = this->voice_type;
+		data["body_id"] = this->body_id;
+		data["face_id"] = this->face_id;
+		data["generation_date"] = this->generation_date;
+		data["unique_id"] = this->unique_id;
+		data["sex_id"] = this->sex_id;
+		data["unique_index"] = this->unique_index;
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->motivation_history_event); i++)
+		{
+			data["motivation_history_event"][i] = this->motivation_history_event[i];
+			data["motivation_history_value"][i] = this->motivation_history_value[i];
+		}
+
+		data["nickname"] = this->nickname;
+	}
+
+	bool crew_member_list_t::parse_update(nlohmann::json& data)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		const auto count = std::min(data.size(), this->max_size());
+		for (auto i = 0ull; i < count; i++)
+		{
+			crew_member_t new_item{};
+			if (!new_item.parse_update(data[i]) || new_item.unique_id == 0)
+			{
+				continue;
+			}
+
+			for (auto o = 0ull; o < this->size(); o++)
+			{
+				auto& entry = this->operator[](o);
+				if (entry.unique_id == new_item.unique_id)
+				{
+					entry.apply_update(new_item);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	bool crew_levels_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["base_defense"], this->base_defense);
+		utils::json::get_or(data["combat_deploy"], this->combat_deploy);
+		utils::json::get_or(data["develop"], this->develop);
+		utils::json::get_or(data["food"], this->food);
+		utils::json::get_or(data["medic"], this->medic);
+		utils::json::get_or(data["plant"], this->plant);
+		return true;
+	}
+
+	void crew_levels_t::to_json(nlohmann::json& data) const
+	{
+		data["base_defense"] = this->base_defense;
+		data["combat_deploy"] = this->combat_deploy;
+		data["develop"] = this->develop;
+		data["food"] = this->food;
+		data["medic"] = this->medic;
+		data["plant"] = this->plant;
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);
@@ -1317,6 +1624,7 @@ namespace database::players
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_GET(player, building_info_t, building_info_africa);
+		DEF_BINARY_GET(player, crew_levels_t, crew_levels);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -1330,6 +1638,7 @@ namespace database::players
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_SET(player, building_info_t, building_info_africa);
+		DEF_BINARY_SET(player, crew_levels_t, crew_levels);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
@@ -1337,6 +1646,7 @@ namespace database::players
 		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_africa);
+		DEF_ARRAY_GET(player, crew_member_list_t, crew_member_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
@@ -1344,6 +1654,7 @@ namespace database::players
 		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_africa);
+		DEF_ARRAY_SET(player, crew_member_list_t, crew_member_list);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const
@@ -1421,6 +1732,11 @@ namespace database::players
 		}
 	}
 
+	void player::get_crew_levels(crew_levels_t& crew_levels) const
+	{
+		RUN_IMPL(impl::get_crew_levels, this->get_user_id(), crew_levels);
+	}
+
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
@@ -1444,6 +1760,11 @@ namespace database::players
 	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list, size_add);
+	}
+
+	void player::get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_crew_member_list, this->get_user_id(), crew_member_list, size_add);
 	}
 
 	bool player::set_avatar(avatar_t& avatar) const
@@ -1508,6 +1829,28 @@ namespace database::players
 		RUN_IMPL(impl::set_story_unlock_info, this->get_user_id(), story_unlock_info);
 	}
 
+	bool player::set_building_info(building_info_t& building, const std::uint32_t map_location) const
+	{
+		switch (map_location)
+		{
+		case 0:
+		{
+			RUN_IMPL(impl::set_building_info_afghan, this->get_player_id(), building);
+		}
+		case 1:
+		{
+			RUN_IMPL(impl::set_building_info_africa, this->get_player_id(), building);
+		}
+		}
+
+		return false;
+	}
+
+	bool player::set_crew_levels(crew_levels_t& crew_levels) const
+	{
+		RUN_IMPL(impl::set_crew_levels, this->get_user_id(), crew_levels);
+	}
+
 	bool player::set_mission_record_list(mission_record_list_t& set_mission_record_list) const
 	{
 		RUN_IMPL(impl::set_mission_record_list, this->get_user_id(), set_mission_record_list);
@@ -1533,21 +1876,9 @@ namespace database::players
 		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
 	}
 
-	bool player::set_building_info(building_info_t& building, const std::uint32_t map_location) const
+	bool player::set_crew_member_list(crew_member_list_t& crew_member_list) const
 	{
-		switch (map_location)
-		{
-		case 0:
-		{
-			RUN_IMPL(impl::set_building_info_afghan, this->get_player_id(), building);
-		}
-		case 1:
-		{
-			RUN_IMPL(impl::set_building_info_africa, this->get_player_id(), building);
-		}
-		}
-
-		return false;
+		RUN_IMPL(impl::set_crew_member_list, this->get_user_id(), crew_member_list);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const

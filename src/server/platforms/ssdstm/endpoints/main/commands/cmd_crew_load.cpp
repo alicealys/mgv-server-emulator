@@ -2,22 +2,26 @@
 
 #include "cmd_crew_load.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	nlohmann::json cmd_crew_load::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
 	{
 		nlohmann::json result;
 
-		// TODO
+		auto crew_levels = std::make_unique<database::players::crew_levels_t>();
+		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
 
-		result["group_level"]["base_defense"] = 0;
-		result["group_level"]["combat_deploy"] = 0;
-		result["group_level"]["develop"] = 0;
-		result["group_level"]["food"] = 0;
-		result["group_level"]["medic"] = 0;
-		result["group_level"]["plant"] = 0;
+		user->current_player->get_crew_levels(*crew_levels);
+		user->current_player->get_crew_member_list(*crew_member_list);
+
+		crew_member_list->to_json(result["crew_list"]);
+		crew_levels->to_json(result["group_level"]);
 
         return result;
+	}
+
+	std::uint32_t cmd_crew_load::flags()
+	{
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
 	}
 }

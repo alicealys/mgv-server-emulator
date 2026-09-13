@@ -43,11 +43,13 @@ namespace emulator::ssd
 
 		auto resources = std::make_unique<database::players::inventory_resource_list_t>();
 		auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
+		auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
 
 		user->current_player->get_inventory_resource_list(*resources);
 		user->current_player->get_stackable_item_list(*stackable_item_list, 1);
+		user->current_player->get_inventory(*player_inventory_info);
 
-		if (!database::players::craft_recipe(*iter->second, *resources, *stackable_item_list))
+  		if (!database::players::craft_recipe(*iter->second, *resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_DATABASE);
 		}
@@ -115,8 +117,6 @@ namespace emulator::ssd
 			}
 			else
 			{
-				auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
-				user->current_player->get_inventory(*player_inventory_info);
 				player_inventory_info->set_survival_obtained(survival_gear->index, true);
 				user->current_player->set_inventory(*player_inventory_info);
 			}

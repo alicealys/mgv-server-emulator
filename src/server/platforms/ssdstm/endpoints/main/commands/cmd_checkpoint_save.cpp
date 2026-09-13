@@ -19,6 +19,19 @@ namespace emulator::ssd
 		auto& animal_list_j = data["animal_list"];
 		auto& story_unlock_info_j = data["story_unlock_info"];
 		auto& open_list_j = data["open_list"];
+		auto& reward_crew_j = data["reward_crew"];
+		auto& crew_update_list_j = data["crew_update_list"];
+		auto& group_level_j = data["group_level"];
+
+		result["added_crew"] = nlohmann::json::array();
+		result["capture_list"] = nlohmann::json::array();
+		result["defense_mission_reward"] = nlohmann::json::array();
+		result["left_resources"] = nlohmann::json::array();
+		result["stackable_list"] = nlohmann::json::array();
+		result["reward_event_point"] = 0;
+		result["boost_flag"] = 0;
+		result["defense_reward_limit_result"]["limit_result"] = nlohmann::json::array();
+		result["defense_reward_limit_result"]["mission_code"] = 0;
 
 		if (gimmick_save_info_j.is_object())
 		{
@@ -177,9 +190,73 @@ namespace emulator::ssd
 			}
 		}
 
+		if (reward_crew_j.is_array())
+		{
+			auto count = 0u;
+
+			const auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+			user->current_player->get_crew_member_list(*crew_member_list, reward_crew_j.size());
+			for (auto i = 0ull; i < reward_crew_j.size(); i++)
+			{
+				database::players::crew_member_t new_member{};
+				if (!new_member.parse_add_param(reward_crew_j[i]))
+				{
+					continue;
+				}
+
+				const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(new_member.unique_index);
+				if (iter == game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
+				{
+					continue;
+				}
+
+				new_member.unique_id = utils::cryptography::random::get_integer() % 1000000;
+				new_member.face_id = iter->second->face;
+				new_member.race_id = iter->second->race;
+				new_member.body_id = iter->second->body;
+				new_member.ability_accessory = 0;
+				new_member.ability_animal = 0;
+				new_member.ability_base_defense = iter->second->base_defense;
+				new_member.ability_defense_unit = 0;
+				new_member.ability_develop = iter->second->develop;
+				new_member.ability_expedition = iter->second->combat_deploy;
+				new_member.ability_food = iter->second->food;
+				new_member.ability_gadget = 0;
+				new_member.ability_medical = iter->second->medic;
+				new_member.ability_plant = iter->second->farm;
+				new_member.resistance_food_shortage = iter->second->hunger_resist;
+				new_member.resistance_sleepless = iter->second->sleeplack_resist;
+				new_member.resistance_water_shortage = iter->second->thirst_resist;
+				new_member.sanity = 1000;
+				new_member.max_life = iter->second->life;
+				new_member.life = iter->second->life;
+				new_member.initial_max_life = iter->second->life;
+				new_member.current_group = 1;
+				new_member.previous_group = 1;
+
+				crew_member_list->push(new_member);
+				new_member.to_json(result["added_crew"][count++]);
+			}
+
+			user->current_player->set_crew_member_list(*crew_member_list);
+		}
+
+		if (crew_update_list_j.is_array())
+		{
+			auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+			user->current_player->get_crew_member_list(*crew_member_list);
+			crew_member_list->parse_update(crew_update_list_j);
+			user->current_player->set_crew_member_list(*crew_member_list);
+		}
+
+		if (group_level_j.is_object())
+		{
+			database::players::crew_levels_t levels{};
+			levels.parse(group_level_j);
+			user->current_player->set_crew_levels(levels);
+		}
+
 		// TODO
-		// group_level
-		// open_list
 		// play_record_additional_130_checkpoint
 		// play_record_save_checkpoint
 		// replay_mission_info

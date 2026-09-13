@@ -210,8 +210,8 @@ namespace database::users
 				T new_data{};
 				utils::json::parse_base64(data_j, new_data, true);
 
-				auto dst = reinterpret_cast<std::uint8_t*>(&new_data);
-				auto src = reinterpret_cast<std::uint8_t*>(&dest);
+				auto src = reinterpret_cast<std::uint8_t*>(&new_data);
+				auto dst = reinterpret_cast<std::uint8_t*>(&dest);
 
 				for (auto i = 0ull; i < sizeof(T); i++)
 				{

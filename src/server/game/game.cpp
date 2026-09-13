@@ -233,4 +233,44 @@ namespace game
 		utils::json::get_or(data["mesh"], this->mesh);
 		return true;
 	}
+ 
+	bool crew_member_type_t::parse(nlohmann::json& data)
+	{
+		utils::json::get_or(data["face"], this->face);
+		utils::json::get_or(data["race"], this->race);
+		utils::json::get_or(data["sex"], this->sex);
+		utils::json::get_or(data["body"], this->body);
+		utils::json::get_or(data["develop"], this->develop);
+		utils::json::get_or(data["food"], this->food);
+		utils::json::get_or(data["medic"], this->medic);
+		utils::json::get_or(data["farm"], this->farm);
+		utils::json::get_or(data["base_defense"], this->base_defense);
+		utils::json::get_or(data["combat_deploy"], this->combat_deploy);
+		utils::json::get_or(data["thirst_resist"], this->thirst_resist);
+		utils::json::get_or(data["hunger_resist"], this->hunger_resist);
+		utils::json::get_or(data["injury_resist"], this->injury_resist);
+		utils::json::get_or(data["sick_resist"], this->sick_resist);
+		utils::json::get_or(data["sleeplack_resist"], this->sleeplack_resist);
+		utils::json::get_or(data["life"], this->life);
+		utils::json::get_or(data["job_table"], this->job_table);
+		utils::json::get_or(data["skill_table"], this->skill_table);
+		utils::json::get_or(data["id"], this->id);
+		utils::json::get_or(data["id_str"], this->id_str);
+		return true;
+	}
+
+	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result)
+	{
+		switch (resource_id)
+		{
+		case 1576527750:
+			*result = obtained[1];
+			return true;
+		//case 0: // ???
+		//	*result = obtained[0];
+		//	return true;
+		}
+
+		return false;
+	}
 }

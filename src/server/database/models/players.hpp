@@ -418,6 +418,81 @@ namespace database::players
 
 		void load_default(const std::uint32_t map_location);
 	};
+
+	struct crew_member_t
+	{
+		std::uint16_t ability_accessory;
+		std::uint16_t ability_animal;
+		std::uint16_t ability_base_defense;
+		std::uint16_t ability_defense_unit;
+		std::uint16_t ability_develop;
+		std::uint16_t ability_expedition;
+		std::uint16_t ability_food;
+		std::uint16_t ability_gadget;
+		std::uint16_t ability_medical;
+		std::uint16_t ability_plant;
+		std::uint16_t condition;
+		std::uint16_t current_group;
+		std::uint16_t first_name_index;
+		std::uint16_t health_flag;
+		std::uint16_t initial_max_life;
+		std::uint16_t injury_id_1;
+		std::uint16_t injury_id_2;
+		std::uint16_t injury_time_1;
+		std::uint16_t injury_time_2;
+		std::uint16_t item1_count;
+		std::uint16_t item2_count;
+		std::uint16_t item3_count;
+		std::uint16_t item4_count;
+		std::uint16_t item5_count;
+		std::uint16_t item6_count;
+		std::uint16_t last_name_index;
+		std::uint16_t life;
+		std::uint16_t map_location;
+		std::uint16_t max_life;
+		std::uint16_t previous_group;
+		std::uint16_t previous_job;
+		std::uint16_t race_id;
+		std::uint16_t resistance_food_shortage;
+		std::uint16_t resistance_sleepless;
+		std::uint16_t resistance_water_shortage;
+		std::uint16_t sanity;
+		std::uint16_t sickness_id_1;
+		std::uint16_t sickness_id_2;
+		std::uint16_t sickness_time_1;
+		std::uint16_t sickness_time_2;
+		std::uint16_t skill;
+		std::uint16_t survival_days;
+		std::uint16_t voice_type;
+		std::uint32_t body_id;
+		std::uint32_t face_id;
+		std::uint32_t generation_date;
+		std::uint32_t unique_id;
+		std::uint32_t sex_id;
+		std::uint32_t unique_index;
+		std::uint8_t motivation_history_event[10];
+		std::uint8_t motivation_history_value[10];
+		char nickname[32];
+		
+		bool parse(nlohmann::json& data);
+		bool parse_update(nlohmann::json& data);
+		bool parse_add_param(nlohmann::json& data);
+		void apply_update(const crew_member_t& diff);
+		void to_json(nlohmann::json& data) const;
+	};
+
+	struct crew_levels_t
+	{
+		std::uint8_t base_defense;
+		std::uint8_t combat_deploy;
+		std::uint8_t develop;
+		std::uint8_t food;
+		std::uint8_t medic;
+		std::uint8_t plant;
+
+		bool parse(nlohmann::json& data);
+		void to_json(nlohmann::json& data) const;
+	};
 #pragma pack(pop)
 
 	template <typename T, std::size_t MaxSize = 2048>
@@ -452,7 +527,7 @@ namespace database::players
 			return this->push(item);
 		}
 
-		bool parse_diff(nlohmann::json& data)
+		virtual bool parse_diff(nlohmann::json& data)
 		{
 			if (!data.is_array())
 			{
@@ -477,7 +552,7 @@ namespace database::players
 			return true;
 		}
 
-		bool parse(nlohmann::json& data)
+		virtual bool parse(nlohmann::json& data)
 		{
 			std::memset(this->data(), 0, this->size() * sizeof(T));
 
@@ -631,7 +706,24 @@ namespace database::players
 		}
 	};
 
-	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list);
+	class crew_member_list_t : public generic_item_list<crew_member_t, 64>
+	{
+	public:
+		inline bool are_elements_equal(const crew_member_t& l, const crew_member_t& r) const override
+		{
+			return l.unique_id == r.unique_id;
+		}
+
+		inline bool is_element_empty(const crew_member_t& value) const override
+		{
+			return value.unique_id == 0u;
+		}
+
+		bool parse_update(nlohmann::json& data);
+
+	};
+
+	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
 	class player
 	{
@@ -663,6 +755,8 @@ namespace database::players
 		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
 		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
 		DEFINE_FIELD(building_info_africa, sqlpp::binary);
+		DEFINE_FIELD(crew_member_list, sqlpp::binary);
+		DEFINE_FIELD(crew_levels, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -685,7 +779,9 @@ namespace database::players
 			map_unlock_list_afghan_field_t,
 			map_unlock_list_africa_field_t,
 			building_info_afghan_field_t,
-			building_info_africa_field_t
+			building_info_africa_field_t,
+			crew_member_list_field_t,
+			crew_levels_field_t
 		);
 
 		inline static table_t table;
@@ -729,13 +825,7 @@ namespace database::players
 		void get_base_resources(base_resources_t& base_resources) const;
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
 		void get_building_info(building_info_t& building, const std::uint32_t map_location) const;
-
-		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
-		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
-		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
-		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
-		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
-		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
+		void get_crew_levels(crew_levels_t& crew_levels) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
@@ -747,6 +837,15 @@ namespace database::players
 		bool set_base_resources(base_resources_t& base_resources) const;
 		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
 		bool set_building_info(building_info_t& building, const std::uint32_t map_location) const;
+		bool set_crew_levels(crew_levels_t& crew_levels) const;
+
+		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
+		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
+		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
+		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
+		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
+		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
+		void get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add = 0ull) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
@@ -754,6 +853,7 @@ namespace database::players
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
 		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
+		bool set_crew_member_list(crew_member_list_t& crew_member_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 	};

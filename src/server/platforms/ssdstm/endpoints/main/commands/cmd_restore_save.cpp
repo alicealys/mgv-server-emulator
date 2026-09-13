@@ -83,11 +83,24 @@ namespace emulator::ssd
 			}
 		}
 
-		// TODO: crew
-		// if (crew_j.is_object())
-		// {
-		// 
-		// }
+		if (crew_j.is_array())
+		{
+			auto& crew_level_j = crew_j["group_level"];
+			if (crew_level_j.is_object())
+			{
+				auto crew_levels = std::make_unique<database::players::crew_levels_t>();
+				crew_levels->parse(crew_level_j);
+				user->current_player->set_crew_levels(*crew_levels);
+			}
+
+			auto& crew_list_j = crew_j["crew_list"];
+			if (crew_list_j.is_array())
+			{
+				auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+				crew_member_list->parse(crew_list_j);
+				user->current_player->set_crew_member_list(*crew_member_list);
+			}
+		}
 
 		// TODO: deploy team
 		// if (deploy_team_j.is_object())
