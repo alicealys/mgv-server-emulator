@@ -24,13 +24,13 @@ namespace database::players
 					.from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
 		}
 
-		const glz::json& get_default_data()
+		const json::value& get_default_data()
 		{
 			static const auto data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
 			return data;
 		}
 
-		const glz::json& get_default_data(const std::string_view& key)
+		const json::value& get_default_data(const std::string_view& key)
 		{
 			const auto& data = get_default_data();
 			return data[key];
@@ -70,11 +70,10 @@ namespace database::players
 		std::memcpy(this, default_inventory, sizeof(player_inventory_t));
 	}
 
-	bool player_inventory_t::parse(glz::json& data, std::uint16_t& nameplate)
+	bool player_inventory_t::parse(json::value& data, std::uint16_t& nameplate)
 	{
 		utils::json_utils::get_or(data["energy"], this->energy);
 		utils::json_utils::get_or(data["name_plate"], nameplate);
-		utils::json_utils::get_or(data["energy"], this->energy);
 		utils::json_utils::get_or(data["class_opened"], this->class_opened);
 		utils::json_utils::get_or(data["oxygen_convert_count"], this->oxygen_convert_count);
 
@@ -96,11 +95,10 @@ namespace database::players
 		return true;
 	}
 
-	bool player_inventory_t::parse_save(glz::json& data, std::uint16_t& nameplate)
+	bool player_inventory_t::parse_save(json::value& data, std::uint16_t& nameplate)
 	{
 		utils::json_utils::get_or(data["energy"], this->energy);
 		utils::json_utils::get_or(data["name_plate"], nameplate);
-		utils::json_utils::get_or(data["energy"], this->energy);
 		utils::json_utils::get_or(data["class_opened"], this->class_opened);
 		utils::json_utils::get_or(data["oxygen_convert_count"], this->oxygen_convert_count);
 
@@ -158,7 +156,7 @@ namespace database::players
 		return true;
 	}
 
-	void player_inventory_t::to_json(glz::json& data, const std::uint16_t nameplate) const
+	void player_inventory_t::to_json(json::value& data, const std::uint16_t nameplate) const
 	{
 		data["cbox_history"] = this->cbox_history;
 		data["cbox_location"] = this->cbox_location;
@@ -189,7 +187,7 @@ namespace database::players
 		}
 	}
 
-	void avatar_t::to_json(glz::json& data) const
+	void avatar_t::to_json(json::value& data) const
 	{
 		data["accessory"] = this->accessory;
 		data["beard_length"] = this->beard_length;
@@ -216,7 +214,7 @@ namespace database::players
 		data["parameter"] = utils::encoding::encode_base64(this->motion_frame_list);
 	}
 
-	bool avatar_t::parse(glz::json& data)
+	bool avatar_t::parse(json::value& data)
 	{
 		std::memset(this, 0, sizeof(avatar_t));
 
@@ -228,7 +226,7 @@ namespace database::players
 			return false;
 		}
 
-		const auto decode_data = [&]<typename T>(glz::json& src, T& dest)
+		const auto decode_data = [&]<typename T>(json::value& src, T& dest)
 		{
 			auto data = src.get<std::string>();
 			data = utils::encoding::decode_url_string(data);
@@ -291,7 +289,7 @@ namespace database::players
 		}
 	}
 
-	bool loadout_t::parse(glz::json& data, std::uint32_t& index)
+	bool loadout_t::parse(json::value& data, std::uint32_t& index)
 	{
 		std::memset(this, 0, sizeof(loadout_t));
 		index = 0u;
@@ -324,7 +322,7 @@ namespace database::players
 		utils::json_utils::get_or(gear_info_j["head_inventory_index"], this->gear_info.head_inventory_index);
 		utils::json_utils::get_or(gear_info_j["leg_inventory_index"], this->gear_info.leg_inventory_index);
 
-		if (!utils::json_utils::parse_array(gadget_list_j, this->gadget_list, [](item_t& dest, glz::json& src)
+		if (!utils::json_utils::parse_array(gadget_list_j, this->gadget_list, [](item_t& dest, json::value& src)
 			{
 				utils::json_utils::get_or(src["count"], dest.count);
 				utils::json_utils::get_or(src["production_idx"], dest.idx);
@@ -333,7 +331,7 @@ namespace database::players
 			return false;
 		}
 
-		const auto weapon_iter = [](weapon_t& dest, glz::json& src)
+		const auto weapon_iter = [](weapon_t& dest, json::value& src)
 		{
 			utils::json_utils::get_or(src["ammo_count"], dest.ammo_count);
 			utils::json_utils::get_or(src["ammo_idx"], dest.ammo_idx);
@@ -348,7 +346,7 @@ namespace database::players
 			return false;
 		}
 
-		if (!utils::json_utils::parse_array(porch_list_j, this->porch_list, [](item_t& dest, glz::json& src)
+		if (!utils::json_utils::parse_array(porch_list_j, this->porch_list, [](item_t& dest, json::value& src)
 			{
 				utils::json_utils::get_or(src, dest.idx);
 				utils::json_utils::get_or(src, dest.count);
@@ -357,7 +355,7 @@ namespace database::players
 			return false;
 		}
 
-		if (!utils::json_utils::parse_array(skill_list_j, this->skill_list, [](skill_t& dest, glz::json& src)
+		if (!utils::json_utils::parse_array(skill_list_j, this->skill_list, [](skill_t& dest, json::value& src)
 			{
 				utils::json_utils::parse_array(src, dest.slot);
 			}))
@@ -375,7 +373,7 @@ namespace database::players
 		return true;
 	}
 
-	void loadout_t::to_json(glz::json& data, const std::uint32_t index) const
+	void loadout_t::to_json(json::value& data, const std::uint32_t index) const
 	{
 		data["class_info"] = this->class_info;
 		data["index"] = index;
@@ -441,7 +439,7 @@ namespace database::players
 		}
 	}
 
-	bool nonstackable_item_t::parse(glz::json& data)
+	bool nonstackable_item_t::parse(json::value& data)
 	{
 		std::memset(this, 0, sizeof(nonstackable_item_t));
 
@@ -457,13 +455,13 @@ namespace database::players
 		utils::json_utils::get_or(data["spec"], this->spec);
 		utils::json_utils::get_or(data["production_id"], this->production_id);
 
-		utils::json_utils::parse_array(data["option_list"], this->option_list, [](nonstackable_item_t::option_t& dest, glz::json& src)
+		utils::json_utils::parse_array(data["option_list"], this->option_list, [](nonstackable_item_t::option_t& dest, json::value& src)
 		{
 			utils::json_utils::get_or(src, dest.obtained);
 			utils::json_utils::get_or(src, dest.option_id);
 		});
 
-		utils::json_utils::parse_array(data["perk_list"], this->perk_list, [](perk_t& dest, glz::json& src)
+		utils::json_utils::parse_array(data["perk_list"], this->perk_list, [](perk_t& dest, json::value& src)
 		{
 			utils::json_utils::get_or(src, dest.perk_id);
 			utils::json_utils::get_or(src, dest.perk_level);
@@ -472,7 +470,7 @@ namespace database::players
 		return true;
 	}
 
-	void nonstackable_item_t::to_json(glz::json& data) const
+	void nonstackable_item_t::to_json(json::value& data) const
 	{
 		data["color"] = this->color;
 		data["color2"] = this->color2;
@@ -499,7 +497,7 @@ namespace database::players
 		}
 	}
 
-	bool stackable_item_t::parse(glz::json& data)
+	bool stackable_item_t::parse(json::value& data)
 	{
 		std::memset(this, 0, sizeof(stackable_item_t));
 		utils::json_utils::get_or(data["cbox_index"], this->cbox_index);
@@ -513,7 +511,7 @@ namespace database::players
 		return true;
 	}
 
-	void stackable_item_t::to_json(glz::json& data) const
+	void stackable_item_t::to_json(json::value& data) const
 	{
 		data["cbox_index"] = this->cbox_index;
 		data["count"] = this->count;
@@ -525,7 +523,7 @@ namespace database::players
 		data["production_id"] = this->production_id;
 	}
 
-	bool inventory_resource_t::parse(glz::json& data)
+	bool inventory_resource_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["inventory_index"], this->inventory_index);
 		utils::json_utils::get_or(data["inventory_type"], this->inventory_type);
@@ -538,7 +536,7 @@ namespace database::players
 		return true;
 	}
 
-	void inventory_resource_t::to_json(glz::json& data) const
+	void inventory_resource_t::to_json(json::value& data) const
 	{
 		data["inventory_index"] = this->inventory_index;
 		data["inventory_type"] = this->inventory_type;
@@ -555,7 +553,7 @@ namespace database::players
 		std::memset(this, 0, sizeof(mission_info_t));
 	}
 
-	bool mission_info_t::parse(glz::json& data)
+	bool mission_info_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["equipment_slot"], this->equipment_slot);
 		utils::json_utils::get_or(data["flag_mission_code"], this->flag_mission_code);
@@ -595,7 +593,7 @@ namespace database::players
 			return false;
 		}
 
-		const auto status_buffer_iter = [](mission_info_t::status_buffer_t& dest, const glz::json& src)
+		const auto status_buffer_iter = [](mission_info_t::status_buffer_t& dest, const json::value& src)
 		{
 			utils::json_utils::get_or(src, dest.buffer_type);
 			utils::json_utils::get_or(src, dest.remaining_time);
@@ -611,7 +609,7 @@ namespace database::players
 		return true;
 	}
 
-	void mission_info_t::to_json(glz::json& data) const
+	void mission_info_t::to_json(json::value& data) const
 	{
 		data["equipment_slot"] = this->equipment_slot;
 		data["flag_mission_code"] = this->flag_mission_code;
@@ -658,7 +656,7 @@ namespace database::players
 		data["vars"] = utils::encoding::encode_base64(this->vars);
 	}
 
-	bool gimmick_save_data_t::parse(glz::json& data)
+	bool gimmick_save_data_t::parse(json::value& data)
 	{
 		if (!data.is_object())
 		{
@@ -678,7 +676,7 @@ namespace database::players
 		return true;
 	}
 
-	void gimmick_save_data_t::to_json(glz::json& data, const std::uint32_t map_location) const
+	void gimmick_save_data_t::to_json(json::value& data, const std::uint32_t map_location) const
 	{
 		data["map_location"] = map_location;
 
@@ -693,7 +691,7 @@ namespace database::players
 		}
 	}
 
-	bool gimmick_resource_info_t::parse(glz::json& data)
+	bool gimmick_resource_info_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["resource_event_tail"], this->resource_event_tail);
 		utils::json_utils::get_or(data["resource_normal_tail"], this->resource_normal_tail);
@@ -702,7 +700,7 @@ namespace database::players
 		return true;
 	}
 
-	void gimmick_resource_info_t::to_json(glz::json& data) const
+	void gimmick_resource_info_t::to_json(json::value& data) const
 	{
 		data["resource_event_tail"] = this->resource_event_tail;
 		data["resource_normal_tail"] = this->resource_normal_tail;
@@ -710,7 +708,7 @@ namespace database::players
 		data["resource_shared_tail"] = this->resource_shared_tail;
 	}
 
-	bool gimmick_timer_info_t::parse(glz::json& data)
+	bool gimmick_timer_info_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["resource_timer_global_afghan"], this->resource_timer_global_afghan);
 		utils::json_utils::get_or(data["resource_timer_global_africa"], this->resource_timer_global_africa);
@@ -719,7 +717,7 @@ namespace database::players
 		return true;
 	}
 
-	void gimmick_timer_info_t::to_json(glz::json& data) const
+	void gimmick_timer_info_t::to_json(json::value& data) const
 	{
 		data["resource_timer_global_afghan"] = this->resource_timer_global_afghan;
 		data["resource_timer_global_africa"] = this->resource_timer_global_africa;
@@ -727,7 +725,7 @@ namespace database::players
 		data["resource_timer_stock_africa"] = this->resource_timer_stock_africa;
 	}
 
-	bool base_resources_t::parse_base(glz::json& base)
+	bool base_resources_t::parse_base(json::value& base)
 	{
 		utils::json_utils::get_or(base["bad_status_1_risk"], this->params.bad_status_1_risk);
 		utils::json_utils::get_or(base["bad_status_2_risk"], this->params.bad_status_2_risk);
@@ -743,7 +741,7 @@ namespace database::players
 		return true;
 	}
 
-	bool base_resources_t::parse_counts(glz::json& count)
+	bool base_resources_t::parse_counts(json::value& count)
 	{
 		for (auto i = 0ull; i < ARRAYSIZE(this->resource_counts); i++)
 		{
@@ -756,7 +754,7 @@ namespace database::players
 		return true;
 	}
 
-	bool base_resources_t::parse_animals(glz::json& animal_list)
+	bool base_resources_t::parse_animals(json::value& animal_list)
 	{
 		if (!animal_list.is_array())
 		{
@@ -789,7 +787,7 @@ namespace database::players
 		return true;
 	}
 
-	void base_resources_t::to_json(glz::json& data) const
+	void base_resources_t::to_json(json::value& data) const
 	{
 		auto& base_resource_j = data["base_resource"];
 		auto& resource_count_j = data["base_resource_count"];
@@ -830,7 +828,7 @@ namespace database::players
 		return this->try_add_item(record, false);
 	}
 
-	bool mission_record_t::parse(glz::json& data)
+	bool mission_record_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["clear_flag"], this->clear_flag);
 		utils::json_utils::get_or(data["clear_rank"], this->clear_rank);
@@ -841,7 +839,7 @@ namespace database::players
 		return true;
 	}
 
-	void mission_record_t::to_json(glz::json& data) const
+	void mission_record_t::to_json(json::value& data) const
 	{
 		data["clear_flag"] = this->clear_flag;
 		data["clear_rank"] = this->clear_rank;
@@ -851,18 +849,18 @@ namespace database::players
 		data["score"] = this->score;
 	}
 
-	bool map_unlock_t::parse(glz::json& data)
+	bool map_unlock_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data, this->value); 
 		return true;
 	}
 
-	void map_unlock_t::to_json(glz::json& data) const
+	void map_unlock_t::to_json(json::value& data) const
 	{
 		data = this->value;
 	}
 
-	bool story_unlock_info_t::parse(glz::json& data)
+	bool story_unlock_info_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["demo_open_flag"], this->demo_open_flag);
 		utils::json_utils::get_or(data["facility_new_flag"], this->facility_new_flag);
@@ -876,7 +874,7 @@ namespace database::players
 		return true;
 	}
 
-	void story_unlock_info_t::to_json(glz::json& data) const
+	void story_unlock_info_t::to_json(json::value& data) const
 	{
 		data["demo_open_flag"] = this->demo_open_flag;
 		data["facility_new_flag"] = this->facility_new_flag;
@@ -888,7 +886,7 @@ namespace database::players
 		data["fast_travel_unlock"] = utils::encoding::encode_base64(this->fast_travel_unlock);
 	}
 
-	bool building_info_t::cell_edge_t::parse(glz::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
+	bool building_info_t::cell_edge_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
 	{
 		if (type == edge_type_center)
 		{
@@ -912,7 +910,7 @@ namespace database::players
 		return true;
 	}
 
-	void building_info_t::cell_edge_t::to_json(glz::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const
+	void building_info_t::cell_edge_t::to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const
 	{
 		if (type == edge_type_center)
 		{
@@ -929,7 +927,7 @@ namespace database::players
 		data["column"] = column;
 	}
 
-	bool building_info_t::parse_type(glz::json& data, const std::uint32_t type)
+	bool building_info_t::parse_type(json::value& data, const std::uint32_t type)
 	{
 		if (!data.is_array())
 		{
@@ -953,7 +951,7 @@ namespace database::players
 		return true;
 	}
 
-	bool building_info_t::parse(glz::json& data, const bool is_diff)
+	bool building_info_t::parse(json::value& data, const bool is_diff)
 	{
 		if (!is_diff)
 		{
@@ -966,9 +964,9 @@ namespace database::players
 		return true;
 	}
 
-	void building_info_t::to_json(glz::json& data, const std::uint32_t type) const
+	void building_info_t::to_json(json::value& data, const std::uint32_t type) const
 	{
-		data = glz::json::array_t();
+		data = json::value::array_t();
 
 		auto idx = 0;
 		for (auto row = 0u; row < building_grid_size; row++)
@@ -985,7 +983,7 @@ namespace database::players
 		}
 	}
 
-	void building_info_t::to_json(glz::json& data) const
+	void building_info_t::to_json(json::value& data) const
 	{
 		this->to_json(data["center_info"], edge_type_center);
 		this->to_json(data["upper_edge_info"], edge_type_upper);
@@ -998,7 +996,7 @@ namespace database::players
 		{
 			static building_info_t data{};
 
-			glz::json default_data = get_default_data("building_info");
+			json::value default_data = get_default_data("building_info");
 			data.parse_type(default_data[map_location]["center_info"], edge_type_center);
 			data.parse_type(default_data[map_location]["upper_edge_info"], edge_type_upper);
 			data.parse_type(default_data[map_location]["left_edge_info"], edge_type_left);
@@ -1009,7 +1007,7 @@ namespace database::players
 		std::memcpy(this, default_building, sizeof(building_info_t));
 	}
 
-	bool nonstackable_item_list_t::parse_life_diff(glz::json& data)
+	bool nonstackable_item_list_t::parse_life_diff(json::value& data)
 	{
 		if (!data.is_array())
 		{
@@ -1176,7 +1174,7 @@ namespace database::players
 		return true;
 	}
 
-	bool crew_member_t::parse(glz::json& data)
+	bool crew_member_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["ability_accessory"], this->ability_accessory);
 		utils::json_utils::get_or(data["ability_animal"], this->ability_animal);
@@ -1254,7 +1252,7 @@ namespace database::players
 		std::memcpy(this->motivation_history_value, diff.motivation_history_value, sizeof(this->motivation_history_value));
 	}
 
-	bool crew_member_t::parse_update(glz::json& data)
+	bool crew_member_t::parse_update(json::value& data)
 	{
 		utils::json_utils::get_or(data["condition"], this->condition);
 		utils::json_utils::get_or(data["health_flag"], this->health_flag);
@@ -1262,8 +1260,8 @@ namespace database::players
 		utils::json_utils::get_or(data["injury_id_2"], this->injury_id_2);
 		utils::json_utils::get_or(data["injury_time_1"], this->injury_time_1);
 		utils::json_utils::get_or(data["injury_time_2"], this->injury_time_2);
-		utils::json_utils::get_or(data["life"], this->life);
-		utils::json_utils::get_or(data["max_life"], this->max_life);
+		utils::json_utils::get_or(data["life"], this->life, this->life);
+		utils::json_utils::get_or(data["max_life"], this->max_life, this->life);
 		utils::json_utils::get_or(data["previous_group"], this->previous_group);
 		utils::json_utils::get_or(data["sanity"], this->sanity);
 		utils::json_utils::get_or(data["sickness_id_1"], this->sickness_id_1);
@@ -1276,7 +1274,7 @@ namespace database::players
 		return true;
 	}
 
-	bool crew_member_t::parse_add_param(glz::json& data)
+	bool crew_member_t::parse_add_param(json::value& data)
 	{
 		//utils::json_utils::get_or(data["banish_unique_id"], this->banish_unique_id);
         utils::json_utils::get_or(data["body_id"], this->body_id);
@@ -1323,7 +1321,7 @@ namespace database::players
 		return true;
 	}
 
-	void crew_member_t::to_json(glz::json& data) const
+	void crew_member_t::to_json(json::value& data) const
 	{
 		data["ability_accessory"] = this->ability_accessory;
 		data["ability_animal"] = this->ability_animal;
@@ -1384,7 +1382,7 @@ namespace database::players
 		data["nickname"] = this->nickname;
 	}
 
-	bool crew_member_list_t::parse_update(glz::json& data)
+	bool crew_member_list_t::parse_update(json::value& data)
 	{
 		if (!data.is_array())
 		{
@@ -1413,7 +1411,22 @@ namespace database::players
 		return true;
 	}
 
-	bool crew_levels_t::parse(glz::json& data)
+	crew_member_t* crew_member_list_t::find_member(const std::uint32_t id)
+	{
+		const auto iter = std::ranges::find_if(this->begin(), this->end(), [&](const crew_member_t& member)
+		{
+			return member.unique_id == id;
+		});
+
+		if (iter == this->end())
+		{
+			return nullptr;
+		}
+
+		return &(*iter);
+	}
+
+	bool crew_levels_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["base_defense"], this->base_defense);
 		utils::json_utils::get_or(data["combat_deploy"], this->combat_deploy);
@@ -1424,7 +1437,7 @@ namespace database::players
 		return true;
 	}
 
-	void crew_levels_t::to_json(glz::json& data) const
+	void crew_levels_t::to_json(json::value& data) const
 	{
 		data["base_defense"] = this->base_defense;
 		data["combat_deploy"] = this->combat_deploy;

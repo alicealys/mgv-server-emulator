@@ -14,6 +14,8 @@ namespace database
 		using std::vector<T>::resize;
 		using std::vector<T>::at;
 		using std::vector<T>::operator[];
+		using std::vector<T>::begin;
+		using std::vector<T>::end;
 
 		virtual ~database_array()
 		{

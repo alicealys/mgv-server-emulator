@@ -39,8 +39,8 @@ namespace database::players
 		std::uint8_t motion_frame_list[60];
 		char name[64];
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct nonstackable_item_t
@@ -71,8 +71,8 @@ namespace database::players
 		option_t option_list[8];
 		perk_t perk_list[5];
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct stackable_item_t
@@ -86,8 +86,8 @@ namespace database::players
 		std::uint32_t obtain_order;
 		std::uint32_t production_id;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct loadout_t
@@ -134,8 +134,8 @@ namespace database::players
 		char name[64];
 
 		void initialize(const std::uint32_t index = 0u);
-		bool parse(glz::json& data, std::uint32_t& index);
-		void to_json(glz::json& data, const std::uint32_t index = 0u) const;
+		bool parse(json::value& data, std::uint32_t& index);
+		void to_json(json::value& data, const std::uint32_t index = 0u) const;
 	};
 
 	struct mission_info_t
@@ -184,8 +184,8 @@ namespace database::players
 		std::uint8_t vars[640]; // 
 
 		void initialize();
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct player_inventory_t
@@ -205,9 +205,9 @@ namespace database::players
 		std::uint8_t survival_slot_new[2];
 
 		void initialize();
-		bool parse(glz::json& data, std::uint16_t& nameplate);
-		bool parse_save(glz::json& data, std::uint16_t& nameplate);
-		void to_json(glz::json& data, const std::uint16_t nameplate = 0u) const;
+		bool parse(json::value& data, std::uint16_t& nameplate);
+		bool parse_save(json::value& data, std::uint16_t& nameplate);
+		void to_json(json::value& data, const std::uint16_t nameplate = 0u) const;
 		void set_survival_obtained(const std::uint32_t index, bool obtained);
 
 	};
@@ -251,8 +251,8 @@ namespace database::players
 		resource_rare_t resource_rare[4];
 		resource_shared_t resource_shared[4];
 
-		bool parse(glz::json& parse);
-		void to_json(glz::json& data, const std::uint32_t map_location) const;
+		bool parse(json::value& parse);
+		void to_json(json::value& data, const std::uint32_t map_location) const;
 	};
 
 	struct loadout_list_t
@@ -267,8 +267,8 @@ namespace database::players
 		std::uint32_t resource_rare_tail;
 		std::uint32_t resource_shared_tail;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct gimmick_timer_info_t
@@ -278,8 +278,8 @@ namespace database::players
 		std::uint16_t resource_timer_stock_afghan;
 		std::uint16_t resource_timer_stock_africa;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct gimmick_info_t
@@ -312,10 +312,10 @@ namespace database::players
 		std::uint64_t update_remaining_time;
 		base_resource_params_t params;
 
-		bool parse_base(glz::json& base);
-		bool parse_counts(glz::json& count);
-		bool parse_animals(glz::json& animals);
-		void to_json(glz::json& data) const;
+		bool parse_base(json::value& base);
+		bool parse_counts(json::value& count);
+		bool parse_animals(json::value& animals);
+		void to_json(json::value& data) const;
 	};
 
 	struct inventory_resource_t
@@ -329,8 +329,8 @@ namespace database::players
 		std::uint32_t obtain_order;
 		std::uint32_t resource_id;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct player_play_record_t
@@ -348,15 +348,15 @@ namespace database::players
 		std::uint32_t new_flag;
 		std::uint32_t score;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct map_unlock_t
 	{
 		std::uint16_t value;
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	struct story_unlock_info_t
@@ -370,8 +370,8 @@ namespace database::players
 		std::uint8_t marker_afghan[522];
 		std::uint8_t marker_africa[522];
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
 	constexpr const auto building_grid_size = 32u;
@@ -396,8 +396,8 @@ namespace database::players
 			std::uint32_t completion_remaining_time;
 			std::uint32_t recovery_time;
 
-			bool parse(glz::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
-			void to_json(glz::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
+			bool parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
+			void to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
 		};
 
 		struct cell_t
@@ -407,11 +407,11 @@ namespace database::players
 
 		cell_t cells[building_grid_size][building_grid_size];
 
-		bool parse_type(glz::json& data, const std::uint32_t type);
-		bool parse(glz::json& data, const bool is_diff);
+		bool parse_type(json::value& data, const std::uint32_t type);
+		bool parse(json::value& data, const bool is_diff);
 
-		void to_json(glz::json& data, const std::uint32_t type) const;
-		void to_json(glz::json& data) const;
+		void to_json(json::value& data, const std::uint32_t type) const;
+		void to_json(json::value& data) const;
 
 		void load_default(const std::uint32_t map_location);
 	};
@@ -471,11 +471,11 @@ namespace database::players
 		std::uint8_t motivation_history_value[10];
 		char nickname[32];
 		
-		bool parse(glz::json& data);
-		bool parse_update(glz::json& data);
-		bool parse_add_param(glz::json& data);
+		bool parse(json::value& data);
+		bool parse_update(json::value& data);
+		bool parse_add_param(json::value& data);
 		void apply_update(const crew_member_t& diff);
-		void to_json(glz::json& data) const;
+		void to_json(json::value& data) const;
 	};
 
 	struct crew_levels_t
@@ -487,8 +487,8 @@ namespace database::players
 		std::uint8_t medic;
 		std::uint8_t plant;
 
-		bool parse(glz::json& data);
-		void to_json(glz::json& data) const;
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 #pragma pack(pop)
 
@@ -524,7 +524,7 @@ namespace database::players
 			return this->push(item);
 		}
 
-		virtual bool parse_diff(glz::json& data)
+		virtual bool parse_diff(json::value& data)
 		{
 			if (!data.is_array())
 			{
@@ -549,7 +549,7 @@ namespace database::players
 			return true;
 		}
 
-		virtual bool parse(glz::json& data)
+		virtual bool parse(json::value& data)
 		{
 			std::memset(this->data(), 0, this->size() * sizeof(T));
 
@@ -569,10 +569,10 @@ namespace database::players
 			return true;
 		}
 
-		virtual void to_json(glz::json& data) const
+		virtual void to_json(json::value& data) const
 		{
 			auto idx = 0;
-			data = glz::json::array_t();
+			data = json::value::array_t();
 
 			const auto list = this->data();
 			for (auto i = 0ull; i < this->size(); i++)
@@ -615,7 +615,7 @@ namespace database::players
 			return value.production_id == 0;
 		}
 
-		bool parse_life_diff(glz::json& data);
+		bool parse_life_diff(json::value& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
 	};
@@ -685,7 +685,7 @@ namespace database::players
 			return value.value == 0u;
 		}
 
-		virtual void to_json(glz::json& data) const override
+		virtual void to_json(json::value& data) const override
 		{
 			auto idx = 1;
 			data[0] = 0;
@@ -716,7 +716,9 @@ namespace database::players
 			return value.unique_id == 0u;
 		}
 
-		bool parse_update(glz::json& data);
+		bool parse_update(json::value& data);
+
+		crew_member_t* find_member(const std::uint32_t id);
 
 	};
 
