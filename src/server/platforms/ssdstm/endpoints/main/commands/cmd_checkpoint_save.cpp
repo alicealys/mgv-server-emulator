@@ -23,15 +23,16 @@ namespace emulator::ssd
 		auto& crew_update_list_j = data["crew_update_list"];
 		auto& group_level_j = data["group_level"];
 		auto& tips_open_info_j = data["tips_open_info"];
+		auto& quest_record_info_j = data["quest_record_info"];
 
-		result["added_crew"] = json::value::array_t();
-		result["capture_list"] = json::value::array_t();
-		result["defense_mission_reward"] = json::value::array_t();
-		result["left_resources"] = json::value::array_t();
-		result["stackable_list"] = json::value::array_t();
+		result["added_crew"] = json::array();
+		result["capture_list"] = json::array();
+		result["defense_mission_reward"] = json::array();
+		result["left_resources"] = json::array();
+		result["stackable_list"] = json::array();
 		result["reward_event_point"] = 0;
 		result["boost_flag"] = 0;
-		result["defense_reward_limit_result"]["limit_result"] = json::value::array_t();
+		result["defense_reward_limit_result"]["limit_result"] = json::array();
 		result["defense_reward_limit_result"]["mission_code"] = 0;
 
 		if (gimmick_save_info_j.is_object())
@@ -188,6 +189,26 @@ namespace emulator::ssd
 				}
 
 				user->current_player->set_mission_record_list(*mission_record_list);
+			}
+
+			auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
+			if (quest_mission_code_list_j.is_array())
+			{
+				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
+				user->current_player->get_quest_record_list(*quest_record_list, quest_mission_code_list_j.size());
+				quest_record_list->parse_diff(quest_mission_code_list_j);
+				user->current_player->set_quest_record_list(*quest_record_list);
+			}
+		}
+
+		if (quest_record_info_j.is_array())
+		{
+			for (auto i = 0ull; i < quest_record_info_j.size(); i++)
+			{
+				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
+				user->current_player->get_quest_record_list(*quest_record_list);
+				quest_record_list->parse_diff(quest_record_info_j);
+				user->current_player->set_quest_record_list(*quest_record_list);
 			}
 		}
 

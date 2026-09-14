@@ -849,6 +849,18 @@ namespace database::players
 		data["score"] = this->score;
 	}
 
+	bool quest_record_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	void quest_record_t::to_json(json::value& data) const
+	{
+		data["flagset"] = this->flagset;
+		data["mission_code"] = this->mission_code;
+		data["repop_count"] = this->repop_count;
+	}
+
 	bool map_unlock_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data, this->value); 
@@ -1667,6 +1679,7 @@ namespace database::players
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
+		DEF_ARRAY_GET(player, quest_record_list_t, quest_record_list);
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_GET(player, crew_member_list_t, crew_member_list);
@@ -1675,6 +1688,7 @@ namespace database::players
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
+		DEF_ARRAY_SET(player, quest_record_list_t, quest_record_list);
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_SET(player, crew_member_list_t, crew_member_list);
@@ -1763,6 +1777,11 @@ namespace database::players
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
+	}
+
+	void player::get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_quest_record_list, this->get_user_id(), quest_record_list, size_add);
 	}
 
 	void player::get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add) const
@@ -1877,6 +1896,11 @@ namespace database::players
 	bool player::set_mission_record_list(mission_record_list_t& set_mission_record_list) const
 	{
 		RUN_IMPL(impl::set_mission_record_list, this->get_user_id(), set_mission_record_list);
+	}
+
+	bool player::set_quest_record_list(quest_record_list_t& quest_record_list) const
+	{
+		RUN_IMPL(impl::set_quest_record_list, this->get_user_id(), quest_record_list);
 	}
 
 	bool player::set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const

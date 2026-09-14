@@ -352,6 +352,16 @@ namespace database::players
 		void to_json(json::value& data) const;
 	};
 
+	struct quest_record_t
+	{
+		std::uint32_t flagset;
+		std::uint32_t mission_code;
+		std::uint32_t repop_count;
+
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
+	};
+
 	struct map_unlock_t
 	{
 		std::uint16_t value;
@@ -680,6 +690,23 @@ namespace database::players
 
 	};
 
+	class quest_record_list_t final : public generic_item_list<quest_record_t, 256>
+	{
+	public:
+		inline bool are_elements_equal(const quest_record_t& l, const quest_record_t& r) const override
+		{
+			return l.mission_code == r.mission_code;
+		}
+
+		inline bool is_element_empty(const quest_record_t& value) const override
+		{
+			return value.mission_code == 0;
+		}
+
+		bool open_mission(const std::uint32_t mission_code);
+
+	};
+
 	class map_unlock_list_t final : public generic_item_list<map_unlock_t, 21904>
 	{
 	public:
@@ -756,6 +783,7 @@ namespace database::players
 		DEFINE_FIELD(base_resources, sqlpp::binary);
 		DEFINE_FIELD(story_unlock_info, sqlpp::binary);
 		DEFINE_FIELD(mission_record_list, sqlpp::binary);
+		DEFINE_FIELD(quest_record_list, sqlpp::binary);
 		DEFINE_FIELD(inventory_resource_list, sqlpp::binary);
 		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
@@ -781,6 +809,7 @@ namespace database::players
 			base_resources_field_t,
 			story_unlock_info_field_t,
 			mission_record_list_field_t,
+			quest_record_list_field_t,
 			inventory_resource_list_field_t,
 			stackable_item_list_field_t,
 			map_unlock_list_afghan_field_t,
@@ -847,6 +876,7 @@ namespace database::players
 		bool set_crew_levels(crew_levels_t& crew_levels) const;
 
 		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
+		void get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add = 0ull) const;
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
@@ -855,6 +885,7 @@ namespace database::players
 		void get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add = 0ull) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
+		bool set_quest_record_list(quest_record_list_t& quest_record_list) const;
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;

@@ -22,6 +22,7 @@ namespace emulator::ssd
 		const auto player_play_record = std::make_unique<database::players::player_play_record_t>();
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 		const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
+		const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
 		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
@@ -41,6 +42,7 @@ namespace emulator::ssd
 		player->get_stackable_item_list(*stackable_item_list);
 		player->get_story_unlock_info(*story_unlock_info);
 		player->get_mission_record_list(*mission_record_list);
+		player->get_quest_record_list(*quest_record_list);
 		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
 
@@ -114,7 +116,7 @@ namespace emulator::ssd
 			result["play_record_user_total_additional_130"][i] = user_play_record->additional[i];
 		}
 
-		result["quest_record_info_list"] = json::value::array_t();
+		quest_record_list->to_json(result["quest_record_info_list"]);
 		result["recipe_list"] = json::value::array_t();
 
 		for (auto i = 0; i < 256; i++)

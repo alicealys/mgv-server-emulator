@@ -45,6 +45,7 @@ create table if not exists `players`
 	base_resources  		blob default null,
 	story_unlock_info  		blob default null,
 	mission_record_list  	blob default null,
+	quest_record_list  		blob default null,
 	stackable_item_list  	blob default null,
 	inventory_resource_list blob default null,
 	crew_member_list		blob default null,

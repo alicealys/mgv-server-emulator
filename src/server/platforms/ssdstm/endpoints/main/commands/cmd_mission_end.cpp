@@ -62,6 +62,15 @@ namespace emulator::ssd
 
 				user->current_player->set_mission_record_list(*mission_record_list);
 			}
+
+			auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
+			if (quest_mission_code_list_j.is_array())
+			{
+				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
+				user->current_player->get_quest_record_list(*quest_record_list, quest_mission_code_list_j.size());
+				quest_record_list->parse_diff(quest_mission_code_list_j);
+				user->current_player->set_quest_record_list(*quest_record_list);
+			}
 		}
 
 		// TODO
