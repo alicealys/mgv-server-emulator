@@ -4,6 +4,7 @@
 #include <optional>
 #include <future>
 #include <unordered_map>
+#include <functional>
 
 namespace utils::http
 {

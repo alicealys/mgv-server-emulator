@@ -254,6 +254,7 @@ workspace "mgv-server-emulator"
 		filter { "system:linux" }
 			toolset "clang"
 			buildoptions { 
+				"-stdlib=libc++", 
 				"-Wno-unused-parameter", 
 				"-Wno-unknown-pragmas", 
 				"-Wno-switch",

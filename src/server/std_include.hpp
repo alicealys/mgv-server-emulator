@@ -71,7 +71,6 @@
 
 #include <gsl/gsl>
 
-#include <json.hpp>
 #include <utils/json.hpp>
 
 #pragma warning(pop)

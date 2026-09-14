@@ -9,8 +9,8 @@ namespace emulator::ssd
 		glz::json result;
 
 		// TODO
-		result["task_list"] = glz::json::array_t();
-		result["expired_list"] = {0, 0, 0, 0, 0};
+		result["task_list"] = glz::json::array_t{};
+		result["expired_list"] = glz::json::array_t{0, 0, 0, 0, 0};
 		result["next_date"] = std::numeric_limits<std::int32_t>::max();
 
         return result;
