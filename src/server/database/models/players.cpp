@@ -870,7 +870,7 @@ namespace database::players
 
 		utils::json_utils::parse_base64(data["marker_africa"], this->marker_africa);
 		utils::json_utils::parse_base64(data["marker_afghan"], this->marker_afghan);
-		utils::json_utils::parse_base64(data["fast_travel_unlock"], this->marker_afghan);
+		utils::json_utils::parse_base64(data["fast_travel_unlock"], this->fast_travel_unlock, true, true);
 		return true;
 	}
 
@@ -886,6 +886,7 @@ namespace database::players
 		data["fast_travel_unlock"] = utils::encoding::encode_base64(this->fast_travel_unlock);
 	}
 
+	bool story_unlock_info_t::tips_open_info_t::parse(json::value& data)
 	{
 		return utils::json_utils::parse_base64(data["data"], this->value);
 	}

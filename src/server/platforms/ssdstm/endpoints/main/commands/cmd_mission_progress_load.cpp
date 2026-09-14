@@ -132,6 +132,7 @@ namespace emulator::ssd
 		inventory_resources->to_json(result["resource_list"]);
 		stackable_item_list->to_json(result["stackable_list"]);
 		story_unlock_info->to_json(result["story_unlock_info"]);
+		story_unlock_info->tips_open_info.to_json(result["tips_open_info"]);
 
 		result["story_unlock_info"]["map_unlock_list"][0]["location_index"] = 0;
 		map_unlock_list_afghan->to_json(result["story_unlock_info"]["map_unlock_list"][0]["map_unlock"]);

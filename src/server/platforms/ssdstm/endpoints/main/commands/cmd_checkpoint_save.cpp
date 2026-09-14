@@ -22,6 +22,7 @@ namespace emulator::ssd
 		auto& reward_crew_j = data["reward_crew"];
 		auto& crew_update_list_j = data["crew_update_list"];
 		auto& group_level_j = data["group_level"];
+		auto& tips_open_info_j = data["tips_open_info"];
 
 		result["added_crew"] = json::value::array_t();
 		result["capture_list"] = json::value::array_t();
@@ -144,12 +145,12 @@ namespace emulator::ssd
 			}
 		};
 
+		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
+
 		if (story_unlock_info_j.is_object())
 		{
-			const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 			user->current_player->get_story_unlock_info(*story_unlock_info);
 			story_unlock_info->parse(story_unlock_info_j);
-			user->current_player->set_story_unlock_info(*story_unlock_info);
 			parse_map_unlock_list(story_unlock_info_j);
 		}
 
@@ -256,12 +257,18 @@ namespace emulator::ssd
 			user->current_player->set_crew_levels(levels);
 		}
 
+		if (tips_open_info_j.is_array() && tips_open_info_j.size())
+		{
+			story_unlock_info->tips_open_info.parse(tips_open_info_j[0]);
+		}
+
+		user->current_player->set_story_unlock_info(*story_unlock_info);
+
 		// TODO
 		// play_record_additional_130_checkpoint
 		// play_record_save_checkpoint
 		// replay_mission_info
 		// quest_repop_count_decrement
-		// tips_open_info
 
 		return result;
 	}

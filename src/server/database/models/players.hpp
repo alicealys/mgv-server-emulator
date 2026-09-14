@@ -361,6 +361,13 @@ namespace database::players
 
 	struct story_unlock_info_t
 	{
+		struct tips_open_info_t
+		{
+			std::uint8_t value[128];
+			bool parse(json::value& data);
+			void to_json(json::value& data) const;
+		};
+
 		std::uint32_t demo_open_flag;
 		std::uint32_t facility_new_flag;
 		std::uint32_t marker_map_location;
@@ -369,6 +376,7 @@ namespace database::players
 		std::uint8_t fast_travel_unlock[8];
 		std::uint8_t marker_afghan[522];
 		std::uint8_t marker_africa[522];
+		tips_open_info_t tips_open_info;
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
