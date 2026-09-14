@@ -9,8 +9,8 @@ namespace emulator::ssd
 		json::value result;
 
 		// TODO
-		result["task_list"] = json::value::array_t{};
-		result["expired_list"] = json::value::array_t{0, 0, 0, 0, 0};
+		result["task_list"] = json::array{};
+		result["expired_list"] = json::array{0, 0, 0, 0, 0};
 		result["next_date"] = std::numeric_limits<std::int32_t>::max();
 
         return result;

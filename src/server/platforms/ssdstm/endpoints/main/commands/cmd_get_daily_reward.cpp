@@ -13,12 +13,12 @@ namespace emulator::ssd
 		result["reward"]["energy"] = 0;
 		result["reward"]["kub_boost_flag"] = 0;
 		result["reward"]["present_box_num"] = 0;
-		result["reward"]["battle_pack_list"] = json::value::array_t();
-		result["reward"]["nonstackable_list"] = json::value::array_t();
-		result["reward"]["present_list"] = json::value::array_t();
-		result["reward"]["recipe_list"] = json::value::array_t();
-		result["reward"]["resources_list"] = json::value::array_t();
-		result["reward"]["stackable_list"] = json::value::array_t();
+		result["reward"]["battle_pack_list"] = json::array();
+		result["reward"]["nonstackable_list"] = json::array();
+		result["reward"]["present_list"] = json::array();
+		result["reward"]["recipe_list"] = json::array();
+		result["reward"]["resources_list"] = json::array();
+		result["reward"]["stackable_list"] = json::array();
 		result["reward"]["text_id"] = 0;
 
         return result;

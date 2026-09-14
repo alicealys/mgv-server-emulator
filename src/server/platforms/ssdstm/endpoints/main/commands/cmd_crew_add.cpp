@@ -17,7 +17,7 @@ namespace emulator::ssd
 		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
 		user->current_player->get_crew_member_list(*crew_member_list);
 
-		result["added_crew"] = json::value::array_t();
+		result["added_crew"] = json::array();
 		auto count = 0u;
 
 		for (auto i = 0ull; i < add_crew_param.size(); i++)

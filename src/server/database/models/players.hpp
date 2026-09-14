@@ -590,7 +590,7 @@ namespace database::players
 		virtual void to_json(json::value& data) const
 		{
 			auto idx = 0;
-			data = json::value::array_t();
+			data = json::array();
 
 			const auto list = this->data();
 			for (auto i = 0ull; i < this->size(); i++)

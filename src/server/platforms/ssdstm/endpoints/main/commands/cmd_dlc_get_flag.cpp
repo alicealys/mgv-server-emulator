@@ -8,7 +8,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		result["consumable_count"] = json::value::array_t{0, 0, 0, 0, 0, 0, 0, 0};
+		result["consumable_count"] = json::array{0, 0, 0, 0, 0, 0, 0, 0};
 		result["flag"] = user->get_dlc_flag();
 
 		return result;

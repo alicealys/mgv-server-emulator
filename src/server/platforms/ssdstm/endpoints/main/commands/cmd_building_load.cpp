@@ -25,7 +25,7 @@ namespace emulator::ssd
 
 		building_info->to_json(result["cell_info"]);
 		result["defense_mission_disconnect"] = 0;
-		result["farming_info"] = json::value::array_t{};
+		result["farming_info"] = json::array{};
 
 		// TODO
 

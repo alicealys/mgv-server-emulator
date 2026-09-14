@@ -74,7 +74,7 @@ namespace emulator
 			user = database::users::find_by_session_id(session_key, false);
 			if (!user.has_value())
 			{
-				data_j = json::value::object_t{};
+				data_j = json::null{};
 				return {};
 			}
 
@@ -168,8 +168,8 @@ namespace emulator
 			data["crypto_type"] = "COMMON";
 		}
 
-		data["flowid"] = json::value::object_t{};
-		data["xuid"] = json::value::object_t{};
+		data["flowid"] = json::null{};
+		data["xuid"] = json::null{};
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 

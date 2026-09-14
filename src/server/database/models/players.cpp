@@ -988,7 +988,7 @@ namespace database::players
 
 	void building_info_t::to_json(json::value& data, const std::uint32_t type) const
 	{
-		data = json::value::array_t();
+		data = json::array();
 
 		auto idx = 0;
 		for (auto row = 0u; row < building_grid_size; row++)

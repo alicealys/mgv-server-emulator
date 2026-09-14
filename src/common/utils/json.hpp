@@ -8,6 +8,7 @@ namespace json
 	using value = glz::generic_sorted_u64;
 	using array = value::array_t;
 	using object = value::object_t;
+	using null = value::null_t;
 
 	constexpr auto options = glz::opts
 	{

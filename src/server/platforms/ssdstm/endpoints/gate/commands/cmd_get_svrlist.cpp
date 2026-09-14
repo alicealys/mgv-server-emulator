@@ -8,10 +8,8 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		result["result"] = "NOERR";
 		result["server_num"] = 0;
-		result["svrlist"] = json::value::array_t{};
-		result["xuid"] = json::value::object_t{};
+		result["svrlist"] = json::array{};
 
 		return result;
 	}

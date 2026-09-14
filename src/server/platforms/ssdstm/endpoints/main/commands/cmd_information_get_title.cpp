@@ -9,7 +9,7 @@ namespace emulator::ssd
 		json::value result;
 		
 		// TODO
-		result["info_list"] = json::value::array_t();
+		result["info_list"] = json::array();
 		result["info_num"] = 0;
 
         return result;

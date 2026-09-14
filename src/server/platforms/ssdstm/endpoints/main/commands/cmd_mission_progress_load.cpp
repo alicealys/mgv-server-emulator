@@ -49,19 +49,19 @@ namespace emulator::ssd
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
 
-		result["additional_storage_info"]["count"] = json::value::array_t{0, 0};
-		result["battle_pack_list"] = json::value::array_t();
-		result["bgm_my_list"] = json::value::array_t();
-		result["boost_list"] = json::value::array_t();
+		result["additional_storage_info"]["count"] = json::array{0, 0};
+		result["battle_pack_list"] = json::array();
+		result["bgm_my_list"] = json::array();
+		result["boost_list"] = json::array();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
-		result["cage_list"] = json::value::array_t();
+		result["cage_list"] = json::array();
 		result["communication_gesture_slot"] = default_data["communication_gesture_slot"];
 
-		result["coop_embedded_mission_record_info_list"] = json::value::array_t();
-		result["coop_event_mission_record_info_list"] = json::value::array_t();
-		result["coop_reward_limit_list"] = json::value::array_t();
+		result["coop_embedded_mission_record_info_list"] = json::array();
+		result["coop_event_mission_record_info_list"] = json::array();
+		result["coop_reward_limit_list"] = json::array();
 
-		result["craft_board"] = json::value::array_t();
+		result["craft_board"] = json::array();
 
 		mission_info->to_json(result["current_mission_info"]);
 
@@ -69,7 +69,7 @@ namespace emulator::ssd
 		result["defense_mission_parameter"]["flag"] = 0;
 		result["defense_mission_parameter"]["threat"] = 0;
 		result["defense_mission_parameter"]["threat_threshold"] = 0;
-		result["defense_mission_record_info_list"] = json::value::array_t{};
+		result["defense_mission_record_info_list"] = json::array{};
 		result["defense_mission_status"]["disconnect_flag"] = 0;
 		result["defense_mission_status"]["mining_machine_life"] = 9680;
 		result["defense_mission_status"]["mission_code"] = 0;
@@ -77,7 +77,7 @@ namespace emulator::ssd
 		result["defense_mission_status"]["next_wave_start_date"] = 0;
 		result["defense_mission_status"]["total_score"] = 0;
 		result["defense_mission_status"]["wave"] = 0;
-		result["defense_reward_limit_list"] = json::value::array_t{};
+		result["defense_reward_limit_list"] = json::array{};
 
 		result["gimmick_save_info_afghan"]["map_location"] = 0;
 		gimmick_data_afghan->to_json(result["gimmick_save_info_afghan"], 0);
@@ -101,8 +101,8 @@ namespace emulator::ssd
 		mission_record_list->to_json(result["mission_record_info_list"]);
 		nonstackable_list->to_json(result["nonstackable_list"]);
 
-		result["order_expired_list"] = json::value::array_t{0, 0, 0, 0, 0};
-		result["order_task_list"] = json::value::array_t();
+		result["order_expired_list"] = json::array{0, 0, 0, 0, 0};
+		result["order_task_list"] = json::array();
 
 		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->first); i++)
 		{
@@ -117,14 +117,14 @@ namespace emulator::ssd
 		}
 
 		quest_record_list->to_json(result["quest_record_info_list"]);
-		result["recipe_list"] = json::value::array_t();
+		result["recipe_list"] = json::array();
 
 		for (auto i = 0; i < 256; i++)
 		{
 			result["recommend_bp_mission_list"][i] = 0;
 		}
 
-		result["replay_info_list"] = json::value::array_t();
+		result["replay_info_list"] = json::array();
 		result["replay_mission_info"]["is_replay_mission"] = 0;
 		result["replay_mission_info"]["replay_mission_difficalty"] = 0;
 		result["replay_mission_info"]["replay_mission_id"] = 0;

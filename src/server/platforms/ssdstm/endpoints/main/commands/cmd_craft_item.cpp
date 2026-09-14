@@ -126,7 +126,7 @@ namespace emulator::ssd
 		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
 
 		result["inventory_index_junk"] = 0xFFFF;
-		result["left_resources"] = json::value::array_t();
+		result["left_resources"] = json::array();
 
         return result;
 	}

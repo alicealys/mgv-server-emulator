@@ -9,7 +9,7 @@ namespace emulator::ssd
 		json::value result;
 
 		// TODO
-		result["event_list"] = json::value::array_t();
+		result["event_list"] = json::array();
 		result["season_flag"] = 0;
 
         return result;

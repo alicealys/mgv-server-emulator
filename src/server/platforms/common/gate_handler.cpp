@@ -98,8 +98,8 @@ namespace emulator
 		const std::optional<database::users::user>&, std::string& result)
 	{
 		data["crypto_type"] = "COMMON";
-		data["flowid"] = json::value::object_t{};
-		data["xuid"] = json::value::object_t{};
+		data["flowid"] = json::null{};
+		data["xuid"] = json::null{};
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 
@@ -121,7 +121,7 @@ namespace emulator
 		response["data"] = utils::encoding::split_into_lines(data_res);
 		response["original_size"] = original_size;
 		response["session_crypto"] = false;
-		response["session_key"] = json::value::object_t{};
+		response["session_key"] = json::null{};
 
 		const auto response_str = json::dump(response);
 		const auto encrypted = this->blow_.encrypt(response_str);

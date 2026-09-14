@@ -10,7 +10,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		result["header_list"] = json::value::array_t();
+		result["header_list"] = json::array();
 
 		auto& account_list_j = data["account_list"];
 		if (!account_list_j.is_array())
