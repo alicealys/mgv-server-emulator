@@ -4,18 +4,18 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_building_load::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_building_load::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& map_location_j = data["map_location"];
-		if (!map_location_j.is_number_unsigned())
+		if (!map_location_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
-		const auto map_location = map_location_j.get<std::uint32_t>();
+		const auto map_location = map_location_j.as<std::uint32_t>();
 		if (map_location > 1)
 		{
 			return error(ERR_INVALIDARG);
@@ -25,7 +25,7 @@ namespace emulator::ssd
 
 		building_info->to_json(result["cell_info"]);
 		result["defense_mission_disconnect"] = 0;
-		result["farming_info"] = nlohmann::json::array();
+		result["farming_info"] = glz::json::array_t{};
 
 		// TODO
 

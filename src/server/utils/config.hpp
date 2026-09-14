@@ -6,65 +6,33 @@
 
 namespace config
 {
-	using field_type = nlohmann::json::value_t;
-	using field_value = nlohmann::json;
-	using validate_callback_t = std::function<bool(const field_value&)>;
-
-	template <typename T>
-	using validate_callback_val_t = std::function<bool(const T&)>;
-
-	nlohmann::json read_config();
-	void write_config(const nlohmann::json& json);
-
-	nlohmann::json validate_config_field(const std::string& key, const field_value& value);
-	std::optional<nlohmann::json> get_default_value(const std::string& key);
-
-	std::optional<nlohmann::json> get_value(const std::string& key);
-
-	template <typename T>
-	T get(const std::string& key)
+	struct config_t
 	{
-		const auto value_opt = get_value(key);
-		if (!value_opt.has_value())
+		struct vars_t
 		{
-			const auto default_value = get_default_value(key);
-			if (default_value.has_value())
-			{
-				return default_value.value();
-			}
+			std::uint32_t session_heartbeat;
+			std::uint32_t session_timeout;
+			std::uint32_t server_version;
+		};
 
-			throw std::runtime_error("config field default value not defined");
-		}
+		std::string base_url = "http://localhost:80";
+		std::uint16_t https_port = 443;
+		std::uint16_t http_port = 80;
+		std::string database_type = "sqlite3";
+		std::string database_user = "root";
+		std::string database_password = "root";
+		std::string database_host = "127.0.0.1";
+		std::uint16_t database_port = 3306;
+		std::string database_name = "mgssd";
+		std::string auth_mode = "offline";
+		std::string cert_file = "";
+		std::string key_file = "";
+		bool use_tmp_folder = true;
+		std::string http_client_ip_header = "";
+		bool enable_web_api = true;
+		bool allow_save_restore = true;
+		vars_t vars;
+	};
 
-		const auto validated = validate_config_field(key, *value_opt);
-		return validated.get<T>();
-	}
-
-	template <typename T>
-	T get_or(const std::string& key, const T& default_value, const std::optional<validate_callback_val_t<T>>& validate_cb = {})
-	{
-		const auto value_opt = get_value(key);
-		if (!value_opt.has_value())
-		{
-			return default_value;
-		}
-
-		try
-		{
-			const auto value = value_opt->get<T>();
-			if (validate_cb.has_value() && !validate_cb->operator()(value))
-			{
-				return default_value;
-			}
-
-			return value;
-		}
-		catch (const std::exception& e)
-		{
-			console::error("Invalid value for \"%s\" in config: %s\n", key.data(), e.what());
-			return default_value;
-		}
-	}
-
-	nlohmann::json get_raw(const std::string& key);
+	const config_t& get();
 }

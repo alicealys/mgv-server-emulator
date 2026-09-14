@@ -6,11 +6,11 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_get_friend_headers::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_get_friend_headers::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
-		result["header_list"] = nlohmann::json::array();
+		result["header_list"] = glz::json::array_t();
 
 		auto& account_list_j = data["account_list"];
 		if (!account_list_j.is_array())
@@ -30,13 +30,13 @@ namespace emulator::ssd
 			auto& id_j = entry["id"];
 			auto& type_j = entry["type"];
 
-			if (!id_j.is_number_unsigned() || !type_j.is_number_unsigned())
+			if (!id_j.is_uint64() || !type_j.is_uint64())
 			{
 				continue;
 			}
 
 			const auto id = id_j.get<std::uint64_t>();
-			const auto type = type_j.get<std::uint32_t>();
+			const auto type = type_j.as<std::uint32_t>();
 
 			if (type != 3u)
 			{

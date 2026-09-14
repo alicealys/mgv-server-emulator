@@ -4,17 +4,17 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_building_remove::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_building_remove::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& map_location_j = data["map_location"];
-		if (!map_location_j.is_number_unsigned())
+		if (!map_location_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto map_location = map_location_j.get<std::uint32_t>();
+		const auto map_location = map_location_j.as<std::uint32_t>();
 		if (map_location > 1)
 		{
 			return error(ERR_INVALIDARG);
@@ -22,7 +22,7 @@ namespace emulator::ssd
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
 
-		const auto do_list = [&](nlohmann::json& data, const std::uint32_t type)
+		const auto do_list = [&](glz::json& data, const std::uint32_t type)
 		{
 			if (!data.is_array())
 			{
@@ -35,14 +35,14 @@ namespace emulator::ssd
 				auto& row_j = data[i]["row"];
 				auto& current_life_j = data[i]["current_life"];
 
-				if (!column_j.is_number_unsigned() || !row_j.is_number_unsigned() || !current_life_j.is_number_unsigned())
+				if (!column_j.is_uint64() || !row_j.is_uint64() || !current_life_j.is_uint64())
 				{
 					continue;
 				}
 
-				const auto col = column_j.get<std::uint32_t>();
-				const auto row = row_j.get<std::uint32_t>();
-				const auto current_life = current_life_j.get<std::uint16_t>();
+				const auto col = column_j.as<std::uint32_t>();
+				const auto row = row_j.as<std::uint32_t>();
+				const auto current_life = current_life_j.as<std::uint16_t>();
 
 				building_info->cells[row][col].edges[type].life = current_life;
 			}

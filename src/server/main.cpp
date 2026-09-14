@@ -22,7 +22,7 @@ namespace
 
 	void write_dlls()
 	{
-		const auto use_tmp_folder = config::get<bool>("use_tmp_folder");
+		const auto use_tmp_folder = config::get().use_tmp_folder;
 
 		if (use_tmp_folder)
 		{

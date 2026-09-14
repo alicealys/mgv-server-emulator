@@ -6,12 +6,12 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_set_currentplayer::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_set_currentplayer::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& index_j = data["index"];
-		if (!index_j.is_number_unsigned())
+		if (!index_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}

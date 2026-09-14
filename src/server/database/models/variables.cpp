@@ -12,8 +12,15 @@ namespace database::variables
 	namespace impl
 	{
 		template <database_type_t Type>
-		void set(const std::string& name, const nlohmann::json& value)
+		void set(const std::string& name, const glz::json& value)
 		{
+			const auto dump_opt = value.dump();
+			if (!dump_opt)
+			{
+				return;
+			}
+
+			const auto& dump = dump_opt.value();
 			return database::access([&](database_t& db)
 			{
 				auto results = db.exec<Type>(
@@ -25,23 +32,23 @@ namespace database::variables
 				{
 					db.exec<Type>(
 						sqlpp::insert_into(variable::table)
-							.set(variable::table.variable_name = name, variable::table.variable_value = value.dump()));
+							.set(variable::table.variable_name = name, variable::table.variable_value = dump));
 				}
 				else
 				{
 					db.exec<Type>(
 						sqlpp::update(variable::table)
-							.set(variable::table.variable_value = value.dump())
+							.set(variable::table.variable_value = dump)
 								.where(variable::table.variable_name == name));
 				}
 			});
 		}
 
 		template <database_type_t Type>
-		std::optional<nlohmann::json> get(const std::string& name)
+		std::optional<glz::json> get(const std::string& name)
 		{
-			return database::access<std::optional<nlohmann::json>>([&](database_t& db)
-				-> std::optional<nlohmann::json>
+			return database::access<std::optional<glz::json>>([&](database_t& db)
+				-> std::optional<glz::json>
 			{
 				auto results = db.exec<Type>(
 					sqlpp::select(variable::table.variable_value)
@@ -53,7 +60,14 @@ namespace database::variables
 					return {};
 				}
 
-				return {nlohmann::json::parse(results.front().variable_value.value())};
+				glz::json json;
+				const auto data = results.front().variable_value.value();
+				if (glz::read_json(json, data))
+				{
+					return {};
+				}
+
+				return {json};
 			});
 		}
 
@@ -86,12 +100,12 @@ namespace database::variables
 		}
 	}
 
-	void set(const std::string& name, const nlohmann::json& value)
+	void set(const std::string& name, const glz::json& value)
 	{
 		RUN_IMPL(impl::set, name, value);
 	}
 
-	std::optional<nlohmann::json> get(const std::string& name)
+	std::optional<glz::json> get(const std::string& name)
 	{
 		RUN_IMPL(impl::get, name);
 	}

@@ -61,17 +61,23 @@ namespace utils::tpp
 		return utils::http::post_data(url + endpoint, post_data, headers);
 	}
 
-	std::optional<nlohmann::json> tpp_client::send_command(const std::string& endpoint, 
-		const nlohmann::json& data_params, bool use_crypto, const nlohmann::json& params)
+	std::optional<glz::json> tpp_client::send_command(const std::string& endpoint, 
+		const glz::json& data_params, bool use_crypto, const glz::json& params)
 	{
 		try
 		{
-			nlohmann::ordered_json message;
+			glz::json message;
 			message["compress"] = false;
 			message["session_crypto"] = use_crypto;
 			message["session_key"] = "";
 
-			const auto data_str = data_params.dump();
+			const auto data_str_opt = data_params.dump();
+			if (!data_str_opt.has_value())
+			{
+				return {};
+			}
+
+			const auto& data_str = data_str_opt.value();
 			if (use_crypto)
 			{
 				const auto encrypted = this->session_blow_.encrypt(data_str);
@@ -84,13 +90,18 @@ namespace utils::tpp
 
 			message["original_size"] = data_str.size();
 
-			for (const auto& [key, value] : params.items())
+			for (const auto& [key, value] : params.get_object())
 			{
 				message[key] = value;
 			}
 
-			const auto message_str = message.dump();
-			const auto res = this->send_data(endpoint, message_str);
+			const auto message_str_opt = message.dump();
+			if (!message_str_opt.has_value())
+			{
+				return {};
+			}
+
+			const auto res = this->send_data(endpoint, message_str_opt.value());
 			if (!res.has_value())
 			{
 				return {};
@@ -109,13 +120,18 @@ namespace utils::tpp
 			}
 
 			const auto decrypted = this->static_blow_.decrypt(value.buffer);
-			auto json = nlohmann::json::parse(decrypted);
+			glz::json json;
+			if (glz::read_json(json, decrypted))
+			{
+				return {};
+			}
+
 			if (!json["data"].is_string())
 			{
 				return {json};
 			}
 
-			auto data = json["data"].get<std::string>();
+			std::string data = json["data"].get<std::string>();
 			const auto compressed = json["compress"].is_boolean() && json["compress"].get<bool>();
 			const auto session_crypto = json["session_crypto"].is_boolean() && json["session_crypto"].get<bool>();
 
@@ -135,8 +151,10 @@ namespace utils::tpp
 				data = utils::compression::zlib::decompress(data);
 			}
 
-			const auto data_json = nlohmann::json::parse(data);
-			json["data"] = data_json;
+			if (!glz::read_json(json["data"], data))
+			{
+				return {};
+			}
 
 			return {json};
 		}

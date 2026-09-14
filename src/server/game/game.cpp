@@ -6,6 +6,70 @@
 #include "utils/resources.hpp"
 #include "utils/json_utils.hpp"
 
+template <>
+struct glz::meta<game::recipe_t>
+{
+	using T = game::recipe_t;
+	static constexpr auto value = glz::object(
+		"id", &T::id,
+		"id_str", &T::id_str,
+		"index", &T::index,
+		"group", &T::group,
+		"dev_level", &T::dev_level,
+		"opened", &T::opened,
+		"production", &T::production_id,
+		"count", &T::count,
+		"leftover", &T::leftover,
+		"transTime", &T::trans_time,
+		"junk", &T::junk,
+		"potentialId", &T::potential_id,
+		"multiCraft", &T::multi_craft,
+		"price", &T::price,
+		"cost", &T::cost
+	);
+};
+
+template <>
+struct glz::meta<game::production_t>
+{
+	using T = game::production_t;
+	static constexpr auto modify = glz::object(
+		"craftCategory", &T::craft_category
+	);
+};
+
+template <>
+struct glz::meta<game::crew_member_type_t>
+{
+	using T = game::crew_member_type_t;
+	static constexpr auto modify = glz::object(
+		"DEVELOP", &T::develop,
+		"FOOD", &T::food,
+		"MEDIC", &T::medic,
+		"FARM", &T::farm,
+		"BASE_DEFENSE", &T::base_defense,
+		"COMBAT_DEPLOY", &T::combat_deploy,
+		"THIRST_RESIST", &T::thirst_resist,
+		"HUNGER_RESIST", &T::hunger_resist,
+		"INJURY_RESIST", &T::injury_resist,
+		"SICK_RESIST", &T::sick_resist,
+		"SLEEPLACK_RESIST", &T::sleeplack_resist,
+		"LIFE", &T::life
+	);
+};
+
+template <>
+struct glz::meta<game::survival_gear_t>
+{
+	using T = game::survival_gear_t;
+	static constexpr auto modify = glz::object(
+		"sveId", &T::id,
+		"typeId", &T::type_id,
+		"targetId", &T::target_id,
+		"valueu1", &T::value_u1
+	);
+};
+
 namespace game
 {
 	// server
@@ -123,53 +187,9 @@ namespace game
 		return sizeof(static_key);
 	}
 
-	bool production_t::parse(nlohmann::json& data)
+	bool production_t::parse(glz::json& data)
 	{
-		utils::json::get_or(data["str"], this->id_str);	
-		utils::json::get_or(data["id"], this->id);
-		utils::json::get_or(data["index"], this->index);
-		utils::json::get_or(data["type"], this->type);
-		utils::json::get_or(data["only_flag"], this->only_flag);
-		utils::json::get_or(data["craftCategory"], this->craft_category);
-		utils::json::get_or(data["rarity"], this->rarity);
-		utils::json::get_or(data["lv_need"], this->lv_need);
-		utils::json::get_or(data["countable"], this->countable);
-		utils::json::get_or(data["stock"], this->stock);
-		utils::json::get_or(data["life"], this->life);
-		utils::json::get_or(data["weight"], this->weight);
-		utils::json::get_or(data["customize"], this->customize);
-		utils::json::get_or(data["conv_use"], this->conv_use);
-		utils::json::get_or(data["base_c_water"], this->base_c_water);
-		utils::json::get_or(data["base_food"], this->base_food);
-		utils::json::get_or(data["base_medicine"], this->base_medicine);
-		utils::json::get_or(data["sup_combat"], this->sup_combat);
-		utils::json::get_or(data["sup_survival"], this->sup_survival);
-		utils::json::get_or(data["crew_inj_food_poison"], this->crew_inj_food_poison);
-		utils::json::get_or(data["crew_inj_dysentery"], this->crew_inj_dysentery);
-		utils::json::get_or(data["crew_inj_physical"], this->crew_inj_physical);
-		utils::json::get_or(data["crew_inj_fatigue"], this->crew_inj_fatigue);
-		utils::json::get_or(data["related_id"], this->related_id);
-		utils::json::get_or(data["eqp_hip"], this->eqp_hip);
-		utils::json::get_or(data["eqp_back"], this->eqp_back);
-		utils::json::get_or(data["eqp_sec"], this->eqp_sec);
-		utils::json::get_or(data["eqp_sup"], this->eqp_sup);
-		utils::json::get_or(data["pri_r_slot"], this->pri_r_slot);
-		utils::json::get_or(data["lang_name"], this->lang_name);
-		utils::json::get_or(data["lang_name2"], this->lang_name2);
-		utils::json::get_or(data["lang_name3"], this->lang_name3);
-		utils::json::get_or(data["lang_info"], this->lang_info);
-		utils::json::get_or(data["show_info"], this->show_info);
-		utils::json::get_or(data["icon_path"], this->icon_path);
-		utils::json::get_or(data["prv_r_x"], this->prv_r_x);
-		utils::json::get_or(data["prv_r_y"], this->prv_r_y);
-		utils::json::get_or(data["prv_r_y_min"], this->prv_r_y_min);
-		utils::json::get_or(data["prv_r_y_max"], this->prv_r_y_max);
-		utils::json::get_or(data["prv_r_z_off"], this->prv_r_z_off);
-		utils::json::get_or(data["prv_zm_min"], this->prv_zm_min);
-		utils::json::get_or(data["prv_zm"], this->prv_zm);
-		utils::json::get_or(data["prv_zm_max"], this->prv_zm_max);
-		utils::json::parse_array(data["perk"], this->perk);
-		return true;
+		return !glz::read<glz::opts{.error_on_unknown_keys = false}>(*this, data);
 	}
 
 	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
@@ -183,39 +203,14 @@ namespace game
 		return iter->second;
 	}
 
-	bool recipe_t::parse(nlohmann::json& data)
+	bool recipe_t::parse(glz::json& data)
 	{
-		utils::json::get_or(data["opened"], this->opened);
-		utils::json::get_or(data["junk"], this->junk);
-		utils::json::get_or(data["index"], this->index);
-		utils::json::get_or(data["group"], this->group);
-		utils::json::get_or(data["dev_level"], this->dev_level);
-		utils::json::get_or(data["count"], this->count);
-		utils::json::get_or(data["transTime"], this->trans_time);
-		utils::json::get_or(data["price"], this->price);
-		utils::json::get_or(data["potentialId"], this->potential_id);
-		utils::json::get_or(data["id"], this->id);
-		utils::json::get_or(data["id_str"], this->id_str);
-		utils::json::get_or(data["production"], this->production_id);
-
-		utils::json::parse_array(data["cost"], this->cost, [](recipe_t::cost_t& dest, nlohmann::json& src)
-		{
-			utils::json::get_or(src["count"], dest.count);
-			utils::json::get_or(src["type"], dest.type);
-			utils::json::get_or(src["id"], dest.id);
-		});
-
-		return true;
+		return !glz::read<glz::opts{.error_on_unknown_keys = false}>(*this, data);
 	}
 
-	bool gradeup_spec_t::parse(nlohmann::json& data)
+	bool gradeup_spec_t::parse(glz::json& data)
 	{
-		utils::json::get_or(data["rarity"], this->rarity);
-		utils::json::get_or(data["atk"], this->atk);
-		utils::json::get_or(data["w_life"], this->w_life);
-		utils::json::get_or(data["def"], this->def);
-		utils::json::get_or(data["a_life"], this->a_life);
-		return true;
+		return !glz::read_json(*this, data);
 	}
 
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade)
@@ -223,40 +218,14 @@ namespace game
 		return static_cast<std::uint16_t>(static_cast<float>(base_life) * 0.01f * static_cast<float>(grade) + static_cast<float>(base_life));
 	}
 
-	bool survival_gear_t::parse(nlohmann::json& data)
+	bool survival_gear_t::parse(glz::json& data)
 	{
-		utils::json::get_or(data["sveId"], this->id);
-		utils::json::get_or(data["index"], this->index);
-		utils::json::get_or(data["typeId"], this->type_id);
-		utils::json::get_or(data["targetId"], this->target_id);
-		utils::json::get_or(data["valueu1"], this->value_u1);
-		utils::json::get_or(data["mesh"], this->mesh);
-		return true;
+		return !glz::read_json(*this, data);
 	}
  
-	bool crew_member_type_t::parse(nlohmann::json& data)
+	bool crew_member_type_t::parse(glz::json& data)
 	{
-		utils::json::get_or(data["face"], this->face);
-		utils::json::get_or(data["race"], this->race);
-		utils::json::get_or(data["sex"], this->sex);
-		utils::json::get_or(data["body"], this->body);
-		utils::json::get_or(data["develop"], this->develop);
-		utils::json::get_or(data["food"], this->food);
-		utils::json::get_or(data["medic"], this->medic);
-		utils::json::get_or(data["farm"], this->farm);
-		utils::json::get_or(data["base_defense"], this->base_defense);
-		utils::json::get_or(data["combat_deploy"], this->combat_deploy);
-		utils::json::get_or(data["thirst_resist"], this->thirst_resist);
-		utils::json::get_or(data["hunger_resist"], this->hunger_resist);
-		utils::json::get_or(data["injury_resist"], this->injury_resist);
-		utils::json::get_or(data["sick_resist"], this->sick_resist);
-		utils::json::get_or(data["sleeplack_resist"], this->sleeplack_resist);
-		utils::json::get_or(data["life"], this->life);
-		utils::json::get_or(data["job_table"], this->job_table);
-		utils::json::get_or(data["skill_table"], this->skill_table);
-		utils::json::get_or(data["id"], this->id);
-		utils::json::get_or(data["id_str"], this->id_str);
-		return true;
+		return !glz::read_json(*this, data);
 	}
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result)

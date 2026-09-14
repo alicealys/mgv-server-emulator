@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_craft_item::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_craft_item::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& craft_item_param_j = data["craft_item_param"];
 		if (!craft_item_param_j.is_object())
@@ -24,16 +24,16 @@ namespace emulator::ssd
 		auto& inventory_index_junk_j = craft_item_param_j["inventory_index_junk"];
 		auto& recipe_id_j = craft_item_param_j["recipe_id"];
 
-		if (!ammo_count_j.is_number_unsigned() || !ammo_id_j.is_number_unsigned() ||
-			!craft_num_j.is_number_unsigned() || !group_level_j.is_number_unsigned() ||
-			!group_skills_j.is_array() || !inventory_index_junk_j.is_number_unsigned() ||
-			!recipe_id_j.is_number_unsigned())
+		if (!ammo_count_j.is_uint64() || !ammo_id_j.is_uint64() ||
+			!craft_num_j.is_uint64() || !group_level_j.is_uint64() ||
+			!group_skills_j.is_array() || !inventory_index_junk_j.is_uint64() ||
+			!recipe_id_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto craft_num = std::min(std::uint16_t(8u), craft_num_j.get<std::uint16_t>());
-		const auto recipe_id = recipe_id_j.get<std::uint32_t>();
+		const auto craft_num = std::min(std::uint16_t(8u), craft_num_j.as<std::uint16_t>());
+		const auto recipe_id = recipe_id_j.as<std::uint32_t>();
 
 		const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(recipe_id);
 		if (iter == game::parameters_table.ssd_sbm_parameters->recipes.end())
@@ -126,7 +126,7 @@ namespace emulator::ssd
 		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
 
 		result["inventory_index_junk"] = 0xFFFF;
-		result["left_resources"] = nlohmann::json::array();
+		result["left_resources"] = glz::json::array_t();
 
         return result;
 	}

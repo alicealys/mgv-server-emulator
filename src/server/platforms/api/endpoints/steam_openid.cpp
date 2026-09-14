@@ -49,9 +49,9 @@ namespace emulator
 		return is_valid;
 	}
 
-	nlohmann::json steam_openid::handle_request(const utils::request_params& params)
+	glz::json steam_openid::handle_request(const utils::request_params& params)
 	{
-		nlohmann::json result;
+		glz::json result;
 		result["is_valid"] = false;
 		result["account_id"] = 0;
 		result["auth_token"] = "";

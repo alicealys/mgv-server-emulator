@@ -6,20 +6,20 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_craft_grade_up::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_craft_grade_up::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& grade_up_item_j = data["grade_up_item"];
 		auto& recipe_id_j = data["recipe_id"];
 
-		if (!grade_up_item_j.is_number_unsigned() || !recipe_id_j.is_number_unsigned())
+		if (!grade_up_item_j.is_uint64() || !recipe_id_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto grade_up_item = grade_up_item_j.get<std::uint16_t>();
-		const auto recipe_id = recipe_id_j.get<std::uint32_t>();
+		const auto grade_up_item = grade_up_item_j.as<std::uint16_t>();
+		const auto recipe_id = recipe_id_j.as<std::uint32_t>();
 
 		const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(recipe_id);
 		if (iter == game::parameters_table.ssd_sbm_parameters->recipes.end())

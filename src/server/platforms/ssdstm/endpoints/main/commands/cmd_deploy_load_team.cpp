@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	nlohmann::json cmd_deploy_load_team::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_deploy_load_team::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO
 
@@ -16,7 +16,7 @@ namespace emulator::ssd
 		result["price_list"][2] = 0;
 		result["price_list"][3] = 0;
 		result["price_list"][4] = 0;
-		result["team_list"] = nlohmann::json::array();
+		result["team_list"] = glz::json::array_t();
 
         return result;
 	}

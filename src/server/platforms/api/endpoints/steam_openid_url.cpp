@@ -16,14 +16,14 @@
 
 namespace emulator
 {
-	nlohmann::json steam_openid_url::handle_request(const utils::request_params& params)
+	glz::json steam_openid_url::handle_request(const utils::request_params& params)
 	{
 		const auto target = params.query.get("target");
 		const auto target_value = target.value_or("");
-		const auto base_url = config::get<std::string>("base_url");
+		const auto& base_url = config::get().enable_web_api;
 		const auto redirect_url = std::format(URL_FORMAT, base_url, target_value, base_url);
 
-		nlohmann::json result;
+		glz::json result;
 		result["redirect_url"] = redirect_url;
 
 		return result;

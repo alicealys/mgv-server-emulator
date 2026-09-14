@@ -6,14 +6,14 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_mission_start::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_mission_start::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& current_mission_info_j = data["current_mission_info"];
 		auto& story_sequence_number_j = data["story_sequence_number"];
 
-		if (!current_mission_info_j.is_object() || !story_sequence_number_j.is_number_unsigned())
+		if (!current_mission_info_j.is_object() || !story_sequence_number_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -22,7 +22,7 @@ namespace emulator::ssd
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 		user->current_player->get_story_unlock_info(*story_unlock_info);
 
-		story_unlock_info->story_sequence_number = story_sequence_number_j;
+		story_unlock_info->story_sequence_number = story_sequence_number_j.as<std::uint32_t>();
 		mission_info->parse(current_mission_info_j);
 
 		user->current_player->set_mission_info(*mission_info);

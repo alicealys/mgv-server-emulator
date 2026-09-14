@@ -8,9 +8,10 @@ namespace database
 
 	void initialize_vars()
 	{
-		vars.session_heartbeat = 1s * config::get_or<std::uint64_t>("vars.session_heartbeat", vars.session_heartbeat.count());
-		vars.session_timeout = 1s * config::get_or<std::uint64_t>("vars.session_timeout", vars.session_timeout.count());
+		auto& cfg = config::get();
 
-		vars.server_version = config::get_or<std::int32_t>("vars.server_version", vars.server_version);
+		vars.session_heartbeat = 1s * cfg.vars.session_heartbeat;
+		vars.session_timeout = 1s * cfg.vars.session_timeout;
+		vars.server_version = cfg.vars.server_version;
 	}
 }

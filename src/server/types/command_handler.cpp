@@ -4,29 +4,29 @@
 
 namespace emulator
 {
-	nlohmann::json error(const std::string& id)
+	glz::json error(const std::string& id)
 	{
-		nlohmann::json result;
+		glz::json result;
 		result["result"] = id;
 		return result;
 	}
 
-	nlohmann::json error(const std::uint32_t id)
+	glz::json error(const std::uint32_t id)
 	{
-		nlohmann::json result;
+		glz::json result;
 		result["result"] = game::get_error(id);
 		return result;
 	}
 
-	nlohmann::json resource(const std::uint32_t id)
+	glz::json resource(const std::uint32_t id)
 	{
 		auto resource = utils::resources::load_json(id);
 		return resource;
 	}
 
-	nlohmann::json player_info(const std::uint64_t player_id, const std::uint64_t account_id)
+	glz::json player_info(const std::uint64_t player_id, const std::uint64_t account_id)
 	{
-		nlohmann::json info;
+		glz::json info;
 
 		info["npid"]["handler"]["data"] = "";
 		info["npid"]["handler"]["dummy"] = {0, 0, 0};
@@ -41,24 +41,24 @@ namespace emulator
 		return info;
 	}
 
-	nlohmann::json player_info(const database::players::player& player)
+	glz::json player_info(const database::players::player& player)
 	{
 		return player_info(player.get_player_id(), player.get_account_id());
 	}
 
-	nlohmann::json player_info(const std::optional<database::players::player>& player)
+	glz::json player_info(const std::optional<database::players::player>& player)
 	{
 		return player_info(*player);
 	}
 
-	void merge_json(nlohmann::json& data, const nlohmann::json& extra_data)
+	void merge_json(glz::json& data, const glz::json& extra_data)
 	{
 		if (!extra_data.is_object())
 		{
 			return;
 		}
 
-		for (const auto& [k, v] : extra_data.items())
+		for (const auto& [k, v] : extra_data.get_object())
 		{
 			if (v.is_object())
 			{

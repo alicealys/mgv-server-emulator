@@ -4,18 +4,18 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_user_flag_set::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_user_flag_set::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& flag_j = data["flag"];
 
-		if (!flag_j.is_number_unsigned())
+		if (!flag_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto flag = user->get_user_flag() | flag_j.get<std::uint32_t>();
+		const auto flag = user->get_user_flag() | flag_j.as<std::uint32_t>();
 		user->set_user_flag(flag);
 
         return result;

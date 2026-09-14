@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_equip_parameters_debug();
-		bool parse(nlohmann::json& data) override;
+		bool parse(glz::json& data) override;
 	};
 }

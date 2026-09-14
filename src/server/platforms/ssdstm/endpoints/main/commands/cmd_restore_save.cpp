@@ -4,11 +4,11 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_restore_save::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_restore_save::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
-		static const auto allow_restore = config::get<bool>("allow_save_restore");
+		static const auto allow_restore = config::get().allow_save_restore;
 		if (!allow_restore)
 		{
 			return error(ERR_PERMISSION_DENIED);
@@ -75,15 +75,15 @@ namespace emulator::ssd
 			if (player_list_arr_j.is_array() && player_list_arr_j.size())
 			{
 				auto& nameplate_j = player_list_arr_j[0]["name_plate"];
-				if (nameplate_j.is_number_unsigned())
+				if (nameplate_j.is_uint64())
 				{
-					const auto nameplate = nameplate_j.get<std::uint16_t>();
+					const auto nameplate = nameplate_j.as<std::uint16_t>();
 					user->current_player->set_nameplate(nameplate);
 				}
 			}
 		}
 
-		if (crew_j.is_array())
+		if (crew_j.is_object())
 		{
 			auto& crew_level_j = crew_j["group_level"];
 			if (crew_level_j.is_object())
@@ -241,12 +241,12 @@ namespace emulator::ssd
 					for (auto i = 0ull; i < unlock_list_j.size(); i++)
 					{
 						auto& location_index_j = unlock_list_j[i]["location_index"];
-						if (!location_index_j.is_number_unsigned())
+						if (!location_index_j.is_uint64())
 						{
 							continue;
 						}
 
-						const auto location_index = location_index_j.get<std::uint32_t>();
+						const auto location_index = location_index_j.as<std::uint32_t>();
 
 						auto unlock_list = std::make_unique<database::players::map_unlock_list_t>();
 						unlock_list->parse_diff(unlock_list_j[i]["map_unlock"]);
@@ -273,9 +273,9 @@ namespace emulator::ssd
 				}
 			}
 
-			if (user_flag_j.is_number_unsigned())
+			if (user_flag_j.is_uint64())
 			{
-				const auto user_flag = user_flag_j.get<std::uint32_t>();
+				const auto user_flag = user_flag_j.as<std::uint32_t>();
 				user->set_user_flag(user_flag);
 			}
 

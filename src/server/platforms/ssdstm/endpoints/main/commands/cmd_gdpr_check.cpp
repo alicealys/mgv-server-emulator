@@ -9,7 +9,7 @@ namespace emulator::ssd
 		this->list_ = resource(RESOURCE_GDPR_CHECK);
 	}
 
-	nlohmann::json cmd_gdpr_check::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_gdpr_check::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
 		return this->list_;
 	}

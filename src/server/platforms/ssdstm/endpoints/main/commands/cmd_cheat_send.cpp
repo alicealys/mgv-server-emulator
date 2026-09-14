@@ -4,7 +4,7 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_cheat_send::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_cheat_send::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
 		return {};
 	}

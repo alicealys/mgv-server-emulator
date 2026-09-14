@@ -69,7 +69,7 @@ namespace database
 
 	database_config load_config()
 	{
-		const auto type_name = config::get<std::string>("database_type");
+		const auto& type_name = config::get().database_type;
 		const auto type = get_database_type(type_name);
 
 		if (type == database_invalid)
@@ -86,12 +86,14 @@ namespace database
 
 		set_database_type(type);
 
+		const auto& cfg = config::get();
+
 		database_config config;
-		config.user = config::get<std::string>("database_user");
-		config.password = config::get<std::string>("database_password");
-		config.host = config::get<std::string>("database_host");
-		config.port = config::get<std::uint16_t>("database_port");
-		config.database_name = config::get<std::string>("database_name");
+		config.user = cfg.database_user;
+		config.password = cfg.database_password;
+		config.host = cfg.database_host;
+		config.port = cfg.database_port;
+		config.database_name = cfg.database_name;
 		return config;
 	}
 

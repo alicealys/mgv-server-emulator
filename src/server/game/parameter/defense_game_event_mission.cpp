@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("DefenseGameEventMission");
 	}
 
-	bool defense_game_event_mission::parse(nlohmann::json& data)
+	bool defense_game_event_mission::parse(glz::json& data)
 	{
 		return true;
 	}

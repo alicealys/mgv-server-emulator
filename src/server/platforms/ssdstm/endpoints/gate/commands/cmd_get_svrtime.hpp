@@ -7,6 +7,6 @@ namespace emulator::ssd
 	class cmd_get_svrtime final : public command_handler
 	{
 	public:
-		nlohmann::json execute(nlohmann::json& data, const std::optional<database::users::user>& player) override;
+		glz::json execute(glz::json& data, const std::optional<database::users::user>& player) override;
 	};
 }

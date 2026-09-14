@@ -93,7 +93,7 @@ namespace game
 
 	struct gradeup_spec_t
 	{
-		bool parse(nlohmann::json& data);
+		bool parse(glz::json& data);
 
 		std::uint8_t rarity;
 		std::uint16_t atk;
@@ -104,7 +104,7 @@ namespace game
 
 	struct survival_gear_t
 	{
-		bool parse(nlohmann::json& data);
+		bool parse(glz::json& data);
 
 		std::uint32_t id;
 		std::uint32_t index;
@@ -116,7 +116,7 @@ namespace game
 
 	struct production_t
 	{
-		bool parse(nlohmann::json& data);
+		bool parse(glz::json& data);
 		std::shared_ptr<survival_gear_t> get_survival_gear();
 
 		std::uint32_t id;
@@ -135,6 +135,8 @@ namespace game
 		std::uint32_t sup_combat;
 		std::uint32_t sup_survival;
 		std::uint32_t related_id;
+		std::uint32_t attr_icon;
+		std::uint32_t material;
 		bool only_flag;
 		bool countable;
 		bool eqp_hip;
@@ -161,13 +163,13 @@ namespace game
 		std::uint64_t lang_name3;
 		std::uint64_t lang_info;
 		std::uint64_t icon_path;
-		std::uint32_t perk[3];
+		std::array<std::uint32_t, 3> perk;
 		std::string id_str;
 	};
 
 	struct recipe_t
 	{
-		bool parse(nlohmann::json& data);
+		bool parse(glz::json& data);
 
 		struct cost_t
 		{
@@ -179,6 +181,7 @@ namespace game
 		struct leftover_t
 		{
 			std::uint32_t id;
+			std::uint32_t type;
 			std::uint32_t count;
 		};
 
@@ -195,6 +198,7 @@ namespace game
 		std::string id_str;
 		leftover_t leftover[1];
 		cost_t cost[6];
+		std::array<std::uint32_t, 2> multi_craft;
 		std::uint32_t production_id;
 
 		std::shared_ptr<production_t> production;
@@ -202,7 +206,7 @@ namespace game
 
 	struct crew_member_type_t
 	{
-		bool parse(nlohmann::json& data);
+		bool parse(glz::json& data);
 
         std::uint16_t face;
         std::uint16_t race;

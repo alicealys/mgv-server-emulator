@@ -18,8 +18,17 @@ namespace emulator
 		blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
-	std::optional<nlohmann::json> main_handler::decrypt_request(const std::string& data, std::optional<database::users::user>& user)
+	std::optional<glz::json> main_handler::decrypt_request(const std::string& data, std::optional<database::users::user>& user)
 	{
+#ifdef DEBUG
+		const auto start = std::chrono::high_resolution_clock::now();
+		const auto _0 = gsl::finally([=]
+		{
+			const auto end = std::chrono::high_resolution_clock::now();
+			const auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+			console::debug("[Endpoint] decrypt request took %lli us", diff);
+		});
+#endif
 		const auto decoded_data = utils::encoding::decode_url_string(data);
 		const auto str = this->blow_.decrypt(decoded_data);
 		if (str.empty())
@@ -27,8 +36,9 @@ namespace emulator
 			return {};
 		}
 
-		auto json = nlohmann::json::parse(str, nullptr, false);
-		if (json.is_discarded())
+		glz::json json;
+		const auto error = glz::read_json(json, str);
+		if (error)
 		{
 			return {};
 		}
@@ -47,15 +57,17 @@ namespace emulator
 		const auto compressed = compressed_val.get<bool>();
 		const auto& session_crypto = json["session_crypto"];
 		auto& json_data = json["data"];
-		const auto data_str = json_data.get<std::string>();
+
+		std::string data_str = json_data.get<std::string>();
+		std::string unescaped_data;
 
 		if (session_crypto.is_boolean() && session_crypto.get<bool>())
 		{
-			const auto session_key = json["session_key"].get<std::string>();
+			const auto& session_key = json["session_key"].get<std::string>();
 			user = database::users::find_by_session_id(session_key, false);
 			if (!user.has_value())
 			{
-				json_data = {};
+				json_data = glz::json::object_t{};
 				return {json};
 			}
 
@@ -65,38 +77,37 @@ namespace emulator
 			const auto decrypted = session_blow.decrypt(data_str);
 			if (!compressed)
 			{
-				const auto unescaped_data = utils::encoding::unescape_json(decrypted);
-				json_data = nlohmann::json::parse(unescaped_data);
+				unescaped_data = utils::encoding::unescape_json(decrypted);
 			}
 			else
 			{
 				const auto decompressed = utils::compression::zlib::decompress(decrypted);
-				const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-				json_data = nlohmann::json::parse(unescaped_data);
+				unescaped_data = utils::encoding::unescape_json(decompressed);
 			}
 		}
 		else
 		{
 			if (!compressed)
 			{
-				const auto unescaped_data = utils::encoding::unescape_json(data_str);
-				const auto data_json = nlohmann::json::parse(unescaped_data);
-				json_data = data_json;
-
+				unescaped_data = utils::encoding::unescape_json(data_str);
 			}
 			else
 			{
 				const auto decoded = utils::cryptography::base64::decode(data_str);
 				const auto decompressed = utils::compression::zlib::decompress(decoded);
-				const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-				json_data = nlohmann::json::parse(unescaped_data);
+				unescaped_data = utils::encoding::unescape_json(decompressed);
 			}
+		}
+
+		if (glz::read_json(json_data, unescaped_data))
+		{
+			return {};
 		}
 
 		return std::make_optional(std::move(json));
 	}
 
-	bool main_handler::verify_request(nlohmann::json& request)
+	bool main_handler::verify_request(glz::json& request)
 	{
 		auto& data = request["data"];
 		if (!data.is_object())
@@ -125,9 +136,19 @@ namespace emulator
 		return true;
 	}
 
-	std::optional<std::string> main_handler::encrypt_response(nlohmann::json& request, nlohmann::json& data, 
+	std::optional<std::string> main_handler::encrypt_response(glz::json& request, glz::json& data,
 		const std::optional<database::users::user>& user)
 	{
+#ifdef DEBUG
+		const auto start = std::chrono::high_resolution_clock::now();
+		const auto _0 = gsl::finally([=]
+		{
+			const auto end = std::chrono::high_resolution_clock::now();
+			const auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+			console::debug("[Endpoint] encrypt response took %lli us", diff);
+		});
+#endif
+
 		const auto& session_crypto_val = request["session_crypto"];
 		const auto session_crypto = session_crypto_val.is_boolean() && session_crypto_val.get<bool>();
 
@@ -140,8 +161,8 @@ namespace emulator
 			data["crypto_type"] = "COMMON";
 		}
 
-		data["flowid"] = {};
-		data["xuid"] = {};
+		data["flowid"] = glz::json::object_t{};
+		data["xuid"] = glz::json::object_t{};
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 
@@ -150,15 +171,21 @@ namespace emulator
 			data["result"] = "NOERR";
 		}
 
-		auto data_dump = data.dump();
+		auto data_dump_opt = data.dump();
+		if (!data_dump_opt.has_value())
+		{
+			return {};
+		}
+
+		const auto& data_dump = data_dump_opt.value();
 		const auto original_size = data_dump.size();
 
-		data_dump = utils::compression::zlib::compress(data_dump, 1u);
-		data_dump.push_back('\0');
+		auto data_res = utils::compression::zlib::compress(data_dump, 1u);
+		data_res.push_back('\0');
 
 		if (!session_crypto)
 		{
-			data_dump = utils::cryptography::base64::encode(data_dump);
+			data_res = utils::cryptography::base64::encode(data_res);
 		}
 		else
 		{
@@ -169,19 +196,24 @@ namespace emulator
 
 			utils::cryptography::blowfish session_blow;
 			session_blow.set_key(user->get_crypto_key());
-			data_dump = session_blow.encrypt(data_dump);
+			data_res = session_blow.encrypt(data_res);
 		}
 
-		nlohmann::json response;
+		glz::json response;
 
 		response["compress"] = true;
-		response["data"] = utils::encoding::split_into_lines(data_dump);
+		response["data"] = utils::encoding::split_into_lines(data_res);
 		response["original_size"] = original_size;
 		response["session_crypto"] = session_crypto_val;
 		response["session_key"] = request["session_key"];
 
 		const auto response_str = response.dump();
-		const auto encrypted = this->blow_.encrypt(response_str);
+		if (!response_str.has_value())
+		{
+			return {};
+		}
+
+		const auto encrypted = this->blow_.encrypt(response_str.value());
 		auto encoded = utils::encoding::split_into_lines(encrypted);
 		
 		return std::make_optional(std::move(encoded));

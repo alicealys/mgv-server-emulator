@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_npc_level_parameters();
-		bool parse(nlohmann::json& data) override;
+		bool parse(glz::json& data) override;
 	};
 }

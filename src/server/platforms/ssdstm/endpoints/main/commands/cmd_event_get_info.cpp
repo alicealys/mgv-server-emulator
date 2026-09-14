@@ -4,12 +4,12 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_event_get_info::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_event_get_info::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO
-		result["event_list"] = nlohmann::json::array();
+		result["event_list"] = glz::json::array_t();
 		result["season_flag"] = 0;
 
         return result;

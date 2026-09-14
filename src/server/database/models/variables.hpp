@@ -16,8 +16,8 @@ namespace database::variables
 
 	};
 
-	void set(const std::string& name, const nlohmann::json& value);
-	std::optional<nlohmann::json> get(const std::string& name);
+	void set(const std::string& name, const glz::json& value);
+	std::optional<glz::json> get(const std::string& name);
 
 	template <typename T>
 	T get(const std::string& name, const T& default_value)

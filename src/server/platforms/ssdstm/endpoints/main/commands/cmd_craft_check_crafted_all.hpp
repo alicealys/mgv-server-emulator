@@ -5,6 +5,6 @@ namespace emulator::ssd
 {
 	class cmd_craft_check_crafted_all final : public command_handler
 	{
-		nlohmann::json execute(nlohmann::json& data, const std::optional<database::users::user>& user) override;
+		glz::json execute(glz::json& data, const std::optional<database::users::user>& user) override;
 	};
 }

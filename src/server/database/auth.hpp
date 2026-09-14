@@ -37,5 +37,5 @@ namespace auth
 	std::optional<auth_ticket_response> authenticate_user_with_ticket(const std::string& auth_ticket, const size_t ticket_size);
 	std::optional<auth_response> authenticate_user(const std::string& account_id, const std::string& password);
 	std::string generate_data(const size_t len, bool base64);
-	bool validate_auth_mode(const nlohmann::json& value);
+	bool validate_auth_mode(const std::string& value);
 }

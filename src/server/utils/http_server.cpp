@@ -13,7 +13,7 @@ namespace utils
 	{
 		bool parse_client_ip(mg_connection* c, mg_http_message* http_message, std::uint8_t* ip)
 		{
-			static const auto client_ip_header = config::get<std::string>("http_client_ip_header");
+			static const auto& client_ip_header = config::get().http_client_ip_header;
 
 			if (!client_ip_header.empty())
 			{
@@ -47,8 +47,7 @@ namespace utils
 				if (mg_span(entry, &k, &v, '='))
 				{
 					const auto key = std::string{k.buf, k.len};
-					std::string value;
-					value.resize(0x100);
+					std::string value(0x100, 0);
 					const auto res = mg_url_decode(v.buf, v.len, value.data(), value.size(), 1);
 					if (res != -1)
 					{
@@ -203,19 +202,21 @@ namespace utils
 			const auto start = std::chrono::high_resolution_clock::now();
 			console::debug("[HTTP Server] [Request %lli] Started\n", index);
 #endif
-
-
-			auto response = new response_params();
 			const auto id = c->id;
-			console::debug("[HTTP Server] Create task data\n");
 
-			inst->thread_pool_.push([=]()
+#ifdef DEBUG
+			console::debug("[HTTP Server] Create task data\n");
+			inst->thread_pool_.push([params = std::move(params), inst, id, start, index]()
+#else
+			inst->thread_pool_.push([params = std::move(params), inst, id]()
+#endif
 			{
+				auto response = new response_params();
 				inst->request_handler->operator()(params, *response);
 				mg_wakeup(&inst->manager_, id, &response, sizeof(response));
 #ifdef DEBUG
 				const auto now = std::chrono::high_resolution_clock::now();
-				console::debug("[HTTP Server] [Request %lli] Finished in %lli msec\n", index, 
+				console::debug("[HTTP Server] [Request %lli] Finished in %lli msec\n", index,
 					std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count());
 #endif
 			});

@@ -32,32 +32,6 @@ namespace utils
 		}
 	}
 
-	thread_pool::job_ptr thread_pool::pop_job()
-	{
-		thread_pool::job_ptr job = std::move(this->queue_.front());
-		this->queue_.pop_front();
-		return job;
-	}
-
-	void thread_pool::run_job()
-	{
-		std::unique_lock<std::mutex> lock(this->mutex_);
-
-		this->event_.wait(lock, [&]()
-		{
-			return !this->queue_.empty() || this->stopped_;
-		});
-
-		if (this->stopped_ || this->queue_.empty())
-		{
-			return;
-		}
-
-		auto job = this->pop_job();
-		lock.unlock();
-		job->operator()();
-	}
-
 	thread_pool::thread_pool(const std::size_t num_workers)
 	{
 		for (auto i = 0u; i < num_workers; i++)

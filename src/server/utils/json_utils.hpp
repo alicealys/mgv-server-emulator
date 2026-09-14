@@ -3,13 +3,16 @@
 #include <utils/cryptography.hpp>
 #include "encoding.hpp"
 
-namespace utils::json
+namespace utils::json_utils
 {
 	template <typename T>
-	bool is(const nlohmann::json& value);
+	bool is(const glz::json& value);
 
 	template <typename T>
-	void get_or(const nlohmann::json& value, T& dest, const T& default_value = {})
+	T get(const glz::json& value);
+
+	template <typename T>
+	void get_or(const glz::json& value, T& dest, const T& default_value = {})
 	{
 		if (!is<T>(value))
 		{
@@ -17,12 +20,12 @@ namespace utils::json
 		}
 		else
 		{
-			dest = value.get<T>();
+			dest = get<T>(value);
 		}
 	}
 
 	template <typename T>
-	bool parse_array(nlohmann::json& src, T& dest, const bool strict = true)
+	bool parse_array(glz::json& src, T& dest, const bool strict = true)
 	{
 		if (!src.is_array() || (strict && src.size() != ARRAYSIZE(dest)))
 		{
@@ -38,7 +41,7 @@ namespace utils::json
 	}
 
 	template <typename T, typename F>
-	bool parse_array(nlohmann::json& src, T& dest, F&& fn, const bool strict = true)
+	bool parse_array(glz::json& src, T& dest, F&& fn, const bool strict = true)
 	{
 		if (!src.is_array() || (strict && src.size() != ARRAYSIZE(dest)))
 		{
@@ -55,15 +58,15 @@ namespace utils::json
 	}
 
 	template <std::size_t N>
-	bool parse_base64(nlohmann::json& src, std::uint8_t (&dest)[N], const bool strict = false)
+	bool parse_base64(glz::json& src, std::uint8_t(&dest)[N], const bool strict = false)
 	{
 		if (!src.is_string())
 		{
 			return false;
 		}
 
-		auto data = utils::encoding::decode_url_string(src);
-		data = utils::cryptography::base64::decode(src);
+		auto data = utils::encoding::decode_url_string(src.get<std::string>());
+		data = utils::cryptography::base64::decode(data);
 
 		if ((strict && data.size() != N) || (!strict && data.size() > N))
 		{
@@ -75,14 +78,14 @@ namespace utils::json
 	}
 
 	template <std::size_t N>
-	bool parse_string(nlohmann::json& src, char(&dest)[N])
+	bool parse_string(glz::json& src, char(&dest)[N])
 	{
 		if (!src.is_string())
 		{
 			return false;
 		}
 
-		const auto string = src.get<std::string>();
+		const auto& string = src.get<std::string>();
 		if (string.size() > N - 1)
 		{
 			return false;

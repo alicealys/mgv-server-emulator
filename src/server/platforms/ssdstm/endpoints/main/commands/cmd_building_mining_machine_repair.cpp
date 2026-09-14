@@ -4,14 +4,14 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_building_mining_machine_repair::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_building_mining_machine_repair::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& option_j = data["option"];
 		auto& damage_rate_j = data["damage_rate"];
 
-		if (!option_j.is_number_unsigned() || !damage_rate_j.is_number_unsigned())
+		if (!option_j.is_uint64() || !damage_rate_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}

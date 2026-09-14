@@ -78,9 +78,15 @@ namespace utils::resources
 #endif
 	}
 
-	nlohmann::json load_json(const std::int32_t resource_id)
+	glz::json load_json(const std::int32_t resource_id)
 	{
-		return nlohmann::json::parse(load(resource_id));
+		glz::json data;
+		if (glz::read_json(data, load(resource_id)))
+		{
+			throw std::runtime_error(std::format("failed to load resource {}", resource_id));
+		}
+
+		return data;
 	}
 
 	std::optional<std::int32_t> get_resource_id(const std::string& path)

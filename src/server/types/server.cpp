@@ -59,16 +59,13 @@ namespace emulator
 
 	bool server::start()
 	{
-		const auto http_port = config::get<std::uint16_t>("http_port");
-		const auto https_port = config::get<std::uint16_t>("https_port");
-		const auto cert_file = config::get<std::string>("cert_file");
-		const auto key_file = config::get<std::string>("key_file");
+		const auto& cfg = config::get();
 
-		this->http_server.set_ports(http_port, https_port);
+		this->http_server.set_ports(cfg.http_port, cfg.https_port);
 
-		if (!key_file.empty() && !cert_file.empty())
+		if (!cfg.key_file.empty() && !cfg.cert_file.empty())
 		{
-			this->http_server.set_tls(cert_file, key_file);
+			this->http_server.set_tls(cfg.cert_file, cfg.key_file);
 		}
 
 		this->http_server.set_request_handler([this](const utils::request_params& request, utils::response_params& response)

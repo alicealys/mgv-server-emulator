@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_boost_check_active::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_boost_check_active::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO
 

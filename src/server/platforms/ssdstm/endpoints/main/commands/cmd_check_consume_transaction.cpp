@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_check_consume_transaction::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_check_consume_transaction::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO?
 		result["in_transaction"] = 0;

@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	nlohmann::json cmd_matching_alive_notice::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_matching_alive_notice::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
         result["result"] = "ERR_NOTIMPLEMENTED";
         return result;
 	}

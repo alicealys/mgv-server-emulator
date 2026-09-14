@@ -15,7 +15,7 @@ namespace emulator
 		blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
-	std::optional<nlohmann::json> gate_handler::decrypt_request(const std::string& data, std::optional<database::users::user>&)
+	std::optional<glz::json> gate_handler::decrypt_request(const std::string& data, std::optional<database::users::user>&)
 	{
 		const auto decoded_data = utils::encoding::decode_url_string(data);
 		const auto str = this->blow_.decrypt(decoded_data);
@@ -24,8 +24,8 @@ namespace emulator
 			return {};
 		}
 
-		auto json = nlohmann::json::parse(str, nullptr, false);
-		if (json.is_discarded())
+		glz::json json;
+		if (glz::read_json(json, str))
 		{
 			return {};
 		}
@@ -44,25 +44,29 @@ namespace emulator
 			return {};
 		}
 
-		const auto data_str = json_data.get<std::string>();
+		const auto& data_str = json_data.get<std::string>();
+		std::string unescaped_data;
+
 		if (!compressed)
 		{
-			const auto unescaped_data = utils::encoding::unescape_json(data_str);
-			json_data = nlohmann::json::parse(unescaped_data);
-
+			unescaped_data = utils::encoding::unescape_json(data_str);
 		}
 		else
 		{
 			const auto decoded = utils::cryptography::base64::decode(data_str);
 			const auto decompressed = utils::compression::zlib::decompress(decoded);
-			const auto unescaped_data = utils::encoding::unescape_json(decompressed);
-			json_data = nlohmann::json::parse(unescaped_data);
+			unescaped_data = utils::encoding::unescape_json(decompressed);
+		}
+
+		if (glz::read_json(json_data, unescaped_data))
+		{
+			return {};
 		}
 
 		return std::make_optional(std::move(json));
 	}
 
-	bool gate_handler::verify_request(nlohmann::json& request)
+	bool gate_handler::verify_request(glz::json& request)
 	{
 		auto& data = request["data"];
 		if (!data.is_object())
@@ -91,12 +95,12 @@ namespace emulator
 		return true;
 	}
 
-	std::optional<std::string> gate_handler::encrypt_response(nlohmann::json& request, nlohmann::json& data, 
+	std::optional<std::string> gate_handler::encrypt_response(glz::json& request, glz::json& data,
 		const std::optional<database::users::user>&)
 	{
 		data["crypto_type"] = "COMMON";
-		data["flowid"] = {};
-		data["xuid"] = {};
+		data["flowid"] = glz::json::object_t{};
+		data["xuid"] = glz::json::object_t{};
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 
@@ -106,22 +110,33 @@ namespace emulator
 			result = "NOERR";
 		}
 
-		auto data_dump = data.dump();
+		const auto data_dump_opt = data.dump();
+		if (!data_dump_opt.has_value())
+		{
+			return {};
+		}
+
+		const auto& data_dump = data_dump_opt.value();
 		const auto original_size = data_dump.size();
 
-		data_dump = utils::compression::zlib::compress(data_dump);
-		data_dump = utils::cryptography::base64::encode(data_dump);
+		auto data_res = utils::compression::zlib::compress(data_dump);
+		data_res = utils::cryptography::base64::encode(data_res);
 
-		nlohmann::json response;
+		glz::json response;
 
 		response["compress"] = true;
-		response["data"] = utils::encoding::split_into_lines(data_dump);
+		response["data"] = utils::encoding::split_into_lines(data_res);
 		response["original_size"] = original_size;
 		response["session_crypto"] = false;
-		response["session_key"] = {};
+		response["session_key"] = glz::json::object_t{};
 
 		const auto response_str = response.dump();
-		const auto encrypted = this->blow_.encrypt(response_str);
+		if (!response_str.has_value())
+		{
+			return {};
+		}
+
+		const auto encrypted = this->blow_.encrypt(response_str.value());
 		auto encoded = utils::encoding::split_into_lines(encrypted);
 
 		return std::make_optional(std::move(encoded));

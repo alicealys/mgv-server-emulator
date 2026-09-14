@@ -34,19 +34,45 @@ namespace utils
 		template <typename F>
 		void push(F&& job)
 		{
-			if (this->stopped_)
+			if (this->stopped_) [[unlikely]]
 			{
 				return;
 			}
 
-			std::lock_guard lock(this->mutex_);
-			this->queue_.emplace_back(std::make_unique<thread_pool::job>(std::forward<F>(job)));
+			{
+				std::lock_guard lock(this->mutex_);
+				this->queue_.emplace_back(std::make_unique<thread_pool::job>(std::forward<F>(job)));
+			}
+
 			this->event_.notify_one();
 		}
 
 	private:
-		thread_pool::job_ptr pop_job();
-		void run_job();
+		inline thread_pool::job_ptr pop_job()
+		{
+			thread_pool::job_ptr job = std::move(this->queue_.front());
+			this->queue_.pop_front();
+			return job;
+		}
+
+		inline void run_job()
+		{
+			std::unique_lock<std::mutex> lock(this->mutex_);
+
+			this->event_.wait(lock, [&]()
+			{
+				return !this->queue_.empty() || this->stopped_;
+			});
+
+			if (this->stopped_ || this->queue_.empty())
+			{
+				return;
+			}
+
+			auto job = this->pop_job();
+			lock.unlock();
+			job->operator()();
+		}
 
 		std::mutex mutex_;
 		std::atomic_bool stopped_;

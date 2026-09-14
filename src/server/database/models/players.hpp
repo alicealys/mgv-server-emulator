@@ -39,8 +39,8 @@ namespace database::players
 		std::uint8_t motion_frame_list[60];
 		char name[64];
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct nonstackable_item_t
@@ -71,8 +71,8 @@ namespace database::players
 		option_t option_list[8];
 		perk_t perk_list[5];
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct stackable_item_t
@@ -86,8 +86,8 @@ namespace database::players
 		std::uint32_t obtain_order;
 		std::uint32_t production_id;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct loadout_t
@@ -132,11 +132,10 @@ namespace database::players
 		std::uint16_t survival_list[8];
 		item_t porch_list[20];
 		char name[64];
-		std::uint8_t reserved[256];
 
 		void initialize(const std::uint32_t index = 0u);
-		bool parse(nlohmann::json& data, std::uint32_t& index);
-		void to_json(nlohmann::json& data, const std::uint32_t index = 0u) const;
+		bool parse(glz::json& data, std::uint32_t& index);
+		void to_json(glz::json& data, const std::uint32_t index = 0u) const;
 	};
 
 	struct mission_info_t
@@ -183,11 +182,10 @@ namespace database::players
 		std::uint16_t injury_recovery_time[32]; // 0
 		status_buffer_t status_buffer[32];
 		std::uint8_t vars[640]; // 
-		std::uint8_t reserved[256];
 
 		void initialize();
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct player_inventory_t
@@ -205,12 +203,11 @@ namespace database::players
 		std::uint8_t survival_new[32];
 		std::uint8_t survival_obtained[32];
 		std::uint8_t survival_slot_new[2];
-		std::uint8_t reserved[256];
 
 		void initialize();
-		bool parse(nlohmann::json& data, std::uint16_t& nameplate);
-		bool parse_save(nlohmann::json& data, std::uint16_t& nameplate);
-		void to_json(nlohmann::json& data, const std::uint16_t nameplate = 0u) const;
+		bool parse(glz::json& data, std::uint16_t& nameplate);
+		bool parse_save(glz::json& data, std::uint16_t& nameplate);
+		void to_json(glz::json& data, const std::uint16_t nameplate = 0u) const;
 		void set_survival_obtained(const std::uint32_t index, bool obtained);
 
 	};
@@ -254,8 +251,8 @@ namespace database::players
 		resource_rare_t resource_rare[4];
 		resource_shared_t resource_shared[4];
 
-		bool parse(nlohmann::json& parse);
-		void to_json(nlohmann::json& data, const std::uint32_t map_location) const;
+		bool parse(glz::json& parse);
+		void to_json(glz::json& data, const std::uint32_t map_location) const;
 	};
 
 	struct loadout_list_t
@@ -270,8 +267,8 @@ namespace database::players
 		std::uint32_t resource_rare_tail;
 		std::uint32_t resource_shared_tail;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct gimmick_timer_info_t
@@ -281,8 +278,8 @@ namespace database::players
 		std::uint16_t resource_timer_stock_afghan;
 		std::uint16_t resource_timer_stock_africa;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct gimmick_info_t
@@ -315,10 +312,10 @@ namespace database::players
 		std::uint64_t update_remaining_time;
 		base_resource_params_t params;
 
-		bool parse_base(nlohmann::json& base);
-		bool parse_counts(nlohmann::json& count);
-		bool parse_animals(nlohmann::json& animals);
-		void to_json(nlohmann::json& data) const;
+		bool parse_base(glz::json& base);
+		bool parse_counts(glz::json& count);
+		bool parse_animals(glz::json& animals);
+		void to_json(glz::json& data) const;
 	};
 
 	struct inventory_resource_t
@@ -332,8 +329,8 @@ namespace database::players
 		std::uint32_t obtain_order;
 		std::uint32_t resource_id;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct player_play_record_t
@@ -351,15 +348,15 @@ namespace database::players
 		std::uint32_t new_flag;
 		std::uint32_t score;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct map_unlock_t
 	{
 		std::uint16_t value;
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	struct story_unlock_info_t
@@ -373,8 +370,8 @@ namespace database::players
 		std::uint8_t marker_afghan[522];
 		std::uint8_t marker_africa[522];
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 
 	constexpr const auto building_grid_size = 32u;
@@ -399,8 +396,8 @@ namespace database::players
 			std::uint32_t completion_remaining_time;
 			std::uint32_t recovery_time;
 
-			bool parse(nlohmann::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
-			void to_json(nlohmann::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
+			bool parse(glz::json& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
+			void to_json(glz::json& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
 		};
 
 		struct cell_t
@@ -410,11 +407,11 @@ namespace database::players
 
 		cell_t cells[building_grid_size][building_grid_size];
 
-		bool parse_type(nlohmann::json& data, const std::uint32_t type);
-		bool parse(nlohmann::json& data, const bool is_diff);
+		bool parse_type(glz::json& data, const std::uint32_t type);
+		bool parse(glz::json& data, const bool is_diff);
 
-		void to_json(nlohmann::json& data, const std::uint32_t type) const;
-		void to_json(nlohmann::json& data) const;
+		void to_json(glz::json& data, const std::uint32_t type) const;
+		void to_json(glz::json& data) const;
 
 		void load_default(const std::uint32_t map_location);
 	};
@@ -474,11 +471,11 @@ namespace database::players
 		std::uint8_t motivation_history_value[10];
 		char nickname[32];
 		
-		bool parse(nlohmann::json& data);
-		bool parse_update(nlohmann::json& data);
-		bool parse_add_param(nlohmann::json& data);
+		bool parse(glz::json& data);
+		bool parse_update(glz::json& data);
+		bool parse_add_param(glz::json& data);
 		void apply_update(const crew_member_t& diff);
-		void to_json(nlohmann::json& data) const;
+		void to_json(glz::json& data) const;
 	};
 
 	struct crew_levels_t
@@ -490,8 +487,8 @@ namespace database::players
 		std::uint8_t medic;
 		std::uint8_t plant;
 
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data) const;
+		bool parse(glz::json& data);
+		void to_json(glz::json& data) const;
 	};
 #pragma pack(pop)
 
@@ -527,7 +524,7 @@ namespace database::players
 			return this->push(item);
 		}
 
-		virtual bool parse_diff(nlohmann::json& data)
+		virtual bool parse_diff(glz::json& data)
 		{
 			if (!data.is_array())
 			{
@@ -552,7 +549,7 @@ namespace database::players
 			return true;
 		}
 
-		virtual bool parse(nlohmann::json& data)
+		virtual bool parse(glz::json& data)
 		{
 			std::memset(this->data(), 0, this->size() * sizeof(T));
 
@@ -572,10 +569,10 @@ namespace database::players
 			return true;
 		}
 
-		virtual void to_json(nlohmann::json& data) const
+		virtual void to_json(glz::json& data) const
 		{
 			auto idx = 0;
-			data = nlohmann::json::array();
+			data = glz::json::array_t();
 
 			const auto list = this->data();
 			for (auto i = 0ull; i < this->size(); i++)
@@ -618,7 +615,7 @@ namespace database::players
 			return value.production_id == 0;
 		}
 
-		bool parse_life_diff(nlohmann::json& data);
+		bool parse_life_diff(glz::json& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
 	};
@@ -688,7 +685,7 @@ namespace database::players
 			return value.value == 0u;
 		}
 
-		virtual void to_json(nlohmann::json& data) const override
+		virtual void to_json(glz::json& data) const override
 		{
 			auto idx = 1;
 			data[0] = 0;
@@ -719,7 +716,7 @@ namespace database::players
 			return value.unique_id == 0u;
 		}
 
-		bool parse_update(nlohmann::json& data);
+		bool parse_update(glz::json& data);
 
 	};
 

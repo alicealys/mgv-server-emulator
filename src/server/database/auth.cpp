@@ -44,19 +44,10 @@ namespace auth
 			}
 
 			std::unordered_set<std::uint64_t> list;
-
-			const auto json_list = nlohmann::json::parse(data, {}, false);
-			if (json_list.is_discarded() || !json_list.is_array())
+			if (glz::read_json(list, data))
 			{
 				console::error("Error parsing list, must be a valid int64 array\n");
-				return {list};
-			}
-
-			for (const auto& steam_id : json_list)
-			{
-				const auto id = steam_id.get<std::uint64_t>();
-				console::log("Adding user \"%lli\" to list\n", id);
-				list.insert(id);
+				return {};
 			}
 
 			return {list};
@@ -105,7 +96,7 @@ namespace auth
 
 		std::optional<std::uint32_t> get_auth_mode()
 		{
-			const auto auth_mode_str = config::get<std::string>("auth_mode");
+			const auto& auth_mode_str = config::get().auth_mode;
 			const auto iter = auth_mode_map.find(auth_mode_str);
 			if (iter == auth_mode_map.end())
 			{
@@ -130,7 +121,7 @@ namespace auth
 
 	std::optional<std::uint64_t> verify_ticket_konami(const std::string& auth_ticket, const size_t ticket_size)
 	{
-		nlohmann::json data;
+		glz::json data;
 		data["steam_ticket"] = utils::encoding::split_into_lines(auth_ticket);
 		data["steam_ticket_size"] = ticket_size;
 		data["region"] = 4;
@@ -153,7 +144,7 @@ namespace auth
 			return {};
 		}
 
-		auto& error = result["result"];
+		auto& error = result["result"].get<std::string>();
 		if (error != "NOERR")
 		{
 			return {};
@@ -165,7 +156,7 @@ namespace auth
 			return {};
 		}
 
-		const auto account_id_str = account_id_j.get<std::string>();
+		const auto& account_id_str = account_id_j.get<std::string>();
 		const auto account_id = std::strtoull(account_id_str.data(), nullptr, 10);
 
 		if (account_id == 0ull)
@@ -322,14 +313,8 @@ namespace auth
 		}
 	}
 
-	bool validate_auth_mode(const nlohmann::json& value)
+	bool validate_auth_mode(const std::string& value)
 	{
-		if (!value.is_string())
-		{
-			return false;
-		}
-
-		const auto value_str = value.get<std::string>();
-		return auth_mode_map.contains(value_str);
+		return auth_mode_map.contains(value);
 	}
 }

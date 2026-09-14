@@ -78,13 +78,13 @@ namespace database::users
 					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
 		}
 
-		const nlohmann::json& get_default_data()
+		const glz::json& get_default_data()
 		{
 			static const auto data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
 			return data;
 		}
 
-		const nlohmann::json& get_default_data(const std::string_view& key)
+		const glz::json& get_default_data(const std::string_view& key)
 		{
 			const auto& data = get_default_data();
 			return data[key];
@@ -132,7 +132,7 @@ namespace database::users
 			load("recipe_used", data.recipe_used);
 			load("resource_opened", data.resource_opened);
 
-			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].get<std::uint8_t>();
+			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].as<std::uint8_t>();
 
 			return &data;
 		}();
@@ -140,7 +140,7 @@ namespace database::users
 		std::memcpy(this, default_inventory, sizeof(user_inventory_t));
 	}
 
-	void user_inventory_t::to_json(nlohmann::json& data)
+	void user_inventory_t::to_json(glz::json& data)
 	{
 		data["archive_new"] = utils::encoding::encode_base64(this->archive_new);
 		data["archive_obtained"] = utils::encoding::encode_base64(this->archive_obtained);
@@ -183,7 +183,7 @@ namespace database::users
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
 
-	bool user_inventory_t::parse_save(nlohmann::json& data)
+	bool user_inventory_t::parse_save(glz::json& data)
 	{
 		const auto try_parse_part = [&]<typename T>(const std::string_view& name, T& dest, const bool or_ = false)
 		{
@@ -208,7 +208,7 @@ namespace database::users
 			if (or_)
 			{
 				T new_data{};
-				utils::json::parse_base64(data_j, new_data, true);
+				utils::json_utils::parse_base64(data_j, new_data, true);
 
 				auto src = reinterpret_cast<std::uint8_t*>(&new_data);
 				auto dst = reinterpret_cast<std::uint8_t*>(&dest);
@@ -220,7 +220,7 @@ namespace database::users
 			}
 			else
 			{
-				utils::json::parse_base64(data_j, dest, true);
+				utils::json_utils::parse_base64(data_j, dest, true);
 			}
 		};
 
@@ -247,36 +247,36 @@ namespace database::users
 		try_parse_part("recipe_used", this->recipe_used);
 		try_parse_part("resource_opened", this->resource_opened, true);
 
-		utils::json::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
 		return true;
 	}
 
-	bool user_inventory_t::parse(nlohmann::json& data)
+	bool user_inventory_t::parse(glz::json& data)
 	{
-		utils::json::parse_base64(data["archive_new"], this->archive_new);
-		utils::json::parse_base64(data["archive_obtained"], this->archive_obtained);
-		utils::json::parse_base64(data["battle_pack_opened"], this->battle_pack_opened);
-		utils::json::parse_base64(data["cassette_new"], this->cassette_new);
-		utils::json::parse_base64(data["cassette_obtained"], this->cassette_obtained);
-		utils::json::parse_base64(data["command_marker_new"], this->command_marker_new);
-		utils::json::parse_base64(data["command_marker_obtained"], this->command_marker_obtained);
-		utils::json::parse_base64(data["face_paint_new"], this->face_paint_new);
-		utils::json::parse_base64(data["face_paint_obtained"], this->face_paint_obtained);
-		utils::json::parse_base64(data["food_used"], this->food_used);
-		utils::json::parse_base64(data["gesture_new"], this->gesture_new);
-		utils::json::parse_base64(data["gesture_obtained"], this->gesture_obtained);
-		utils::json::parse_base64(data["name_plate_new"], this->name_plate_new);
-		utils::json::parse_base64(data["name_plate_obtained"], this->name_plate_obtained);
-		utils::json::parse_base64(data["preset_radio_new"], this->preset_radio_new);
-		utils::json::parse_base64(data["preset_radio_obtained"], this->preset_radio_obtained);
-		utils::json::parse_base64(data["production_opened"], this->production_opened);
-		utils::json::parse_base64(data["recipe_new"], this->recipe_new);
-		utils::json::parse_base64(data["recipe_new_for_db"], this->recipe_new_for_db);
-		utils::json::parse_base64(data["recipe_opened"], this->recipe_opened);
-		utils::json::parse_base64(data["recipe_used"], this->recipe_used);
-		utils::json::parse_base64(data["resource_opened"], this->resource_opened);
+		utils::json_utils::parse_base64(data["archive_new"], this->archive_new);
+		utils::json_utils::parse_base64(data["archive_obtained"], this->archive_obtained);
+		utils::json_utils::parse_base64(data["battle_pack_opened"], this->battle_pack_opened);
+		utils::json_utils::parse_base64(data["cassette_new"], this->cassette_new);
+		utils::json_utils::parse_base64(data["cassette_obtained"], this->cassette_obtained);
+		utils::json_utils::parse_base64(data["command_marker_new"], this->command_marker_new);
+		utils::json_utils::parse_base64(data["command_marker_obtained"], this->command_marker_obtained);
+		utils::json_utils::parse_base64(data["face_paint_new"], this->face_paint_new);
+		utils::json_utils::parse_base64(data["face_paint_obtained"], this->face_paint_obtained);
+		utils::json_utils::parse_base64(data["food_used"], this->food_used);
+		utils::json_utils::parse_base64(data["gesture_new"], this->gesture_new);
+		utils::json_utils::parse_base64(data["gesture_obtained"], this->gesture_obtained);
+		utils::json_utils::parse_base64(data["name_plate_new"], this->name_plate_new);
+		utils::json_utils::parse_base64(data["name_plate_obtained"], this->name_plate_obtained);
+		utils::json_utils::parse_base64(data["preset_radio_new"], this->preset_radio_new);
+		utils::json_utils::parse_base64(data["preset_radio_obtained"], this->preset_radio_obtained);
+		utils::json_utils::parse_base64(data["production_opened"], this->production_opened);
+		utils::json_utils::parse_base64(data["recipe_new"], this->recipe_new);
+		utils::json_utils::parse_base64(data["recipe_new_for_db"], this->recipe_new_for_db);
+		utils::json_utils::parse_base64(data["recipe_opened"], this->recipe_opened);
+		utils::json_utils::parse_base64(data["recipe_used"], this->recipe_used);
+		utils::json_utils::parse_base64(data["resource_opened"], this->resource_opened);
 
-		utils::json::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
 		return true;
 	}
 
@@ -459,31 +459,16 @@ namespace database::users
 		}
 
 		template <database_type_t Type>
-		bool update_session(const user& user)
+		bool update_session(const std::uint64_t user_id)
 		{
-			size_t result = 0;
-			if (!is_session_expired(user))
+			return database::access<bool>([&](database::database_t& db)
 			{
-				database::access([&](database::database_t& db)
-				{
-					result = db.exec<Type>(
-						sqlpp::update(user::table)
-							.set(user::table.last_update = std::chrono::system_clock::now())
-								.where(user::table.user_id == user.get_user_id()));
-				});
-			}
-			else
-			{
-				database::access([&](database::database_t& db)
-				{
-					result = db.exec<Type>(
-						sqlpp::update(user::table)
-							.set(user::table.last_update = std::chrono::system_clock::now())
-									.where(user::table.user_id == user.get_user_id()));
-				});
-			}
-
-			return result != 0;
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.last_update = std::chrono::system_clock::now())
+							.where(user::table.user_id == user_id));
+				return result != 0;
+			});
 		}
 
 		template <database_type_t Type>
@@ -633,9 +618,9 @@ namespace database::users
 		RUN_IMPL(impl::set_ip_and_port, user_id, ex_ip, ex_port, in_ip, in_port, nat_type);
 	}
 
-	bool update_session(const user& user)
+	bool update_session(const std::uint64_t user_id)
 	{
-		RUN_IMPL(impl::update_session, user);
+		RUN_IMPL(impl::update_session, user_id);
 	}
 
 	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id)

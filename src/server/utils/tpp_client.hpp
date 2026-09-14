@@ -20,8 +20,8 @@ namespace utils::tpp
 
 		std::string decrypt_response(const std::string& data, bool use_static = true);
 		std::optional<utils::http::http_result> send_data(const std::string& endpoint, const std::string& data);
-		std::optional<nlohmann::json> send_command(const std::string& endpoint,
-			const nlohmann::json& data_params, bool use_crypto = true, const nlohmann::json& params = {});
+		std::optional<glz::json> send_command(const std::string& endpoint,
+			const glz::json& data_params, bool use_crypto = true, const glz::json& params = {});
 
 	private:
 		std::string url_;

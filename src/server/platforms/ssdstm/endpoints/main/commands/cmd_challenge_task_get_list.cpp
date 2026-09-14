@@ -4,12 +4,12 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_challenge_task_get_list::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_challenge_task_get_list::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO
-		result["task_list"] = nlohmann::json::array();
+		result["task_list"] = glz::json::array_t();
 		result["expired_list"] = {0, 0, 0, 0, 0};
 		result["next_date"] = std::numeric_limits<std::int32_t>::max();
 

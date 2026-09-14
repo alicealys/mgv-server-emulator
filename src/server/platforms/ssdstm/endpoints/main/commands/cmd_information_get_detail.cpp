@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_information_get_detail::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_information_get_detail::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO
 		result["title"]["text"] = "";

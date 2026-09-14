@@ -7,9 +7,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_reqauth_https::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_reqauth_https::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		const auto& hash_val = data["hash"];
 		const auto& account_id_val = data["user_name"];
@@ -18,7 +18,8 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto hash = hash_val.get<std::string>();
+		const auto& account_id = account_id_val.get<std::string>();
+		const auto& hash = hash_val.get<std::string>();
 
 		result["timeout_sec"] = database::vars.session_timeout.count();
 		result["heartbeat_sec"] = database::vars.session_heartbeat.count();
@@ -34,7 +35,7 @@ namespace emulator::ssd
 
 		if (!user.has_value())
 		{
-			const auto auth_result_opt = auth::authenticate_user(account_id_val, hash);
+			const auto auth_result_opt = auth::authenticate_user(account_id, hash);
 			if (!auth_result_opt.has_value())
 			{
 				return error(ERR_INVALID_ACCOUNT);
@@ -58,7 +59,7 @@ namespace emulator::ssd
 
 			if (expired)
 			{
-				database::users::update_session(user_opt.value());
+				database::users::update_session(user_opt->get_user_id());
 			}
 
 			result["crypto_key"] = user_opt->get_crypto_key();

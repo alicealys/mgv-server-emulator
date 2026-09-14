@@ -72,6 +72,7 @@
 #include <gsl/gsl>
 
 #include <json.hpp>
+#include <utils/json.hpp>
 
 #pragma warning(pop)
 #pragma warning(disable: 4100)
@@ -102,3 +103,5 @@ char (*countof(T(&)[N]))[N]
 }
 #define ARRAYSIZE(A) (sizeof(*countof(A)))
 #endif
+
+#include "component/console.hpp"

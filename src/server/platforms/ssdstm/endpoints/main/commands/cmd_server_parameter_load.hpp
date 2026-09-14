@@ -7,10 +7,10 @@ namespace emulator::ssd
 	{
 	public:
 		cmd_server_parameter_load();
-		nlohmann::json execute(nlohmann::json& data, const std::optional<database::users::user>& user) override;
+		glz::json execute(glz::json& data, const std::optional<database::users::user>& user) override;
 
 	private:
-		nlohmann::json list_;
+		glz::json list_;
 
 	};
 }

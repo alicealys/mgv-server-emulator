@@ -6,7 +6,7 @@
 
 namespace emulator::ssd
 {
-	void cmd_inventory_save::do_save(nlohmann::json& data, const std::optional<database::users::user>& user)
+	void cmd_inventory_save::do_save(glz::json& data, const std::optional<database::users::user>& user)
 	{
 		auto& player_inventory_j = data["inventory_player_info_save"];
 		auto& user_inventory_j = data["inventory_user_info_save"];
@@ -97,9 +97,9 @@ namespace emulator::ssd
 		}
 	}
 
-	nlohmann::json cmd_inventory_save::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_inventory_save::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		this->do_save(data, user);
 

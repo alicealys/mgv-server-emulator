@@ -13,13 +13,19 @@ namespace emulator
 	void api_endpoint::handle_command(const utils::request_params& request, utils::response_params& response)
 	{
 		const auto result = this->handle_request(request);
-		response.body = result.dump();
+		const auto dump = result.dump();
+		if (!dump.has_value())
+		{
+			return;
+		}
+
+		response.body = dump.value();
 		response.headers.append("Content-Type: application/json\n");
 	}
 
 	api_handler::api_handler()
 	{
-		const auto enable = config::get<bool>("enable_web_api");
+		const auto enable = config::get().enable_web_api;
 		if (!enable)
 		{
 			return;

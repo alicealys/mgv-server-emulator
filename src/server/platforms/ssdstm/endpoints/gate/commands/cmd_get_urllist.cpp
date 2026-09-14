@@ -111,7 +111,7 @@ namespace emulator::ssd
 
 	cmd_get_urllist::cmd_get_urllist()
 	{
-		const auto base_url = config::get<std::string>("base_url");
+        const auto& base_url = config::get().base_url;
 		for (auto& url : url_list)
 		{
 			if (url.replace_hostname)
@@ -121,9 +121,9 @@ namespace emulator::ssd
 		}
 	}
 
-	nlohmann::json cmd_get_urllist::execute(nlohmann::json& data, const std::optional<database::users::user>&)
+    glz::json cmd_get_urllist::execute(glz::json& data, const std::optional<database::users::user>&)
 	{
-		nlohmann::json result;
+        glz::json result;
 
 		for (auto i = 0ull; i < url_list.size(); i++)
 		{

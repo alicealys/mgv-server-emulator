@@ -7,18 +7,18 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_auth_steamticket::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_auth_steamticket::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		const auto& steam_ticket_val = data["steam_ticket"];
 		const auto& steam_ticket_size_j = data["steam_ticket_size"];
-		if (!steam_ticket_val.is_string() || !steam_ticket_size_j.is_number_unsigned())
+		if (!steam_ticket_val.is_string() || !steam_ticket_size_j.is_uint64())
 		{
 			return error(ERR_INVALID_TICKET);
 		}
 
-		const auto steam_ticket = steam_ticket_val.get<std::string>();
+		const auto& steam_ticket = steam_ticket_val.get<std::string>();
 		const auto steam_ticket_size = steam_ticket_size_j.get<std::size_t>();
 
 		const auto auth_result_opt = auth::authenticate_user_with_ticket(steam_ticket, steam_ticket_size);

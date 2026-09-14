@@ -10,9 +10,9 @@
 
 namespace emulator
 {
-	nlohmann::json status::handle_request(const utils::request_params& params)
+	glz::json status::handle_request(const utils::request_params& params)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		const auto now = std::chrono::system_clock::now();
 		const auto uptime = now - get_server_startup();

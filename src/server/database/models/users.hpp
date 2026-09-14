@@ -32,9 +32,9 @@ namespace database::users
 		std::uint8_t resource_opened[128];
 
 		void initialize();
-		bool parse_save(nlohmann::json& data);
-		bool parse(nlohmann::json& data);
-		void to_json(nlohmann::json& data);
+		bool parse_save(glz::json& data);
+		bool parse(glz::json& data);
+		void to_json(glz::json& data);
 	};
 
 	struct user_play_record_t
@@ -151,7 +151,7 @@ namespace database::users
 	void set_ip_and_port(const std::uint64_t user_id, const std::string& ex_ip, const std::uint16_t ex_port,
 		const std::string& in_ip, const std::uint16_t in_port, const std::string& nat_type);
 
-	bool update_session(const user& user);
+	bool update_session(const std::uint64_t user_id);
 
 	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id);
 	bool reset_current_player(const std::uint64_t user_id);

@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_mission_end::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_mission_end::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& current_mission_info_j = data["current_mission_info"];
 		auto& story_unlock_info_j = data["story_unlock_info"];
@@ -51,12 +51,12 @@ namespace emulator::ssd
 				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 				{
 					auto& mission_code_j = mission_code_list_j[i];
-					if (!mission_code_j.is_number_unsigned())
+					if (!mission_code_j.is_uint64())
 					{
 						continue;
 					}
 
-					const auto mission_code = mission_code_j.get<std::uint32_t>();
+					const auto mission_code = mission_code_j.as<std::uint32_t>();
 					mission_record_list->open_mission(mission_code);
 				}
 
@@ -68,12 +68,12 @@ namespace emulator::ssd
 		result["reward"]["energy"] = 0;
 		result["reward"]["kub_boost_flag"] = 0;
 		result["reward"]["present_box_num"] = 0;
-		result["reward"]["battle_pack_list"] = nlohmann::json::array();
-		result["reward"]["nonstackable_list"] = nlohmann::json::array();
-		result["reward"]["present_list"] = nlohmann::json::array();
-		result["reward"]["recipe_list"] = nlohmann::json::array();
-		result["reward"]["resources_list"] = nlohmann::json::array();
-		result["reward"]["stackable_list"] = nlohmann::json::array();
+		result["reward"]["battle_pack_list"] = glz::json::array_t();
+		result["reward"]["nonstackable_list"] = glz::json::array_t();
+		result["reward"]["present_list"] = glz::json::array_t();
+		result["reward"]["recipe_list"] = glz::json::array_t();
+		result["reward"]["resources_list"] = glz::json::array_t();
+		result["reward"]["stackable_list"] = glz::json::array_t();
 		result["reward"]["text_id"] = 0;
 
 		return result;

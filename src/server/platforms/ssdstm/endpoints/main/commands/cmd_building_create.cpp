@@ -4,19 +4,19 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_building_create::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_building_create::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		auto& cell_info = data["cell_info"];
 		auto& map_location_j = data["map_location"];
 
-		if (!cell_info.is_object() || !map_location_j.is_number_unsigned())
+		if (!cell_info.is_object() || !map_location_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto map_location = map_location_j.get<std::uint32_t>();
+		const auto map_location = map_location_j.as<std::uint32_t>();
 		if (map_location > 1)
 		{
 			return error(ERR_INVALIDARG);

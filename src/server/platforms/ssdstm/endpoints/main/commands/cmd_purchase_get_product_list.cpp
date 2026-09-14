@@ -9,9 +9,9 @@ namespace emulator::ssd
 		this->list_ = resource(RESOURCE_PRODUCT_LIST);
 	}
 
-	nlohmann::json cmd_purchase_get_product_list::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_purchase_get_product_list::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		// TODO?
 		result["product_list"] = this->list_;

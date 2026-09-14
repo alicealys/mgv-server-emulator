@@ -27,7 +27,7 @@ namespace emulator
 			return;
 		}
 
-		const auto msgid_str = json_req["data"]["msgid"].get<std::string>();
+		std::string msgid_str = json_req["data"]["msgid"].get<std::string>();
 		const auto handler = this->handlers_.find(msgid_str);
 
 		if (handler == this->handlers_.end())
@@ -75,7 +75,7 @@ namespace emulator
 		}
 
 #ifdef DEBUG
-		const auto result = result_j.get<std::string>();
+		const auto& result = result_j.get<std::string>();
 		console::debug("[Endpoint] Command \"%s\" (%lli) result: %s\n", msgid_str.data(), id, result.data());
 #endif
 

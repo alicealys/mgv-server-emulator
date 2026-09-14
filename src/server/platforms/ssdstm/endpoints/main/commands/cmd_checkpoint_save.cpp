@@ -5,9 +5,9 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_checkpoint_save::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_checkpoint_save::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
 		cmd_inventory_save::do_save(data, user);
 
@@ -23,20 +23,20 @@ namespace emulator::ssd
 		auto& crew_update_list_j = data["crew_update_list"];
 		auto& group_level_j = data["group_level"];
 
-		result["added_crew"] = nlohmann::json::array();
-		result["capture_list"] = nlohmann::json::array();
-		result["defense_mission_reward"] = nlohmann::json::array();
-		result["left_resources"] = nlohmann::json::array();
-		result["stackable_list"] = nlohmann::json::array();
+		result["added_crew"] = glz::json::array_t();
+		result["capture_list"] = glz::json::array_t();
+		result["defense_mission_reward"] = glz::json::array_t();
+		result["left_resources"] = glz::json::array_t();
+		result["stackable_list"] = glz::json::array_t();
 		result["reward_event_point"] = 0;
 		result["boost_flag"] = 0;
-		result["defense_reward_limit_result"]["limit_result"] = nlohmann::json::array();
+		result["defense_reward_limit_result"]["limit_result"] = glz::json::array_t();
 		result["defense_reward_limit_result"]["mission_code"] = 0;
 
 		if (gimmick_save_info_j.is_object())
 		{
 			auto& map_location_j = gimmick_save_info_j["map_location"];
-			if (!map_location_j.is_number_integer())
+			if (!map_location_j.is_uint64())
 			{
 				return error(ERR_INVALIDARG);
 			}
@@ -44,7 +44,7 @@ namespace emulator::ssd
 			const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 			user->current_player->get_gimmick_info(*gimmick_info);
 
-			const auto map_location = map_location_j.get<std::uint32_t>();
+			const auto map_location = map_location_j.as<std::uint32_t>();
 			if (map_location > 1)
 			{
 				return error(ERR_INVALIDARG);
@@ -92,7 +92,7 @@ namespace emulator::ssd
 
 		user->current_player->set_base_resources(*base_resources);
 
-		const auto parse_map_unlock_list = [&](nlohmann::json& story_unlock_info_j)
+		const auto parse_map_unlock_list = [&](glz::json& story_unlock_info_j)
 		{
 			auto& map_unlock_list_j = story_unlock_info_j["map_unlock_list"];
 			if (!map_unlock_list_j.is_array())
@@ -110,12 +110,12 @@ namespace emulator::ssd
 
 				auto& location_index_j = entry["location_index"];
 				auto& map_unlock_j = entry["map_unlock"];
-				if (!location_index_j.is_number_unsigned() || !map_unlock_j.is_array() || map_unlock_j.size() == 0)
+				if (!location_index_j.is_uint64() || !map_unlock_j.is_array() || map_unlock_j.size() == 0)
 				{
 					continue;
 				}
 
-				const auto location_index = location_index_j.get<std::uint32_t>();
+				const auto location_index = location_index_j.as<std::uint32_t>();
 				const auto map_unlock_list = std::make_unique<database::players::map_unlock_list_t>();
 
 				switch (location_index)
@@ -177,12 +177,12 @@ namespace emulator::ssd
 				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 				{
 					auto& mission_code_j = mission_code_list_j[i];
-					if (!mission_code_j.is_number_unsigned())
+					if (!mission_code_j.is_uint64())
 					{
 						continue;
 					}
 
-					const auto mission_code = mission_code_j.get<std::uint32_t>();
+					const auto mission_code = mission_code_j.as<std::uint32_t>();
 					mission_record_list->open_mission(mission_code);
 				}
 

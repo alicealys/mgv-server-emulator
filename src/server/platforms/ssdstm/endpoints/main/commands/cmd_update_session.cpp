@@ -4,11 +4,11 @@
 
 namespace emulator::ssd
 {
-	nlohmann::json cmd_update_session::execute(nlohmann::json& data, const std::optional<database::users::user>& user)
+	glz::json cmd_update_session::execute(glz::json& data, const std::optional<database::users::user>& user)
 	{
-		nlohmann::json result;
+		glz::json result;
 
-		if (!database::users::update_session(user.value()))
+		if (!database::users::update_session(user->get_user_id()))
 		{
 			return error(ERR_DATABASE);
 		}
@@ -18,6 +18,6 @@ namespace emulator::ssd
 
 	std::uint32_t cmd_update_session::flags()
 	{
-		return true;
+		return CMD_NEEDS_USER;
 	}
 }

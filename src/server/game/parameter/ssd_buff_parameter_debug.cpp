@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdBuffParameter_debug");
 	}
 
-	bool ssd_buff_parameter_debug::parse(nlohmann::json& data)
+	bool ssd_buff_parameter_debug::parse(glz::json& data)
 	{
 		return true;
 	}
