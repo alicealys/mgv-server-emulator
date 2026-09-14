@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	glz::json cmd_challenge_task_complete::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_challenge_task_complete::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
         result["result"] = "ERR_NOTIMPLEMENTED";
         return result;
 	}

@@ -9,9 +9,9 @@ namespace emulator::ssd
 		this->list_ = resource(RESOURCE_SERVER_PARAMETER_LIST);
 	}
 
-	glz::json cmd_server_parameter_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_server_parameter_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
         result["server_parameter_list"] = this->list_;
 

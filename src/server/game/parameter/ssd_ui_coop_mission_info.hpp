@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_ui_coop_mission_info();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 	};
 }

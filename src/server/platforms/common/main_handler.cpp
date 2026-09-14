@@ -18,7 +18,7 @@ namespace emulator
 		blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
-	std::optional<glz::json> main_handler::decrypt_request(const std::string& data, std::optional<database::users::user>& user)
+	std::optional<json::value> main_handler::decrypt_request(const std::string& data, std::optional<database::users::user>& user)
 	{
 #ifdef DEBUG
 		const auto start = std::chrono::high_resolution_clock::now();
@@ -36,8 +36,8 @@ namespace emulator
 			return {};
 		}
 
-		glz::json json;
-		const auto error = glz::read_json(json, str);
+		json::value json;
+		const auto error = json::read(json, str);
 		if (error)
 		{
 			return {};
@@ -67,7 +67,7 @@ namespace emulator
 			user = database::users::find_by_session_id(session_key, false);
 			if (!user.has_value())
 			{
-				json_data = glz::json::object_t{};
+				json_data = json::value::object_t{};
 				return {json};
 			}
 
@@ -99,7 +99,7 @@ namespace emulator
 			}
 		}
 
-		if (glz::read_json(json_data, unescaped_data))
+		if (json::read(json_data, unescaped_data))
 		{
 			return {};
 		}
@@ -107,7 +107,7 @@ namespace emulator
 		return std::make_optional(std::move(json));
 	}
 
-	bool main_handler::verify_request(glz::json& request)
+	bool main_handler::verify_request(json::value& request)
 	{
 		auto& data = request["data"];
 		if (!data.is_object())
@@ -136,7 +136,7 @@ namespace emulator
 		return true;
 	}
 
-	std::optional<std::string> main_handler::encrypt_response(glz::json& request, glz::json& data,
+	std::optional<std::string> main_handler::encrypt_response(json::value& request, json::value& data,
 		const std::optional<database::users::user>& user)
 	{
 #ifdef DEBUG
@@ -161,8 +161,8 @@ namespace emulator
 			data["crypto_type"] = "COMMON";
 		}
 
-		data["flowid"] = glz::json::object_t{};
-		data["xuid"] = glz::json::object_t{};
+		data["flowid"] = json::value::object_t{};
+		data["xuid"] = json::value::object_t{};
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 
@@ -171,13 +171,7 @@ namespace emulator
 			data["result"] = "NOERR";
 		}
 
-		auto data_dump_opt = data.dump();
-		if (!data_dump_opt.has_value())
-		{
-			return {};
-		}
-
-		const auto& data_dump = data_dump_opt.value();
+		const auto data_dump = json::dump(data);
 		const auto original_size = data_dump.size();
 
 		auto data_res = utils::compression::zlib::compress(data_dump, 1u);
@@ -199,7 +193,7 @@ namespace emulator
 			data_res = session_blow.encrypt(data_res);
 		}
 
-		glz::json response;
+		json::value response;
 
 		response["compress"] = true;
 		response["data"] = utils::encoding::split_into_lines(data_res);
@@ -207,13 +201,8 @@ namespace emulator
 		response["session_crypto"] = session_crypto_val;
 		response["session_key"] = request["session_key"];
 
-		const auto response_str = response.dump();
-		if (!response_str.has_value())
-		{
-			return {};
-		}
-
-		const auto encrypted = this->blow_.encrypt(response_str.value());
+		const auto response_str = json::dump(response);
+		const auto encrypted = this->blow_.encrypt(response_str);
 		auto encoded = utils::encoding::split_into_lines(encrypted);
 		
 		return std::make_optional(std::move(encoded));

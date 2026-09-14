@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_relocate::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_relocate::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& map_location_j = data["map_location"];
 		auto& departure_coordinate_j = data["departure_coordinate"];
@@ -38,7 +38,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto get_coordinate = [](glz::json& data, std::uint32_t& col, std::uint32_t& row)
+		const auto get_coordinate = [](json::value& data, std::uint32_t& col, std::uint32_t& row)
 		{
 			auto& column_j = data["column"];
 			auto& row_j = data["row"];

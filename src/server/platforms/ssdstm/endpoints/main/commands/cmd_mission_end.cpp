@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_mission_end::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_mission_end::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& current_mission_info_j = data["current_mission_info"];
 		auto& story_unlock_info_j = data["story_unlock_info"];
@@ -68,12 +68,12 @@ namespace emulator::ssd
 		result["reward"]["energy"] = 0;
 		result["reward"]["kub_boost_flag"] = 0;
 		result["reward"]["present_box_num"] = 0;
-		result["reward"]["battle_pack_list"] = glz::json::array_t();
-		result["reward"]["nonstackable_list"] = glz::json::array_t();
-		result["reward"]["present_list"] = glz::json::array_t();
-		result["reward"]["recipe_list"] = glz::json::array_t();
-		result["reward"]["resources_list"] = glz::json::array_t();
-		result["reward"]["stackable_list"] = glz::json::array_t();
+		result["reward"]["battle_pack_list"] = json::value::array_t();
+		result["reward"]["nonstackable_list"] = json::value::array_t();
+		result["reward"]["present_list"] = json::value::array_t();
+		result["reward"]["recipe_list"] = json::value::array_t();
+		result["reward"]["resources_list"] = json::value::array_t();
+		result["reward"]["stackable_list"] = json::value::array_t();
 		result["reward"]["text_id"] = 0;
 
 		return result;

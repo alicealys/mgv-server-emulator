@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& map_location_j = data["map_location"];
 		if (!map_location_j.is_uint64())
@@ -25,7 +25,7 @@ namespace emulator::ssd
 
 		building_info->to_json(result["cell_info"]);
 		result["defense_mission_disconnect"] = 0;
-		result["farming_info"] = glz::json::array_t{};
+		result["farming_info"] = json::value::array_t{};
 
 		// TODO
 

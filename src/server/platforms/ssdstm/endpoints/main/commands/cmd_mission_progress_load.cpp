@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_mission_progress_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_mission_progress_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		static const auto default_data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
 
@@ -47,19 +47,19 @@ namespace emulator::ssd
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
 
-		result["additional_storage_info"]["count"] = glz::json::array_t{0, 0};
-		result["battle_pack_list"] = glz::json::array_t();
-		result["bgm_my_list"] = glz::json::array_t();
-		result["boost_list"] = glz::json::array_t();
+		result["additional_storage_info"]["count"] = json::value::array_t{0, 0};
+		result["battle_pack_list"] = json::value::array_t();
+		result["bgm_my_list"] = json::value::array_t();
+		result["boost_list"] = json::value::array_t();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
-		result["cage_list"] = glz::json::array_t();
+		result["cage_list"] = json::value::array_t();
 		result["communication_gesture_slot"] = default_data["communication_gesture_slot"];
 
-		result["coop_embedded_mission_record_info_list"] = glz::json::array_t();
-		result["coop_event_mission_record_info_list"] = glz::json::array_t();
-		result["coop_reward_limit_list"] = glz::json::array_t();
+		result["coop_embedded_mission_record_info_list"] = json::value::array_t();
+		result["coop_event_mission_record_info_list"] = json::value::array_t();
+		result["coop_reward_limit_list"] = json::value::array_t();
 
-		result["craft_board"] = glz::json::array_t();
+		result["craft_board"] = json::value::array_t();
 
 		mission_info->to_json(result["current_mission_info"]);
 
@@ -67,7 +67,7 @@ namespace emulator::ssd
 		result["defense_mission_parameter"]["flag"] = 0;
 		result["defense_mission_parameter"]["threat"] = 0;
 		result["defense_mission_parameter"]["threat_threshold"] = 0;
-		result["defense_mission_record_info_list"] = glz::json::array_t{};
+		result["defense_mission_record_info_list"] = json::value::array_t{};
 		result["defense_mission_status"]["disconnect_flag"] = 0;
 		result["defense_mission_status"]["mining_machine_life"] = 9680;
 		result["defense_mission_status"]["mission_code"] = 0;
@@ -75,7 +75,7 @@ namespace emulator::ssd
 		result["defense_mission_status"]["next_wave_start_date"] = 0;
 		result["defense_mission_status"]["total_score"] = 0;
 		result["defense_mission_status"]["wave"] = 0;
-		result["defense_reward_limit_list"] = glz::json::array_t{};
+		result["defense_reward_limit_list"] = json::value::array_t{};
 
 		result["gimmick_save_info_afghan"]["map_location"] = 0;
 		gimmick_data_afghan->to_json(result["gimmick_save_info_afghan"], 0);
@@ -99,8 +99,8 @@ namespace emulator::ssd
 		mission_record_list->to_json(result["mission_record_info_list"]);
 		nonstackable_list->to_json(result["nonstackable_list"]);
 
-		result["order_expired_list"] = glz::json::array_t{0, 0, 0, 0, 0};
-		result["order_task_list"] = glz::json::array_t();
+		result["order_expired_list"] = json::value::array_t{0, 0, 0, 0, 0};
+		result["order_task_list"] = json::value::array_t();
 
 		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->first); i++)
 		{
@@ -114,15 +114,15 @@ namespace emulator::ssd
 			result["play_record_user_total_additional_130"][i] = user_play_record->additional[i];
 		}
 
-		result["quest_record_info_list"] = glz::json::array_t();
-		result["recipe_list"] = glz::json::array_t();
+		result["quest_record_info_list"] = json::value::array_t();
+		result["recipe_list"] = json::value::array_t();
 
 		for (auto i = 0; i < 256; i++)
 		{
 			result["recommend_bp_mission_list"][i] = 0;
 		}
 
-		result["replay_info_list"] = glz::json::array_t();
+		result["replay_info_list"] = json::value::array_t();
 		result["replay_mission_info"]["is_replay_mission"] = 0;
 		result["replay_mission_info"]["replay_mission_difficalty"] = 0;
 		result["replay_mission_info"]["replay_mission_id"] = 0;

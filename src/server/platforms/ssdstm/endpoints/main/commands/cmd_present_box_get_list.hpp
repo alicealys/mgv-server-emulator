@@ -5,6 +5,6 @@ namespace emulator::ssd
 {
 	class cmd_present_box_get_list final : public command_handler
 	{
-		glz::json execute(glz::json& data, const std::optional<database::users::user>& user) override;
+		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;
 	};
 }

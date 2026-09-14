@@ -13,13 +13,7 @@ namespace emulator
 	void api_endpoint::handle_command(const utils::request_params& request, utils::response_params& response)
 	{
 		const auto result = this->handle_request(request);
-		const auto dump = result.dump();
-		if (!dump.has_value())
-		{
-			return;
-		}
-
-		response.body = dump.value();
+		response.body = json::dump(result);
 		response.headers.append("Content-Type: application/json\n");
 	}
 

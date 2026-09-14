@@ -78,10 +78,10 @@ namespace utils::resources
 #endif
 	}
 
-	glz::json load_json(const std::int32_t resource_id)
+	json::value load_json(const std::int32_t resource_id)
 	{
-		glz::json data;
-		if (glz::read_json(data, load(resource_id)))
+		json::value data;
+		if (json::read(data, load(resource_id)))
 		{
 			throw std::runtime_error(std::format("failed to load resource {}", resource_id));
 		}

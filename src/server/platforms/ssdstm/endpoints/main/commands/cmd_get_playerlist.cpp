@@ -8,9 +8,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_get_playerlist::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_get_playerlist::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto avatar = std::make_unique<database::players::avatar_t>();
 		auto loadout_list = std::make_unique<database::players::loadout_list_t>();

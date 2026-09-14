@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("DefenseGameEmbeddedMission");
 	}
 
-	bool defense_game_embedded_mission::parse(glz::json& data)
+	bool defense_game_embedded_mission::parse(json::value& data)
 	{
 		return true;
 	}

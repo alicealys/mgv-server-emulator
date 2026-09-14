@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_present_box_is_new::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_present_box_is_new::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		// TODO
         result["is_new"] = 0;

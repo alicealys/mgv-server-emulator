@@ -11,10 +11,10 @@ namespace emulator
 	public:
 		main_handler();
 
-		std::optional<glz::json> decrypt_request(const std::string& data,
+		std::optional<json::value> decrypt_request(const std::string& data,
 			std::optional<database::users::user>& player) override;
-		bool verify_request(glz::json& request) override;
-		std::optional<std::string> encrypt_response(glz::json& request, glz::json& data,
+		bool verify_request(json::value& request) override;
+		std::optional<std::string> encrypt_response(json::value& request, json::value& data,
 			const std::optional<database::users::user>& player) override;
 
 	private:

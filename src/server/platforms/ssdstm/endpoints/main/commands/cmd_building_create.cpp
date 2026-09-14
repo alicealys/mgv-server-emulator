@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_create::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_create::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& cell_info = data["cell_info"];
 		auto& map_location_j = data["map_location"];

@@ -78,13 +78,13 @@ namespace database::users
 					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
 		}
 
-		const glz::json& get_default_data()
+		const json::value& get_default_data()
 		{
 			static const auto data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
 			return data;
 		}
 
-		const glz::json& get_default_data(const std::string_view& key)
+		const json::value& get_default_data(const std::string_view& key)
 		{
 			const auto& data = get_default_data();
 			return data[key];
@@ -140,7 +140,7 @@ namespace database::users
 		std::memcpy(this, default_inventory, sizeof(user_inventory_t));
 	}
 
-	void user_inventory_t::to_json(glz::json& data)
+	void user_inventory_t::to_json(json::value& data)
 	{
 		data["archive_new"] = utils::encoding::encode_base64(this->archive_new);
 		data["archive_obtained"] = utils::encoding::encode_base64(this->archive_obtained);
@@ -183,7 +183,7 @@ namespace database::users
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
 
-	bool user_inventory_t::parse_save(glz::json& data)
+	bool user_inventory_t::parse_save(json::value& data)
 	{
 		const auto try_parse_part = [&]<typename T>(const std::string_view& name, T& dest, const bool or_ = false)
 		{
@@ -251,7 +251,7 @@ namespace database::users
 		return true;
 	}
 
-	bool user_inventory_t::parse(glz::json& data)
+	bool user_inventory_t::parse(json::value& data)
 	{
 		utils::json_utils::parse_base64(data["archive_new"], this->archive_new);
 		utils::json_utils::parse_base64(data["archive_obtained"], this->archive_obtained);

@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_avatar_save::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_avatar_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		database::players::avatar_t avatar{};
 

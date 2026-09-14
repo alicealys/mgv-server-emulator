@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_send_ipandport::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_send_ipandport::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		const auto& ex_ip_j = data["ex_ip"];
 		const auto& in_ip_j = data["in_ip"];

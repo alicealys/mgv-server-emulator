@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_crew_add::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_crew_add::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& add_crew_param = data["add_crew_param"];
 		if (!add_crew_param.is_array())
@@ -17,7 +17,7 @@ namespace emulator::ssd
 		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
 		user->current_player->get_crew_member_list(*crew_member_list);
 
-		result["added_crew"] = glz::json::array_t();
+		result["added_crew"] = json::value::array_t();
 		auto count = 0u;
 
 		for (auto i = 0ull; i < add_crew_param.size(); i++)

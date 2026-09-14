@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		defense_game_embedded_mission();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 	};
 }

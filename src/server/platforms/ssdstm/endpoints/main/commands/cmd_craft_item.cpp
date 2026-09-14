@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_craft_item::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_craft_item::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& craft_item_param_j = data["craft_item_param"];
 		if (!craft_item_param_j.is_object())
@@ -126,7 +126,7 @@ namespace emulator::ssd
 		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
 
 		result["inventory_index_junk"] = 0xFFFF;
-		result["left_resources"] = glz::json::array_t();
+		result["left_resources"] = json::value::array_t();
 
         return result;
 	}

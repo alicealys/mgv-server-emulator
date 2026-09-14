@@ -6,10 +6,10 @@ namespace emulator::ssd
 	class cmd_server_parameter_get_url_list final : public command_handler
 	{
 	public:
-		glz::json execute(glz::json& data, const std::optional<database::users::user>& user) override;
+		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;
 
 	private:
-		glz::json list_;
+		json::value list_;
 
 	};
 }

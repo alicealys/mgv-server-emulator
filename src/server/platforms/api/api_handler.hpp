@@ -8,7 +8,7 @@ namespace emulator
 	{
 	public:
 		void handle_command(const utils::request_params& request, utils::response_params& response) override;
-		virtual glz::json handle_request(const utils::request_params& params) = 0;
+		virtual json::value handle_request(const utils::request_params& params) = 0;
 	};
 
 	class api_handler final : public platform_handler

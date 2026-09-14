@@ -61,23 +61,17 @@ namespace utils::tpp
 		return utils::http::post_data(url + endpoint, post_data, headers);
 	}
 
-	std::optional<glz::json> tpp_client::send_command(const std::string& endpoint, 
-		const glz::json& data_params, bool use_crypto, const glz::json& params)
+	std::optional<json::value> tpp_client::send_command(const std::string& endpoint, 
+		const json::value& data_params, bool use_crypto, const json::value& params)
 	{
 		try
 		{
-			glz::json message;
+			json::value message;
 			message["compress"] = false;
 			message["session_crypto"] = use_crypto;
 			message["session_key"] = "";
 
-			const auto data_str_opt = data_params.dump();
-			if (!data_str_opt.has_value())
-			{
-				return {};
-			}
-
-			const auto& data_str = data_str_opt.value();
+			const auto data_str = json::dump(data_params);
 			if (use_crypto)
 			{
 				const auto encrypted = this->session_blow_.encrypt(data_str);
@@ -95,13 +89,8 @@ namespace utils::tpp
 				message[key] = value;
 			}
 
-			const auto message_str_opt = message.dump();
-			if (!message_str_opt.has_value())
-			{
-				return {};
-			}
-
-			const auto res = this->send_data(endpoint, message_str_opt.value());
+			const auto message_str = json::dump(message);
+			const auto res = this->send_data(endpoint, message_str);
 			if (!res.has_value())
 			{
 				return {};
@@ -120,8 +109,8 @@ namespace utils::tpp
 			}
 
 			const auto decrypted = this->static_blow_.decrypt(value.buffer);
-			glz::json json;
-			if (glz::read_json(json, decrypted))
+			json::value json;
+			if (json::read(json, decrypted))
 			{
 				return {};
 			}
@@ -151,7 +140,7 @@ namespace utils::tpp
 				data = utils::compression::zlib::decompress(data);
 			}
 
-			if (!glz::read_json(json["data"], data))
+			if (!json::read(json["data"], data))
 			{
 				return {};
 			}

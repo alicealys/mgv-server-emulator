@@ -6,26 +6,20 @@
 namespace utils::json_utils
 {
 	template <typename T>
-	bool is(const glz::json& value);
-
-	template <typename T>
-	T get(const glz::json& value);
-
-	template <typename T>
-	void get_or(const glz::json& value, T& dest, const T& default_value = {})
+	void get_or(const json::value& value, T& dest, const T& default_value = {})
 	{
-		if (!is<T>(value))
+		if (!value.is<T>())
 		{
 			dest = default_value;
 		}
 		else
 		{
-			dest = get<T>(value);
+			dest = value.as<T>();
 		}
 	}
 
 	template <typename T>
-	bool parse_array(glz::json& src, T& dest, const bool strict = true)
+	bool parse_array(json::value& src, T& dest, const bool strict = true)
 	{
 		if (!src.is_array() || (strict && src.size() != ARRAYSIZE(dest)))
 		{
@@ -41,7 +35,7 @@ namespace utils::json_utils
 	}
 
 	template <typename T, typename F>
-	bool parse_array(glz::json& src, T& dest, F&& fn, const bool strict = true)
+	bool parse_array(json::value& src, T& dest, F&& fn, const bool strict = true)
 	{
 		if (!src.is_array() || (strict && src.size() != ARRAYSIZE(dest)))
 		{
@@ -58,7 +52,7 @@ namespace utils::json_utils
 	}
 
 	template <std::size_t N>
-	bool parse_base64(glz::json& src, std::uint8_t(&dest)[N], const bool strict = false)
+	bool parse_base64(json::value& src, std::uint8_t(&dest)[N], const bool strict = false)
 	{
 		if (!src.is_string())
 		{
@@ -78,7 +72,7 @@ namespace utils::json_utils
 	}
 
 	template <std::size_t N>
-	bool parse_string(glz::json& src, char(&dest)[N])
+	bool parse_string(json::value& src, char(&dest)[N])
 	{
 		if (!src.is_string())
 		{

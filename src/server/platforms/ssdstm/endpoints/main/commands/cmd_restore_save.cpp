@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_restore_save::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_restore_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		static const auto allow_restore = config::get().allow_save_restore;
 		if (!allow_restore)

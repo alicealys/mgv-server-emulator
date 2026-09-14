@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_building_parameter_table();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 	};
 }

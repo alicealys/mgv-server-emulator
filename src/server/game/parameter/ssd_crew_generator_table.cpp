@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdCrewGeneratorTable");
 	}
 
-	bool ssd_crew_generator_table::parse(glz::json& data)
+	bool ssd_crew_generator_table::parse(json::value& data)
 	{
 		for (auto i = 0ull; i < data["unique_table"].size(); i++)
 		{

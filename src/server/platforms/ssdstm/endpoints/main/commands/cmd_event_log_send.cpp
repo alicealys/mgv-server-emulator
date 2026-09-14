@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	glz::json cmd_event_log_send::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_event_log_send::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
         result["result"] = "ERR_NOTIMPLEMENTED";
         return result;
 	}

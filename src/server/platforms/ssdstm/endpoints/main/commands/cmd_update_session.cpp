@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_update_session::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_update_session::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		if (!database::users::update_session(user->get_user_id()))
 		{

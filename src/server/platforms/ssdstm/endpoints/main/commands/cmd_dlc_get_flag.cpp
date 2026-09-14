@@ -4,11 +4,11 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_dlc_get_flag::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_dlc_get_flag::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
-		result["consumable_count"] = glz::json::array_t{0, 0, 0, 0, 0, 0, 0, 0};
+		result["consumable_count"] = json::value::array_t{0, 0, 0, 0, 0, 0, 0, 0};
 		result["flag"] = user->get_dlc_flag();
 
 		return result;

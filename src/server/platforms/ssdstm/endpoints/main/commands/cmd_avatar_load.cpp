@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_avatar_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_avatar_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		if (!user->current_player.has_value())
 		{

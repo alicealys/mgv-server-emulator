@@ -4,7 +4,7 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_cheat_send::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_cheat_send::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		return {};
 	}

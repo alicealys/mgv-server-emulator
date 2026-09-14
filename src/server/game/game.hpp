@@ -93,7 +93,7 @@ namespace game
 
 	struct gradeup_spec_t
 	{
-		bool parse(glz::json& data);
+		bool parse(json::value& data);
 
 		std::uint8_t rarity;
 		std::uint16_t atk;
@@ -104,7 +104,7 @@ namespace game
 
 	struct survival_gear_t
 	{
-		bool parse(glz::json& data);
+		bool parse(json::value& data);
 
 		std::uint32_t id;
 		std::uint32_t index;
@@ -116,7 +116,7 @@ namespace game
 
 	struct production_t
 	{
-		bool parse(glz::json& data);
+		bool parse(json::value& data);
 		std::shared_ptr<survival_gear_t> get_survival_gear();
 
 		std::uint32_t id;
@@ -169,7 +169,7 @@ namespace game
 
 	struct recipe_t
 	{
-		bool parse(glz::json& data);
+		bool parse(json::value& data);
 
 		struct cost_t
 		{
@@ -206,7 +206,7 @@ namespace game
 
 	struct crew_member_type_t
 	{
-		bool parse(glz::json& data);
+		bool parse(json::value& data);
 
         std::uint16_t face;
         std::uint16_t race;

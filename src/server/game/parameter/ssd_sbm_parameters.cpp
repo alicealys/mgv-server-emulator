@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdSbmParameters");
 	}
 
-	bool ssd_sbm_parameters::parse(glz::json& data)
+	bool ssd_sbm_parameters::parse(json::value& data)
 	{
 		for (auto i = 0ull; i < data["production"].size(); i++)
 		{

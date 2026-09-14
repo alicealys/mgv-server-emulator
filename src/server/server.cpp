@@ -10,30 +10,6 @@
 #include "component/console.hpp"
 #include "component/command.hpp"
 
-struct crew_member_type_t
-{
-	std::uint16_t face;
-	std::uint16_t race;
-	std::uint16_t sex;
-	std::uint16_t body;
-	std::uint16_t develop;
-	std::uint16_t food;
-	std::uint16_t medic;
-	std::uint16_t farm;
-	std::uint16_t base_defense;
-	std::uint16_t combat_deploy;
-	std::uint16_t thirst_resist;
-	std::uint16_t hunger_resist;
-	std::uint16_t injury_resist;
-	std::uint16_t sick_resist;
-	std::uint16_t sleeplack_resist;
-	std::uint16_t life;
-	std::uint16_t job_table;
-	std::uint16_t skill_table;
-	std::uint32_t id;
-	std::string id_str;
-};
-
 namespace emulator
 {
 	namespace

@@ -9,9 +9,9 @@
 
 namespace emulator
 {
-	glz::json delete_account::handle_request(const utils::request_params& params)
+	json::value delete_account::handle_request(const utils::request_params& params)
 	{
-		glz::json result;
+		json::value result;
 		result["result"] = false;
 
 		std::uint64_t steam_id{};

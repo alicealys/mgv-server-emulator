@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdNpcLevelParameters");
 	}
 
-	bool ssd_npc_level_parameters::parse(glz::json& data)
+	bool ssd_npc_level_parameters::parse(json::value& data)
 	{
 		return true;
 	}

@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdCombatDeployParameterTable");
 	}
 
-	bool ssd_combat_deploy_parameter_table::parse(glz::json& data)
+	bool ssd_combat_deploy_parameter_table::parse(json::value& data)
 	{
 		return true;
 	}

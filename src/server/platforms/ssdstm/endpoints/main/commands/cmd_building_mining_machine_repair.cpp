@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_mining_machine_repair::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_mining_machine_repair::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& option_j = data["option"];
 		auto& damage_rate_j = data["damage_rate"];

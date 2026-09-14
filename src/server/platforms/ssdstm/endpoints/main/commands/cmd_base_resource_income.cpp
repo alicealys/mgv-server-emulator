@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	glz::json cmd_base_resource_income::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_base_resource_income::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
         result["result"] = "ERR_NOTIMPLEMENTED";
         return result;
 	}

@@ -121,9 +121,9 @@ namespace emulator::ssd
 		}
 	}
 
-    glz::json cmd_get_urllist::execute(glz::json& data, const std::optional<database::users::user>&)
+    json::value cmd_get_urllist::execute(json::value& data, const std::optional<database::users::user>&)
 	{
-        glz::json result;
+        json::value result;
 
 		for (auto i = 0ull; i < url_list.size(); i++)
 		{

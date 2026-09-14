@@ -4,12 +4,12 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_information_get_title::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_information_get_title::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 		
 		// TODO
-		result["info_list"] = glz::json::array_t();
+		result["info_list"] = json::value::array_t();
 		result["info_num"] = 0;
 
         return result;

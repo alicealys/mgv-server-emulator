@@ -187,7 +187,7 @@ namespace game
 		return sizeof(static_key);
 	}
 
-	bool production_t::parse(glz::json& data)
+	bool production_t::parse(json::value& data)
 	{
 		return !glz::read<glz::opts{.error_on_unknown_keys = false}>(*this, data);
 	}
@@ -203,14 +203,14 @@ namespace game
 		return iter->second;
 	}
 
-	bool recipe_t::parse(glz::json& data)
+	bool recipe_t::parse(json::value& data)
 	{
-		return !glz::read<glz::opts{.error_on_unknown_keys = false}>(*this, data);
+		return !json::read(*this, data);
 	}
 
-	bool gradeup_spec_t::parse(glz::json& data)
+	bool gradeup_spec_t::parse(json::value& data)
 	{
-		return !glz::read_json(*this, data);
+		return !json::read(*this, data);
 	}
 
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade)
@@ -218,14 +218,14 @@ namespace game
 		return static_cast<std::uint16_t>(static_cast<float>(base_life) * 0.01f * static_cast<float>(grade) + static_cast<float>(base_life));
 	}
 
-	bool survival_gear_t::parse(glz::json& data)
+	bool survival_gear_t::parse(json::value& data)
 	{
-		return !glz::read_json(*this, data);
+		return !json::read(*this, data);
 	}
  
-	bool crew_member_type_t::parse(glz::json& data)
+	bool crew_member_type_t::parse(json::value& data)
 	{
-		return !glz::read_json(*this, data);
+		return !json::read(*this, data);
 	}
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result)

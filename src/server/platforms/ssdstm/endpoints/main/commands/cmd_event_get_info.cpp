@@ -4,12 +4,12 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_event_get_info::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_event_get_info::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		// TODO
-		result["event_list"] = glz::json::array_t();
+		result["event_list"] = json::value::array_t();
 		result["season_flag"] = 0;
 
         return result;

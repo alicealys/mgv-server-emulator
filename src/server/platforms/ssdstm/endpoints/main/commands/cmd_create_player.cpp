@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_create_player::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_create_player::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		const auto players = database::players::get_player_list(user->get_user_id());
 		if (players.size() >= database::players::player_capacity)

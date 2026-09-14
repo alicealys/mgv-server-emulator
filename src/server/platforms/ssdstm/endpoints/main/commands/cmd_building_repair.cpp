@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_repair::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_repair::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& map_location_j = data["map_location"];
 		auto& current_life_obj_j = data["current_life"];

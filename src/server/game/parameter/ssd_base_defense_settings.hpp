@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_base_defense_settings();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 	};
 }

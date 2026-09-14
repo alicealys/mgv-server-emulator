@@ -6,11 +6,11 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_get_friend_headers::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_get_friend_headers::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
-		result["header_list"] = glz::json::array_t();
+		result["header_list"] = json::value::array_t();
 
 		auto& account_list_j = data["account_list"];
 		if (!account_list_j.is_array())

@@ -7,9 +7,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_server_parameter_get_url_list::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_server_parameter_get_url_list::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		static const auto base_url = config::get().base_url;
 		for (auto i = 0ull; i < game::parameters_list.size(); i++)

@@ -5,9 +5,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_checkpoint_save::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_checkpoint_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		cmd_inventory_save::do_save(data, user);
 
@@ -23,14 +23,14 @@ namespace emulator::ssd
 		auto& crew_update_list_j = data["crew_update_list"];
 		auto& group_level_j = data["group_level"];
 
-		result["added_crew"] = glz::json::array_t();
-		result["capture_list"] = glz::json::array_t();
-		result["defense_mission_reward"] = glz::json::array_t();
-		result["left_resources"] = glz::json::array_t();
-		result["stackable_list"] = glz::json::array_t();
+		result["added_crew"] = json::value::array_t();
+		result["capture_list"] = json::value::array_t();
+		result["defense_mission_reward"] = json::value::array_t();
+		result["left_resources"] = json::value::array_t();
+		result["stackable_list"] = json::value::array_t();
 		result["reward_event_point"] = 0;
 		result["boost_flag"] = 0;
-		result["defense_reward_limit_result"]["limit_result"] = glz::json::array_t();
+		result["defense_reward_limit_result"]["limit_result"] = json::value::array_t();
 		result["defense_reward_limit_result"]["mission_code"] = 0;
 
 		if (gimmick_save_info_j.is_object())
@@ -92,7 +92,7 @@ namespace emulator::ssd
 
 		user->current_player->set_base_resources(*base_resources);
 
-		const auto parse_map_unlock_list = [&](glz::json& story_unlock_info_j)
+		const auto parse_map_unlock_list = [&](json::value& story_unlock_info_j)
 		{
 			auto& map_unlock_list_j = story_unlock_info_j["map_unlock_list"];
 			if (!map_unlock_list_j.is_array())

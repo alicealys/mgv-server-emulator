@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdDamageParameter_debug");
 	}
 
-	bool ssd_damage_parameter_debug::parse(glz::json& data)
+	bool ssd_damage_parameter_debug::parse(json::value& data)
 	{
 		return true;
 	}

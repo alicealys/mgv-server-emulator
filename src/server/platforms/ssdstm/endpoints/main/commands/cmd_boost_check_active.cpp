@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_boost_check_active::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_boost_check_active::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		// TODO
 

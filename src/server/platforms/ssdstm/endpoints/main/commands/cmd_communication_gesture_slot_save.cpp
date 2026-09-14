@@ -5,9 +5,9 @@
 // not implemented
 namespace emulator::ssd
 {
-	glz::json cmd_communication_gesture_slot_save::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_communication_gesture_slot_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
         result["result"] = "ERR_NOTIMPLEMENTED";
         return result;
 	}

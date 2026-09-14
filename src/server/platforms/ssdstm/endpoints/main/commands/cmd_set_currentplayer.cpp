@@ -6,9 +6,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_set_currentplayer::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_set_currentplayer::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& index_j = data["index"];
 		if (!index_j.is_uint64())

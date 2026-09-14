@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_base_resource_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_base_resource_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		const auto base_resources = std::make_unique<database::players::base_resources_t>();
 		user->current_player->get_base_resources(*base_resources);

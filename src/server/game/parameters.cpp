@@ -47,11 +47,10 @@ namespace game
 
 		const auto data = utils::resources::load(resource_id.value());
 
-		glz::json json;
-		const auto error = glz::read_json(json, data);
-		auto dump = json.dump();
+		auto json = json::parse(data);
+		const auto dump = json::dump(json);
 
-		if (error || !this->parse(json))
+		if (!this->parse(json))
 		{
 			throw std::runtime_error(std::format("failed to parse game parameter file {}.json", name));
 		}
@@ -59,7 +58,7 @@ namespace game
 		utils::cryptography::blowfish blow;
 		blow.set_key(game::get_static_key(game::key_type_tpp), game::get_static_key_len());
 
-		auto encrypted_data = utils::compression::zlib::compress(dump.value());
+		auto encrypted_data = utils::compression::zlib::compress(dump);
 		encrypted_data = blow.encrypt_internal(encrypted_data);
 
 		this->data_path_ = std::format("tmp/parameter/{}.param", name);

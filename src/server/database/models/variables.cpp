@@ -12,15 +12,9 @@ namespace database::variables
 	namespace impl
 	{
 		template <database_type_t Type>
-		void set(const std::string& name, const glz::json& value)
+		void set(const std::string& name, const json::value& value)
 		{
-			const auto dump_opt = value.dump();
-			if (!dump_opt)
-			{
-				return;
-			}
-
-			const auto& dump = dump_opt.value();
+			const auto dump = json::dump(value);
 			return database::access([&](database_t& db)
 			{
 				auto results = db.exec<Type>(
@@ -45,10 +39,10 @@ namespace database::variables
 		}
 
 		template <database_type_t Type>
-		std::optional<glz::json> get(const std::string& name)
+		std::optional<json::value> get(const std::string& name)
 		{
-			return database::access<std::optional<glz::json>>([&](database_t& db)
-				-> std::optional<glz::json>
+			return database::access<std::optional<json::value>>([&](database_t& db)
+				-> std::optional<json::value>
 			{
 				auto results = db.exec<Type>(
 					sqlpp::select(variable::table.variable_value)
@@ -60,9 +54,9 @@ namespace database::variables
 					return {};
 				}
 
-				glz::json json;
+				json::value json;
 				const auto data = results.front().variable_value.value();
-				if (glz::read_json(json, data))
+				if (json::read(json, data))
 				{
 					return {};
 				}
@@ -100,12 +94,12 @@ namespace database::variables
 		}
 	}
 
-	void set(const std::string& name, const glz::json& value)
+	void set(const std::string& name, const json::value& value)
 	{
 		RUN_IMPL(impl::set, name, value);
 	}
 
-	std::optional<glz::json> get(const std::string& name)
+	std::optional<json::value> get(const std::string& name)
 	{
 		RUN_IMPL(impl::get, name);
 	}

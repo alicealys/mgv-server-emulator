@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdWeaponParameters_opt");
 	}
 
-	bool ssd_weapon_parameters_opt::parse(glz::json& data)
+	bool ssd_weapon_parameters_opt::parse(json::value& data)
 	{
 		return true;
 	}

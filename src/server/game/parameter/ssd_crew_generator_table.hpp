@@ -8,7 +8,7 @@ namespace game::parameters
 	{
 	public:
 		ssd_crew_generator_table();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 
 		std::unordered_map<std::uint32_t, std::shared_ptr<crew_member_type_t>> crew_member_types;
 	};

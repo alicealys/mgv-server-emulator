@@ -13,17 +13,17 @@ namespace emulator
 		{
 		}
 
-		virtual std::optional<glz::json> decrypt_request(const std::string& data, std::optional<database::users::user>& player)
+		virtual std::optional<json::value> decrypt_request(const std::string& data, std::optional<database::users::user>& player)
 		{
 			return {};
 		}
 
-		virtual bool verify_request(glz::json& request)
+		virtual bool verify_request(json::value& request)
 		{
 			return false;
 		}
 
-		virtual std::optional<std::string> encrypt_response(glz::json& request, glz::json& data, const std::optional<database::users::user>& player)
+		virtual std::optional<std::string> encrypt_response(json::value& request, json::value& data, const std::optional<database::users::user>& player)
 		{
 			return {};
 		}

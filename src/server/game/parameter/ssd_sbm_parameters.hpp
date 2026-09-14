@@ -8,7 +8,7 @@ namespace game::parameters
 	{
 	public:
 		ssd_sbm_parameters();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 
 		std::unordered_map<std::uint32_t, std::shared_ptr<production_t>> productions;
 		std::unordered_map<std::uint32_t, std::shared_ptr<recipe_t>> recipes;

@@ -7,9 +7,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_reqauth_https::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_reqauth_https::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		const auto& hash_val = data["hash"];
 		const auto& account_id_val = data["user_name"];

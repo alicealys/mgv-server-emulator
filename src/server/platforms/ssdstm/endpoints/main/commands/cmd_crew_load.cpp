@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_crew_load::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_crew_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto crew_levels = std::make_unique<database::players::crew_levels_t>();
 		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();

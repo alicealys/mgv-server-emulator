@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdBaseDefenseSettings");
 	}
 
-	bool ssd_base_defense_settings::parse(glz::json& data)
+	bool ssd_base_defense_settings::parse(json::value& data)
 	{
 		return true;
 	}

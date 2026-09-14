@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdCollectionItems");
 	}
 
-	bool ssd_collection_items::parse(glz::json& data)
+	bool ssd_collection_items::parse(json::value& data)
 	{
 		return true;
 	}

@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_building_remove::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_building_remove::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& map_location_j = data["map_location"];
 		if (!map_location_j.is_uint64())
@@ -22,7 +22,7 @@ namespace emulator::ssd
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
 
-		const auto do_list = [&](glz::json& data, const std::uint32_t type)
+		const auto do_list = [&](json::value& data, const std::uint32_t type)
 		{
 			if (!data.is_array())
 			{

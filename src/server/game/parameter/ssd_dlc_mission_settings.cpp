@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdDlcMissionSettings");
 	}
 
-	bool ssd_dlc_mission_settings::parse(glz::json& data)
+	bool ssd_dlc_mission_settings::parse(json::value& data)
 	{
 		return true;
 	}

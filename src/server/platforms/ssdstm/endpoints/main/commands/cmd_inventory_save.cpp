@@ -6,7 +6,7 @@
 
 namespace emulator::ssd
 {
-	void cmd_inventory_save::do_save(glz::json& data, const std::optional<database::users::user>& user)
+	void cmd_inventory_save::do_save(json::value& data, const std::optional<database::users::user>& user)
 	{
 		auto& player_inventory_j = data["inventory_player_info_save"];
 		auto& user_inventory_j = data["inventory_user_info_save"];
@@ -97,9 +97,9 @@ namespace emulator::ssd
 		}
 	}
 
-	glz::json cmd_inventory_save::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_inventory_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		this->do_save(data, user);
 

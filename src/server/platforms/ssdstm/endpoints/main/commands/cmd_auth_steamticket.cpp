@@ -7,9 +7,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_auth_steamticket::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_auth_steamticket::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		const auto& steam_ticket_val = data["steam_ticket"];
 		const auto& steam_ticket_size_j = data["steam_ticket_size"];

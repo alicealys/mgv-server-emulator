@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_maintenance_get_schedule::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_maintenance_get_schedule::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		result["server_time"] = std::time(nullptr);
 		result["next_maintenance"] = std::numeric_limits<std::int32_t>::max();

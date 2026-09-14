@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdBuildingParameterTable");
 	}
 
-	bool ssd_building_parameter_table::parse(glz::json& data)
+	bool ssd_building_parameter_table::parse(json::value& data)
 	{
 		return true;
 	}

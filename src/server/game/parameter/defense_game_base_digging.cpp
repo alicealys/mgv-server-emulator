@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("DefenseGameBaseDigging");
 	}
 
-	bool defense_game_base_digging::parse(glz::json& data)
+	bool defense_game_base_digging::parse(json::value& data)
 	{
 		return true;
 	}

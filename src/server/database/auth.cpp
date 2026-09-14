@@ -44,7 +44,7 @@ namespace auth
 			}
 
 			std::unordered_set<std::uint64_t> list;
-			if (glz::read_json(list, data))
+			if (json::read(list, data))
 			{
 				console::error("Error parsing list, must be a valid int64 array\n");
 				return {};
@@ -121,7 +121,7 @@ namespace auth
 
 	std::optional<std::uint64_t> verify_ticket_konami(const std::string& auth_ticket, const size_t ticket_size)
 	{
-		glz::json data;
+		json::value data;
 		data["steam_ticket"] = utils::encoding::split_into_lines(auth_ticket);
 		data["steam_ticket_size"] = ticket_size;
 		data["region"] = 4;

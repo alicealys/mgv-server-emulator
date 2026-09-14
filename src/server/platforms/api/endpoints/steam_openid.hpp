@@ -7,7 +7,7 @@ namespace emulator
 	{
 	public:
 		static bool verify_user(const utils::request_params& params, std::uint64_t& steam_id);
-		glz::json handle_request(const utils::request_params& params) override;
+		json::value handle_request(const utils::request_params& params) override;
 
 	};
 }

@@ -32,9 +32,9 @@ namespace database::users
 		std::uint8_t resource_opened[128];
 
 		void initialize();
-		bool parse_save(glz::json& data);
-		bool parse(glz::json& data);
-		void to_json(glz::json& data);
+		bool parse_save(json::value& data);
+		bool parse(json::value& data);
+		void to_json(json::value& data);
 	};
 
 	struct user_play_record_t

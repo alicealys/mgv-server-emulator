@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdWalkerGearParameters");
 	}
 
-	bool ssd_walker_gear_parameters::parse(glz::json& data)
+	bool ssd_walker_gear_parameters::parse(json::value& data)
 	{
 		return true;
 	}

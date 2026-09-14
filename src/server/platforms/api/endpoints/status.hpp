@@ -6,7 +6,7 @@ namespace emulator
 	class status final : public api_endpoint
 	{
 	public:
-		glz::json handle_request(const utils::request_params& params) override;
+		json::value handle_request(const utils::request_params& params) override;
 
 	};
 }

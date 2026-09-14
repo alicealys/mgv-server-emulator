@@ -8,6 +8,6 @@ namespace game::parameters
 	{
 	public:
 		ssd_weapon_parameters_opt();
-		bool parse(glz::json& data) override;
+		bool parse(json::value& data) override;
 	};
 }

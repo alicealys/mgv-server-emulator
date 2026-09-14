@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_user_flag_set::execute(glz::json& data, const std::optional<database::users::user>& user)
+	json::value cmd_user_flag_set::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		glz::json result;
+		json::value result;
 
 		auto& flag_j = data["flag"];
 

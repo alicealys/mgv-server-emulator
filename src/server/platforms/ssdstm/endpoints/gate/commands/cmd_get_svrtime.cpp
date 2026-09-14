@@ -4,9 +4,9 @@
 
 namespace emulator::ssd
 {
-	glz::json cmd_get_svrtime::execute(glz::json& data, const std::optional<database::users::user>&)
+	json::value cmd_get_svrtime::execute(json::value& data, const std::optional<database::users::user>&)
 	{
-		glz::json result;
+		json::value result;
 
 		result["result"] = "NOERR";
 		result["date"] = std::time(nullptr);

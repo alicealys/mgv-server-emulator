@@ -9,7 +9,7 @@ namespace game::parameters
 		this->load("SsdEquipParameters");
 	}
 
-	bool ssd_equip_parameters::parse(glz::json& data)
+	bool ssd_equip_parameters::parse(json::value& data)
 	{
 		return true;
 	}
