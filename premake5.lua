@@ -259,9 +259,10 @@ workspace "mgv-server-emulator"
 				"-Wno-unknown-pragmas", 
 				"-Wno-switch",
 				"-Wno-unused-value",
-				"-Wno-unused-but-set-variable"
+				"-Wno-unused-but-set-variable",
+				"-Wno-missing-braces"
 			}
-			linkoptions {"-fuse-ld=lld"}
+			linkoptions {"-fuse-ld=lld", "-stdlib=libc++"}
 		filter {}
 
 		filter { "system:windows" }
