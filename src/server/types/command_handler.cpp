@@ -29,10 +29,10 @@ namespace emulator
 		glz::json info;
 
 		info["npid"]["handler"]["data"] = "";
-		info["npid"]["handler"]["dummy"] = {0, 0, 0};
+		info["npid"]["handler"]["dummy"] = glz::json::array_t{0, 0, 0};
 		info["npid"]["handler"]["term"] = 0;
-		info["npid"]["opt"] = {0, 0, 0, 0, 0, 0, 0, 0};
-		info["npid"]["reserved"] = {0, 0, 0, 0, 0, 0, 0, 0};
+		info["npid"]["opt"] = glz::json::array_t{0, 0, 0, 0, 0, 0, 0, 0};
+		info["npid"]["reserved"] = glz::json::array_t{0, 0, 0, 0, 0, 0, 0, 0};
 		info["player_id"] = player_id;
 		info["player_name"] = account_id == 0 ? "NotImplement" : std::format("{}_player01", account_id);
 		info["ugc"] = player_id != 0 ? 1 : 0;
