@@ -8,7 +8,7 @@ namespace emulator::ssd
 	{
 		glz::json result;
 
-		result["consumable_count"] = {0, 0, 0, 0, 0, 0, 0, 0};
+		result["consumable_count"] = glz::json::array_t{0, 0, 0, 0, 0, 0, 0, 0};
 		result["flag"] = user->get_dlc_flag();
 
 		return result;
