@@ -116,13 +116,13 @@ namespace database::players
 				return;
 			}
 
-			value_j = value_j[0];
-			if (!value_j.is_object())
+			auto& obj_j = value_j[0];
+			if (!obj_j.is_object())
 			{
 				return;
 			}
 
-			auto& data_j = value_j[name];
+			auto& data_j = obj_j[name];
 			if (!data_j.is_string())
 			{
 				return;
@@ -884,6 +884,15 @@ namespace database::players
 		data["marker_afghan"] = utils::encoding::encode_base64(this->marker_afghan);
 		data["marker_africa"] = utils::encoding::encode_base64(this->marker_africa);
 		data["fast_travel_unlock"] = utils::encoding::encode_base64(this->fast_travel_unlock);
+	}
+
+	{
+		return utils::json_utils::parse_base64(data["data"], this->value);
+	}
+
+	void story_unlock_info_t::tips_open_info_t::to_json(json::value& data) const
+	{
+		data["data"] = utils::encoding::encode_base64(this->value);
 	}
 
 	bool building_info_t::cell_edge_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)

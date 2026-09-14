@@ -193,13 +193,13 @@ namespace database::users
 				return;
 			}
 
-			value_j = value_j[0];
-			if (!value_j.is_object())
+			auto& obj_j = value_j[0];
+			if (!obj_j.is_object())
 			{
 				return;
 			}
 
-			auto& data_j = value_j[name];
+			auto& data_j = obj_j[name];
 			if (!data_j.is_string())
 			{
 				return;

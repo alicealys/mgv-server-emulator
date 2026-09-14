@@ -52,7 +52,7 @@ namespace utils::json_utils
 	}
 
 	template <std::size_t N>
-	bool parse_base64(json::value& src, std::uint8_t(&dest)[N], const bool strict = false)
+	bool parse_base64(json::value& src, std::uint8_t(&dest)[N], const bool strict = false, const bool or_bytes = false)
 	{
 		if (!src.is_string())
 		{
@@ -67,7 +67,18 @@ namespace utils::json_utils
 			return false;
 		}
 
-		std::memcpy(dest, data.data(), data.size());
+		if (or_bytes)
+		{
+			for (auto i = 0ull; i < data.size(); i++)
+			{
+				dest[i] |= data[i];
+			}
+		}
+		else
+		{
+			std::memcpy(dest, data.data(), data.size());
+		}
+
 		return true;
 	}
 

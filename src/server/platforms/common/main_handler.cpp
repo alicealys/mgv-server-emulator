@@ -20,6 +20,8 @@ namespace emulator
 
 	std::optional<json::value> main_handler::decrypt_request(const std::string& data, std::optional<database::users::user>& user)
 	{
+		std::optional<json::value> json;
+
 #ifdef DEBUG
 		const auto start = std::chrono::high_resolution_clock::now();
 		const auto _0 = gsl::finally([=]
@@ -33,49 +35,54 @@ namespace emulator
 		const auto str = this->blow_.decrypt(decoded_data);
 		if (str.empty())
 		{
-			return {};
+			return json;
 		}
 
-		json::value json;
-		const auto error = json::read(json, str);
+		const auto error = json::read(json.emplace(), str);
 		if (error)
 		{
 			return {};
 		}
 
-		if (!json["data"].is_string())
+		auto& data_j = json->operator[]("data");
+		if (!data_j.is_string())
 		{
-			return {json};
+			return {};
 		}
 
-		const auto& compressed_val = json["compress"];
-		if (!compressed_val.is_boolean())
+		auto& compress_j = json->operator[]("compress");
+		if (!compress_j.is_boolean())
 		{
-			return {json};
+			return {};
 		}
 
-		const auto compressed = compressed_val.get<bool>();
-		const auto& session_crypto = json["session_crypto"];
-		auto& json_data = json["data"];
+		const auto compress = compress_j.get<bool>();
+		auto& session_crypto_j = json->operator[]("session_crypto");
 
-		std::string data_str = json_data.get<std::string>();
+		std::string data_str = data_j.get<std::string>();
 		std::string unescaped_data;
 
-		if (session_crypto.is_boolean() && session_crypto.get<bool>())
+		if (session_crypto_j.is_boolean() && session_crypto_j.as<bool>())
 		{
-			const auto& session_key = json["session_key"].get<std::string>();
+			auto& session_key_j = json->operator[]("session_key");
+			if (!session_key_j.is_string())
+			{
+				return {};
+			}
+
+			const auto& session_key = session_key_j.get<std::string>();
 			user = database::users::find_by_session_id(session_key, false);
 			if (!user.has_value())
 			{
-				json_data = json::value::object_t{};
-				return {json};
+				data_j = json::value::object_t{};
+				return {};
 			}
 
 			utils::cryptography::blowfish session_blow;
 			session_blow.set_key(user->get_crypto_key());
 
 			const auto decrypted = session_blow.decrypt(data_str);
-			if (!compressed)
+			if (!compress)
 			{
 				unescaped_data = utils::encoding::unescape_json(decrypted);
 			}
@@ -87,7 +94,7 @@ namespace emulator
 		}
 		else
 		{
-			if (!compressed)
+			if (!compress)
 			{
 				unescaped_data = utils::encoding::unescape_json(data_str);
 			}
@@ -99,12 +106,12 @@ namespace emulator
 			}
 		}
 
-		if (json::read(json_data, unescaped_data))
+		if (json::read(data_j, unescaped_data))
 		{
 			return {};
 		}
 
-		return std::make_optional(std::move(json));
+		return json;
 	}
 
 	bool main_handler::verify_request(json::value& request)
@@ -136,8 +143,8 @@ namespace emulator
 		return true;
 	}
 
-	std::optional<std::string> main_handler::encrypt_response(json::value& request, json::value& data,
-		const std::optional<database::users::user>& user)
+	bool main_handler::encrypt_response(json::value& request, json::value& data,
+		const std::optional<database::users::user>& user, std::string& result)
 	{
 #ifdef DEBUG
 		const auto start = std::chrono::high_resolution_clock::now();
@@ -185,7 +192,7 @@ namespace emulator
 		{
 			if (!user.has_value())
 			{
-				return {};
+				return false;
 			}
 
 			utils::cryptography::blowfish session_blow;
@@ -203,8 +210,8 @@ namespace emulator
 
 		const auto response_str = json::dump(response);
 		const auto encrypted = this->blow_.encrypt(response_str);
-		auto encoded = utils::encoding::split_into_lines(encrypted);
+		result = utils::encoding::split_into_lines(encrypted);
 		
-		return std::make_optional(std::move(encoded));
+		return true;
 	}
 }

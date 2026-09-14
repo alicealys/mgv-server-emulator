@@ -24,30 +24,29 @@ namespace emulator
 			return {};
 		}
 
-		json::value json;
-		if (json::read(json, str))
+		std::optional<json::value> json;
+		if (json::read(json.emplace(), str))
 		{
 			return {};
 		}
 		
-		const auto& compressed_val = json["compress"];
-		if (!compressed_val.is_boolean())
+		auto& compress_j = json->operator[]("compress");
+		if (!compress_j.is_boolean())
 		{
 			return {};
 		}
 
-		const auto compressed = compressed_val.get<bool>();
-		auto& json_data = json["data"];
-
-		if (!json_data.is_string())
+		auto& data_j = json->operator[]("data");
+		if (!data_j.is_string())
 		{
 			return {};
 		}
 
-		const auto& data_str = json_data.get<std::string>();
+		const auto& data_str = data_j.get<std::string>();
 		std::string unescaped_data;
 
-		if (!compressed)
+		const auto compress = compress_j.get<bool>();
+		if (!compress)
 		{
 			unescaped_data = utils::encoding::unescape_json(data_str);
 		}
@@ -58,12 +57,12 @@ namespace emulator
 			unescaped_data = utils::encoding::unescape_json(decompressed);
 		}
 
-		if (json::read(json_data, unescaped_data))
+		if (json::read(data_j, unescaped_data))
 		{
 			return {};
 		}
 
-		return std::make_optional(std::move(json));
+		return json;
 	}
 
 	bool gate_handler::verify_request(json::value& request)
@@ -95,8 +94,8 @@ namespace emulator
 		return true;
 	}
 
-	std::optional<std::string> gate_handler::encrypt_response(json::value& request, json::value& data,
-		const std::optional<database::users::user>&)
+	bool gate_handler::encrypt_response(json::value& request, json::value& data,
+		const std::optional<database::users::user>&, std::string& result)
 	{
 		data["crypto_type"] = "COMMON";
 		data["flowid"] = json::value::object_t{};
@@ -104,10 +103,10 @@ namespace emulator
 		data["rqid"] = request["data"]["rqid"];
 		data["msgid"] = request["data"]["msgid"];
 
-		auto& result = data["result"];
-		if (result.is_null())
+		auto& result_j = data["result"];
+		if (result_j.is_null())
 		{
-			result = "NOERR";
+			result_j = "NOERR";
 		}
 
 		const auto data_dump = json::dump(data);
@@ -126,8 +125,8 @@ namespace emulator
 
 		const auto response_str = json::dump(response);
 		const auto encrypted = this->blow_.encrypt(response_str);
-		auto encoded = utils::encoding::split_into_lines(encrypted);
+		result = utils::encoding::split_into_lines(encrypted);
 
-		return std::make_optional(std::move(encoded));
+		return true;
 	}
 }

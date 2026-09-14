@@ -5,7 +5,7 @@
 
 namespace json
 {
-	using value = glz::generic_u64;
+	using value = glz::generic_sorted_u64;
 
 	constexpr auto options = glz::opts
 	{

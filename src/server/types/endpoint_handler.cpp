@@ -79,10 +79,9 @@ namespace emulator
 		console::debug("[Endpoint] Command \"%s\" (%lli) result: %s\n", msgid_str.data(), id, result.data());
 #endif
 
-		const auto encrypt = this->encrypt_response(json_req, json_res, user);
-		if (encrypt.has_value())
+		if (!this->encrypt_response(json_req, json_res, user, response.body))
 		{
-			response.body = encrypt.value();
+			response.code = 500;
 		}
 	}
 

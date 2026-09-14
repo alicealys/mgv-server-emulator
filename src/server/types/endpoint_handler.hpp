@@ -23,9 +23,9 @@ namespace emulator
 			return false;
 		}
 
-		virtual std::optional<std::string> encrypt_response(json::value& request, json::value& data, const std::optional<database::users::user>& player)
+		virtual bool encrypt_response(json::value& request, json::value& data, const std::optional<database::users::user>& player, std::string& result)
 		{
-			return {};
+			return false;
 		}
 
 		virtual void handle_command(const utils::request_params& request, utils::response_params& response);
