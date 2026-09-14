@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glaze/glaze.hpp>
 #include <glaze/glaze_exceptions.hpp>
 
