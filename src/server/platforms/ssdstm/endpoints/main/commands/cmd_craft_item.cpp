@@ -44,12 +44,15 @@ namespace emulator::ssd
 		auto resources = std::make_unique<database::players::inventory_resource_list_t>();
 		auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
+		auto user_inventory_info = std::make_unique<database::users::user_inventory_t>();
 
 		user->current_player->get_inventory_resource_list(*resources);
 		user->current_player->get_stackable_item_list(*stackable_item_list, 1);
 		user->current_player->get_inventory(*player_inventory_info);
+		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(*iter->second, *resources, *stackable_item_list, *player_inventory_info))
+  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, 
+			*resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_DATABASE);
 		}
@@ -84,7 +87,7 @@ namespace emulator::ssd
 			{
 				nonstackable_item.color = 255;
 				nonstackable_item.color2 = 255;
-				nonstackable_item.option_slot = static_cast<std::uint16_t>(customize->option_slots_min); // not sure
+				nonstackable_item.option_slot = static_cast<std::uint16_t>(customize->option_slots_min);
 				auto opt_idx = 0u;
 				for (auto i = 0ull; i < customize->option_slots.size(); i++)
 				{
@@ -95,15 +98,15 @@ namespace emulator::ssd
 					}
 
 					auto& option = nonstackable_item.option_list[opt_idx++];
-					option.obtained = 1; // ?
-
 					for (auto o = 0ull; o < option_slot->options.size(); o++)
 					{
-						// ?
 						if (option_slot->options[o].obtained)
 						{
-							option.option_id = option_slot->options[o].optid;
-							break;
+							option.obtained |= 1 << o;
+							if (option.option_id != 0)
+							{
+								option.option_id = option_slot->options[o].optid;
+							}
 						}
 					}
 				}
@@ -141,18 +144,19 @@ namespace emulator::ssd
 
 			stackable_item.to_json(result["crafted_stackable_items"][0]);
 
-			if (survival_gear == nullptr)
-			{
-				user->current_player->set_stackable_item_list(*stackable_item_list);
-			}
-			else
+			if (survival_gear != nullptr)
 			{
 				player_inventory_info->set_survival_obtained(survival_gear->index, true);
-				user->current_player->set_inventory(*player_inventory_info);
 			}
 		}
 
+		user_inventory_info->open_production(iter->second->production->index);
+
 		user->current_player->set_inventory_resource_list(*resources);
+		user->current_player->set_stackable_item_list(*stackable_item_list);
+		user->current_player->set_inventory(*player_inventory_info);
+		user->set_inventory(*user_inventory_info);
+
 		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
 
 		result["inventory_index_junk"] = 0xFFFF;

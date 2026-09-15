@@ -18,6 +18,28 @@ struct glz::meta<game::customize_option_group_t::option_t>
 };
 
 template <>
+struct glz::meta<game::customize_option_t>
+{
+	using T = game::customize_option_t;
+	static constexpr auto value = glz::object(
+		"id_str", &T::id_str,
+		"id", &T::id,
+		"type_id", &T::type_id,
+		"relatedId1", &T::related_id1,
+		"relatedId2", &T::related_id2,
+		"valueu1", &T::value_u1,
+		"valuef1", &T::value_f1,
+		"price", &T::price,
+		"cost", &T::cost,
+		"lang_name", &T::lang_name,
+		"lang_name2", &T::lang_name2,
+		"lang_name3", &T::lang_name3,
+		"lang_info", &T::lang_info,
+		"icon_path", &T::icon_path
+	);
+};
+
+template <>
 struct glz::meta<game::customize_t>
 {
 	using T = game::customize_t;

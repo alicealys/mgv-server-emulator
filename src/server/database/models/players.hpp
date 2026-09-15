@@ -635,6 +635,7 @@ namespace database::players
 
 		bool parse_life_diff(json::value& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
+		nonstackable_item_t* find_at_index(const std::uint16_t inventory_index);
 
 	};
 
@@ -757,7 +758,61 @@ namespace database::players
 
 	};
 
-	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
+	template <size_t N>
+	bool craft_recipe(const std::uint32_t price, const game::cost_t(&cost)[N], 
+		inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	{
+		if (price > inventory_info.energy)
+		{
+			return false;
+		}
+
+		inventory_info.energy -= price;
+
+		for (auto i = 0ull; i < N; i++)
+		{
+			if (cost[i].id == 0)
+			{
+				continue;
+			}
+
+			auto found = false;
+			if (game::is_event_obtained_res(cost[i].id, inventory_info.event_obtained, &found) && found)
+			{
+				continue;
+			}
+
+			for (auto o = 0ull; o < resource_list.size(); o++)
+			{
+				if (cost[i].id == resource_list[o].resource_id && cost[i].count <= resource_list[o].count)
+				{
+					found = true;
+					resource_list[o].count -= cost[i].count;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				for (auto o = 0ull; o < stackable_item_list.size(); o++)
+				{
+					if (cost[i].id == stackable_item_list[o].production_id && cost[i].count <= stackable_item_list[o].count)
+					{
+						found = true;
+						stackable_item_list[o].count -= static_cast<std::uint16_t>(cost[i].count);
+						break;
+					}
+				}
+			}
+
+			if (!found)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	class player
 	{

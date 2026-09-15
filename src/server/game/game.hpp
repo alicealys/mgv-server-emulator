@@ -133,7 +133,7 @@ namespace game
 		std::uint32_t value_u1;
 		float value_f1;
 		std::uint32_t price;
-		std::array<cost_t, 4> cost;
+		cost_t cost[4];
 		std::uint64_t lang_name;
 		std::uint64_t lang_name2;
 		std::uint64_t lang_name3;

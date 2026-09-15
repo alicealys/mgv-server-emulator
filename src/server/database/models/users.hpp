@@ -35,6 +35,7 @@ namespace database::users
 		bool parse_save(json::value& data);
 		bool parse(json::value& data);
 		void to_json(json::value& data);
+		void open_production(const std::uint32_t index);
 	};
 
 	struct user_play_record_t

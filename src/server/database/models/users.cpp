@@ -167,6 +167,17 @@ namespace database::users
 		data["bgm_my_list_setting"] = this->bgm_my_list_setting;
 	}
 
+	void user_inventory_t::open_production(const std::uint32_t index)
+	{
+		if (index >= sizeof(this->production_opened) * 8)
+		{
+			return;
+		}
+
+		const auto byte_index = (index >> 3);
+		this->production_opened[byte_index] |= (1 << (index & 7));
+	}
+
 	GET_FIELD_C(user, std::uint64_t, user_id);
 	GET_FIELD_C(user, std::uint64_t, account_id);
 	GET_FIELD_C(user, std::uint64_t, current_player_id);

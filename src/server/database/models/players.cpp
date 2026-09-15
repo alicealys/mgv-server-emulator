@@ -1084,6 +1084,21 @@ namespace database::players
 		return index < 2048;
 	}
 
+	nonstackable_item_t* nonstackable_item_list_t::find_at_index(const std::uint16_t inventory_index)
+	{
+		const auto iter = std::ranges::find_if(this->begin(), this->end(), [&](const auto& item)
+		{
+			return item.inventory_index == inventory_index;
+		});
+
+		if (iter == this->end())
+		{
+			return nullptr;
+		}
+
+		return &(*iter);
+	}
+
 	bool inventory_resource_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
 	{
 		index = 0u;
@@ -1147,53 +1162,6 @@ namespace database::players
 
 		++obtain_order;
 		return index < 2048;
-	}
-
-	bool craft_recipe(const game::recipe_t& recipe, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
-	{
-		for (auto i = 0ull; i < ARRAYSIZE(recipe.cost); i++)
-		{
-			if (recipe.cost[i].id == 0)
-			{
-				continue;
-			}
-
-			auto found = false;
-			if (game::is_event_obtained_res(recipe.cost[i].id, inventory_info.event_obtained, &found) && found)
-			{
-				continue;
-			}
-
-			for (auto o = 0ull; o < resource_list.size(); o++)
-			{
-				if (recipe.cost[i].id == resource_list[o].resource_id && recipe.cost[i].count <= resource_list[o].count)
-				{
-					found = true;
-					resource_list[o].count -= recipe.cost[i].count;
-					break;
-				}
-			}
-
-			if (!found)
-			{
-				for (auto o = 0ull; o < stackable_item_list.size(); o++)
-				{
-					if (recipe.cost[i].id == stackable_item_list[o].production_id && recipe.cost[i].count <= stackable_item_list[o].count)
-					{
-						found = true;
-						stackable_item_list[o].count -= static_cast<std::uint16_t>(recipe.cost[i].count);
-						break;
-					}
-				}
-			}
-
-			if (!found)
-			{
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	bool crew_member_t::parse(json::value& data)
