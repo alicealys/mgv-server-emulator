@@ -25,12 +25,6 @@
 [submodule "deps/mbedtls"]
 	path = deps/mbedtls
 	url = https://github.com/Mbed-TLS/mbedtls.git
-[submodule "deps/lua"]
-	path = deps/lua
-	url = https://github.com/lua/lua.git
-[submodule "deps/sol2"]
-	path = deps/sol2
-	url = https://github.com/ThePhD/sol2.git
 [submodule "deps/glaze"]
 	path = deps/glaze
 	url = https://github.com/alicealys/glaze.git
