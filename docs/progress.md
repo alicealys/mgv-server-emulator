@@ -24,8 +24,8 @@ List of implemeted/unimplemented server commands
 | CMD_SET_CURRENTPLAYER | ✔️ |  |
 | CMD_CREATE_PLAYER | ✔️ |  |
 | CMD_GDPR_CHECK | ✔️ |  |
-| CMD_REQAUTH_SESSIONSVR | ❌ |  |
-| CMD_SEND_HEARTBEAT | ❌ |  |
+| CMD_REQAUTH_SESSIONSVR | ➖ |  |
+| CMD_SEND_HEARTBEAT | ➖ |  |
 | CMD_ERROR_INFO_SEND | ❌ |  |
 | CMD_ERROR_LANG_ID_SEND | ❌ |  |
 | CMD_GET_INFORMATIONLIST | ❌ |  |
@@ -118,11 +118,11 @@ List of implemeted/unimplemented server commands
 | CMD_BUILDING_REPAIR_LIST | ✔️ |  |
 | CMD_BUILDING_MINING_MACHINE_REPAIR | ❌ |  |
 | CMD_DEPLOY_GET_LIST | ❌ |  |
-| CMD_CREW_LOAD | ❌ |  |
+| CMD_CREW_LOAD | ✔️ |  |
 | CMD_CREW_GROUP_TRANSFER | ❌ |  |
 | CMD_CREW_BANISH | ❌ |  |
-| CMD_CREW_ADD | ❌ |  |
-| CMD_CREW_UPDATE | ❌ |  |
+| CMD_CREW_ADD | ✔️ |  |
+| CMD_CREW_UPDATE | ✔️ |  |
 | CMD_CREW_TREAT | ❌ |  |
 | CMD_CREW_USE_ITEM | ❌ |  |
 | CMD_CREW_USE_PARTY_ITEM | ❌ |  |
@@ -172,9 +172,9 @@ List of implemeted/unimplemented server commands
 | CMD_CRAFT_DELIVER | ❌ |  |
 | CMD_SURVIVE_SUPPLY_LOTTERY | ❌ |  |
 | CMD_CRAFT_OPEN_PERK | ❌ |  |
-| CMD_CRAFT_GRADE_UP | ❌ |  |
+| CMD_CRAFT_GRADE_UP | ✔️ |  |
 | CMD_CRAFT_REFORGE | ❌ |  |
-| CMD_CRAFT_OBTAIN_OPTION | ❌ |  |
+| CMD_CRAFT_OBTAIN_OPTION | ✔️ |  |
 | CMD_CRAFT_CHECK_CRAFTED | ❌ |  |
 | CMD_CRAFT_CHECK_CRAFTED_ALL | ❌ |  |
 | CMD_CRAFT_INVEST_TO_PLAYER | ❌ |  |
