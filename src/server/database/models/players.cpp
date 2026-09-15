@@ -486,8 +486,8 @@ namespace database::players
 
 		for (auto i = 0ull; i < ARRAYSIZE(this->option_list); i++)
 		{
-			data["option_list"][i]["perk_id"] = this->option_list[i].obtained;
-			data["option_list"][i]["perk_level"] = this->option_list[i].option_id;
+			data["option_list"][i]["obtained"] = this->option_list[i].obtained;
+			data["option_list"][i]["option_id"] = this->option_list[i].option_id;
 		}
 
 		for (auto i = 0ull; i < ARRAYSIZE(this->perk_list); i++)

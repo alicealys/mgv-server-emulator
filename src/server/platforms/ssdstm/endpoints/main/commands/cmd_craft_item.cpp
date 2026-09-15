@@ -79,6 +79,36 @@ namespace emulator::ssd
 			nonstackable_item.spec = 1000;
 			nonstackable_item.flag = 1;
 
+			const auto& customize = iter->second->production->customize;
+			if (customize != nullptr)
+			{
+				nonstackable_item.color = 255;
+				nonstackable_item.color2 = 255;
+				nonstackable_item.option_slot = static_cast<std::uint16_t>(customize->option_slots_min); // not sure
+				auto opt_idx = 0u;
+				for (auto i = 0ull; i < customize->option_slots.size(); i++)
+				{
+					auto& option_slot = customize->option_slots[i];
+					if (option_slot == nullptr || !option_slot->not_empty)
+					{
+						continue;
+					}
+
+					auto& option = nonstackable_item.option_list[opt_idx];
+					option.obtained = 1; // ?
+
+					for (auto o = 0ull; o < option_slot->options.size(); o++)
+					{
+						// ?
+						if (option_slot->options[o].obtained)
+						{
+							option.option_id = option_slot->options[o].optid;
+							break;
+						}
+					}
+				}
+			}
+
 			nonstackable_item_list->push(nonstackable_item);
 			user->current_player->set_nonstackable_item_list(*nonstackable_item_list);
 		}
