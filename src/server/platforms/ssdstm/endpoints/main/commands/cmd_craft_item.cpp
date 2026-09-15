@@ -94,7 +94,7 @@ namespace emulator::ssd
 						continue;
 					}
 
-					auto& option = nonstackable_item.option_list[opt_idx];
+					auto& option = nonstackable_item.option_list[opt_idx++];
 					option.obtained = 1; // ?
 
 					for (auto o = 0ull; o < option_slot->options.size(); o++)

@@ -457,15 +457,15 @@ namespace database::players
 
 		utils::json_utils::parse_array(data["option_list"], this->option_list, [](nonstackable_item_t::option_t& dest, json::value& src)
 		{
-			utils::json_utils::get_or(src, dest.obtained);
-			utils::json_utils::get_or(src, dest.option_id);
-		});
+			utils::json_utils::get_or(src["obtained"], dest.obtained);
+			utils::json_utils::get_or(src["option_id"], dest.option_id);
+		}, false);
 
 		utils::json_utils::parse_array(data["perk_list"], this->perk_list, [](perk_t& dest, json::value& src)
 		{
-			utils::json_utils::get_or(src, dest.perk_id);
-			utils::json_utils::get_or(src, dest.perk_level);
-		});
+			utils::json_utils::get_or(src["perk_id"], dest.perk_id);
+			utils::json_utils::get_or(src["perk_level"], dest.perk_level);
+		}, false);
 
 		return true;
 	}
