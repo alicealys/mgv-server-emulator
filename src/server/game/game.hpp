@@ -91,6 +91,13 @@ namespace game
 	std::uint8_t* get_static_key(const std::uint32_t type = key_type_ssd);
 	std::size_t get_static_key_len();
 
+	struct cost_t
+	{
+		std::uint32_t id;
+		std::uint32_t type;
+		std::uint32_t count;
+	};
+
 	struct gradeup_spec_t
 	{
 		bool parse(json::value& data);
@@ -114,6 +121,55 @@ namespace game
 		std::uint32_t mesh;
 	};
 
+	struct customize_option_t
+	{
+		bool parse(json::value& data);
+
+		std::string id_str;
+		std::uint32_t id;
+		std::uint32_t type_id;
+		std::uint32_t related_id1;
+		std::uint32_t related_id2;
+		std::uint32_t value_u1;
+		float value_f1;
+		std::uint32_t price;
+		std::array<cost_t, 4> cost;
+		std::uint64_t lang_name;
+		std::uint64_t lang_name2;
+		std::uint64_t lang_name3;
+		std::uint64_t lang_info;
+		std::uint64_t icon_path;
+	};
+
+	struct customize_option_group_t
+	{
+		bool parse(json::value& data);
+
+		struct option_t
+		{
+			std::uint32_t optid;
+			bool obtained;
+			std::uint8_t level;
+			std::shared_ptr<customize_option_t> option;
+		};
+
+		std::string id_str;
+		std::uint32_t id;
+		bool not_empty;
+		std::array<option_t, 8> options;
+	};
+
+	struct customize_t
+	{
+		bool parse(json::value& data);
+
+		std::string id_str;
+		std::uint32_t id;
+		std::uint32_t option_slots_min;
+		std::array<std::uint32_t, 8> option_slot_ids;
+		std::array<std::shared_ptr<customize_option_group_t>, 8> option_slots;
+	};
+
 	struct production_t
 	{
 		bool parse(json::value& data);
@@ -127,7 +183,7 @@ namespace game
 		std::uint32_t lv_need;
 		std::uint32_t stock;
 		std::uint32_t life;
-		std::uint32_t customize;
+		std::uint32_t customize_id;
 		std::uint32_t conv_use;
 		std::uint32_t base_c_water;
 		std::uint32_t base_food;
@@ -165,18 +221,12 @@ namespace game
 		std::uint64_t icon_path;
 		std::array<std::uint32_t, 3> perk;
 		std::string id_str;
+		std::shared_ptr<customize_t> customize;
 	};
 
 	struct recipe_t
 	{
 		bool parse(json::value& data);
-
-		struct cost_t
-		{
-			std::uint32_t id;
-			std::uint32_t type;
-			std::uint32_t count;
-		};
 
 		struct leftover_t
 		{

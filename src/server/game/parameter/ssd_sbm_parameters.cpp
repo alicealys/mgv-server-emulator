@@ -11,12 +11,96 @@ namespace game::parameters
 
 	bool ssd_sbm_parameters::parse(json::value& data)
 	{
+		for (auto i = 0ull; i < data["customize_option"].size(); i++)
+		{
+			auto inst = std::make_shared<customize_option_t>();
+			if (!inst->parse(data["customize_option"][i]))
+			{
+				console::warning("invalid customize_option at index %lli\n", i);
+				continue;
+			}
+
+			this->customize_option[inst->id] = inst;
+		}
+
+		for (auto i = 0ull; i < data["customize_option_group"].size(); i++)
+		{
+			auto inst = std::make_shared<customize_option_group_t>();
+			if (!inst->parse(data["customize_option_group"][i]))
+			{
+				console::warning("invalid customize_option_group at index %lli\n", i);
+				continue;
+			}
+
+			for (auto o = 0ull; o < inst->options.size(); o++)
+			{
+				if (inst->options[o].optid == 0)
+				{
+					continue;
+				}
+
+				const auto iter = this->customize_option.find(inst->options[o].optid);
+				if (iter == this->customize_option.end())
+				{
+					console::warning("customize_option_group %s has invalid customize_option id %lli\n", inst->id_str.data(), inst->options[o].optid);
+					continue;
+				}
+
+				inst->options[o].option = iter->second;
+			}
+
+			this->customize_option_group[inst->id] = inst;
+		}
+
+		for (auto i = 0ull; i < data["customize"].size(); i++)
+		{
+			auto inst = std::make_shared<customize_t>();
+			if (!inst->parse(data["customize"][i]))
+			{
+				console::warning("invalid customize at index %lli\n", i);
+				continue;
+			}
+
+			for (auto o = 0ull; o < inst->option_slots.size(); o++)
+			{
+				if (inst->option_slot_ids[o] == 0)
+				{
+					continue;
+				}
+
+				const auto iter = this->customize_option_group.find(inst->option_slot_ids[o]);
+				if (iter == this->customize_option_group.end())
+				{
+					console::warning("customize %s has invalid customize_option_group id %lli\n", inst->id_str.data(), inst->option_slot_ids[o]);
+					continue;
+				}
+
+				inst->option_slots[o] = iter->second;
+			}
+
+			this->customize[inst->id] = inst;
+		}
+
 		for (auto i = 0ull; i < data["production"].size(); i++)
 		{
 			auto prod = std::make_shared<production_t>();
 			if (!prod->parse(data["production"][i]))
 			{
 				console::warning("invalid production at index %lli\n", i);
+				continue;
+			}
+
+			if (prod->customize_id != 0)
+			{
+				const auto iter = this->customize.find(prod->customize_id);
+				if (iter == this->customize.end())
+				{
+					console::warning("production %s has invalid customize id %lli\n", prod->id_str.data(), prod->customize_id);
+				}
+				else
+				{
+					prod->customize = iter->second;
+				}
 			}
 
 			this->productions[prod->id] = prod;

@@ -7,6 +7,27 @@
 #include "utils/json_utils.hpp"
 
 template <>
+struct glz::meta<game::customize_option_group_t::option_t>
+{
+	using T = game::customize_option_group_t::option_t;
+	static constexpr auto value = glz::object(
+		"optid", &T::optid,
+		"obtained", &T::obtained,
+		"level", &T::level
+	);
+};
+
+template <>
+struct glz::meta<game::customize_t>
+{
+	using T = game::customize_t;
+	static constexpr auto modify = glz::object(
+		"optionSlotsMin", &T::option_slots_min,
+		"optionSlots", &T::option_slot_ids
+	);
+};
+
+template <>
 struct glz::meta<game::recipe_t>
 {
 	using T = game::recipe_t;
@@ -33,8 +54,53 @@ template <>
 struct glz::meta<game::production_t>
 {
 	using T = game::production_t;
-	static constexpr auto modify = glz::object(
-		"craftCategory", &T::craft_category
+	static constexpr auto value = glz::object(
+		"id", &T::id,
+		"index", &T::index,
+		"type", &T::type,
+		"craftCategory", &T::craft_category,
+		"rarity", &T::rarity,
+		"lv_need", &T::lv_need,
+		"stock", &T::stock,
+		"life", &T::life,
+		"customize", &T::customize_id,
+		"conv_use", &T::conv_use,
+		"base_c_water", &T::base_c_water,
+		"base_food", &T::base_food,
+		"base_medicine", &T::base_medicine,
+		"sup_combat", &T::sup_combat,
+		"sup_survival", &T::sup_survival,
+		"related_id", &T::related_id,
+		"attr_icon", &T::attr_icon,
+		"material", &T::material,
+		"only_flag", &T::only_flag,
+		"countable", &T::countable,
+		"eqp_hip", &T::eqp_hip,
+		"eqp_back", &T::eqp_back,
+		"eqp_sec", &T::eqp_sec,
+		"eqp_sup", &T::eqp_sup,
+		"pri_r_slot", &T::pri_r_slot,
+		"show_info", &T::show_info,
+		"weight", &T::weight,
+		"crew_inj_food_poison", &T::crew_inj_food_poison,
+		"crew_inj_dysentery", &T::crew_inj_dysentery,
+		"crew_inj_physical", &T::crew_inj_physical,
+		"crew_inj_fatigue", &T::crew_inj_fatigue,
+		"prv_r_x", &T::prv_r_x,
+		"prv_r_y", &T::prv_r_y,
+		"prv_r_y_min", &T::prv_r_y_min,
+		"prv_r_y_max", &T::prv_r_y_max,
+		"prv_r_z_off", &T::prv_r_z_off,
+		"prv_zm_min", &T::prv_zm_min,
+		"prv_zm", &T::prv_zm,
+		"prv_zm_max", &T::prv_zm_max,
+		"lang_name", &T::lang_name,
+		"lang_name2", &T::lang_name2,
+		"lang_name3", &T::lang_name3,
+		"lang_info", &T::lang_info,
+		"icon_path", &T::icon_path,
+		"perk", &T::perk,
+		"id_str", &T::id_str
 	);
 };
 
@@ -187,9 +253,24 @@ namespace game
 		return sizeof(static_key);
 	}
 
+	bool customize_option_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	bool customize_option_group_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	bool customize_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
 	bool production_t::parse(json::value& data)
 	{
-		return !glz::read<glz::opts{.error_on_unknown_keys = false}>(*this, data);
+		return !json::read(*this, data);
 	}
 
 	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
