@@ -19,7 +19,7 @@ namespace database::auth_tokens
 		DEFINE_FIELD(account_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(token_hash, sqlpp::text);
 		DEFINE_FIELD(expire_date, sqlpp::time_point);
-		DEFINE_TABLE(steam_users, id_field_t, account_id_field_t, 
+		DEFINE_TABLE(auth_tokens, id_field_t, account_id_field_t, 
 			type_field_t, token_hash_field_t, expire_date_field_t);
 
 		inline static table_t table;

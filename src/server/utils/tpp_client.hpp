@@ -13,13 +13,15 @@ namespace utils::tpp
 		tpp_client();
 		~tpp_client();
 
+		void initialize();
+
 		void set_url(const std::string& url);
 		std::string get_url();
 
 		std::string decrypt_response(const std::string& data, bool use_static = true);
 		std::optional<utils::http::http_result> send_data(const std::string& endpoint, const std::string& data);
 		std::optional<json::value> send_command(const std::string& endpoint,
-			const json::value& data_params, bool use_crypto = true, const json::value& params = {});
+			const json::value& data_params, bool use_crypto = true);
 
 	private:
 		std::string url_;

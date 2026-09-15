@@ -20,7 +20,7 @@ namespace emulator
 	{
 		const auto target = params.query.get("target");
 		const auto target_value = target.value_or("");
-		const auto& base_url = config::get().enable_web_api;
+		const auto& base_url = config::get().base_url;
 		const auto redirect_url = std::format(URL_FORMAT, base_url, target_value, base_url);
 
 		json::value result;

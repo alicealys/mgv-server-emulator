@@ -109,6 +109,7 @@ namespace auth
 
 	void initialize_lists()
 	{
+		client.initialize();
 		get_allow_list();
 		get_deny_list();
 	}

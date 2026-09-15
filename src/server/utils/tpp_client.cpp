@@ -7,12 +7,16 @@ namespace utils::tpp
 {
 	tpp_client::tpp_client()
 	{
-		this->set_url("https://mgssd-game.cs.konami.net/ssdstm/gate");
-		this->static_blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
 	tpp_client::~tpp_client()
 	{
+	}
+
+	void tpp_client::initialize()
+	{
+		this->set_url("https://mgssd-game.cs.konami.net");
+		this->static_blow_.set_key(game::get_static_key(), game::get_static_key_len());
 	}
 
 	void tpp_client::set_url(const std::string& url)
@@ -49,107 +53,92 @@ namespace utils::tpp
 	std::optional<utils::http::http_result> tpp_client::send_data(const std::string& endpoint, const std::string& data)
 	{
 		auto encrypted = this->static_blow_.encrypt(data);
-		encrypted = utils::string::replace(encrypted, "+", "%2B");
-
-		const auto post_data = "body="s + encrypted;
 		utils::http::headers headers;
 
 		headers["Connection"] = "Keep-Alive";
-		headers["Content-Type"] = "application/x-www-form-urlencoded";
+		headers["Content-Type"] = "application/json";
 
 		const auto url = this->get_url() + "/";
-		return utils::http::post_data(url + endpoint, post_data, headers);
+		return utils::http::post_data(url + endpoint, encrypted, headers);
 	}
 
 	std::optional<json::value> tpp_client::send_command(const std::string& endpoint, 
-		const json::value& data_params, bool use_crypto, const json::value& params)
+		const json::value& data_params, bool use_crypto)
 	{
-		try
+		json::value message;
+		message["compress"] = false;
+		message["session_crypto"] = use_crypto;
+		message["session_key"] = "";
+
+		const auto data_str = json::dump(data_params);
+		if (use_crypto)
 		{
-			json::value message;
-			message["compress"] = false;
-			message["session_crypto"] = use_crypto;
-			message["session_key"] = "";
-
-			const auto data_str = json::dump(data_params);
-			if (use_crypto)
-			{
-				const auto encrypted = this->session_blow_.encrypt(data_str);
-				message["data"] = encrypted;
-			}
-			else
-			{
-				message["data"] = data_str;
-			}
-
-			message["original_size"] = data_str.size();
-
-			for (const auto& [key, value] : params.get_object())
-			{
-				message[key] = value;
-			}
-
-			const auto message_str = json::dump(message);
-			const auto res = this->send_data(endpoint, message_str);
-			if (!res.has_value())
-			{
-				return {};
-			}
-
-			const auto& value = res.value();
-			if (value.response_code != 200)
-			{
-				return {};
-			}
-
-			const auto buffer = utils::string::replace(value.buffer, "\r\n", "");
-			if (buffer.size() == 0)
-			{
-				return {};
-			}
-
-			const auto decrypted = this->static_blow_.decrypt(value.buffer);
-			json::value json;
-			if (json::read(json, decrypted))
-			{
-				return {};
-			}
-
-			if (!json["data"].is_string())
-			{
-				return {json};
-			}
-
-			std::string data = json["data"].get<std::string>();
-			const auto compressed = json["compress"].is_boolean() && json["compress"].get<bool>();
-			const auto session_crypto = json["session_crypto"].is_boolean() && json["session_crypto"].get<bool>();
-
-			if (session_crypto)
-			{
-				data = utils::string::replace(data, "\r\n", "");
-				data = this->session_blow_.decrypt(data);
-			}
-
-			if (compressed)
-			{
-				if (!session_crypto)
-				{
-					data = utils::cryptography::base64::decode(data);
-				}
-
-				data = utils::compression::zlib::decompress(data);
-			}
-
-			if (!json::read(json["data"], data))
-			{
-				return {};
-			}
-
-			return {json};
+			const auto encrypted = this->session_blow_.encrypt(data_str);
+			message["data"] = encrypted;
 		}
-		catch (const std::exception&)
+		else
+		{
+			message["data"] = data_str;
+		}
+
+		message["original_size"] = data_str.size();
+
+		const auto message_str = json::dump(message);
+		const auto res = this->send_data(endpoint, message_str);
+		if (!res.has_value())
 		{
 			return {};
 		}
+
+		const auto& value = res.value();
+		if (value.response_code != 200)
+		{
+			return {};
+		}
+
+		const auto buffer = utils::string::replace(value.buffer, "\r\n", "");
+		if (buffer.size() == 0)
+		{
+			return {};
+		}
+
+		const auto decrypted = this->static_blow_.decrypt(value.buffer);
+		json::value json;
+		if (json::read(json, decrypted))
+		{
+			return {};
+		}
+
+		if (!json["data"].is_string())
+		{
+			return {json};
+		}
+
+		std::string data = json["data"].get<std::string>();
+		const auto compressed = json["compress"].is_boolean() && json["compress"].get<bool>();
+		const auto session_crypto = json["session_crypto"].is_boolean() && json["session_crypto"].get<bool>();
+
+		if (session_crypto)
+		{
+			data = utils::string::replace(data, "\r\n", "");
+			data = this->session_blow_.decrypt(data);
+		}
+
+		if (compressed)
+		{
+			if (!session_crypto)
+			{
+				data = utils::cryptography::base64::decode(data);
+			}
+
+			data = utils::compression::zlib::decompress(data);
+		}
+
+		if (json::read(json["data"], data))
+		{
+			return {};
+		}
+
+		return {json};
 	}
 }
