@@ -80,7 +80,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		if (!database::players::craft_recipe(option->price, option->cost, 
+		if (!database::players::craft_recipe(option->price, option->cost, 1,
 			*resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_DATABASE);

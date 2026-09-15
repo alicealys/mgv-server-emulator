@@ -32,7 +32,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto craft_num = std::min(std::uint16_t(8u), craft_num_j.as<std::uint16_t>());
+		const auto craft_num = std::min(std::uint16_t(256u), craft_num_j.as<std::uint16_t>());
 		const auto recipe_id = recipe_id_j.as<std::uint32_t>();
 
 		const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(recipe_id);
@@ -51,7 +51,7 @@ namespace emulator::ssd
 		user->current_player->get_inventory(*player_inventory_info);
 		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, 
+  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, craft_num,
 			*resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_DATABASE);

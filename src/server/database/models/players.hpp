@@ -553,7 +553,7 @@ namespace database::players
 			for (auto i = 0ull; i < count; i++)
 			{
 				T new_item{};
-				if (!new_item.parse(data[i]) || this->is_element_empty(new_item))
+				if (!new_item.parse(data[i]))
 				{
 					continue;
 				}
@@ -759,15 +759,15 @@ namespace database::players
 	};
 
 	template <size_t N>
-	bool craft_recipe(const std::uint32_t price, const game::cost_t(&cost)[N], 
+	bool craft_recipe(const std::uint32_t price, const game::cost_t(&cost)[N], const std::uint32_t amount,
 		inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
 	{
-		if (price > inventory_info.energy)
+		if (price * amount > inventory_info.energy)
 		{
 			return false;
 		}
 
-		inventory_info.energy -= price;
+		inventory_info.energy -= price * amount;
 
 		for (auto i = 0ull; i < N; i++)
 		{
@@ -784,10 +784,10 @@ namespace database::players
 
 			for (auto o = 0ull; o < resource_list.size(); o++)
 			{
-				if (cost[i].id == resource_list[o].resource_id && cost[i].count <= resource_list[o].count)
+				if (cost[i].id == resource_list[o].resource_id && cost[i].count * amount <= resource_list[o].count)
 				{
 					found = true;
-					resource_list[o].count -= cost[i].count;
+					resource_list[o].count -= cost[i].count * amount;
 					break;
 				}
 			}
@@ -796,10 +796,10 @@ namespace database::players
 			{
 				for (auto o = 0ull; o < stackable_item_list.size(); o++)
 				{
-					if (cost[i].id == stackable_item_list[o].production_id && cost[i].count <= stackable_item_list[o].count)
+					if (cost[i].id == stackable_item_list[o].production_id && cost[i].count * amount <= stackable_item_list[o].count)
 					{
 						found = true;
-						stackable_item_list[o].count -= static_cast<std::uint16_t>(cost[i].count);
+						stackable_item_list[o].count -= static_cast<std::uint16_t>(cost[i].count * amount);
 						break;
 					}
 				}

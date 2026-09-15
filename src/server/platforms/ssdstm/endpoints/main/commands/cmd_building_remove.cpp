@@ -44,13 +44,20 @@ namespace emulator::ssd
 				const auto row = row_j.as<std::uint32_t>();
 				const auto current_life = current_life_j.as<std::uint16_t>();
 
-				building_info->cells[row][col].edges[type].life = current_life;
+				if (current_life == 0)
+				{
+					std::memset(&building_info->cells[row][col].edges[type], 0, sizeof(database::players::building_info_t::cell_edge_t));
+				}
+				else
+				{
+					building_info->cells[row][col].edges[type].life = current_life;
+				}
 			}
 		};
 
 		user->current_player->get_building_info(*building_info, map_location);
 
-		do_list(data["center_life_list"], database::players::edge_type_upper);
+		do_list(data["center_life_list"], database::players::edge_type_center);
 		do_list(data["upper_life_list"], database::players::edge_type_upper);
 		do_list(data["left_life_list"], database::players::edge_type_left);
 
