@@ -29,9 +29,9 @@ namespace emulator::ssd
 		result["is_release_note"] = 1;
 		result["login_count"] = 0;
 
-		result["aes_key"] = nullptr;
-		result["cbc_iv"] = nullptr;
-		result["hmac_key"] = nullptr;
+		result["aes_key"] = json::null();
+		result["cbc_iv"] = json::null();
+		result["hmac_key"] = json::null();
 
 		if (!user.has_value())
 		{

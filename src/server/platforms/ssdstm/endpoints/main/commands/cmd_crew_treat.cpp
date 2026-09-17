@@ -2,13 +2,51 @@
 
 #include "cmd_crew_treat.hpp"
 
-// not implemented
+struct entry_t
+{
+	std::uint32_t unique_id;
+	std::uint32_t treat_item_injury_1;
+	std::uint32_t treat_item_injury_2;
+	std::uint32_t treat_item_sickness_1;
+	std::uint32_t treat_item_sickness_2;
+};
+
 namespace emulator::ssd
 {
 	json::value cmd_crew_treat::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
-        result["result"] = "ERR_NOTIMPLEMENTED";
-        return result;
+
+		std::uint32_t option{};
+		if (json::read(option, data["option"]))
+		{
+			return error(ERR_INVALIDARG);
+		}
+
+		auto& list_j = data["treat_list"];
+		if (!list_j.is_array())
+		{
+			return error(ERR_INVALIDARG);
+		}
+
+		for (auto i = 0ull; i < list_j.size(); i++)
+		{
+			entry_t entry{};
+			if (json::read(entry, list_j[i]))
+			{
+				continue;
+			}
+
+			// TODO
+		}
+
+		result["result"] = "ERR_NOTIMPLEMENTED";
+
+		return result;
+	}
+
+	std::uint32_t cmd_crew_treat::flags()
+	{
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
 	}
 }

@@ -26,8 +26,8 @@ List of implemeted/unimplemented server commands
 | CMD_GDPR_CHECK | ✔️ |  |
 | CMD_REQAUTH_SESSIONSVR | ➖ |  |
 | CMD_SEND_HEARTBEAT | ➖ |  |
-| CMD_ERROR_INFO_SEND | ❌ |  |
-| CMD_ERROR_LANG_ID_SEND | ❌ |  |
+| CMD_ERROR_INFO_SEND | ➖ |  |
+| CMD_ERROR_LANG_ID_SEND | ➖ |  |
 | CMD_GET_INFORMATIONLIST | ❌ |  |
 | CMD_UPDATE_SESSION | ✔️ |  |
 | CMD_SVCOIN_GET_BALANCE | ❌ |  |
@@ -91,7 +91,7 @@ List of implemeted/unimplemented server commands
 | CMD_FLAG_MISSION_END | ❌ |  |
 | CMD_MISSION_ABORT | ❌ |  |
 | CMD_QUEST_END | ❌ |  |
-| CMD_MISSION_OPEN | ❌ |  |
+| CMD_MISSION_OPEN | ✔️ |  |
 | CMD_MISSION_PROGRESS_LOAD | ✔️ |  |
 | CMD_EVENT_LOG_SEND | ❌ |  |
 | CMD_CHARACTER_SET_NAME | ❌ |  |
@@ -159,8 +159,8 @@ List of implemeted/unimplemented server commands
 | CMD_EVENT_GET_AROUND_RANKING | ❌ |  |
 | CMD_EVENT_CATALOG_REWARD_PURCHASE | ❌ |  |
 | CMD_EVENT_REWARD_RECEIVE | ❌ |  |
-| CMD_SEND_STATISTICS_DATA | ❌ |  |
-| CMD_STATISTICS_MATCHING_TIME | ❌ |  |
+| CMD_SEND_STATISTICS_DATA | ➖ |  |
+| CMD_STATISTICS_MATCHING_TIME | ➖ |  |
 | CMD_DEFENSE_MISSION_START | ❌ |  |
 | CMD_DEFENSE_MISSION_CANCEL | ❌ |  |
 | CMD_DEFENSE_MISSION_GET_HISTORY_LIST | ❌ |  |

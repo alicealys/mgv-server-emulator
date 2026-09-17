@@ -67,8 +67,12 @@ namespace emulator
 		};
 
 		auto json_res = get_json_response();
-		auto& result_j = json_res["result"];
+		if (!json_res.is_object())
+		{
+			json_res = json::object();
+		}
 
+		auto& result_j = json_res["result"];
 		if (!result_j.is_string())
 		{
 			result_j = "NOERR";
