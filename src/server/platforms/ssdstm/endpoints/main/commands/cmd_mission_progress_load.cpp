@@ -142,7 +142,6 @@ namespace emulator::ssd
 		result["story_unlock_info"]["map_unlock_list"][1]["location_index"] = 1;
 		map_unlock_list_africa->to_json(result["story_unlock_info"]["map_unlock_list"][1]["map_unlock"]);
 		
-		result["tips_open_info"]["data"] = "";
 		result["user_flag"] = user->get_user_flag();
 
         return result;
