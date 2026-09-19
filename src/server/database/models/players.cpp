@@ -956,8 +956,7 @@ namespace database::players
 			return false;
 		}
 
-		const auto count = std::min(data.size(), static_cast<std::size_t>(building_grid_size));
-		for (auto i = 0ull; i < count; i++)
+		for (auto i = 0ull; i < data.size(); i++)
 		{
 			cell_edge_t cell_edge{};
 			std::uint32_t row{};

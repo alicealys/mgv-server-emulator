@@ -36,17 +36,17 @@ namespace emulator::ssd
 			auto& animal_list_j = base_resources_j["animal_list"];
 
 			const auto base_resources = std::make_unique<database::players::base_resources_t>();
-			if (base_resource_count_j.is_array() && base_resource_count_j.size())
+			if (base_resource_count_j.is_object())
 			{
 				base_resources->parse_counts(base_resource_count_j);
 			}
 
-			if (base_resource_j.is_array() && base_resource_j.size())
+			if (base_resource_j.is_object())
 			{
 				base_resources->parse_base(base_resource_j);
 			}
 
-			if (animal_list_j.is_array() && animal_list_j.size())
+			if (animal_list_j.is_array())
 			{
 				base_resources->parse_animals(animal_list_j);
 			}
