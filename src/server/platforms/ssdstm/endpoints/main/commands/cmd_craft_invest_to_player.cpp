@@ -4,12 +4,6 @@
 
 #include <utils/json_utils.hpp>
 
-struct param_t
-{
-	std::uint32_t cls;
-	std::uint32_t energy;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_craft_invest_to_player::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -28,8 +22,29 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		result["energy"] = 0;
-		result["result"] = "ERR_NOTIMPLEMENTED";
+		const auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
+		const auto player_play_record = std::make_unique<database::players::player_play_record_t>();
+		if (param.cls >= ARRAYSIZE(player_inventory_info->energy_invested))
+		{
+			return error(ERR_INVALIDARG);
+		}
+
+		user->current_player->get_inventory(*player_inventory_info);
+		user->current_player->get_play_record(*player_play_record);
+		if (param.energy > player_inventory_info->energy)
+		{
+			return error(ERR_DATABASE);
+		}
+
+		player_inventory_info->energy -= param.energy;
+		player_inventory_info->energy_invested[param.cls] += param.energy;
+		std::memcpy(player_inventory_info->survival_new, survival_slot_new, sizeof(player_inventory_info->survival_new));
+		player_play_record->first[187] += param.energy;
+
+		user->current_player->set_inventory(*player_inventory_info);
+		user->current_player->set_play_record(*player_play_record);
+
+		result["energy"] = param.energy;
 
         return result;
 	}

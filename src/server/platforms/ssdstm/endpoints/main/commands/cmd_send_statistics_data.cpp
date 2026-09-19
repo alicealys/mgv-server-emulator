@@ -2,12 +2,6 @@
 
 #include "cmd_send_statistics_data.hpp"
 
-struct param_t
-{
-	std::uint32_t data_type;
-	std::string data;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_send_statistics_data::execute(json::value& data, const std::optional<database::users::user>& user)

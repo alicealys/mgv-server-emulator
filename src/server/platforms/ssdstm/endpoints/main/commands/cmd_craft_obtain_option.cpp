@@ -4,21 +4,13 @@
 
 #include "game/parameters.hpp"
 
-struct obtain_option_item_param_t
-{
-	std::uint16_t inventory_index;
-	std::uint8_t inventory_type;
-	std::uint32_t option_id;
-	std::uint8_t option_slot;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_craft_obtain_option::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
 
-		obtain_option_item_param_t param{};
+		param_t param{};
 		if (json::read(param, data["obtain_option_item_param"]))
 		{
 			return error(ERR_INVALIDARG);

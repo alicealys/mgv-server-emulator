@@ -2,12 +2,6 @@
 
 #include "cmd_crew_use_item.hpp"
 
-struct entry_t
-{
-	std::uint32_t item_resource_id;
-	std::uint32_t num;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_crew_use_item::execute(json::value& data, const std::optional<database::users::user>& user)

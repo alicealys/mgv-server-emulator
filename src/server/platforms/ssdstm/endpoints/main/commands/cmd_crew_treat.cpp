@@ -2,15 +2,6 @@
 
 #include "cmd_crew_treat.hpp"
 
-struct entry_t
-{
-	std::uint32_t unique_id;
-	std::uint32_t treat_item_injury_1;
-	std::uint32_t treat_item_injury_2;
-	std::uint32_t treat_item_sickness_1;
-	std::uint32_t treat_item_sickness_2;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_crew_treat::execute(json::value& data, const std::optional<database::users::user>& user)

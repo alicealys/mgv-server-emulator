@@ -106,7 +106,7 @@ namespace database::players
 		utils::json_utils::parse_array(data["cbox_location"], this->cbox_location);
 		utils::json_utils::parse_array(data["cbox_pos"], this->cbox_pos);
 		utils::json_utils::parse_array(data["cbox_updated"], this->cbox_updated);
-		utils::json_utils::parse_array(data["energy_invested"], this->energy_invested);
+		//utils::json_utils::parse_array(data["energy_invested"], this->energy_invested);
 
 		const auto try_parse_part = [&]<typename T>(const std::string_view & name, T & dest, const bool or_ = false)
 		{

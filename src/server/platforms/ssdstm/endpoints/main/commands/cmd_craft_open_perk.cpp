@@ -2,13 +2,6 @@
 
 #include "cmd_craft_open_perk.hpp"
 
-struct param_t
-{
-	std::uint32_t perk_id;
-	std::uint32_t recipe_id;
-	std::uint32_t target_item;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_craft_open_perk::execute(json::value& data, const std::optional<database::users::user>& user)

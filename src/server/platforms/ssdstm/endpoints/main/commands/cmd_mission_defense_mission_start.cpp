@@ -2,14 +2,6 @@
 
 #include "cmd_mission_defense_mission_start.hpp"
 
-struct param_t
-{
-	std::uint32_t attack_time;
-	std::uint32_t flag;
-	std::uint32_t threat;
-	std::uint32_t threat_threshold;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_mission_defense_mission_start::execute(json::value& data, const std::optional<database::users::user>& user)

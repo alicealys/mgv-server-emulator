@@ -2,14 +2,6 @@
 
 #include "cmd_error_info_send.hpp"
 
-struct param_t
-{
-	std::uint32_t action;
-	std::uint32_t error;
-	std::uint32_t info;
-	std::string message;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_error_info_send::execute(json::value& data, const std::optional<database::users::user>& user)

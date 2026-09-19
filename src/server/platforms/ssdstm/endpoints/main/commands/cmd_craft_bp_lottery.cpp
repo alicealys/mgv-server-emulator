@@ -2,13 +2,6 @@
 
 #include "cmd_craft_bp_lottery.hpp"
 
-struct entry_t
-{
-	std::uint16_t inventory_index;
-	std::uint16_t inventory_type;
-	std::uint16_t num;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_craft_bp_lottery::execute(json::value& data, const std::optional<database::users::user>& user)

@@ -2,12 +2,6 @@
 
 #include "cmd_crew_group_transfer.hpp"
 
-struct entry_t
-{
-	std::uint32_t unique_id;
-	std::uint16_t group_id;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_crew_group_transfer::execute(json::value& data, const std::optional<database::users::user>& user)

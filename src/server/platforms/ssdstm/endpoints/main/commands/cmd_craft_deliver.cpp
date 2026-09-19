@@ -2,23 +2,6 @@
 
 #include "cmd_craft_deliver.hpp"
 
-struct param_t
-{
-    std::uint32_t bad_status_1_risk;
-    std::uint32_t bad_status_2_risk;
-    std::uint32_t bad_status_3_risk;
-    std::uint32_t bad_status_4_risk;
-    std::uint32_t clean_water;
-    std::uint32_t food;
-    std::uint32_t inventory_index;
-    std::uint32_t inventory_index2;
-    std::uint32_t inventory_type;
-    std::uint32_t inventory_type2;
-    std::uint32_t list_type;
-    std::uint32_t medical_supplies;
-    std::uint32_t num;
-};
-
 namespace emulator::ssd
 {
 	json::value cmd_craft_deliver::execute(json::value& data, const std::optional<database::users::user>& user)
