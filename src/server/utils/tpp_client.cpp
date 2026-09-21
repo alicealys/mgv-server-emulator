@@ -104,7 +104,7 @@ namespace utils::tpp
 
 		const auto decrypted = this->static_blow_.decrypt(value.buffer);
 		json::value json;
-		if (json::read(json, decrypted))
+		if (!json::read(json, decrypted))
 		{
 			return {};
 		}
@@ -134,7 +134,7 @@ namespace utils::tpp
 			data = utils::compression::zlib::decompress(data);
 		}
 
-		if (json::read(json["data"], data))
+		if (!json::read(json["data"], data))
 		{
 			return {};
 		}

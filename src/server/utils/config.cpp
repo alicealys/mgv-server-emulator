@@ -27,7 +27,7 @@ namespace config
 			}
 
 			config_t config{};
-			if (json::read(config, data))
+			if (!json::read(config, data))
 			{
 				throw std::runtime_error("failed to parse config");
 			}

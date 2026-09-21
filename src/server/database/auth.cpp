@@ -44,7 +44,7 @@ namespace auth
 			}
 
 			std::unordered_set<std::uint64_t> list;
-			if (json::read(list, data))
+			if (!json::read(list, data))
 			{
 				console::error("Error parsing list, must be a valid int64 array\n");
 				return {};

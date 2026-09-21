@@ -9,7 +9,7 @@ namespace emulator::ssd
 		json::value result;
         
 		std::uint32_t id{};
-		if (json::read(id, data["id"]))
+		if (!json::read(id, data["id"]))
 		{
 			return error(ERR_INVALIDARG);
 		}

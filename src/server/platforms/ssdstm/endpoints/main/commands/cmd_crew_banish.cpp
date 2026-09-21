@@ -17,7 +17,7 @@ namespace emulator::ssd
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
 			std::uint32_t unique_id{};
-			if (json::read(unique_id, list_j[i]))
+			if (!json::read(unique_id, list_j[i]))
 			{
 				continue;
 			}

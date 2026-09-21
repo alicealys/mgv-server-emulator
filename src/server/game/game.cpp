@@ -291,22 +291,22 @@ namespace game
 
 	bool customize_option_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool customize_option_group_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool customize_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool production_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
@@ -322,12 +322,12 @@ namespace game
 
 	bool recipe_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool gradeup_spec_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade)
@@ -337,17 +337,17 @@ namespace game
 
 	bool survival_gear_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
  
 	bool crew_member_type_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool defense_mission_settings_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result)

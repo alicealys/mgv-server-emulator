@@ -81,7 +81,7 @@ namespace utils::resources
 	json::value load_json(const std::int32_t resource_id)
 	{
 		json::value data;
-		if (json::read(data, load(resource_id)))
+		if (!json::read(data, load(resource_id)))
 		{
 			throw std::runtime_error(std::format("failed to load resource {}", resource_id));
 		}

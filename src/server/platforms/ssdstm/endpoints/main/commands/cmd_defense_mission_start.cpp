@@ -11,7 +11,7 @@ namespace emulator::ssd
 		json::value result;
 
 		param_t param{};
-		if (json::read(param, data))
+		if (!json::read(param, data))
 		{
 			return error(ERR_INVALIDARG);
 		}

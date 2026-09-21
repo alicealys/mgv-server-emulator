@@ -38,8 +38,7 @@ namespace emulator
 			return json;
 		}
 
-		const auto error = json::read(json.emplace(), str);
-		if (error)
+		if (!json::read(json.emplace(), str))
 		{
 			return {};
 		}
@@ -106,7 +105,7 @@ namespace emulator
 			}
 		}
 
-		if (json::read(data_j, unescaped_data))
+		if (!json::read(data_j, unescaped_data))
 		{
 			return {};
 		}

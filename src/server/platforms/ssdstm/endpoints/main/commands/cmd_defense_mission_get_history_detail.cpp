@@ -10,7 +10,7 @@ namespace emulator::ssd
 		json::value result;
 
 		std::uint32_t history_unique_id{};
-		if (json::read(history_unique_id, data["history_unique_id"]))
+		if (!json::read(history_unique_id, data["history_unique_id"]))
 		{
 			return error(ERR_INVALIDARG);
 		}

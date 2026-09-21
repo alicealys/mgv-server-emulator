@@ -851,7 +851,7 @@ namespace database::players
 
 	bool quest_record_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void quest_record_t::to_json(json::value& data) const
@@ -1438,7 +1438,7 @@ namespace database::players
 
 	bool defense_mission_record_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void defense_mission_record_t::to_json(json::value& data) const
@@ -1453,7 +1453,7 @@ namespace database::players
 
 	bool defense_mission_info_t::status_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void defense_mission_info_t::status_t::to_json(json::value& data) const
@@ -1463,7 +1463,7 @@ namespace database::players
 
 	bool defense_mission_info_t::parameter_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void defense_mission_info_t::parameter_t::to_json(json::value& data) const

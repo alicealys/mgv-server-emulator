@@ -24,7 +24,7 @@ namespace database::defense_missions
 {
 	bool injury_crew_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void injury_crew_t::to_json(json::value& data) const
@@ -38,7 +38,7 @@ namespace database::defense_missions
 
 	bool reward_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void reward_t::to_json(json::value& data) const
@@ -55,7 +55,7 @@ namespace database::defense_missions
 
 	bool broken_facility_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void broken_facility_t::to_json(json::value& data) const
@@ -66,7 +66,7 @@ namespace database::defense_missions
 
 	bool wave_params_t::parse(json::value& data)
 	{
-		return !json::read(*this, data);
+		return json::read(*this, data);
 	}
 
 	void wave_params_t::to_json(json::value& data) const
@@ -363,7 +363,6 @@ namespace database::defense_missions
 		if (this->current_wave_ == 0)
 		{
 			data["current_wave"] = 1;
-
 		}
 		else
 		{

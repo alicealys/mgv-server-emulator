@@ -9,7 +9,7 @@ namespace emulator::ssd
 		json::value result;
 
 		param_t param{};
-		if (json::read(param, data["defense_mission_parameter"]))
+		if (!json::read(param, data["defense_mission_parameter"]))
 		{
 			return error(ERR_INVALIDARG);
 		}

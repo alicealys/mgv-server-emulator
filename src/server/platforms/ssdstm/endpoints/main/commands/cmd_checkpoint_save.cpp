@@ -37,7 +37,7 @@ namespace emulator::ssd
 			database::defense_missions::wave_result_t wave_result{};
 			database::defense_missions::wave_params_t wave_params{};
 
-			if (json::read(wave_result, entry) || !wave_params.parse(entry))
+			if (!json::read(wave_result, entry) || !wave_params.parse(entry))
 			{
 				continue;
 			}

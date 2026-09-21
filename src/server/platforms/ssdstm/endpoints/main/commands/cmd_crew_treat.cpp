@@ -9,7 +9,7 @@ namespace emulator::ssd
 		json::value result;
 
 		std::uint32_t option{};
-		if (json::read(option, data["option"]))
+		if (!json::read(option, data["option"]))
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -62,7 +62,7 @@ namespace emulator::ssd
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
 			entry_t entry{};
-			if (json::read(entry, list_j[i]))
+			if (!json::read(entry, list_j[i]))
 			{
 				continue;
 			}

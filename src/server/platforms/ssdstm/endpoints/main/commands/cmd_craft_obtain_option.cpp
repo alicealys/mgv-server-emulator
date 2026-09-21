@@ -11,7 +11,7 @@ namespace emulator::ssd
 		json::value result;
 
 		param_t param{};
-		if (json::read(param, data["obtain_option_item_param"]))
+		if (!json::read(param, data["obtain_option_item_param"]))
 		{
 			return error(ERR_INVALIDARG);
 		}

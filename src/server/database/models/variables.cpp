@@ -56,7 +56,7 @@ namespace database::variables
 
 				json::value json;
 				const auto data = results.front().variable_value.value();
-				if (json::read(json, data))
+				if (!json::read(json, data))
 				{
 					return {};
 				}

@@ -25,7 +25,7 @@ namespace emulator
 		}
 
 		std::optional<json::value> json;
-		if (json::read(json.emplace(), str))
+		if (!json::read(json.emplace(), str))
 		{
 			return {};
 		}
@@ -57,7 +57,7 @@ namespace emulator
 			unescaped_data = utils::encoding::unescape_json(decompressed);
 		}
 
-		if (json::read(data_j, unescaped_data))
+		if (!json::read(data_j, unescaped_data))
 		{
 			return {};
 		}
