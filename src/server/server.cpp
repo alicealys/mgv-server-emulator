@@ -35,6 +35,9 @@ namespace emulator
 
 		std::vector<std::thread> threads;
 
+		auth::initialize_lists();
+		game::initialize_parameters_table();
+
 		try
 		{
 			database::initialize();
@@ -44,9 +47,6 @@ namespace emulator
 			console::error("Failed to initialize database: %s\n", e.what());
 			return;
 		}
-
-		auth::initialize_lists();
-		game::initialize_parameters_table();
 
 		server s;
 		if (!s.start())

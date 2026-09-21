@@ -170,6 +170,40 @@ namespace game
 		std::array<std::shared_ptr<customize_option_group_t>, 8> option_slots;
 	};
 
+	struct resource_t
+	{
+		bool parse(json::value& data);
+
+		std::string id_str;
+		std::uint32_t id;
+		std::uint32_t index;
+		std::uint32_t type;
+		std::uint32_t material;
+		std::uint8_t rarity;
+		float weight;
+		std::uint32_t repop;
+		bool in_kakin_tab;
+		bool enable_takeout;
+		std::uint32_t conv_home;
+		std::uint32_t conv_use;
+		std::uint32_t base_c_water;
+		std::uint32_t base_food;
+		std::uint32_t base_medicine;
+		std::uint32_t sup_combat;
+		std::uint32_t sup_survival;
+		float crew_inj_food_poison;
+		float crew_inj_dysentery;
+		float crew_inj_physical;
+		float crew_inj_fatigue;
+		std::uint32_t related_id;
+		std::uint64_t lang_name;
+		std::uint64_t lang_name2;
+		std::uint64_t lang_name3;
+		std::uint64_t lang_info;
+		bool show_info;
+		std::uint64_t icon_path;
+	};
+
 	struct production_t
 	{
 		bool parse(json::value& data);
@@ -284,12 +318,25 @@ namespace game
 	{
 		bool parse(json::value& data);
 
+		struct ui_reward_info_t
+		{
+			std::uint8_t rarity;
+			std::uint32_t icon_type;
+		};
+
+		struct rank_reward_info_t
+		{
+			std::array<ui_reward_info_t, 8> line_info;
+			std::string rank;
+		};
+
 		std::vector<float> wave_time;
 		std::vector<std::uint32_t> interval;
 		std::array<std::uint32_t, 5> rank_threshold;
 		std::uint32_t mission_type;
 		std::uint16_t mission_id;
 		std::uint16_t max_wave_count;
+		std::array<rank_reward_info_t, 6> rank_reward_info;
 	};
 
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade);

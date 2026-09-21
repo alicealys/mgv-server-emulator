@@ -20,8 +20,100 @@ struct glz::meta<database::defense_missions::injury_crew_t>
 	);
 };
 
+template <>
+struct glz::meta<database::defense_missions::reward_pool_t::reward_t>
+{
+	using T = database::defense_missions::reward_pool_t::reward_t;
+	static constexpr auto value = glz::object(
+		"id", &T::id,
+		"max", &T::max,
+		"type", &T::type
+	);
+};
+
+template <>
+struct glz::meta<database::defense_missions::reward_pool_t::rank_t>
+{
+	using T = database::defense_missions::reward_pool_t::rank_t;
+	static constexpr auto value = glz::object(
+		"count", &T::count,
+		"energy", &T::energy,
+		"recipe_list", &T::recipe_list,
+		"rewards", &T::rewards
+	);
+};
+
 namespace database::defense_missions
 {
+	namespace
+	{
+		std::unordered_map<std::uint32_t, reward_pool_t> load_reward_pools()
+		{
+			const auto data = utils::resources::load_json(RESOURCE_BASE_DEFENSE_REWARD_POOLS);
+
+			std::unordered_map<std::uint32_t, reward_pool_t> map;
+			for (auto i = 0ull; i < data.size(); i++)
+			{
+				reward_pool_t pool{};
+
+				if (!json::read(pool.mission_code, data[i]["mission_code"]))
+				{
+					throw std::runtime_error("failed to parse reward pool list (mission_code)");
+				}
+
+				for (auto o = 0ull; o < pool.reward_pool.size(); o++)
+				{
+					if (!json::read(pool.reward_pool[o], data[i]["reward_pool"][o]))
+					{
+						throw std::runtime_error("failed to parse reward pool list (reward_pool)");
+					}
+
+					for (auto& reward : pool.reward_pool[o].rewards)
+					{
+						if (reward.type == "resource")
+						{
+							const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(reward.id);
+							if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+							{
+								console::warning("[defense missions] reward has invalid resource id %lli\n", reward.id);
+								reward.reward_type = reward_type_invalid;
+							}
+							else
+							{
+								reward.reward_type = reward_type_resource;
+								reward.resource = iter->second;
+							}
+						}
+						else if (reward.type == "item")
+						{
+							const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(reward.id);
+							if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+							{
+								console::warning("[defense missions] reward has invalid item id %lli\n", reward.id);
+								reward.reward_type = reward_type_invalid;
+							}
+							else
+							{
+								reward.reward_type = reward_type_item;
+								reward.item = iter->second;
+							}
+						}
+					}
+				}
+
+				map.insert(std::make_pair(pool.mission_code, pool));
+			}
+
+			return map;
+		}
+
+		const std::unordered_map<std::uint32_t, reward_pool_t>& get_reward_pools()
+		{
+			static const auto pools = load_reward_pools();
+			return pools;
+		}
+	}
+
 	bool injury_crew_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
@@ -102,18 +194,132 @@ namespace database::defense_missions
 		data["mining_machine_life_max"] = this->mining_machine_life_max;
 	}
 
-	std::uint8_t calc_rank(const std::array<std::uint32_t, 5>& thresholds, const std::uint32_t score)
+	std::uint8_t calc_rank(const game::defense_mission_settings_t& mission_settings, const std::uint32_t score)
 	{
-		const auto score_s = static_cast<std::uint32_t>(static_cast<float>(score) / 100.f);
-		for (auto i = 0ull; i < thresholds.size(); i++)
+		const auto score_s = static_cast<std::uint32_t>(static_cast<float>(score) / 1000.f);
+		for (auto i = 0ull; i < mission_settings.rank_threshold.size(); i++)
 		{
-			if (score_s >= thresholds[i])
+			if (score_s >= mission_settings.rank_threshold[i])
 			{
 				return static_cast<std::uint8_t>(i);
 			}
 		}
 
 		return 5u;
+	}
+
+	std::uint32_t find_random_resource(const std::uint8_t rarity, std::uint8_t& category)
+	{
+		const auto find = []<typename T, typename F>(const T& list, F&& f)
+		{
+			const auto offset = utils::cryptography::random::get_integer() % list.size();
+			for (auto i = 0ull; i < list.size(); i++)
+			{
+				auto index = (i + offset) % list.size();
+				auto& entry = list[index];
+				if (entry != nullptr && f(*entry))
+				{
+					return entry->id;
+				}
+			}
+
+			return 0u;
+		};
+
+		const auto is_resource = utils::cryptography::random::get_integer() % 1 == 1;
+		if (is_resource)
+		{
+			category = 0;
+			return find(game::parameters_table.ssd_sbm_parameters->resources_list, [&](const game::resource_t& resource)
+			{
+				return resource.rarity == rarity;
+			});
+		}
+		else
+		{
+			category = 1;
+			return find(game::parameters_table.ssd_sbm_parameters->productions_list, [&](const game::production_t& production)
+			{
+				return production.rarity == rarity && production.countable;
+			});
+		}
+	}
+
+	std::vector<reward_info_t> generate_rewards(const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
+	{
+		std::vector<reward_info_t> rewards;
+
+		const auto& reward_pools = get_reward_pools();
+		const auto iter = reward_pools.find(mission_settings.mission_id);
+		if (iter == reward_pools.end())
+		{
+			return rewards;
+		}
+
+		// category
+		// 0: resource
+		// 1: stackable item
+		// 9: energy
+
+		const auto& reward_pool = iter->second;
+		for (auto i = rank; i < reward_pool.reward_pool.size(); i++)
+		{
+			if (reward_pool.reward_pool[i].energy > 0)
+			{
+				reward_info_t reward_info{};
+				reward_info.rank = i;
+				reward_info.param.category = 9;
+				reward_info.param.num = reward_pool.reward_pool[i].energy;
+				rewards.emplace_back(reward_info);
+			}
+
+			for (auto o = 0ull; o < reward_pool.reward_pool[i].count; o++)
+			{
+				const auto& reward_list = reward_pool.reward_pool[i].rewards;
+				const auto rand = utils::cryptography::random::get_integer() % reward_list.size();
+				const auto& reward = reward_list[rand];
+
+				reward_info_t reward_info{};
+				reward_info.rank = i;
+
+				auto num = reward.max;
+
+				if (reward.max < 50 && reward.max > 5)
+				{
+					constexpr const auto min_percent = 80; // should it be 100?
+					const auto percent = static_cast<float>(utils::cryptography::random::get_integer() %
+						(100 - min_percent) + min_percent) / 100.f;
+					num = static_cast<std::uint32_t>(static_cast<float>(reward.max) * percent);
+				}
+
+				switch (reward.reward_type)
+				{
+				case reward_type_resource:
+				{
+					reward_info.param.category = 0;
+					reward_info.param.code = reward.id;
+					reward_info.param.num = num;
+					break;
+				}
+				case reward_type_item:
+				{
+					reward_info.param.category = 1;
+					reward_info.param.code = reward.id;
+					reward_info.param.num = num;
+					break;
+				}
+				default:
+				case reward_type_invalid:
+					continue;
+				}
+
+				rewards.emplace_back(reward_info);
+			}
+		}
+
+		std::shuffle(rewards.begin(), rewards.end(), utils::cryptography::random::get_engine());
+
+		return rewards;
 	}
 
 	GET_FIELD_C(defense_mission_wave, std::uint64_t, defense_mission_id);
@@ -424,6 +630,7 @@ namespace database::defense_missions
 	public:
 		void create(database_t& database) override
 		{
+			load_reward_pools();
 			database.run_query("mgssd.defense_missions.create");
 			database.run_query("mgssd.defense_mission_waves.create");
 		}

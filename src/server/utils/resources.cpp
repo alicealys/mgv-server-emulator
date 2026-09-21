@@ -17,6 +17,7 @@ namespace utils::resources
 			{RESOURCE_PRODUCT_LIST, "resources/data/product_list.json"},
 			{RESOURCE_SERVER_PARAMETER_LIST, "resources/data/server_parameter_list.json"},
 			{RESOURCE_DEFAULT_DATA, "resources/data/default_data.json"},
+			{RESOURCE_BASE_DEFENSE_REWARD_POOLS, "resources/data/base_defense_reward_pools.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},

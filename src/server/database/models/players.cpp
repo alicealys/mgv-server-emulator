@@ -1121,7 +1121,48 @@ namespace database::players
 		}
 
 		++obtain_order;
-		return index < 2048;
+		return index < 1024;
+	}
+
+	bool inventory_resource_list_t::add_resource(inventory_resource_t& resource)
+	{
+		std::int64_t free_index = -1;
+		for (auto o = 0ull; o < this->size(); o++)
+		{
+			auto& entry = this->operator[](o);
+			if (entry.resource_id == resource.resource_id && entry.count < max_item_count)
+			{
+				const auto add_count = std::min(resource.count, max_item_count - entry.count);
+				entry.count += add_count;
+				if (add_count == resource.count)
+				{
+					std::memcpy(&resource, &entry, sizeof(inventory_resource_t));
+					return true;
+				}
+				else
+				{
+					resource.count -= add_count;
+				}
+			}
+			else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+			{
+				free_index = static_cast<std::int64_t>(o);
+			}
+		}
+
+		if (!this->find_free_index(resource.inventory_index, resource.obtain_order))
+		{
+			return false;
+		}
+
+		if (free_index != -1)
+		{
+			auto& entry = this->operator[](free_index);
+			std::memcpy(&entry, &resource, sizeof(inventory_resource_t));
+			return true;
+		}
+
+		return this->push(resource);
 	}
 
 	stackable_item_t* stackable_item_list_t::find_item(const std::uint32_t production_id)
@@ -1160,7 +1201,48 @@ namespace database::players
 		}
 
 		++obtain_order;
-		return index < 2048;
+		return index < 1024;
+	}
+
+	bool stackable_item_list_t::add_item(stackable_item_t& item)
+	{
+		std::int64_t free_index = -1;
+		for (auto o = 0ull; o < this->size(); o++)
+		{
+			auto& entry = this->operator[](o);
+			if (entry.production_id == item.production_id && entry.count < max_item_count)
+			{
+				const auto add_count = std::min(item.count, max_item_count - entry.count);
+				entry.count += add_count;
+				if (add_count == item.count)
+				{
+					std::memcpy(&item, &entry, sizeof(stackable_item_t));
+					return true;
+				}
+				else
+				{
+					item.count -= add_count;
+				}
+			}
+			else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+			{
+				free_index = static_cast<std::int64_t>(o);
+			}
+		}
+
+		if (!this->find_free_index(item.inventory_index, item.obtain_order))
+		{
+			return false;
+		}
+
+		if (free_index != -1)
+		{
+			auto& entry = this->operator[](free_index);
+			std::memcpy(&entry, &item, sizeof(stackable_item_t));
+			return true;
+		}
+
+		return this->push(item);
 	}
 
 	bool crew_member_t::parse(json::value& data)

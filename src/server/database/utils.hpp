@@ -102,15 +102,16 @@ namespace database
 			std::int64_t free_index = -1;
 			for (auto o = 0ull; o < this->size(); o++)
 			{
-				if (this->are_elements_equal(item, this->operator[](o)))
+				auto& entry = this->operator[](o);
+				if (this->are_elements_equal(item, entry))
 				{
 					if (overwrite_existing)
 					{
-						std::memcpy(&this->operator[](o), &item, sizeof(T));
+						this->import_element(entry, item);
 					}
 					return true;
 				}
-				else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+				else if (this->is_element_empty(entry) && free_index == -1)
 				{
 					free_index = static_cast<std::int64_t>(o);
 				}
@@ -118,7 +119,7 @@ namespace database
 
 			if (free_index != -1)
 			{
-				std::memcpy(&this->operator[](free_index), &item, sizeof(T));
+				this->import_element(this->operator[](free_index), item);
 				return true;
 			}
 
@@ -195,6 +196,11 @@ namespace database
 		virtual inline bool are_elements_equal(const T& l, const T& r) const
 		{
 			return false;
+		}
+		
+		virtual inline void import_element(T& dest, const T& src) const
+		{
+			std::memcpy(&dest, &src, sizeof(T));
 		}
 
 		inline bool skip_element(const T& value) const override

@@ -159,6 +159,16 @@ struct glz::meta<game::survival_gear_t>
 };
 
 template <>
+struct glz::meta<game::defense_mission_settings_t::rank_reward_info_t>
+{
+	using T = game::defense_mission_settings_t::rank_reward_info_t;
+	static constexpr auto value = glz::object(
+		"line_info", &T::line_info,
+		"rank", &T::rank
+	);
+};
+
+template <>
 struct glz::meta<game::defense_mission_settings_t>
 {
 	using T = game::defense_mission_settings_t;
@@ -304,6 +314,11 @@ namespace game
 		return json::read(*this, data);
 	}
 
+	bool resource_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
 	bool production_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
@@ -347,6 +362,15 @@ namespace game
 
 	bool defense_mission_settings_t::parse(json::value& data)
 	{
+		const auto count = std::min(this->rank_reward_info.size(), data["uiRewardInfo"]["rank_reward_info"].size());
+		for (auto i = 0ull; i < count; i++)
+		{
+			if (!json::read(this->rank_reward_info[i], data["uiRewardInfo"]["rank_reward_info"][i]))
+			{
+				return false;
+			}
+		}
+
 		return json::read(*this, data);
 	}
 

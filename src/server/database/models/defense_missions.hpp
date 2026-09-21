@@ -21,7 +21,7 @@ namespace database::defense_missions
 
 	struct reward_t
 	{
-		std::uint32_t category;
+		std::uint8_t category;
 		std::uint32_t code;
 		std::uint32_t param1;
 		std::uint32_t param2;
@@ -90,7 +90,45 @@ namespace database::defense_missions
 	};
 #pragma pack(pop)
 
-	std::uint8_t calc_rank(const std::array<std::uint32_t, 5>& thresholds, const std::uint32_t score);
+	struct reward_info_t
+	{
+		std::uint8_t rank;
+		reward_t param;
+	};
+
+	enum reward_type_t
+	{
+		reward_type_invalid = 0,
+		reward_type_resource = 1,
+		reward_type_item = 2,
+	};
+
+	struct reward_pool_t
+	{
+		struct reward_t
+		{
+			std::uint32_t id;
+			std::uint32_t max;
+			std::string type;
+			std::uint32_t reward_type;
+			std::shared_ptr<game::resource_t> resource;
+			std::shared_ptr<game::production_t> item;
+		};
+
+		struct rank_t
+		{
+			std::uint32_t count;
+			std::uint32_t energy;
+			std::vector<std::uint32_t> recipe_list;
+			std::vector<reward_t> rewards;
+		};
+
+		std::uint32_t mission_code;
+		std::array<rank_t, 6> reward_pool;
+	};
+
+	std::uint8_t calc_rank(const game::defense_mission_settings_t& mission_settings, const std::uint32_t score);
+	std::vector<reward_info_t> generate_rewards(const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank);
 
 	class broken_facility_list_t final : public generic_item_list<broken_facility_t, 256>
 	{

@@ -632,6 +632,12 @@ namespace utils::cryptography
 		return data;
 	}
 
+	std::default_random_engine& random::get_engine()
+	{
+		static std::default_random_engine engine(get_integer());
+		return engine;
+	}
+
 	blowfish::blowfish()
 	{
 	}

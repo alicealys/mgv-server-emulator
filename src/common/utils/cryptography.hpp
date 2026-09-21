@@ -2,6 +2,7 @@
 
 #include <string>
 #include <tomcrypt.h>
+#include <random>
 
 #ifdef _WIN32
 #define BSWAP32(x) _byteswap_ulong(x)
@@ -125,6 +126,8 @@ namespace utils::cryptography
 		std::string get_challenge();
 		void get_data(void* data, size_t size);
 		std::string get_data(const size_t size);
+
+		std::default_random_engine& get_engine();
 	}
 
 	const std::uint32_t initial_p[18] =

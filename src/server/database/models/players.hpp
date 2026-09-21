@@ -78,7 +78,7 @@ namespace database::players
 	struct stackable_item_t
 	{
 		std::uint16_t cbox_index;
-		std::uint16_t count;
+		std::uint32_t count;
 		std::uint16_t damaged_in_count;
 		std::uint16_t flag;
 		std::uint16_t inventory_index;
@@ -548,6 +548,8 @@ namespace database::players
 	};
 #pragma pack(pop)
 
+	constexpr const auto max_item_count = 99999;
+
 	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t, 1024>
 	{
 	public:
@@ -583,6 +585,13 @@ namespace database::players
 		stackable_item_t* find_item(const std::uint32_t production_id);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
+		inline void import_element(stackable_item_t& dest, const stackable_item_t& src) const override
+		{
+			std::memcpy(&dest, &src, sizeof(stackable_item_t));
+		}
+
+		bool add_item(stackable_item_t& resource);
+
 	};
 
 	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t, 512>
@@ -600,6 +609,12 @@ namespace database::players
 
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 
+		inline void import_element(inventory_resource_t& dest, const inventory_resource_t& src) const override
+		{
+			std::memcpy(&dest, &src, sizeof(inventory_resource_t));
+		}
+
+		bool add_resource(inventory_resource_t& resource);
 	};
 
 	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>

@@ -3,18 +3,102 @@
 #include "cmd_checkpoint_save.hpp"
 #include "cmd_inventory_save.hpp"
 
-#include "database/models/defense_missions.hpp"
-
 namespace emulator::ssd
 {
+	void cmd_checkpoint_save::generate_defense_mission_rewards(
+		json::value& result, const std::optional<database::users::user>& user,
+		database::defense_missions::reward_list_t& reward_list,
+		const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
+	{
+		const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
+		const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
+		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
+
+		user->current_player->get_inventory_resource_list(*resource_list, 16);
+		user->current_player->get_stackable_item_list(*stackable_list, 16);
+		user->current_player->get_inventory(*player_inventory);
+
+		const auto _0 = gsl::finally([&]
+		{
+			user->current_player->set_inventory_resource_list(*resource_list);
+			user->current_player->set_stackable_item_list(*stackable_list);
+			user->current_player->set_inventory(*player_inventory);
+		});
+
+		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank);
+		for (const auto& reward : rewards)
+		{
+			reward_list.push(reward.param);
+		}
+
+		auto reward_entries_idx = 0u;
+		for (auto r = rank; r <= 5; r++)
+		{
+			auto& rank_entry = result[reward_entries_idx++];
+
+			rank_entry["battle_pack_list"] = json::array();
+			rank_entry["expire_date"] = std::time(nullptr) + 14ull * 86400ull;
+			rank_entry["kub_boost_flag"] = 0;
+			rank_entry["nonstackable_list"] = json::array();
+			rank_entry["present_num"] = 0;
+			rank_entry["present_list"] = json::array();
+			rank_entry["recipe_list"] = json::array();
+			rank_entry["resources_list"] = json::array();
+			rank_entry["stackable_list"] = json::array();
+			rank_entry["text_id"] = 229691447841577;
+
+			auto energy = 0u;
+			auto stackable_count = 0u;
+			auto resource_count = 0u;
+
+			for (const auto& reward : rewards)
+			{
+				if (reward.rank != r)
+				{
+					continue;
+				}
+
+				switch (reward.param.category)
+				{
+				case 9:
+					energy += reward.param.num;
+					break;
+				case 1:
+				{
+					database::players::stackable_item_t item{};
+					item.count = reward.param.num;
+					item.production_id = reward.param.code;
+					auto count = item.count;
+					if (stackable_list->add_item(item)) // add it to present box if fail
+					{
+						item.count = count;
+						item.to_json(rank_entry["stackable_list"][stackable_count++]);
+					}
+					break;
+				}
+				case 0:
+				{
+					database::players::inventory_resource_t resource{};
+					resource.count = reward.param.num;
+					resource.resource_id = reward.param.code;
+					auto count = resource.count;
+					if (resource_list->add_resource(resource))
+					{
+						resource.count = count;
+						resource.to_json(rank_entry["resources_list"][resource_count++]);
+					}
+					break;
+				}
+				}
+			}
+
+			player_inventory->energy += energy;
+			rank_entry["energy"] = energy;
+		}
+	}
+
 	void cmd_checkpoint_save::save_defense_mission(json::value& result, json::value& wave_results, const std::optional<database::users::user>& user)
 	{
-		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
-		const auto defense_mission_record = std::make_unique<database::players::defense_mission_record_list_t>();
-
-		user->current_player->get_defense_mission_info(*defense_mission_info);
-		user->current_player->get_defense_mission_record_list(*defense_mission_record);
-
 		const auto now = std::chrono::system_clock::now().time_since_epoch();
 		const auto mission = database::defense_missions::get_current_mission(user->current_player->get_player_id());
 
@@ -28,6 +112,24 @@ namespace emulator::ssd
 		{
 			return;
 		}
+
+		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
+		const auto defense_mission_record = std::make_unique<database::players::defense_mission_record_list_t>();
+
+		user->current_player->get_defense_mission_info(*defense_mission_info);
+		user->current_player->get_defense_mission_record_list(*defense_mission_record);
+
+		const auto _0 = gsl::finally([&]
+		{
+			user->current_player->set_defense_mission_info(*defense_mission_info);
+			user->current_player->set_defense_mission_record_list(*defense_mission_record);
+		});
+
+		result["defense_reward_limit_result"]["limit_result"] = json::array();
+		result["defense_reward_limit_result"]["mission_code"] = mission->get_mission_code();
+
+		auto& defense_mission_reward_j = result["defense_mission_reward"];
+		defense_mission_reward_j = json::array();
 
 		auto& mission_settings = iter->second;
 		for (auto i = 0ull; i < wave_results.size(); i++)
@@ -51,12 +153,14 @@ namespace emulator::ssd
 			defense_mission_info->status.mining_machine_life = wave_params.mining_machine_life_after;
 
 			const auto this_wave = mission->get_current_wave();
-			const auto rank = database::defense_missions::calc_rank(mission_settings->rank_threshold, new_score);
+			const auto rank = database::defense_missions::calc_rank(*mission_settings, new_score);
 			const auto cleared = this_wave == mission_settings->max_wave_count - 1 && is_win;
 			const std::uint8_t next_wave = is_win ? this_wave + 1u : this_wave;
 
 			auto end_date = std::chrono::seconds(wave_result.end_date);
 			auto next_wave_date = end_date;
+
+			database::defense_missions::reward_list_t reward_list{};
 
 			if (cleared)
 			{
@@ -67,6 +171,8 @@ namespace emulator::ssd
 				mission_record.iris_score = new_score;
 				mission_record.waves = wave_result.wave;
 				defense_mission_record->try_add_item(mission_record);
+
+				this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
 			}
 			else if (is_win)
 			{
@@ -81,7 +187,6 @@ namespace emulator::ssd
 
 			database::defense_missions::injury_crew_list_t injury_crew_list{};
 			database::defense_missions::broken_facility_list_t broken_facility_list{};
-			database::defense_missions::reward_list_t reward_list{}; // TODO?
 
 			injury_crew_list.parse(entry["injury_crew_list"]);
 			broken_facility_list.parse(entry["broken_facility_list"]);
@@ -89,9 +194,6 @@ namespace emulator::ssd
 			database::defense_missions::add_wave(mission->get_defense_mission_id(),
 				wave_result, wave_params, broken_facility_list, injury_crew_list, reward_list);
 		}
-
-		user->current_player->set_defense_mission_info(*defense_mission_info);
-		user->current_player->set_defense_mission_record_list(*defense_mission_record);
 	}
 
 	json::value cmd_checkpoint_save::execute(json::value& data, const std::optional<database::users::user>& user)

@@ -81,6 +81,24 @@ namespace game::parameters
 			this->customize[inst->id] = inst;
 		}
 
+		for (auto i = 0ull; i < data["resource"].size(); i++)
+		{
+			auto res = std::make_shared<resource_t>();
+			if (!res->parse(data["resource"][i]))
+			{
+				console::warning("invalid resource at index %lli\n", i);
+				continue;
+			}
+
+			this->resources[res->id] = res;
+			if (res->index >= this->resources_list.size())
+			{
+				this->resources_list.resize(res->index + 1);
+			}
+
+			this->resources_list[res->index] = res;
+		}
+
 		for (auto i = 0ull; i < data["production"].size(); i++)
 		{
 			auto prod = std::make_shared<production_t>();
@@ -104,6 +122,12 @@ namespace game::parameters
 			}
 
 			this->productions[prod->id] = prod;
+			if (prod->index >= this->productions_list.size())
+			{
+				this->productions_list.resize(prod->index + 1);
+			}
+
+			this->productions_list[prod->index] = prod;
 		}
 
 		for (auto i = 0ull; i < data["recipe"].size(); i++)
