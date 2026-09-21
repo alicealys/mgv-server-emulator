@@ -16,7 +16,13 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		// TODO
+		database::players::defense_mission_info_t initial_info{};
+		initial_info.initialize();
+
+		database::players::defense_mission_info_t info{};
+		user->current_player->get_defense_mission_info(info);
+		info.status.mining_machine_life = initial_info.status.mining_machine_life;
+		user->current_player->set_defense_mission_info(info);
 
 		return result;
 	}

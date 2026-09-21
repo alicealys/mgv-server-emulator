@@ -3,8 +3,97 @@
 #include "cmd_checkpoint_save.hpp"
 #include "cmd_inventory_save.hpp"
 
+#include "database/models/defense_missions.hpp"
+
 namespace emulator::ssd
 {
+	void cmd_checkpoint_save::save_defense_mission(json::value& result, json::value& wave_results, const std::optional<database::users::user>& user)
+	{
+		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
+		const auto defense_mission_record = std::make_unique<database::players::defense_mission_record_list_t>();
+
+		user->current_player->get_defense_mission_info(*defense_mission_info);
+		user->current_player->get_defense_mission_record_list(*defense_mission_record);
+
+		const auto now = std::chrono::system_clock::now().time_since_epoch();
+		const auto mission = database::defense_missions::get_current_mission(user->current_player->get_player_id());
+
+		if (!mission.has_value() || (now < mission->get_next_wave_date()))
+		{
+			return;
+		}
+
+		const auto iter = game::parameters_table.ssd_base_defense_settings->mission_settings.find(mission->get_mission_code());
+		if (iter == game::parameters_table.ssd_base_defense_settings->mission_settings.end())
+		{
+			return;
+		}
+
+		auto& mission_settings = iter->second;
+		for (auto i = 0ull; i < wave_results.size(); i++)
+		{
+			auto& entry = wave_results[i];
+
+			database::defense_missions::wave_result_t wave_result{};
+			database::defense_missions::wave_params_t wave_params{};
+
+			if (json::read(wave_result, entry) || !wave_params.parse(entry))
+			{
+				continue;
+			}
+
+			wave_result.wave = mission->get_current_wave();
+
+			const auto is_win = wave_result.result != 2;
+			const auto score_add = is_win ? wave_result.total_score : 0u;
+			const auto new_score = mission->get_total_score() + score_add;
+
+			defense_mission_info->status.mining_machine_life = wave_params.mining_machine_life_after;
+
+			const auto this_wave = mission->get_current_wave();
+			const auto rank = database::defense_missions::calc_rank(mission_settings->rank_threshold, new_score);
+			const auto cleared = this_wave == mission_settings->max_wave_count - 1 && is_win;
+			const std::uint8_t next_wave = is_win ? this_wave + 1u : this_wave;
+
+			auto end_date = std::chrono::seconds(wave_result.end_date);
+			auto next_wave_date = end_date;
+
+			if (cleared)
+			{
+				database::players::defense_mission_record_t mission_record{};
+				mission_record.mission_code = mission->get_mission_code();
+				mission_record.cleared = (wave_result.wave == mission_settings->max_wave_count) && is_win;
+				mission_record.clear_rank = rank;
+				mission_record.iris_score = new_score;
+				mission_record.waves = wave_result.wave;
+				defense_mission_record->try_add_item(mission_record);
+			}
+			else if (is_win)
+			{
+				next_wave_date = std::chrono::duration_cast<std::chrono::seconds>(now);
+				if (this_wave < mission_settings->interval.size())
+				{
+					next_wave_date += mission_settings->interval[this_wave] * 1h;
+				}
+			}
+
+			mission->update(cleared, next_wave, rank, new_score, end_date, next_wave_date);
+
+			database::defense_missions::injury_crew_list_t injury_crew_list{};
+			database::defense_missions::broken_facility_list_t broken_facility_list{};
+			database::defense_missions::reward_list_t reward_list{}; // TODO?
+
+			injury_crew_list.parse(entry["injury_crew_list"]);
+			broken_facility_list.parse(entry["broken_facility_list"]);
+
+			database::defense_missions::add_wave(mission->get_defense_mission_id(),
+				wave_result, wave_params, broken_facility_list, injury_crew_list, reward_list);
+		}
+
+		user->current_player->set_defense_mission_info(*defense_mission_info);
+		user->current_player->set_defense_mission_record_list(*defense_mission_record);
+	}
+
 	json::value cmd_checkpoint_save::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
@@ -24,6 +113,7 @@ namespace emulator::ssd
 		auto& group_level_j = data["group_level"];
 		auto& tips_open_info_j = data["tips_open_info"];
 		auto& quest_record_info_j = data["quest_record_info"];
+		auto& defense_mission_wave_result_j = data["defense_mission_wave_result"];
 
 		result["added_crew"] = json::array();
 		result["capture_list"] = json::array();
@@ -284,6 +374,11 @@ namespace emulator::ssd
 		}
 
 		user->current_player->set_story_unlock_info(*story_unlock_info);
+
+		if (defense_mission_wave_result_j.is_array())
+		{
+			this->save_defense_mission(result, defense_mission_wave_result_j, user);
+		}
 
 		// TODO
 		// play_record_additional_130_checkpoint

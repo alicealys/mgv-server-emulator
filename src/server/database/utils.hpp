@@ -92,6 +92,117 @@ namespace database
 		}
 	};
 
+
+	template <typename T, std::size_t MaxSize = 1024>
+	class generic_item_list : public database_array<T, MaxSize>
+	{
+	public:
+		bool try_add_item(const T& item, const bool overwrite_existing = true)
+		{
+			std::int64_t free_index = -1;
+			for (auto o = 0ull; o < this->size(); o++)
+			{
+				if (this->are_elements_equal(item, this->operator[](o)))
+				{
+					if (overwrite_existing)
+					{
+						std::memcpy(&this->operator[](o), &item, sizeof(T));
+					}
+					return true;
+				}
+				else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+				{
+					free_index = static_cast<std::int64_t>(o);
+				}
+			}
+
+			if (free_index != -1)
+			{
+				std::memcpy(&this->operator[](free_index), &item, sizeof(T));
+				return true;
+			}
+
+			return this->push(item);
+		}
+
+		virtual bool parse_diff(json::value& data)
+		{
+			if (!data.is_array())
+			{
+				return false;
+			}
+
+			const auto count = std::min(data.size(), this->max_size());
+			for (auto i = 0ull; i < count; i++)
+			{
+				T new_item{};
+				if (!new_item.parse(data[i]))
+				{
+					continue;
+				}
+
+				if (!try_add_item(new_item))
+				{
+					break;
+				}
+			}
+
+			return true;
+		}
+
+		virtual bool parse(json::value& data)
+		{
+			std::memset(this->data(), 0, this->size() * sizeof(T));
+
+			if (!data.is_array())
+			{
+				return false;
+			}
+
+			const auto count = std::min(this->max_size(), data.size());
+			this->resize(count);
+
+			for (auto i = 0ull; i < count; i++)
+			{
+				this->operator[](i).parse(data[i]);
+			}
+
+			return true;
+		}
+
+		virtual void to_json(json::value& data) const
+		{
+			auto idx = 0;
+			data = json::array();
+
+			const auto list = this->data();
+			for (auto i = 0ull; i < this->size(); i++)
+			{
+				if (this->is_element_empty(list[i]))
+				{
+					continue;
+				}
+
+				list[i].to_json(data[idx++]);
+			}
+		}
+
+		virtual inline bool is_element_empty(const T& value) const
+		{
+			return false;
+		}
+
+		virtual inline bool are_elements_equal(const T& l, const T& r) const
+		{
+			return false;
+		}
+
+		inline bool skip_element(const T& value) const override
+		{
+			return this->is_element_empty(value);
+		}
+	};
+
 	template <typename S, typename T>
 	std::size_t get_offset(T S::* field)
 	{

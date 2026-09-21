@@ -11,6 +11,13 @@ namespace game::parameters
 
 	bool ssd_base_defense_settings::parse(json::value& data)
 	{
+		for (auto i = 0ull; i < data["missionSettings"].size(); i++)
+		{
+			auto mission = std::make_shared<defense_mission_settings_t>();
+			mission->parse(data["missionSettings"][i]);
+			this->mission_settings[mission->mission_id] = mission;
+		}
+
 		return true;
 	}
 }

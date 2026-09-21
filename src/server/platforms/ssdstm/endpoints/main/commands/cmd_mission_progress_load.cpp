@@ -2,6 +2,8 @@
 
 #include "cmd_mission_progress_load.hpp"
 
+#include "database/models/defense_missions.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_mission_progress_load::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -27,6 +29,8 @@ namespace emulator::ssd
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
 		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
+		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
+		const auto defense_mission_record_list = std::make_unique<database::players::defense_mission_record_list_t>();
 
 		const auto& player = user->current_player;
 
@@ -45,6 +49,8 @@ namespace emulator::ssd
 		player->get_quest_record_list(*quest_record_list);
 		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
+		player->get_defense_mission_info(*defense_mission_info);
+		player->get_defense_mission_record_list(*defense_mission_record_list);
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -65,18 +71,31 @@ namespace emulator::ssd
 
 		mission_info->to_json(result["current_mission_info"]);
 
-		result["defense_mission_parameter"]["attack_time"] = 0;
-		result["defense_mission_parameter"]["flag"] = 0;
-		result["defense_mission_parameter"]["threat"] = 0;
-		result["defense_mission_parameter"]["threat_threshold"] = 0;
-		result["defense_mission_record_info_list"] = json::array{};
-		result["defense_mission_status"]["disconnect_flag"] = 0;
-		result["defense_mission_status"]["mining_machine_life"] = 9680;
-		result["defense_mission_status"]["mission_code"] = 0;
-		result["defense_mission_status"]["mission_start_date"] = 0;
-		result["defense_mission_status"]["next_wave_start_date"] = 0;
-		result["defense_mission_status"]["total_score"] = 0;
-		result["defense_mission_status"]["wave"] = 0;
+		const auto latest_defense_mission = database::defense_missions::get_current_mission(user->current_player->get_player_id());
+		if (latest_defense_mission.has_value())
+		{
+			result["defense_mission_status"]["mission_code"] = latest_defense_mission->get_mission_code();
+			result["defense_mission_status"]["wave"] = latest_defense_mission->get_current_wave();
+			result["defense_mission_status"]["mission_start_date"] = latest_defense_mission->get_start_date();
+			result["defense_mission_status"]["next_wave_start_date"] = latest_defense_mission->get_next_wave_date();
+			result["defense_mission_status"]["total_score"] = latest_defense_mission->get_total_score();
+			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info->status.mining_machine_life;
+			result["defense_mission_status"]["disconnect_flag"] = 0;
+		}
+		else
+		{
+			result["defense_mission_status"]["mission_code"] = 0;
+			result["defense_mission_status"]["wave"] = 0;
+			result["defense_mission_status"]["mission_start_date"] = 0;
+			result["defense_mission_status"]["next_wave_start_date"] = 0;
+			result["defense_mission_status"]["total_score"] = 0;
+			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info->status.mining_machine_life;
+			result["defense_mission_status"]["disconnect_flag"] = 0;
+		}
+
+		defense_mission_info->parameter.to_json(result["defense_mission_parameter"]);
+		defense_mission_record_list->to_json(result["defense_mission_record_info_list"]);
+
 		result["defense_reward_limit_list"] = json::array{};
 
 		result["gimmick_save_info_afghan"]["map_location"] = 0;

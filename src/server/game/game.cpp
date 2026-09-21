@@ -158,6 +158,20 @@ struct glz::meta<game::survival_gear_t>
 	);
 };
 
+template <>
+struct glz::meta<game::defense_mission_settings_t>
+{
+	using T = game::defense_mission_settings_t;
+	static constexpr auto value = glz::object(
+		"waveCountMax", &T::max_wave_count,
+		"waveTime", &T::wave_time,
+		"interval", &T::interval,
+		"missionId", &T::mission_id,
+		"missionType", &T::mission_type,
+		"rankRewardThreashold", &T::rank_threshold
+	);
+};
+
 namespace game
 {
 	// server
@@ -327,6 +341,11 @@ namespace game
 	}
  
 	bool crew_member_type_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	bool defense_mission_settings_t::parse(json::value& data)
 	{
 		return !json::read(*this, data);
 	}

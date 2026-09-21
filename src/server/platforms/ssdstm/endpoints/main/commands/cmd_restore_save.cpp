@@ -123,6 +123,9 @@ namespace emulator::ssd
 			auto& stackable_list_j = mission_progress_j["stackable_list"];
 			auto& story_unlock_info_j = mission_progress_j["story_unlock_info"];
 			auto& user_flag_j = mission_progress_j["user_flag"];
+			auto& defense_mission_status_j = mission_progress_j["defense_mission_status"];
+			auto& defense_mission_parameter_j = mission_progress_j["defense_mission_parameter"];
+			auto& defense_mission_record_info_list_j = mission_progress_j["defense_mission_record_info_list"];
 
 			auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 			if (gimmick_save_info_afghan_j.is_object())
@@ -279,7 +282,27 @@ namespace emulator::ssd
 				user->set_user_flag(user_flag);
 			}
 
-			database::users::reset_current_player(user->get_user_id());
+			database::players::defense_mission_info_t defense_mission_info{};
+			defense_mission_info.initialize();
+
+			if (defense_mission_status_j.is_object())
+			{
+				defense_mission_info.status.parse(defense_mission_status_j);
+			}
+
+			if (defense_mission_parameter_j.is_object())
+			{
+				defense_mission_info.parameter.parse(defense_mission_parameter_j);
+			}
+
+			if (defense_mission_record_info_list_j.is_array())
+			{
+				database::players::defense_mission_record_list_t list{};
+				list.parse(defense_mission_record_info_list_j);
+				user->current_player->set_defense_mission_record_list(list);
+			}
+
+			user->current_player->set_defense_mission_info(defense_mission_info);
 		}
 
 		return result;

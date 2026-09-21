@@ -508,119 +508,47 @@ namespace database::players
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
 	};
-#pragma pack(pop)
 
-	template <typename T, std::size_t MaxSize = 2048>
-	class generic_item_list : public database_array<T, MaxSize>
+	struct defense_mission_record_t
 	{
-	public:
-		bool try_add_item(const T& item, const bool overwrite_existing = true)
-		{
-			std::int64_t free_index = -1;
-			for (auto o = 0ull; o < this->size(); o++)
-			{
-				if (this->are_elements_equal(item, this->operator[](o)))
-				{
-					if (overwrite_existing)
-					{
-						std::memcpy(&this->operator[](o), &item, sizeof(T));
-					}
-					return true;
-				}
-				else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
-				{
-					free_index = static_cast<std::int64_t>(o);
-				}
-			}
+		std::uint8_t cleared;
+		std::uint8_t clear_rank;
+		std::uint16_t mission_code;
+		std::uint32_t iris_score;
+		std::uint32_t waves;
 
-			if (free_index != -1)
-			{
-				std::memcpy(&this->operator[](free_index), &item, sizeof(T));
-				return true;
-			}
-
-			return this->push(item);
-		}
-
-		virtual bool parse_diff(json::value& data)
-		{
-			if (!data.is_array())
-			{
-				return false;
-			}
-
-			const auto count = std::min(data.size(), this->max_size());
-			for (auto i = 0ull; i < count; i++)
-			{
-				T new_item{};
-				if (!new_item.parse(data[i]))
-				{
-					continue;
-				}
-
-				if (!try_add_item(new_item))
-				{
-					break;
-				}
-			}
-
-			return true;
-		}
-
-		virtual bool parse(json::value& data)
-		{
-			std::memset(this->data(), 0, this->size() * sizeof(T));
-
-			if (!data.is_array())
-			{
-				return false;
-			}
-
-			const auto count = std::min(this->max_size(), data.size());
-			this->resize(count);
-
-			for (auto i = 0ull; i < count; i++)
-			{
-				this->operator[](i).parse(data[i]);
-			}
-
-			return true;
-		}
-
-		virtual void to_json(json::value& data) const
-		{
-			auto idx = 0;
-			data = json::array();
-
-			const auto list = this->data();
-			for (auto i = 0ull; i < this->size(); i++)
-			{
-				if (this->is_element_empty(list[i]))
-				{
-					continue;
-				}
-
-				list[i].to_json(data[idx++]);
-			}
-		}
-
-		virtual inline bool is_element_empty(const T& value) const
-		{
-			return false;
-		}
-
-		virtual inline bool are_elements_equal(const T& l, const T& r) const
-		{
-			return false;
-		}
-
-		inline bool skip_element(const T& value) const override
-		{
-			return this->is_element_empty(value);
-		}
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
 	};
 
-	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t>
+	struct defense_mission_info_t
+	{
+		struct status_t
+		{
+			std::uint32_t mining_machine_life;
+
+			bool parse(json::value& data);
+			void to_json(json::value& data) const;
+		};
+
+		struct parameter_t
+		{
+			std::uint32_t flag;
+			std::uint32_t threat;
+			std::uint32_t threat_threshold;
+			std::uint32_t attack_time;
+
+			bool parse(json::value& data);
+			void to_json(json::value& data) const;
+		};
+
+		status_t status;
+		parameter_t parameter;
+		void initialize();
+	};
+#pragma pack(pop)
+
+	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t, 1024>
 	{
 	public:
 		inline bool are_elements_equal(const nonstackable_item_t& l, const nonstackable_item_t& r) const override
@@ -639,7 +567,7 @@ namespace database::players
 
 	};
 
-	class stackable_item_list_t final : public generic_item_list<stackable_item_t>
+	class stackable_item_list_t final : public generic_item_list<stackable_item_t, 1024>
 	{
 	public:
 		inline bool are_elements_equal(const stackable_item_t& l, const stackable_item_t& r) const override
@@ -657,7 +585,7 @@ namespace database::players
 
 	};
 
-	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t>
+	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t, 512>
 	{
 	public:
 		inline bool are_elements_equal(const inventory_resource_t& l, const inventory_resource_t& r) const override
@@ -708,6 +636,21 @@ namespace database::players
 
 	};
 
+	class defense_mission_record_list_t final : public generic_item_list<defense_mission_record_t, 50>
+	{
+	public:
+		inline bool are_elements_equal(const defense_mission_record_t& l, const defense_mission_record_t& r) const override
+		{
+			return l.mission_code == r.mission_code;
+		}
+
+		inline bool is_element_empty(const defense_mission_record_t& value) const override
+		{
+			return value.mission_code == 0;
+		}
+
+	};
+
 	class map_unlock_list_t final : public generic_item_list<map_unlock_t, 21904>
 	{
 	public:
@@ -739,7 +682,7 @@ namespace database::players
 		}
 	};
 
-	class crew_member_list_t : public generic_item_list<crew_member_t, 64>
+	class crew_member_list_t : public generic_item_list<crew_member_t, 30>
 	{
 	public:
 		inline bool are_elements_equal(const crew_member_t& l, const crew_member_t& r) const override
@@ -847,6 +790,8 @@ namespace database::players
 		DEFINE_FIELD(building_info_africa, sqlpp::binary);
 		DEFINE_FIELD(crew_member_list, sqlpp::binary);
 		DEFINE_FIELD(crew_levels, sqlpp::binary);
+		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
+		DEFINE_FIELD(defense_mission_record_list, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -872,7 +817,9 @@ namespace database::players
 			building_info_afghan_field_t,
 			building_info_africa_field_t,
 			crew_member_list_field_t,
-			crew_levels_field_t
+			crew_levels_field_t,
+			defense_mission_info_field_t,
+			defense_mission_record_list_field_t
 		);
 
 		inline static table_t table;
@@ -917,6 +864,7 @@ namespace database::players
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
 		void get_building_info(building_info_t& building, const std::uint32_t map_location) const;
 		void get_crew_levels(crew_levels_t& crew_levels) const;
+		void get_defense_mission_info(defense_mission_info_t& defense_mission) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
@@ -929,6 +877,7 @@ namespace database::players
 		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
 		bool set_building_info(building_info_t& building, const std::uint32_t map_location) const;
 		bool set_crew_levels(crew_levels_t& crew_levels) const;
+		bool set_defense_mission_info(defense_mission_info_t& defense_mission) const;
 
 		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
 		void get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add = 0ull) const;
@@ -938,6 +887,7 @@ namespace database::players
 		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
 		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
 		void get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add = 0ull) const;
+		void get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add = 0ull) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
 		bool set_quest_record_list(quest_record_list_t& quest_record_list) const;
@@ -947,6 +897,7 @@ namespace database::players
 		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 		bool set_crew_member_list(crew_member_list_t& crew_member_list) const;
+		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 	};

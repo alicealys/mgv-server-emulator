@@ -20,6 +20,45 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		const auto item_list = std::make_unique<database::players::stackable_item_list_t>();
+		const auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+
+		user->current_player->get_crew_member_list(*crew_member_list);
+		user->current_player->get_stackable_item_list(*item_list);
+
+		const auto do_treatment = [&](const std::uint32_t item_id, std::uint32_t& target_treatment_id, std::uint32_t& target_treatment_time)
+		{
+			if (item_id == 0)
+			{
+				return true;
+			}
+
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(item_id);
+			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+			{
+				return false;
+			}
+
+			const auto item = item_list->find_item(item_id);
+			if (item == nullptr)
+			{
+				return false;
+			}
+
+			if (item->count <= 0)
+			{
+				return false;
+			}
+
+			item->count -= 1;
+			target_treatment_id = 0;
+			target_treatment_time = 0;
+
+			// TODO: life?
+
+			return true;
+		};
+
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
 			entry_t entry{};
@@ -28,10 +67,23 @@ namespace emulator::ssd
 				continue;
 			}
 
-			// TODO
+			const auto member = crew_member_list->find_member(entry.unique_id);
+			if (member == nullptr)
+			{
+				continue;
+			}
+			
+			if (!do_treatment(entry.treat_item_injury_1, member->injury_id_1, member->injury_time_1) || 
+				!do_treatment(entry.treat_item_injury_2, member->injury_id_2, member->injury_time_2) ||
+				!do_treatment(entry.treat_item_sickness_1, member->sickness_id_1, member->sickness_time_2) || 
+				!do_treatment(entry.treat_item_sickness_2, member->sickness_id_2, member->sickness_time_2))
+			{
+				return error(ERR_INVALIDARG);
+			}
 		}
 
-		result["result"] = "ERR_NOTIMPLEMENTED";
+		user->current_player->set_crew_member_list(*crew_member_list);
+		user->current_player->set_stackable_item_list(*item_list);
 
 		return result;
 	}

@@ -280,6 +280,18 @@ namespace game
 		std::string id_str;
 	};
 
+	struct defense_mission_settings_t
+	{
+		bool parse(json::value& data);
+
+		std::vector<float> wave_time;
+		std::vector<std::uint32_t> interval;
+		std::array<std::uint32_t, 5> rank_threshold;
+		std::uint32_t mission_type;
+		std::uint16_t mission_id;
+		std::uint16_t max_wave_count;
+	};
+
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade);
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result);

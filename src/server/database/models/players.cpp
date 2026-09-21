@@ -1436,6 +1436,50 @@ namespace database::players
 		data["plant"] = this->plant;
 	}
 
+	bool defense_mission_record_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	void defense_mission_record_t::to_json(json::value& data) const
+	{
+		data["mission_code"] = this->mission_code;
+		data["cleared"] = this->cleared;
+		data["clear_rank"] = this->clear_rank;
+		data["clear_rank"] = this->clear_rank;
+		data["iris_score"] = this->iris_score;
+		data["waves"] = this->waves;
+	}
+
+	bool defense_mission_info_t::status_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	void defense_mission_info_t::status_t::to_json(json::value& data) const
+	{
+		data["mining_machine_life"] = this->mining_machine_life;
+	}
+
+	bool defense_mission_info_t::parameter_t::parse(json::value& data)
+	{
+		return !json::read(*this, data);
+	}
+
+	void defense_mission_info_t::parameter_t::to_json(json::value& data) const
+	{
+		data["flag"] = this->flag;
+		data["threat"] = this->threat;
+		data["threat_threshold"] = this->threat_threshold;
+		data["attack_time"] = this->attack_time;
+	}
+
+	void defense_mission_info_t::initialize()
+	{
+		std::memset(this, 0, sizeof(defense_mission_info_t));
+		this->status.mining_machine_life = 9360;
+	}
+
 	GET_FIELD_C(player, std::uint64_t, player_id);
 	GET_FIELD_C(player, std::uint64_t, user_id);
 	GET_FIELD_C(player, std::uint64_t, account_id);
@@ -1549,6 +1593,13 @@ namespace database::players
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
 			}();
 
+			static const auto defense_mission_info = []()
+			{
+				static defense_mission_info_t info{};
+				info.initialize();
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(info));
+			}();
+
 			const auto id = database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				return db.exec<Type>(
@@ -1558,6 +1609,7 @@ namespace database::players
 							 player::table.loadout_list = loadout_list,
 							 player::table.building_info_afghan = building_info_afghan,
 							 player::table.building_info_africa = building_info_africa,
+							 player::table.defense_mission_info = defense_mission_info,
 							 player::table.current_loadout = 0,
 							 player::table.loadout_count = initial_loadout_count,
 							 player::table.player_creation_date = std::chrono::system_clock::now()));
@@ -1627,6 +1679,7 @@ namespace database::players
 		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_GET(player, building_info_t, building_info_africa);
 		DEF_BINARY_GET(player, crew_levels_t, crew_levels);
+		DEF_BINARY_GET(player, defense_mission_info_t, defense_mission_info);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -1641,6 +1694,7 @@ namespace database::players
 		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_SET(player, building_info_t, building_info_africa);
 		DEF_BINARY_SET(player, crew_levels_t, crew_levels);
+		DEF_BINARY_SET(player, defense_mission_info_t, defense_mission_info);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
@@ -1650,6 +1704,7 @@ namespace database::players
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_GET(player, crew_member_list_t, crew_member_list);
+		DEF_ARRAY_GET(player, defense_mission_record_list_t, defense_mission_record_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
@@ -1659,6 +1714,7 @@ namespace database::players
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
 		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_SET(player, crew_member_list_t, crew_member_list);
+		DEF_ARRAY_SET(player, defense_mission_record_list_t, defense_mission_record_list);
 	}
 
 	void player::get_avatar(avatar_t& avatar) const
@@ -1741,6 +1797,11 @@ namespace database::players
 		RUN_IMPL(impl::get_crew_levels, this->get_user_id(), crew_levels);
 	}
 
+	void player::get_defense_mission_info(defense_mission_info_t& defense_mission_info) const
+	{
+		RUN_IMPL(impl::get_defense_mission_info, this->get_user_id(), defense_mission_info);
+	}
+
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
@@ -1774,6 +1835,11 @@ namespace database::players
 	void player::get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_crew_member_list, this->get_user_id(), crew_member_list, size_add);
+	}
+
+	void player::get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_defense_mission_record_list, this->get_user_id(), defense_mission_record_list, size_add);
 	}
 
 	bool player::set_avatar(avatar_t& avatar) const
@@ -1860,6 +1926,11 @@ namespace database::players
 		RUN_IMPL(impl::set_crew_levels, this->get_user_id(), crew_levels);
 	}
 
+	bool player::set_defense_mission_info(defense_mission_info_t& defense_mission_info) const
+	{
+		RUN_IMPL(impl::set_defense_mission_info, this->get_user_id(), defense_mission_info);
+	}
+
 	bool player::set_mission_record_list(mission_record_list_t& set_mission_record_list) const
 	{
 		RUN_IMPL(impl::set_mission_record_list, this->get_user_id(), set_mission_record_list);
@@ -1893,6 +1964,11 @@ namespace database::players
 	bool player::set_crew_member_list(crew_member_list_t& crew_member_list) const
 	{
 		RUN_IMPL(impl::set_crew_member_list, this->get_user_id(), crew_member_list);
+	}
+
+	bool player::set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const
+	{
+		RUN_IMPL(impl::set_defense_mission_record_list, this->get_user_id(), defense_mission_record_list);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const
