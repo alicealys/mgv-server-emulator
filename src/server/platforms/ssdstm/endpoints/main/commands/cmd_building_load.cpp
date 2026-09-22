@@ -24,10 +24,8 @@ namespace emulator::ssd
 		user->current_player->get_building_info(*building_info, map_location);
 
 		building_info->to_json(result["cell_info"]);
+		building_info->to_json_farming(result["farming_info"]);
 		result["defense_mission_disconnect"] = 0;
-		result["farming_info"] = json::array{};
-
-		// TODO
 
         return result;
 	}

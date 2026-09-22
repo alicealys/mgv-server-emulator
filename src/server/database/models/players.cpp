@@ -999,6 +999,61 @@ namespace database::players
 		data["column"] = column;
 	}
 
+	bool building_info_t::farming_info_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column)
+	{
+		utils::json_utils::get_or(data["animal00"], this->animal[0]);
+		utils::json_utils::get_or(data["animal01"], this->animal[1]);
+		utils::json_utils::get_or(data["animal02"], this->animal[2]);
+		utils::json_utils::get_or(data["animal03"], this->animal[3]);
+		utils::json_utils::get_or(data["animal04"], this->animal[4]);
+		utils::json_utils::get_or(data["animal05"], this->animal[5]);
+		utils::json_utils::get_or(data["animal06"], this->animal[6]);
+		utils::json_utils::get_or(data["animal07"], this->animal[7]);
+		utils::json_utils::get_or(data["item00"], this->item[0]);
+		utils::json_utils::get_or(data["item01"], this->item[1]);
+		utils::json_utils::get_or(data["item02"], this->item[2]);
+		utils::json_utils::get_or(data["item03"], this->item[3]);
+		utils::json_utils::get_or(data["item04"], this->item[4]);
+		utils::json_utils::get_or(data["item05"], this->item[5]);
+		utils::json_utils::get_or(data["item06"], this->item[6]);
+		utils::json_utils::get_or(data["item07"], this->item[7]);
+		utils::json_utils::get_or(data["item08"], this->item[8]);
+		utils::json_utils::get_or(data["item09"], this->item[9]);
+		utils::json_utils::get_or(data["column"], column);
+		utils::json_utils::get_or(data["row"], row);
+
+		if (row >= building_grid_size || column >= building_grid_size)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	void building_info_t::farming_info_t::to_json(json::value& data, const std::uint32_t row, const std::uint32_t column) const
+	{
+		data["animal00"] = this->animal[0];
+		data["animal01"] = this->animal[1];
+		data["animal02"] = this->animal[2];
+		data["animal03"] = this->animal[3];
+		data["animal04"] = this->animal[4];
+		data["animal05"] = this->animal[5];
+		data["animal06"] = this->animal[6];
+		data["animal07"] = this->animal[7];
+		data["item00"] = this->item[0];
+		data["item01"] = this->item[1];
+		data["item02"] = this->item[2];
+		data["item03"] = this->item[3];
+		data["item04"] = this->item[4];
+		data["item05"] = this->item[5];
+		data["item06"] = this->item[6];
+		data["item07"] = this->item[7];
+		data["item08"] = this->item[8];
+		data["item09"] = this->item[9];
+		data["column"] = column;
+		data["row"] = row;
+	}
+
 	bool building_info_t::parse_type(json::value& data, const std::uint32_t type)
 	{
 		if (!data.is_array())
@@ -1022,6 +1077,29 @@ namespace database::players
 		return true;
 	}
 
+	bool building_info_t::parse_farming(json::value& data)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < data.size(); i++)
+		{
+			farming_info_t farming{};
+			std::uint32_t row{};
+			std::uint32_t column{};
+			if (!farming.parse(data[i], row, column))
+			{
+				continue;
+			}
+
+			std::memcpy(&this->cells[row][column].farming_info, &farming, sizeof(farming_info_t));
+		}
+
+		return true;
+	}
+
 	bool building_info_t::parse(json::value& data, const bool is_diff)
 	{
 		if (!is_diff)
@@ -1032,33 +1110,49 @@ namespace database::players
 		this->parse_type(data["center_info"], edge_type_center);
 		this->parse_type(data["upper_edge_info"], edge_type_upper);
 		this->parse_type(data["left_edge_info"], edge_type_left);
+
 		return true;
-	}
-
-	void building_info_t::to_json(json::value& data, const std::uint32_t type) const
-	{
-		data = json::array();
-
-		auto idx = 0;
-		for (auto row = 0u; row < building_grid_size; row++)
-		{
-			for (auto col = 0u; col < building_grid_size; col++)
-			{
-				if (this->cells[row][col].edges[type].life == 0)
-				{
-					continue;
-				}
-
-				this->cells[row][col].edges[type].to_json(data[idx++], row, col, type);
-			}
-		}
 	}
 
 	void building_info_t::to_json(json::value& data) const
 	{
-		this->to_json(data["center_info"], edge_type_center);
-		this->to_json(data["upper_edge_info"], edge_type_upper);
-		this->to_json(data["left_edge_info"], edge_type_left);
+		for (auto row = 0u; row < building_grid_size; row++)
+		{
+			for (auto col = 0u; col < building_grid_size; col++)
+			{
+				auto& cell = this->cells[row][col];
+				const auto do_edge = [&](json::value& edge, const std::uint32_t type)
+				{
+					if (cell.edges[type].life == 0)
+					{
+						return;
+					}
+
+					cell.edges[type].to_json(edge[edge.size()], row, col, type);
+				};
+
+				do_edge(data["center_info"], edge_type_center);
+				do_edge(data["upper_edge_info"], edge_type_upper);
+				do_edge(data["left_edge_info"], edge_type_left);
+			}
+		}
+	}
+
+	void building_info_t::to_json_farming(json::value& data) const
+	{
+		for (auto row = 0u; row < building_grid_size; row++)
+		{
+			for (auto col = 0u; col < building_grid_size; col++)
+			{
+				auto& cell = this->cells[row][col];
+
+				farming_info_t dummy_info{};
+				if (std::memcmp(&cell.farming_info, &dummy_info, sizeof(dummy_info)) != 0)
+				{
+					cell.farming_info.to_json(data[data.size()], row, col);
+				}
+			}
+		}
 	}
 
 	void building_info_t::load_default(const std::uint32_t map_location)

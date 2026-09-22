@@ -15,6 +15,8 @@ namespace emulator::ssd
 		auto& nonstackable_life_update_list_j = data["nonstackable_life_update_list"];
 		auto& stackable_list_j = data["stackable_list"];
 		auto& resource_list_j = data["resource_list"];
+		auto& cell_info_j = data["cell_info"];
+		auto& farming_update_list_j = data["farming_update_list"];
 
 		if (player_inventory_j.is_object())
 		{
@@ -94,6 +96,24 @@ namespace emulator::ssd
 			user->current_player->get_nonstackable_item_list(*nonstackable_list, nonstackable_list_j.size());
 			nonstackable_list->parse_life_diff(nonstackable_life_update_list_j);
 			user->current_player->set_nonstackable_item_list(*nonstackable_list);
+		}
+
+		if (cell_info_j.is_object() || farming_update_list_j.is_array())
+		{
+			const auto building_info = std::make_unique<database::players::building_info_t>();
+			user->current_player->get_building_info(*building_info, 0);
+
+			if (cell_info_j.is_object())
+			{
+				building_info->parse(cell_info_j, true);
+			}
+
+			if (farming_update_list_j.is_array())
+			{
+				building_info->parse_farming(farming_update_list_j);
+			}
+
+			user->current_player->set_building_info(*building_info, 0);
 		}
 	}
 

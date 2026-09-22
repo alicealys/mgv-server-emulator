@@ -65,6 +65,7 @@ namespace emulator::ssd
 				}
 
 				building_info->parse(building_info_j[i]["cell_info"], false);
+				building_info->parse_farming(building_info_j[i]["farming_info"]);
 				user->current_player->set_building_info(*building_info, i);
 			}
 		}

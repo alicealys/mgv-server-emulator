@@ -212,6 +212,7 @@ namespace emulator::ssd
 		auto& open_list_j = data["open_list"];
 		auto& reward_crew_j = data["reward_crew"];
 		auto& crew_update_list_j = data["crew_update_list"];
+		auto& crew_died_list_j = data["crew_died_list"];
 		auto& group_level_j = data["group_level"];
 		auto& tips_open_info_j = data["tips_open_info"];
 		auto& quest_record_info_j = data["quest_record_info"];
@@ -455,11 +456,31 @@ namespace emulator::ssd
 			user->current_player->set_crew_member_list(*crew_member_list);
 		}
 
-		if (crew_update_list_j.is_array())
+		if (crew_update_list_j.is_array() || crew_died_list_j.is_array())
 		{
 			auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
 			user->current_player->get_crew_member_list(*crew_member_list);
-			crew_member_list->parse_update(crew_update_list_j);
+
+			if (crew_update_list_j.is_array())
+			{
+				crew_member_list->parse_update(crew_update_list_j);
+			}
+
+			if (crew_died_list_j.is_array())
+			{
+				for (auto i = 0ull; i < crew_died_list_j.size(); i++)
+				{
+					std::uint32_t unique_id{};
+					if (!json::read(unique_id, crew_died_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto member = crew_member_list->find_member(unique_id);
+					std::memset(member, 0, sizeof(database::players::crew_member_list_t));
+				}
+			}
+
 			user->current_player->set_crew_member_list(*crew_member_list);
 		}
 

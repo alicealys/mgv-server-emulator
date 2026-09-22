@@ -61,8 +61,6 @@ namespace emulator::ssd
 		do_list(data["upper_life_list"], database::players::edge_type_upper);
 		do_list(data["left_life_list"], database::players::edge_type_left);
 
-		user->current_player->set_building_info(*building_info, map_location);
-
 		auto& base_resource_j = data["base_resource"];
 		if (base_resource_j.is_array() && base_resource_j.size())
 		{
@@ -72,7 +70,9 @@ namespace emulator::ssd
 			user->current_player->set_base_resources(*base_resources);
 		}
 
-		// TODO: farming_update_list
+		building_info->parse_farming(data["farming_update_list"]);
+
+		user->current_player->set_building_info(*building_info, map_location);
 
 		return result;
 	}

@@ -474,18 +474,29 @@ namespace database::players
 			void to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
 		};
 
+		struct farming_info_t
+		{
+			std::uint8_t animal[8];
+			std::uint8_t item[10];
+
+			bool parse(json::value& data, std::uint32_t& row, std::uint32_t& column);
+			void to_json(json::value& data, const std::uint32_t row, const std::uint32_t column) const;
+		};
+
 		struct cell_t
 		{
+			farming_info_t farming_info;
 			cell_edge_t edges[edge_type_count];
 		};
 
 		cell_t cells[building_grid_size][building_grid_size];
 
 		bool parse_type(json::value& data, const std::uint32_t type);
+		bool parse_farming(json::value& data);
 		bool parse(json::value& data, const bool is_diff);
 
-		void to_json(json::value& data, const std::uint32_t type) const;
 		void to_json(json::value& data) const;
+		void to_json_farming(json::value& data) const;
 
 		void load_default(const std::uint32_t map_location);
 	};
