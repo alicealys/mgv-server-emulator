@@ -10,9 +10,10 @@ namespace config
 	{
 		struct vars_t
 		{
-			std::uint32_t session_heartbeat;
-			std::uint32_t session_timeout;
-			std::uint32_t server_version;
+			std::uint32_t session_heartbeat = 60;
+			std::uint32_t session_timeout = 200;
+			std::uint32_t server_version = 19;
+			bool disable_tutorial_tips = false;
 		};
 
 		std::string base_url = "http://localhost:80";

@@ -9,6 +9,7 @@ namespace database
 		std::chrono::seconds session_heartbeat = 60s;
 		std::chrono::seconds session_timeout = 200s;
 		std::uint32_t server_version = 19;
+		bool disable_tutorial_tips = false;
 	};
 	
 	extern vars_t vars;

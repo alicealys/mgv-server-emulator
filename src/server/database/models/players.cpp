@@ -955,7 +955,16 @@ namespace database::players
 
 	void story_unlock_info_t::tips_open_info_t::to_json(json::value& data) const
 	{
-		data["data"] = utils::encoding::encode_base64(this->value);
+		if (database::vars.disable_tutorial_tips)
+		{
+			std::uint8_t tips_data[128]{};
+			std::memset(tips_data, 0xFF, sizeof(tips_data));
+			data["data"] = utils::encoding::encode_base64(tips_data);
+		}
+		else
+		{
+			data["data"] = utils::encoding::encode_base64(this->value);
+		}
 	}
 
 	bool building_info_t::cell_edge_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
