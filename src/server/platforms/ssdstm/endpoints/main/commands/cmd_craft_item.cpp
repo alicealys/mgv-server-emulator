@@ -32,7 +32,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto craft_num = std::min(std::uint16_t(256u), craft_num_j.as<std::uint16_t>());
+		const auto craft_num = craft_num_j.as<std::uint32_t>();
 		const auto recipe_id = recipe_id_j.as<std::uint32_t>();
 
 		const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(recipe_id);
@@ -41,7 +41,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto count = craft_num * iter->second->count;
+		const auto count = std::min(database::players::max_item_count, craft_num * iter->second->count);
 		auto resources = std::make_unique<database::players::inventory_resource_list_t>();
 		auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
@@ -52,10 +52,10 @@ namespace emulator::ssd
 		user->current_player->get_inventory(*player_inventory_info);
 		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, count,
+  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, craft_num,
 			*resources, *stackable_item_list, *player_inventory_info))
 		{
-			return error(ERR_DATABASE);
+			return error(ERR_RESOURCE_SHORTAGE);
 		}
 
 		const auto survival_gear = iter->second->production->get_survival_gear();
@@ -72,7 +72,7 @@ namespace emulator::ssd
 			std::uint32_t obtain_order{};
 			if (!nonstackable_item_list->find_free_index(free_index, obtain_order))
 			{
-				return error(ERR_DATABASE);
+				return error(ERR_OVER_CAPACITY);
 			}
 
 			nonstackable_item.life = static_cast<std::uint16_t>(iter->second->production->life);
@@ -123,9 +123,9 @@ namespace emulator::ssd
 			stackable_item.flag = 1;
 			stackable_item.count = count;
 
-			if (!stackable_item_list->add_item(stackable_item))
+			if (!stackable_item_list->add_item(stackable_item, 0))
 			{
-				return error(ERR_DATABASE);
+				return error(ERR_OVER_CAPACITY);
 			}
 
 			stackable_item.count = count;

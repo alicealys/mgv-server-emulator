@@ -69,7 +69,7 @@ namespace emulator::ssd
 					item.count = reward.param.num;
 					item.production_id = reward.param.code;
 					auto count = item.count;
-					if (stackable_list->add_item(item)) // add it to present box if fail
+					if (stackable_list->add_item(item, 1)) // add it to present box if fail
 					{
 						item.count = count;
 						item.to_json(rank_entry["stackable_list"][stackable_count++]);
@@ -82,7 +82,7 @@ namespace emulator::ssd
 					resource.count = reward.param.num;
 					resource.resource_id = reward.param.code;
 					auto count = resource.count;
-					if (resource_list->add_resource(resource))
+					if (resource_list->add_resource(resource, 1))
 					{
 						resource.count = count;
 						resource.to_json(rank_entry["resources_list"][resource_count++]);

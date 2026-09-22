@@ -1124,13 +1124,14 @@ namespace database::players
 		return index < 1024;
 	}
 
-	bool inventory_resource_list_t::add_resource(inventory_resource_t& resource)
+	bool inventory_resource_list_t::add_resource(inventory_resource_t& resource, const std::int32_t inventory_type)
 	{
 		std::int64_t free_index = -1;
 		for (auto o = 0ull; o < this->size(); o++)
 		{
 			auto& entry = this->operator[](o);
-			if (entry.resource_id == resource.resource_id && entry.count < max_item_count)
+			if (entry.resource_id == resource.resource_id && (inventory_type == -1 || entry.inventory_type == inventory_type) && 
+				entry.count < max_item_count)
 			{
 				const auto add_count = std::min(resource.count, max_item_count - entry.count);
 				entry.count += add_count;
@@ -1153,6 +1154,11 @@ namespace database::players
 		if (!this->find_free_index(resource.inventory_index, resource.obtain_order))
 		{
 			return false;
+		}
+
+		if (inventory_type != -1)
+		{
+			resource.inventory_type = static_cast<std::uint16_t>(inventory_type);
 		}
 
 		if (free_index != -1)
@@ -1204,13 +1210,14 @@ namespace database::players
 		return index < 1024;
 	}
 
-	bool stackable_item_list_t::add_item(stackable_item_t& item)
+	bool stackable_item_list_t::add_item(stackable_item_t& item, const std::int32_t inventory_type)
 	{
 		std::int64_t free_index = -1;
 		for (auto o = 0ull; o < this->size(); o++)
 		{
 			auto& entry = this->operator[](o);
-			if (entry.production_id == item.production_id && entry.count < max_item_count)
+			if (entry.production_id == item.production_id && (inventory_type == -1 || entry.inventory_type == inventory_type) && 
+				entry.count < max_item_count)
 			{
 				const auto add_count = std::min(item.count, max_item_count - entry.count);
 				entry.count += add_count;
@@ -1228,6 +1235,11 @@ namespace database::players
 			{
 				free_index = static_cast<std::int64_t>(o);
 			}
+		}
+
+		if (inventory_type != -1)
+		{
+			item.inventory_type = static_cast<std::uint16_t>(inventory_type);
 		}
 
 		if (!this->find_free_index(item.inventory_index, item.obtain_order))

@@ -548,7 +548,7 @@ namespace database::players
 	};
 #pragma pack(pop)
 
-	constexpr const auto max_item_count = 99999;
+	constexpr const auto max_item_count = 99999u;
 
 	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t, 1024>
 	{
@@ -590,7 +590,7 @@ namespace database::players
 			std::memcpy(&dest, &src, sizeof(stackable_item_t));
 		}
 
-		bool add_item(stackable_item_t& resource);
+		bool add_item(stackable_item_t& item, const std::int32_t inventory_type = -1);
 
 	};
 
@@ -614,7 +614,7 @@ namespace database::players
 			std::memcpy(&dest, &src, sizeof(inventory_resource_t));
 		}
 
-		bool add_resource(inventory_resource_t& resource);
+		bool add_resource(inventory_resource_t& resource, const std::int32_t inventory_type = -1);
 	};
 
 	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>
