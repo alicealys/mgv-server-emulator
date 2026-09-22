@@ -91,6 +91,9 @@ namespace game
 	std::uint8_t* get_static_key(const std::uint32_t type = key_type_ssd);
 	std::size_t get_static_key_len();
 
+	extern std::unordered_set<std::uint32_t> mission_list;
+	extern std::unordered_set<std::uint32_t> quest_list;
+
 	struct cost_t
 	{
 		std::uint32_t id;

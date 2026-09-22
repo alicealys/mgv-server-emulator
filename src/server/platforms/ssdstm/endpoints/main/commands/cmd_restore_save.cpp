@@ -118,6 +118,7 @@ namespace emulator::ssd
 			auto& inventory_user_info_j = mission_progress_j["inventory_user_info"];
 			auto& load_out_list_j = mission_progress_j["load_out_list"];
 			auto& mission_record_info_list_j = mission_progress_j["mission_record_info_list"];
+			auto& quest_record_info_list_j = mission_progress_j["quest_record_info_list"];
 			auto& nonstackable_list_j = mission_progress_j["nonstackable_list"];
 			auto& resource_list_j = mission_progress_j["resource_list"];
 			auto& stackable_list_j = mission_progress_j["stackable_list"];
@@ -200,6 +201,15 @@ namespace emulator::ssd
 				if (mission_record_list->parse(mission_record_info_list_j))
 				{
 					user->current_player->set_mission_record_list(*mission_record_list);
+				}
+			}
+
+			if (quest_record_info_list_j.is_array())
+			{
+				auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
+				if (quest_record_list->parse(quest_record_info_list_j))
+				{
+					user->current_player->set_quest_record_list(*quest_record_list);
 				}
 			}
 

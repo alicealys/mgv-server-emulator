@@ -299,6 +299,7 @@ namespace database::defense_missions
 					reward_info.param.category = 0;
 					reward_info.param.code = reward.id;
 					reward_info.param.num = num;
+					reward_info.id_index = reward.resource->index;
 					break;
 				}
 				case reward_type_item:
@@ -306,6 +307,7 @@ namespace database::defense_missions
 					reward_info.param.category = 1;
 					reward_info.param.code = reward.id;
 					reward_info.param.num = num;
+					reward_info.id_index = reward.item->index;
 					break;
 				}
 				default:

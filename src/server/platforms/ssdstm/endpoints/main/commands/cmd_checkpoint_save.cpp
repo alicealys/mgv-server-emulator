@@ -67,9 +67,9 @@ namespace emulator::ssd
 				{
 					database::players::stackable_item_t item{};
 					item.count = reward.param.num;
-					item.production_id = reward.param.code;
+					item.production_index = reward.id_index;
 					auto count = item.count;
-					if (stackable_list->add_item(item, 1)) // add it to present box if fail
+					if (stackable_list->add_item(item)) // add it to present box if fail
 					{
 						item.count = count;
 						item.to_json(rank_entry["stackable_list"][stackable_count++]);
@@ -80,9 +80,9 @@ namespace emulator::ssd
 				{
 					database::players::inventory_resource_t resource{};
 					resource.count = reward.param.num;
-					resource.resource_id = reward.param.code;
+					resource.resource_index = reward.id_index;
 					auto count = resource.count;
-					if (resource_list->add_resource(resource, 1))
+					if (resource_list->add_resource(resource))
 					{
 						resource.count = count;
 						resource.to_json(rank_entry["resources_list"][resource_count++]);
@@ -376,7 +376,7 @@ namespace emulator::ssd
 						continue;
 					}
 
-					const auto mission_code = mission_code_j.as<std::uint32_t>();
+					const auto mission_code = mission_code_j.as<std::uint16_t>();
 					mission_record_list->open_mission(mission_code);
 				}
 

@@ -119,11 +119,11 @@ namespace emulator::ssd
 		else
 		{
 			database::players::stackable_item_t stackable_item{};
-			stackable_item.production_id = iter->second->production->id;
+			stackable_item.production_index = iter->second->production->index;
 			stackable_item.flag = 1;
 			stackable_item.count = count;
 
-			if (!stackable_item_list->add_item(stackable_item, 0))
+			if (!stackable_item_list->add_item(stackable_item))
 			{
 				return error(ERR_OVER_CAPACITY);
 			}

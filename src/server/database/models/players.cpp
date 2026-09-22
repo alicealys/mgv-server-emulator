@@ -499,15 +499,35 @@ namespace database::players
 
 	bool stackable_item_t::parse(json::value& data)
 	{
+		stackable_item_t::parseable parsed_data{};
+
 		std::memset(this, 0, sizeof(stackable_item_t));
-		utils::json_utils::get_or(data["cbox_index"], this->cbox_index);
-		utils::json_utils::get_or(data["count"], this->count);
-		utils::json_utils::get_or(data["damaged_in_count"], this->damaged_in_count);
-		utils::json_utils::get_or(data["flag"], this->flag);
-		utils::json_utils::get_or(data["inventory_index"], this->inventory_index);
-		utils::json_utils::get_or(data["inventory_type"], this->inventory_type);
-		utils::json_utils::get_or(data["obtain_order"], this->obtain_order);
-		utils::json_utils::get_or(data["production_id"], this->production_id);
+		if (!json::read(parsed_data, data))
+		{
+			return false;
+		}
+
+		this->flag = parsed_data.flag;
+		this->inventory_type = parsed_data.inventory_type;
+		this->cbox_index = parsed_data.cbox_index;
+		this->inventory_index = parsed_data.inventory_index;
+		this->obtain_order = parsed_data.obtain_order;
+		this->damaged_in_count = parsed_data.damaged_in_count;
+		this->count = parsed_data.count;
+
+		std::uint32_t production_id{};
+		if (!json::read(production_id, data["production_id"]))
+		{
+			return false;
+		}
+
+		const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(production_id);
+		if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+		{
+			return false;
+		}
+
+		this->production_index = iter->second->index;
 		return true;
 	}
 
@@ -520,19 +540,40 @@ namespace database::players
 		data["inventory_index"] = this->inventory_index;
 		data["inventory_type"] = this->inventory_type;
 		data["obtain_order"] = this->obtain_order;
-		data["production_id"] = this->production_id;
+		data["production_id"] = this->get_production_id();
 	}
 
 	bool inventory_resource_t::parse(json::value& data)
 	{
-		utils::json_utils::get_or(data["inventory_index"], this->inventory_index);
-		utils::json_utils::get_or(data["inventory_type"], this->inventory_type);
-		utils::json_utils::get_or(data["cbox_index"], this->cbox_index);
-		utils::json_utils::get_or(data["count"], this->count);
-		utils::json_utils::get_or(data["damaged_in_count"], this->damaged_in_count);
-		utils::json_utils::get_or(data["flag"], this->flag);
-		utils::json_utils::get_or(data["obtain_order"], this->obtain_order);
-		utils::json_utils::get_or(data["resource_id"], this->resource_id);
+		std::memset(this, 0, sizeof(inventory_resource_t));
+
+		inventory_resource_t::parseable parsed_data{};
+		if (!json::read(parsed_data, data))
+		{
+			return false;
+		}
+
+		this->flag = parsed_data.flag;
+		this->inventory_type = parsed_data.inventory_type;
+		this->cbox_index = parsed_data.cbox_index;
+		this->inventory_index = parsed_data.inventory_index;
+		this->obtain_order = parsed_data.obtain_order;
+		this->damaged_in_count = parsed_data.damaged_in_count;
+		this->count = parsed_data.count;
+
+		std::uint32_t resource_id{};
+		if (!json::read(resource_id, data["resource_id"]))
+		{
+			return false;
+		}
+
+		const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(resource_id);
+		if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+		{
+			return false;
+		}
+
+		this->resource_index = iter->second->index;
 		return true;
 	}
 
@@ -545,7 +586,7 @@ namespace database::players
 		data["damaged_in_count"] = this->damaged_in_count;
 		data["flag"] = this->flag;
 		data["obtain_order"] = this->obtain_order;
-		data["resource_id"] = this->resource_id;
+		data["resource_id"] = this->get_resource_id();
 	}
 
 	void mission_info_t::initialize()
@@ -821,8 +862,13 @@ namespace database::players
 		resource_count_j["update_remaining_time"] = this->update_remaining_time;
 	}
 
-	bool mission_record_list_t::open_mission(const std::uint32_t mission_code)
+	bool mission_record_list_t::open_mission(const std::uint16_t mission_code)
 	{
+		if (!game::mission_list.contains(mission_code))
+		{
+			return false;
+		}
+
 		mission_record_t record{};
 		record.mission_code = mission_code;
 		return this->try_add_item(record, false);
@@ -830,28 +876,32 @@ namespace database::players
 
 	bool mission_record_t::parse(json::value& data)
 	{
-		utils::json_utils::get_or(data["clear_flag"], this->clear_flag);
-		utils::json_utils::get_or(data["clear_rank"], this->clear_rank);
-		utils::json_utils::get_or(data["clear_time"], this->clear_time);
-		utils::json_utils::get_or(data["mission_code"], this->mission_code);
-		utils::json_utils::get_or(data["new_flag"], this->new_flag);
-		utils::json_utils::get_or(data["score"], this->score);
-		return true;
+		if (!json::read(*this, data))
+		{
+			return false;
+		}
+
+		return game::mission_list.contains(this->mission_code);
 	}
 
 	void mission_record_t::to_json(json::value& data) const
 	{
 		data["clear_flag"] = this->clear_flag;
-		data["clear_rank"] = this->clear_rank;
-		data["clear_time"] = this->clear_time;
+		data["clear_rank"] = 0;
+		data["clear_time"] = 0;
 		data["mission_code"] = this->mission_code;
-		data["new_flag"] = this->new_flag;
-		data["score"] = this->score;
+		data["new_flag"] = 0;
+		data["score"] = 0;
 	}
 
 	bool quest_record_t::parse(json::value& data)
 	{
-		return json::read(*this, data);
+		if (!json::read(*this, data))
+		{
+			return false;
+		}
+
+		return game::quest_list.contains(this->mission_code);
 	}
 
 	void quest_record_t::to_json(json::value& data) const
@@ -1080,7 +1130,7 @@ namespace database::players
 		}
 
 		++obtain_order;
-		return index < 2048;
+		return index < max_nonstackable_items;
 	}
 
 	nonstackable_item_t* nonstackable_item_list_t::find_at_index(const std::uint16_t inventory_index)
@@ -1098,7 +1148,7 @@ namespace database::players
 		return &(*iter);
 	}
 
-	bool inventory_resource_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
+	bool inventory_resource_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const
 	{
 		index = 0u;
 		obtain_order = 0u;
@@ -1106,9 +1156,9 @@ namespace database::players
 		for (auto i = 0u; i < this->size(); )
 		{
 			auto& entry = this->operator[](i);
-			obtain_order = std::max(obtain_order, entry.obtain_order);
+			obtain_order = std::max(obtain_order, static_cast<std::uint16_t>(entry.obtain_order));
 
-			if (entry.inventory_index == index)
+			if (entry.inventory_index == index && entry.inventory_type == inventory_type && entry.resource_index != 0)
 			{
 				++index;
 				i = 0u;
@@ -1121,16 +1171,16 @@ namespace database::players
 		}
 
 		++obtain_order;
-		return index < 1024;
+		return index < max_resources;
 	}
 
-	bool inventory_resource_list_t::add_resource(inventory_resource_t& resource, const std::int32_t inventory_type)
+	bool inventory_resource_list_t::add_resource(inventory_resource_t& resource, const std::uint8_t inventory_type)
 	{
 		std::int64_t free_index = -1;
 		for (auto o = 0ull; o < this->size(); o++)
 		{
 			auto& entry = this->operator[](o);
-			if (entry.resource_id == resource.resource_id && (inventory_type == -1 || entry.inventory_type == inventory_type) && 
+			if (entry.resource_index == resource.resource_index && entry.inventory_type == inventory_type &&
 				entry.count < max_item_count)
 			{
 				const auto add_count = std::min(resource.count, max_item_count - entry.count);
@@ -1151,15 +1201,16 @@ namespace database::players
 			}
 		}
 
-		if (!this->find_free_index(resource.inventory_index, resource.obtain_order))
+		std::uint16_t inventory_index{};
+		std::uint16_t obtain_order{};
+		resource.inventory_type = inventory_type;
+		if (!this->find_free_index(resource.inventory_type, inventory_index, obtain_order))
 		{
 			return false;
 		}
 
-		if (inventory_type != -1)
-		{
-			resource.inventory_type = static_cast<std::uint16_t>(inventory_type);
-		}
+		resource.inventory_index = inventory_index;
+		resource.obtain_order = obtain_order;
 
 		if (free_index != -1)
 		{
@@ -1175,7 +1226,7 @@ namespace database::players
 	{
 		for (auto i = 0u; i < this->size(); i++)
 		{
-			if (this->operator[](i).production_id == production_id)
+			if (this->operator[](i).get_production_id() == production_id)
 			{
 				return &this->operator[](i);
 			}
@@ -1184,7 +1235,7 @@ namespace database::players
 		return nullptr;
 	}
 
-	bool stackable_item_list_t::find_free_index(std::uint16_t& index, std::uint32_t& obtain_order)
+	bool stackable_item_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const
 	{
 		index = 0u;
 		obtain_order = 0u;
@@ -1192,9 +1243,9 @@ namespace database::players
 		for (auto i = 0u; i < this->size(); )
 		{
 			auto& entry = this->operator[](i);
-			obtain_order = std::max(obtain_order, entry.obtain_order);
+			obtain_order = std::max(obtain_order, static_cast<std::uint16_t>(entry.obtain_order));
 
-			if (entry.inventory_index == index)
+			if (entry.inventory_index == index && entry.inventory_type == inventory_type && entry.production_index != 0)
 			{
 				++index;
 				i = 0u;
@@ -1207,16 +1258,16 @@ namespace database::players
 		}
 
 		++obtain_order;
-		return index < 1024;
+		return index < max_stackable_items;
 	}
 
-	bool stackable_item_list_t::add_item(stackable_item_t& item, const std::int32_t inventory_type)
+	bool stackable_item_list_t::add_item(stackable_item_t& item, const std::uint8_t inventory_type)
 	{
 		std::int64_t free_index = -1;
 		for (auto o = 0ull; o < this->size(); o++)
 		{
 			auto& entry = this->operator[](o);
-			if (entry.production_id == item.production_id && (inventory_type == -1 || entry.inventory_type == inventory_type) && 
+			if (entry.production_index == item.production_index && entry.inventory_type == inventory_type &&
 				entry.count < max_item_count)
 			{
 				const auto add_count = std::min(item.count, max_item_count - entry.count);
@@ -1237,15 +1288,16 @@ namespace database::players
 			}
 		}
 
-		if (inventory_type != -1)
-		{
-			item.inventory_type = static_cast<std::uint16_t>(inventory_type);
-		}
-
-		if (!this->find_free_index(item.inventory_index, item.obtain_order))
+		item.inventory_type = inventory_type;
+		std::uint16_t inventory_index{};
+		std::uint16_t obtain_order{};
+		if (!this->find_free_index(item.inventory_type, inventory_index, obtain_order))
 		{
 			return false;
 		}
+
+		item.inventory_index = inventory_index;
+		item.obtain_order = inventory_index;
 
 		if (free_index != -1)
 		{
@@ -1532,7 +1584,12 @@ namespace database::players
 
 	bool defense_mission_record_t::parse(json::value& data)
 	{
-		return json::read(*this, data);
+		if (!json::read(*this, data))
+		{
+			return false;
+		}
+
+		return game::parameters_table.ssd_base_defense_settings->mission_settings.contains(this->mission_code);
 	}
 
 	void defense_mission_record_t::to_json(json::value& data) const
@@ -2128,14 +2185,20 @@ namespace database::players
 					return;
 				}
 
+				const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(static_cast<std::uint32_t>(resource_id));
+				if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+				{
+					console::log("resource not found\n");
+					return;
+				}
+
 				auto resource_list = std::make_unique<inventory_resource_list_t>();
 				player->get_inventory_resource_list(*resource_list, 1);
 				inventory_resource_t resource{};
-				resource.resource_id = static_cast<std::uint32_t>(resource_id);
+				resource.resource_index = iter->second->index;
 				resource.count = static_cast<std::uint32_t>(amount);
 				resource.flag = 1;
-				resource_list->find_free_index(resource.inventory_index, resource.obtain_order);
-				resource_list->try_add_item(resource);
+				resource_list->add_resource(resource);
 				player->set_inventory_resource_list(*resource_list);
 			});
 		}

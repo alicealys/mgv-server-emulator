@@ -77,14 +77,42 @@ namespace database::players
 
 	struct stackable_item_t
 	{
-		std::uint16_t cbox_index;
-		std::uint32_t count;
-		std::uint16_t damaged_in_count;
-		std::uint16_t flag;
-		std::uint16_t inventory_index;
-		std::uint16_t inventory_type;
-		std::uint32_t obtain_order;
-		std::uint32_t production_id;
+		struct parseable
+		{
+			std::uint8_t flag;
+			std::uint8_t inventory_type;
+			std::uint8_t cbox_index;
+			std::uint8_t inventory_index;
+			std::uint8_t obtain_order;
+			std::uint8_t damaged_in_count;
+			std::uint32_t count;
+		};
+
+		std::uint32_t flag : 1;
+		std::uint32_t inventory_type : 1;
+		std::uint32_t cbox_index : 7;
+		std::uint32_t inventory_index : 7;
+		std::uint32_t obtain_order : 7;
+		std::uint32_t damaged_in_count : 8;
+		std::uint32_t production_index : 10;
+		std::uint32_t count : 17;
+		std::uint32_t unused : 5;
+
+		inline std::uint32_t get_production_id() const
+		{
+			if (this->production_index > game::parameters_table.ssd_sbm_parameters->productions_list.size())
+			{
+				return 0u;
+			}
+
+			const auto& prod = game::parameters_table.ssd_sbm_parameters->productions_list[this->production_index];
+			if (prod == nullptr)
+			{
+				return 0u;
+			}
+
+			return prod->id;
+		}
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -320,14 +348,42 @@ namespace database::players
 
 	struct inventory_resource_t
 	{
-		std::uint16_t inventory_index;
-		std::uint16_t inventory_type;
-		std::uint32_t cbox_index;
-		std::uint32_t count;
-		std::uint32_t damaged_in_count;
-		std::uint32_t flag;
-		std::uint32_t obtain_order;
-		std::uint32_t resource_id;
+		struct parseable
+		{
+			std::uint8_t flag;
+			std::uint8_t inventory_type;
+			std::uint8_t cbox_index;
+			std::uint8_t inventory_index;
+			std::uint8_t obtain_order;
+			std::uint8_t damaged_in_count;
+			std::uint32_t count;
+		};
+
+		std::uint32_t flag : 1;
+		std::uint32_t inventory_type : 1;
+		std::uint32_t cbox_index : 7;
+		std::uint32_t inventory_index : 7;
+		std::uint32_t obtain_order : 7;
+		std::uint32_t damaged_in_count : 8;
+		std::uint32_t resource_index : 10;
+		std::uint32_t count : 17;
+		std::uint32_t unused : 5;
+		
+		inline std::uint32_t get_resource_id() const
+		{
+			if (this->resource_index > game::parameters_table.ssd_sbm_parameters->resources_list.size())
+			{
+				return 0u;
+			}
+
+			const auto& res = game::parameters_table.ssd_sbm_parameters->resources_list[this->resource_index];
+			if (res == nullptr)
+			{
+				return 0u;
+			}
+
+			return res->id;
+		}
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -341,12 +397,12 @@ namespace database::players
 
 	struct mission_record_t
 	{
-		std::uint32_t clear_flag;
-		std::uint32_t clear_rank;
-		std::uint32_t clear_time;
-		std::uint32_t mission_code;
-		std::uint32_t new_flag;
-		std::uint32_t score;
+		std::uint8_t clear_flag;
+		//std::uint8_t clear_rank; // always zero?
+		//std::uint8_t new_flag;
+		std::uint16_t mission_code;
+		//std::uint32_t clear_time;
+		//std::uint32_t score;
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -354,9 +410,9 @@ namespace database::players
 
 	struct quest_record_t
 	{
-		std::uint32_t flagset;
+		std::uint8_t flagset;
 		std::uint32_t mission_code;
-		std::uint32_t repop_count;
+		std::uint16_t repop_count;
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -513,9 +569,9 @@ namespace database::players
 	{
 		std::uint8_t cleared;
 		std::uint8_t clear_rank;
+		std::uint8_t waves;
 		std::uint16_t mission_code;
 		std::uint32_t iris_score;
-		std::uint32_t waves;
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -550,7 +606,15 @@ namespace database::players
 
 	constexpr const auto max_item_count = 99999u;
 
-	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t, 1024>
+	enum inventory_type_t : std::uint8_t
+	{
+		inventory_storage = 0,
+		inventory_player = 1,
+		inventory_type_count = 2,
+	};
+
+	constexpr const auto max_nonstackable_items = 1024;
+	class nonstackable_item_list_t final : public generic_item_list<nonstackable_item_t, max_nonstackable_items>
 	{
 	public:
 		inline bool are_elements_equal(const nonstackable_item_t& l, const nonstackable_item_t& r) const override
@@ -569,7 +633,8 @@ namespace database::players
 
 	};
 
-	class stackable_item_list_t final : public generic_item_list<stackable_item_t, 1024>
+	constexpr const auto max_stackable_items = 1024;
+	class stackable_item_list_t final : public generic_item_list<stackable_item_t, max_stackable_items>
 	{
 	public:
 		inline bool are_elements_equal(const stackable_item_t& l, const stackable_item_t& r) const override
@@ -579,22 +644,23 @@ namespace database::players
 
 		inline bool is_element_empty(const stackable_item_t& value) const override
 		{
-			return value.production_id == 0 || value.count == 0;
+			return value.production_index == 0 || value.count == 0;
 		}
 
 		stackable_item_t* find_item(const std::uint32_t production_id);
-		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
+		bool find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const;
 
 		inline void import_element(stackable_item_t& dest, const stackable_item_t& src) const override
 		{
 			std::memcpy(&dest, &src, sizeof(stackable_item_t));
 		}
 
-		bool add_item(stackable_item_t& item, const std::int32_t inventory_type = -1);
+		bool add_item(stackable_item_t& item, const std::uint8_t inventory_type = inventory_storage);
 
 	};
 
-	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t, 512>
+	constexpr const auto max_resources = 512;
+	class inventory_resource_list_t final : public generic_item_list<inventory_resource_t, max_resources>
 	{
 	public:
 		inline bool are_elements_equal(const inventory_resource_t& l, const inventory_resource_t& r) const override
@@ -604,17 +670,18 @@ namespace database::players
 
 		inline bool is_element_empty(const inventory_resource_t& value) const override
 		{
-			return value.resource_id == 0 || value.count == 0;
+			return value.resource_index == 0 || value.count == 0;
 		}
 
-		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
+		bool find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const;
 
 		inline void import_element(inventory_resource_t& dest, const inventory_resource_t& src) const override
 		{
 			std::memcpy(&dest, &src, sizeof(inventory_resource_t));
 		}
 
-		bool add_resource(inventory_resource_t& resource, const std::int32_t inventory_type = -1);
+		bool add_resource(inventory_resource_t& resource, const std::uint8_t inventory_type = inventory_storage);
+
 	};
 
 	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>
@@ -630,7 +697,7 @@ namespace database::players
 			return value.mission_code == 0;
 		}
 
-		bool open_mission(const std::uint32_t mission_code);
+		bool open_mission(const std::uint16_t mission_code);
 
 	};
 
@@ -647,7 +714,7 @@ namespace database::players
 			return value.mission_code == 0;
 		}
 
-		bool open_mission(const std::uint32_t mission_code);
+		bool open_mission(const std::uint16_t mission_code);
 
 	};
 
@@ -742,7 +809,7 @@ namespace database::players
 
 			for (auto o = 0ull; o < resource_list.size(); o++)
 			{
-				if (cost[i].id == resource_list[o].resource_id && cost[i].count * amount <= resource_list[o].count)
+				if (cost[i].id == resource_list[o].get_resource_id() && cost[i].count * amount <= resource_list[o].count)
 				{
 					found = true;
 					resource_list[o].count -= cost[i].count * amount;
@@ -754,7 +821,7 @@ namespace database::players
 			{
 				for (auto o = 0ull; o < stackable_item_list.size(); o++)
 				{
-					if (cost[i].id == stackable_item_list[o].production_id && cost[i].count * amount <= stackable_item_list[o].count)
+					if (cost[i].id == stackable_item_list[o].get_production_id() && cost[i].count * amount <= stackable_item_list[o].count)
 					{
 						found = true;
 						stackable_item_list[o].count -= static_cast<std::uint16_t>(cost[i].count * amount);

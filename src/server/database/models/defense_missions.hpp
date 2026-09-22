@@ -93,6 +93,7 @@ namespace database::defense_missions
 	struct reward_info_t
 	{
 		std::uint8_t rank;
+		std::uint32_t id_index;
 		reward_t param;
 	};
 

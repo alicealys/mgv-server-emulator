@@ -28,7 +28,7 @@ namespace emulator::ssd
 					continue;
 				}
 
-				const auto mission_code = mission_code_j.as<std::uint32_t>();
+				const auto mission_code = mission_code_j.as<std::uint16_t>();
 				mission_record_list->open_mission(mission_code);
 			}
 
