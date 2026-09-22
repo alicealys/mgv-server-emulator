@@ -19,6 +19,8 @@ namespace emulator
 		const auto uptime_s = std::chrono::duration_cast<std::chrono::seconds>(uptime).count();
 
 		result["uptime"] = uptime_s;
+		result["online_player_count"] = database::users::get_online_user_count();
+		result["total_player_count"] = database::users::get_user_count();
 		result["version"] = VERSION;
 
 		return result;

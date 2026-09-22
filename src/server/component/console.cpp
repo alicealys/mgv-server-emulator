@@ -439,7 +439,7 @@ namespace console
 	public:
 		void pre_start() override
 		{
-			printf("\033]0;%s\007", "tpp-server-emulator");
+			printf("\033]0;%s\007", "mgv-server-emulator");
 
 			set_sigint_handler();
 			pipe(con.pipe_fd);

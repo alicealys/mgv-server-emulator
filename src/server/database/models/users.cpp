@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "players.hpp"
+#include "defense_missions.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -551,6 +552,35 @@ namespace database::users
 			});
 		}
 
+		template <database_type_t Type>
+		std::uint64_t get_user_count()
+		{
+			return database::access<std::uint64_t>([&](database::database_t& db)
+			{
+				auto results = db.get_database<Type>()->operator()(
+					sqlpp::select(
+						sqlpp::count(1))
+							.from(user::table).unconditionally());
+
+				return results.front().count.value();
+			});
+		}
+
+		template <database_type_t Type>
+		std::uint64_t get_online_user_count(const std::chrono::milliseconds within)
+		{
+			return database::access<std::uint64_t>([&](database::database_t& db)
+			{
+				auto results = db.get_database<Type>()->operator()(
+					sqlpp::select(
+						sqlpp::count(1))
+							.from(user::table)
+								.where(user::table.last_update >= std::chrono::system_clock::now() - within));
+
+				return results.front().count.value();
+			});
+		}
+
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
 
@@ -642,6 +672,21 @@ namespace database::users
 	bool reset_current_player(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::reset_current_player, user_id);
+	}
+
+	std::uint64_t get_user_count()
+	{
+		RUN_IMPL(impl::get_user_count);
+	}
+
+	std::uint64_t get_online_user_count(const std::chrono::milliseconds within)
+	{
+		RUN_IMPL(impl::get_online_user_count, within);
+	}
+
+	std::uint64_t get_online_user_count()
+	{
+		return get_online_user_count(database::vars.session_timeout);
 	}
 
 	void delete_user_data(const std::uint64_t user_id)

@@ -157,5 +157,9 @@ namespace database::users
 	bool set_current_player(const std::uint64_t user_id, const std::uint64_t player_id);
 	bool reset_current_player(const std::uint64_t user_id);
 
+	std::uint64_t get_user_count();
+	std::uint64_t get_online_user_count();
+	std::uint64_t get_online_user_count(const std::chrono::milliseconds within);
+
 	bool delete_all_user_data(const std::uint64_t account_id);
 }

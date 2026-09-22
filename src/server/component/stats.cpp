@@ -6,7 +6,7 @@
 #include "../server.hpp"
 
 #include "database/database.hpp"
-#include "database/models/players.hpp"
+#include "database/models/users.hpp"
 
 #include <utils/io.hpp>
 #include <utils/string.hpp>
@@ -17,15 +17,15 @@ namespace stats
 	{
 		void update_window_title()
 		{
-			/*const auto total_count = database::players::get_player_count();
-			const auto active_count = database::players::get_online_player_count();
+			const auto total_count = database::users::get_user_count();
+			const auto active_count = database::users::get_online_user_count();
 			const auto title = std::format("mgv-server-emulator - ({} / {} active players)", active_count, total_count);
 
 #ifdef _WIN32
 			SetConsoleTitle(title.data());
 #else
 			printf("\033]0;%s\007", title.data());
-#endif*/
+#endif
 		}
 	}
 
@@ -47,9 +47,9 @@ namespace stats
 					within = std::chrono::seconds{std::strtoull(time_str.data(), nullptr, 10)};
 				}
 
-				//const auto total_count = database::players::get_player_count();
-				//const auto count = database::players::get_online_player_count(within);
-				//console::log("Active players (within %llis): %lli / %lli\n", within.count(), count, total_count);
+				const auto total_count = database::users::get_user_count();
+				const auto count = database::users::get_online_user_count(within);
+				console::log("Active players (within %llis): %lli / %lli\n", within.count(), count, total_count);
 			});
 		}
 	};
