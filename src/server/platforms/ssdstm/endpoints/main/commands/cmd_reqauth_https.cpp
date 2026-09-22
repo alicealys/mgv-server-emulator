@@ -50,7 +50,7 @@ namespace emulator::ssd
 		{
 			auto expired = false;
 			const auto session_key = user->get_session_id();
-			const auto user_opt = database::users::find_by_session_id(session_key, false, &expired);
+			const auto user_opt = database::users::find_from_session_id(session_key, false, &expired);
 
 			if (!user_opt.has_value())
 			{

@@ -356,7 +356,7 @@ namespace database::users
 		}
 
 		template <database_type_t Type>
-		std::optional<user> find_by_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
+		std::optional<user> find_from_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
 		{
 			return database::access<std::optional<user>>([&](database::database_t& db)
 				-> std::optional<user>
@@ -409,7 +409,7 @@ namespace database::users
 				db.exec<Type>(
 					sqlpp::insert_into(user::table)
 						.set(user::table.account_id = account_id,
-							 user::table.currency = "EUR",
+							 user::table.currency = "",
 							 user::table.user_inventory = default_inventory,
 							 user::table.last_update = std::chrono::system_clock::now(),
 							 user::table.user_creation_date = std::chrono::system_clock::now()));
@@ -633,9 +633,9 @@ namespace database::users
 		RUN_IMPL(impl::find_from_account, account_id);
 	}
 
-	std::optional<user> find_by_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
+	std::optional<user> find_from_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
 	{
-		RUN_IMPL(impl::find_by_session_id, session_id, use_timeout, is_expired);
+		RUN_IMPL(impl::find_from_session_id, session_id, use_timeout, is_expired);
 	}
 
 	user find_or_insert(const std::uint64_t account_id)
@@ -696,7 +696,7 @@ namespace database::users
 
 	bool delete_all_user_data(const std::uint64_t account_id)
 	{
-		const auto user = find(account_id);
+		const auto user = find_from_account(account_id);
 		if (!user.has_value())
 		{
 			return false;
@@ -707,6 +707,7 @@ namespace database::users
 		const auto players = players::get_player_list(user->get_user_id());
 		for (const auto& player : players)
 		{
+			defense_missions::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 

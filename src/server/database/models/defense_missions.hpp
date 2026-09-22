@@ -315,4 +315,6 @@ namespace database::defense_missions
 		broken_facility_list_t& broken_facility_list,
 		injury_crew_list_t& injury_crew_list,
 		reward_list_t& reward_list);
+
+	void delete_player_data(const std::uint64_t player_id);
 }

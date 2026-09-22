@@ -70,7 +70,7 @@ namespace emulator
 			}
 
 			const auto& session_key = session_key_j.get<std::string>();
-			user = database::users::find_by_session_id(session_key, false);
+			user = database::users::find_from_session_id(session_key, false);
 			if (!user.has_value())
 			{
 				data_j = json::null{};

@@ -11,7 +11,7 @@
 	"openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&" \
 	"openid.identity=http://specs.openid.net/auth/2.0/identifier_select&" \
 	"openid.return_to={}/{}&" \
-	"openid.realm={}&" \
+	"openid.realm={}/{}&" \
 	"openid.mode=checkid_setup" 
 
 namespace emulator
@@ -21,7 +21,7 @@ namespace emulator
 		const auto target = params.query.get("target");
 		const auto target_value = target.value_or("");
 		const auto& base_url = config::get().base_url;
-		const auto redirect_url = std::format(URL_FORMAT, base_url, target_value, base_url);
+		const auto redirect_url = std::format(URL_FORMAT, base_url, target_value, base_url, target_value);
 
 		json::value result;
 		result["redirect_url"] = redirect_url;

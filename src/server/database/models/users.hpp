@@ -143,7 +143,7 @@ namespace database::users
 	std::optional<user> find(const std::uint64_t user_id);
 	bool exists(const std::uint64_t user_id);
 	std::optional<user> find_from_account(const std::uint64_t account_id);
-	std::optional<user> find_by_session_id(const std::string session_id, bool use_timeout, bool* is_expired = nullptr);
+	std::optional<user> find_from_session_id(const std::string session_id, bool use_timeout, bool* is_expired = nullptr);
 	user find_or_insert(const std::uint64_t account_id);
 
 	bool generate_password(const std::uint64_t user_id, std::string& password);

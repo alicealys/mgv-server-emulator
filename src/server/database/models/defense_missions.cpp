@@ -627,6 +627,11 @@ namespace database::defense_missions
 		RUN_IMPL(impl::add_wave, defense_mission_id, result, params, broken_facility_list, injury_crew_list, reward_list);
 	}
 
+	void delete_player_data(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::delete_player_data, player_id);
+	}
+
 	class table final : public table_interface
 	{
 	public:
