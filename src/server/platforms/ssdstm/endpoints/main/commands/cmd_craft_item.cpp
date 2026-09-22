@@ -41,6 +41,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		const auto count = craft_num * iter->second->count;
 		auto resources = std::make_unique<database::players::inventory_resource_list_t>();
 		auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
@@ -51,7 +52,7 @@ namespace emulator::ssd
 		user->current_player->get_inventory(*player_inventory_info);
 		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, craft_num,
+  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, count,
 			*resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_DATABASE);
@@ -103,7 +104,7 @@ namespace emulator::ssd
 						if (option_slot->options[o].obtained)
 						{
 							option.obtained |= 1 << o;
-							if (option.option_id != 0)
+							if (option.option_id == 0)
 							{
 								option.option_id = option_slot->options[o].optid;
 							}
@@ -120,28 +121,14 @@ namespace emulator::ssd
 			database::players::stackable_item_t stackable_item{};
 			stackable_item.production_id = iter->second->production->id;
 			stackable_item.flag = 1;
-			stackable_item.count = craft_num;
+			stackable_item.count = count;
 
-			const auto slot = stackable_item_list->find_item(iter->second->production->id);
-			if (slot != nullptr && slot->count < 99)
+			if (!stackable_item_list->add_item(stackable_item))
 			{
-				stackable_item.inventory_index = slot->inventory_index;
-				slot->count += craft_num;
-			}
-			else
-			{
-				std::uint16_t free_index{};
-				std::uint32_t obtain_order{};
-				if (!stackable_item_list->find_free_index(free_index, obtain_order))
-				{
-					return error(ERR_DATABASE);
-				}
-
-				stackable_item.inventory_index = free_index;
-				//stackable_item.obtain_order = obtain_order;
-				stackable_item_list->push(stackable_item);
+				return error(ERR_DATABASE);
 			}
 
+			stackable_item.count = count;
 			stackable_item.to_json(result["crafted_stackable_items"][0]);
 
 			if (survival_gear != nullptr)
