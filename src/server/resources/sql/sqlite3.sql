@@ -14,11 +14,11 @@ create table if not exists `users`
 	nat						int unsigned	default 0,
 	current_player_id		bigint unsigned default null unique,
 	last_update				datetime        not null,
-	user_creation_date		datetime        not null
+	user_creation_date		datetime        not null,
 	user_flag				int unsigned 	default 0,
 	dlc_flag				int unsigned 	default 0,
 	user_inventory			blob			default null,
-	user_play_record		blob			default null,
+	user_play_record		blob			default null
 )
 -- query:mgssd.players.create
 create table if not exists `players`
@@ -77,14 +77,14 @@ alter table users
 add constraint current_player_id_fk 
 foreign key (`current_player_id`) references `players`(`player_id`)
 -- query:mgssd.users.remove_update_trigger
-drop trigger if exists players_insert_trigger
+drop trigger if exists users_update_trigger
 -- query:mgssd.users.add_update_trigger
-create trigger players_insert_trigger
-before update on players
+create trigger users_update_trigger
+before update on users
 for each row
 begin
     select raise(fail, 'current_player_id check fail')
-    where not exists (
+    where NEW.current_player_id is not null and not exists (
         select 1 from players 
         where player_id = NEW.current_player_id and f_user_id = NEW.user_id
     );
