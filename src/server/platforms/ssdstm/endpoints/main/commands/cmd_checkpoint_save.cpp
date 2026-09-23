@@ -219,6 +219,7 @@ namespace emulator::ssd
 		auto& tips_open_info_j = data["tips_open_info"];
 		auto& quest_record_info_j = data["quest_record_info"];
 		auto& defense_mission_wave_result_j = data["defense_mission_wave_result"];
+		auto& defense_mission_parameter_j = data["defense_mission_parameter"];
 
 		result["added_crew"] = json::array();
 		result["capture_list"] = json::array();
@@ -493,6 +494,14 @@ namespace emulator::ssd
 		if (defense_mission_wave_result_j.is_array())
 		{
 			this->save_defense_mission(result, defense_mission_wave_result_j, user);
+		}
+
+		if (defense_mission_parameter_j.is_object())
+		{
+			database::players::defense_mission_info_t info{};
+			user->current_player->get_defense_mission_info(info);
+			info.parameter.parse(defense_mission_parameter_j);
+			user->current_player->set_defense_mission_info(info);
 		}
 
 		// TODO

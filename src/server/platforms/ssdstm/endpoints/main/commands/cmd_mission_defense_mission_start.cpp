@@ -8,13 +8,15 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		param_t param{};
-		if (!json::read(param, data["defense_mission_parameter"]))
+		database::players::defense_mission_info_t info{};
+		user->current_player->get_defense_mission_info(info);
+
+		if (!info.parameter.parse(data["defense_mission_parameter"]))
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		user->current_player->set_defense_mission_info(info);
 
         return result;
 	}

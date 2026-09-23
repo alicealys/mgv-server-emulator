@@ -98,7 +98,7 @@ List of implemeted/unimplemented server commands
 | CMD_CHARACTER_SET_CLASS | ❌ |  |
 | CMD_SERVER_DATA_INITIALIZE | ❌ |  |
 | CMD_SURVIVOR_INITIALIZE | ❌ |  |
-| CMD_MISSION_DEFENSE_MISSION_START | ❌ |  |
+| CMD_MISSION_DEFENSE_MISSION_START | ✔️ |  |
 | CMD_DLC_SET_FLAG | ✔️ |  |
 | CMD_DLC_GET_FLAG | ✔️ |  |
 | CMD_COMMUNICATION_GESTURE_SLOT_SAVE | ✔️ |  |
