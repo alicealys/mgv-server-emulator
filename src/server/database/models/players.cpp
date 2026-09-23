@@ -20,8 +20,17 @@ namespace database::players
 		namespace exp
 		{
 			const auto select = sqlpp::select(
-				sqlpp::all_of(player::table), users::user::table.account_id)
-					.from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
+				player::table.player_id, 
+				player::table.player_index, 
+				player::table.f_user_id, 
+				player::table.loadout_count, 
+				player::table.current_loadout,
+				player::table.playtime,
+				player::table.nameplate,
+				player::table.player_creation_date,
+				player::table.point,
+				users::user::table.account_id
+			).from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
 		}
 
 		const json::value& get_default_data()
@@ -1325,7 +1334,6 @@ namespace database::players
 		return this->push(resource);
 	}
 
-
 	inventory_resource_t* inventory_resource_list_t::get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type)
 	{
 		for (auto i = 0u; i < this->size(); i++)
@@ -1763,6 +1771,46 @@ namespace database::players
 		this->status.mining_machine_life = 9360;
 	}
 
+	bool communication_gesture_info_t::parse(json::value& data)
+	{
+		if (!data.is_object())
+		{
+			return false;
+		}
+
+		if (!utils::json_utils::parse_array(data["communication_slot"], this->communication_slot) ||
+			!utils::json_utils::parse_array(data["communication_type"], this->communication_type) ||
+			!utils::json_utils::parse_array(data["gesture_slot"], this->gesture_slot))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	void communication_gesture_info_t::to_json(json::value& data) const
+	{
+		for (auto i = 0; i < ARRAYSIZE(this->communication_slot); i++)
+		{
+			data["communication_slot"][i] = this->communication_slot[i];
+			data["communication_type"][i] = this->communication_type[i];
+			data["gesture_slot"][i] = this->gesture_slot[i];
+		}
+	}
+
+	void communication_gesture_info_t::initialize()
+	{
+		static const auto default_info = []()
+		{
+			static communication_gesture_info_t data{};
+			json::value default_data = get_default_data("communication_gesture_slot");
+			data.parse(default_data);
+			return &data;
+		}();
+
+		std::memcpy(this, default_info, sizeof(communication_gesture_info_t));
+	}
+
 	GET_FIELD_C(player, std::uint64_t, player_id);
 	GET_FIELD_C(player, std::uint64_t, user_id);
 	GET_FIELD_C(player, std::uint64_t, account_id);
@@ -1876,6 +1924,13 @@ namespace database::players
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(info));
 			}();
 
+			static const auto communication_gesture_info = []()
+			{
+				static communication_gesture_info_t info{};
+				info.initialize();
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(info));
+			}();
+
 			const auto id = database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				return db.exec<Type>(
@@ -1885,6 +1940,7 @@ namespace database::players
 							 player::table.loadout_list = loadout_list,
 							 player::table.building_info_afghan = building_info_afghan,
 							 player::table.defense_mission_info = defense_mission_info,
+							 player::table.communication_gesture_info = communication_gesture_info,
 							 player::table.current_loadout = 0,
 							 player::table.loadout_count = initial_loadout_count,
 							 player::table.player_creation_date = std::chrono::system_clock::now()));
@@ -1954,6 +2010,7 @@ namespace database::players
 		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_GET(player, crew_levels_t, crew_levels);
 		DEF_BINARY_GET(player, defense_mission_info_t, defense_mission_info);
+		DEF_BINARY_GET(player, communication_gesture_info_t, communication_gesture_info);
 
 		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
@@ -1968,6 +2025,7 @@ namespace database::players
 		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
 		DEF_BINARY_SET(player, crew_levels_t, crew_levels);
 		DEF_BINARY_SET(player, defense_mission_info_t, defense_mission_info);
+		DEF_BINARY_SET(player, communication_gesture_info_t, communication_gesture_info);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
@@ -2063,6 +2121,11 @@ namespace database::players
 	void player::get_defense_mission_info(defense_mission_info_t& defense_mission_info) const
 	{
 		RUN_IMPL(impl::get_defense_mission_info, this->get_user_id(), defense_mission_info);
+	}
+
+	void player::get_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const
+	{
+		RUN_IMPL(impl::get_communication_gesture_info, this->get_user_id(), communication_gesture_info);
 	}
 
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
@@ -2180,6 +2243,11 @@ namespace database::players
 	bool player::set_defense_mission_info(defense_mission_info_t& defense_mission_info) const
 	{
 		RUN_IMPL(impl::set_defense_mission_info, this->get_user_id(), defense_mission_info);
+	}
+
+	bool player::set_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const
+	{
+		RUN_IMPL(impl::set_communication_gesture_info, this->get_user_id(), communication_gesture_info);
 	}
 
 	bool player::set_mission_record_list(mission_record_list_t& set_mission_record_list) const

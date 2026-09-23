@@ -128,6 +128,7 @@ namespace emulator::ssd
 			auto& defense_mission_status_j = mission_progress_j["defense_mission_status"];
 			auto& defense_mission_parameter_j = mission_progress_j["defense_mission_parameter"];
 			auto& defense_mission_record_info_list_j = mission_progress_j["defense_mission_record_info_list"];
+			auto& communication_gesture_slot_j = mission_progress_j["communication_gesture_slot"];
 
 			auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 			if (gimmick_save_info_afghan_j.is_object())
@@ -314,6 +315,13 @@ namespace emulator::ssd
 			}
 
 			user->current_player->set_defense_mission_info(defense_mission_info);
+
+			if (communication_gesture_slot_j.is_object())
+			{
+				database::players::communication_gesture_info_t gesture_info{};
+				gesture_info.parse(communication_gesture_slot_j);
+				user->current_player->set_communication_gesture_info(gesture_info);
+			}
 		}
 
 		return result;

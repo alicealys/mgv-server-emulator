@@ -54,6 +54,7 @@ create table if not exists `players`
 	building_info_afghan		blob default null,
 	defense_mission_info		blob default null,
 	defense_mission_record_list	blob default null,
+	communication_gesture_info	blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger

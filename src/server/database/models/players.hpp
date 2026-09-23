@@ -613,6 +613,17 @@ namespace database::players
 		parameter_t parameter;
 		void initialize();
 	};
+
+	struct communication_gesture_info_t
+	{
+		std::uint8_t communication_slot[16];
+		std::uint8_t communication_type[16];
+		std::uint8_t gesture_slot[16];
+
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
+		void initialize();
+	};
 #pragma pack(pop)
 
 	constexpr const auto max_item_count = 99999u;
@@ -886,6 +897,7 @@ namespace database::players
 		DEFINE_FIELD(crew_levels, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_record_list, sqlpp::binary);
+		DEFINE_FIELD(communication_gesture_info, sqlpp::binary);
 		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
@@ -912,7 +924,8 @@ namespace database::players
 			crew_member_list_field_t,
 			crew_levels_field_t,
 			defense_mission_info_field_t,
-			defense_mission_record_list_field_t
+			defense_mission_record_list_field_t,
+			communication_gesture_info_field_t
 		);
 
 		inline static table_t table;
@@ -958,6 +971,7 @@ namespace database::players
 		void get_building_info(building_info_t& building) const;
 		void get_crew_levels(crew_levels_t& crew_levels) const;
 		void get_defense_mission_info(defense_mission_info_t& defense_mission) const;
+		void get_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
@@ -971,6 +985,7 @@ namespace database::players
 		bool set_building_info(building_info_t& building) const;
 		bool set_crew_levels(crew_levels_t& crew_levels) const;
 		bool set_defense_mission_info(defense_mission_info_t& defense_mission) const;
+		bool set_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const;
 
 		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
 		void get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add = 0ull) const;

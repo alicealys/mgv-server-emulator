@@ -34,6 +34,7 @@ create table if not exists `players`
 	current_loadout				int unsigned default 0,
 	loadout_count				int unsigned default 4,
 	crew_levels					tinyblob default null,
+	communication_gesture_info	tinyblob default null,
 	avatar						blob default null,
 	loadout_list				blob default null,
 	mission_info				blob default null,

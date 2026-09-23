@@ -31,6 +31,7 @@ namespace emulator::ssd
 		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
 		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
 		const auto defense_mission_record_list = std::make_unique<database::players::defense_mission_record_list_t>();
+		const auto communication_gesture_info = std::make_unique<database::players::communication_gesture_info_t>();
 
 		const auto& player = user->current_player;
 
@@ -51,6 +52,7 @@ namespace emulator::ssd
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
 		player->get_defense_mission_info(*defense_mission_info);
 		player->get_defense_mission_record_list(*defense_mission_record_list);
+		player->get_communication_gesture_info(*communication_gesture_info);
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -61,7 +63,7 @@ namespace emulator::ssd
 		result["boost_list"] = json::array();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
 		result["cage_list"] = json::array();
-		result["communication_gesture_slot"] = default_data["communication_gesture_slot"];
+		communication_gesture_info->to_json(result["communication_gesture_slot"]);
 
 		result["coop_embedded_mission_record_info_list"] = json::array();
 		result["coop_event_mission_record_info_list"] = json::array();
@@ -108,7 +110,7 @@ namespace emulator::ssd
 
 		gimmick_info->timer.to_json(result["gimmick_timer_info"]);
 
-		player_inventory->to_json(result["inventory_player_info"]);
+		player_inventory->to_json(result["inventory_player_info"], static_cast<std::uint16_t>(player->get_nameplate()));
 		user_inventory->to_json(result["inventory_user_info"]);
 
 		auto& loadout_list_j = result["load_out_list"];

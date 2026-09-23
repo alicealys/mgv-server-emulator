@@ -101,7 +101,7 @@ List of implemeted/unimplemented server commands
 | CMD_MISSION_DEFENSE_MISSION_START | ❌ |  |
 | CMD_DLC_SET_FLAG | ✔️ |  |
 | CMD_DLC_GET_FLAG | ✔️ |  |
-| CMD_COMMUNICATION_GESTURE_SLOT_SAVE | ❌ |  |
+| CMD_COMMUNICATION_GESTURE_SLOT_SAVE | ✔️ |  |
 | CMD_CHEAT_SEND | ❌ |  |
 | CMD_BASE_RESOURCE_PROVIDE | ❌ |  |
 | CMD_BASE_RESOURCE_LOAD | ✔️ |  |
@@ -169,7 +169,7 @@ List of implemeted/unimplemented server commands
 | CMD_USER_FLAG_SET | ✔️ |  |
 | CMD_GET_FRIEND_HEADERS | ✔️ |  |
 | CMD_CRAFT_BP_LOTTERY | ❌ |  |
-| CMD_CRAFT_DELIVER | ❌ |  |
+| CMD_CRAFT_DELIVER | ✔️ |  |
 | CMD_SURVIVE_SUPPLY_LOTTERY | ❌ |  |
 | CMD_CRAFT_OPEN_PERK | ❌ |  |
 | CMD_CRAFT_GRADE_UP | ✔️ |  |
