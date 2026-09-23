@@ -659,6 +659,7 @@ namespace database::players
 		}
 
 		stackable_item_t* find_item(const std::uint32_t production_id);
+		stackable_item_t* get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type);
 		bool find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const;
 
 		inline void import_element(stackable_item_t& dest, const stackable_item_t& src) const override
@@ -685,6 +686,7 @@ namespace database::players
 		}
 
 		bool find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const;
+		inventory_resource_t* get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type);
 
 		inline void import_element(inventory_resource_t& dest, const inventory_resource_t& src) const override
 		{

@@ -1325,6 +1325,21 @@ namespace database::players
 		return this->push(resource);
 	}
 
+
+	inventory_resource_t* inventory_resource_list_t::get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			auto& entry = this->operator[](i);
+			if (entry.inventory_index == inventory_index && entry.inventory_type == inventory_type)
+			{
+				return &entry;
+			}
+		}
+
+		return nullptr;
+	}
+
 	stackable_item_t* stackable_item_list_t::find_item(const std::uint32_t production_id)
 	{
 		for (auto i = 0u; i < this->size(); i++)
@@ -1332,6 +1347,20 @@ namespace database::players
 			if (this->operator[](i).get_production_id() == production_id)
 			{
 				return &this->operator[](i);
+			}
+		}
+
+		return nullptr;
+	}
+
+	stackable_item_t* stackable_item_list_t::get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			auto& entry = this->operator[](i);
+			if (entry.inventory_index == inventory_index && entry.inventory_type == inventory_type)
+			{
+				return &entry;
 			}
 		}
 
