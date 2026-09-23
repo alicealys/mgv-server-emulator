@@ -94,6 +94,40 @@ namespace game
 	extern std::unordered_set<std::uint32_t> mission_list;
 	extern std::unordered_set<std::uint32_t> quest_list;
 
+	enum reward_category_t
+	{
+		REWARD_RESOURCE = 0,
+		REWARD_PRODUCTION = 1,
+		REWARD_RECIPE = 2,
+		REWARD_PRESET_RADIO = 3,
+		REWARD_GESTURE = 4,
+		REWARD_COMMUNICATION_MARKER = 5,
+		REWARD_NAMEPLATE = 6,
+		REWARD_PRIVILEGE = 7,
+		REWARD_COIN = 8,
+		REWARD_ENERGY = 9,
+		REWARD_BATTLE_PACK = 10,
+		REWARD_FACE_PAINT = 11,
+		REWARD_CASSETTE = 12,
+		REWARD_CHARACTER_SLOT = 13,
+		REWARD_COUNT = 14,
+	};
+
+	struct reward_t
+	{
+		std::uint8_t category;
+		std::uint32_t code;
+		std::uint32_t param1;
+		std::uint32_t param2;
+		std::uint32_t param3;
+		std::uint32_t param4;
+		std::uint32_t param5;
+		std::uint32_t num;
+
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
+	};
+
 	struct cost_t
 	{
 		std::uint32_t id;

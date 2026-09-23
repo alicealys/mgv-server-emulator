@@ -128,23 +128,6 @@ namespace database::defense_missions
 		data["group_id"] = this->group_id;
 	}
 
-	bool reward_t::parse(json::value& data)
-	{
-		return json::read(*this, data);
-	}
-
-	void reward_t::to_json(json::value& data) const
-	{
-		data["category"] = this->category;
-		data["code"] = this->code;
-		data["param1"] = this->param1;
-		data["param2"] = this->param2;
-		data["param3"] = this->param3;
-		data["param4"] = this->param4;
-		data["param5"] = this->param5;
-		data["num"] = this->num;
-	}
-
 	bool broken_facility_t::parse(json::value& data)
 	{
 		return json::read(*this, data);

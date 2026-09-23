@@ -3,6 +3,7 @@
 #include "../database.hpp"
 #include "players.hpp"
 #include "../utils.hpp"
+#include "game/game.hpp"
 
 namespace database::defense_missions
 {
@@ -14,21 +15,6 @@ namespace database::defense_missions
 		std::uint16_t face_id;
 		std::uint16_t server_unique_id;
 		std::uint16_t group_id;
-
-		bool parse(json::value& data);
-		void to_json(json::value& data) const;
-	};
-
-	struct reward_t
-	{
-		std::uint8_t category;
-		std::uint32_t code;
-		std::uint32_t param1;
-		std::uint32_t param2;
-		std::uint32_t param3;
-		std::uint32_t param4;
-		std::uint32_t param5;
-		std::uint32_t num;
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -94,7 +80,7 @@ namespace database::defense_missions
 	{
 		std::uint8_t rank;
 		std::uint32_t id_index;
-		reward_t param;
+		game::reward_t param;
 	};
 
 	enum reward_type_t
@@ -159,15 +145,15 @@ namespace database::defense_missions
 		}
 	};
 
-	class reward_list_t final : public generic_item_list<reward_t, 32>
+	class reward_list_t final : public generic_item_list<game::reward_t, 32>
 	{
 	public:
-		inline bool are_elements_equal(const reward_t& l, const reward_t& r) const override
+		inline bool are_elements_equal(const game::reward_t& l, const game::reward_t& r) const override
 		{
 			return false;
 		}
 
-		inline bool is_element_empty(const reward_t& value) const override
+		inline bool is_element_empty(const game::reward_t& value) const override
 		{
 			return value.code == 0;
 		}

@@ -2295,6 +2295,121 @@ namespace database::players
 		RUN_IMPL(impl::set_nameplate, this->get_user_id(), nameplate);
 	}
 
+	bool player::give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, 
+		inventory_resource_list_t* resource_list, player_inventory_t* inventory_info) const
+	{
+		switch (reward.category)
+		{
+		case game::REWARD_RESOURCE:
+		{
+			if (resource_list == nullptr)
+			{
+				return false;
+			}
+
+			const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(reward.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+			{
+				return false;
+			}
+
+			database::players::inventory_resource_t resource{};
+			resource.resource_index = iter->second->index;
+			resource.count = static_cast<std::uint16_t>(reward.num);
+			if (!resource_list->add_resource(resource))
+			{
+				return false;
+			}
+
+			return true;
+		}
+		case game::REWARD_PRODUCTION:
+		{
+			if (stackable_list == nullptr)
+			{
+				return false;
+			}
+
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(reward.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+			{
+				return false;
+			}
+
+			if (iter->second->countable)
+			{
+				return false;
+			}
+
+			database::players::stackable_item_t stackable_item{};
+			stackable_item.production_index = iter->second->index;
+			stackable_item.count = static_cast<std::uint16_t>(reward.num);
+			if (!stackable_list->add_item(stackable_item))
+			{
+				return false;
+			}
+
+			return true;
+		}
+		case game::REWARD_RECIPE:
+		{
+			return false;
+		}
+		case game::REWARD_PRESET_RADIO:
+		{
+			return false;
+		}
+		case game::REWARD_GESTURE:
+		{
+			return false;
+		}
+		case game::REWARD_COMMUNICATION_MARKER:
+		{
+			return false;
+		}
+		case game::REWARD_NAMEPLATE:
+		{
+			return false;
+		}
+		case game::REWARD_PRIVILEGE:
+		{
+			return false;
+		}
+		case game::REWARD_COIN:
+		{
+			return false;
+		}
+		case game::REWARD_ENERGY:
+		{
+			if (inventory_info == nullptr)
+			{
+				return false;
+			}
+
+			inventory_info->energy += reward.num;
+			return true;
+		}
+		case game::REWARD_BATTLE_PACK:
+		{
+			return false;
+		}
+		case game::REWARD_FACE_PAINT:
+		{
+			return false;
+		}
+		case game::REWARD_CASSETTE:
+		{
+			return false;
+		}
+		case game::REWARD_CHARACTER_SLOT:
+		{
+			return false;
+		}
+		}
+
+		return false;
+	}
+
 	std::optional<player> find(const std::uint64_t id)
 	{
 		RUN_IMPL(impl::find, id);

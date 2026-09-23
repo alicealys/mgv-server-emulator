@@ -3,6 +3,8 @@
 #include "cmd_checkpoint_save.hpp"
 #include "cmd_inventory_save.hpp"
 
+#include "database/models/present_box.hpp"
+
 namespace emulator::ssd
 {
 	void cmd_checkpoint_save::generate_defense_mission_rewards(
@@ -27,11 +29,15 @@ namespace emulator::ssd
 			reward_list.push(reward.param);
 		}
 
+		const auto now = std::chrono::system_clock::now();
+		const auto expire_date = now + 14 * 24h;
+		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+
 		for (auto i = rank; i <= 5; i++)
 		{
 			auto& rank_entry = result[i - rank];
 			rank_entry["battle_pack_list"] = json::array();
-			rank_entry["expire_date"] = std::time(nullptr) + 14ull * 86400ull;
+			rank_entry["expire_date"] = expire_date_s.count();
 			rank_entry["kub_boost_flag"] = 0;
 			rank_entry["nonstackable_list"] = json::array();
 			rank_entry["present_num"] = 0;
@@ -55,27 +61,39 @@ namespace emulator::ssd
 			auto& rank_entry = result[reward.rank - rank];
 			auto& stackable_list_j = rank_entry["stackable_list"];
 			auto& resources_list_j = rank_entry["resources_list"];
+			auto& present_list_j = rank_entry["present_list"];
 			auto& energy_j = rank_entry["energy"];
+			
+			const auto give_as_present = [&]()
+			{
+				database::present_box::add_item(user->current_player->get_player_id(),
+					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param);
+			};
 
 			switch (reward.param.category)
 			{
-			case 9:
+			case game::REWARD_ENERGY:
 				energy_j = energy_j.as<std::uint32_t>() + reward.param.num;
 				break;
-			case 1:
+			case game::REWARD_PRODUCTION:
 			{
 				database::players::stackable_item_t item{};
 				item.count = reward.param.num;
 				item.production_index = reward.id_index;
 				auto count = item.count;
-				if (stackable_list->add_item(item)) // todo: add it to present box if fail
+				if (stackable_list->add_item(item))
 				{
 					item.count = count;
 					item.to_json(stackable_list_j[stackable_list_j.size()]);
 				}
+				else
+				{
+					give_as_present();
+					reward.param.to_json(present_list_j[present_list_j.size()]);
+				}
 				break;
 			}
-			case 0:
+			case game::REWARD_RESOURCE:
 			{
 				database::players::inventory_resource_t resource{};
 				resource.count = reward.param.num;
@@ -86,9 +104,21 @@ namespace emulator::ssd
 					resource.count = count;
 					resource.to_json(resources_list_j[resources_list_j.size()]);
 				}
+				else
+				{
+					give_as_present();
+					reward.param.to_json(present_list_j[present_list_j.size()]);
+				}
 				break;
 			}
 			}
+		}
+
+		const auto present_count = database::present_box::get_present_count(user->current_player->get_player_id());
+		for (auto i = rank; i <= 5; i++)
+		{
+			auto& rank_entry = result[i - rank];
+			rank_entry["present_num"] = present_count;
 		}
 
 		if (!rewards.empty())

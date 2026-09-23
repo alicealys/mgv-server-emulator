@@ -1008,6 +1008,8 @@ namespace database::players
 		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
+
+		bool give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, inventory_resource_list_t* resource_list, player_inventory_t* inventory_info) const;
 	};
 
 	std::optional<player> find(const std::uint64_t id);

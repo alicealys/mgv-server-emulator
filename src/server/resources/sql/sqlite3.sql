@@ -136,3 +136,20 @@ create table if not exists `defense_mission_waves`
 	reward_list				blob default null,
 	foreign key (`f_defense_mission_id`) references `defense_missions`(`defense_mission_id`)
 )
+-- query:mgssd.present_box_entries.create
+create table if not exists `present_box_entries`
+(
+	present_id			integer	primary key autoincrement,
+	f_player_id			bigint unsigned	not null,
+	flags				int unsigned not null default 0,
+	item_category		int unsigned not null default 0,
+	item_code			int unsigned not null default 0,
+	item_num			int unsigned not null default 0,
+	item_param1			int unsigned not null default 0,
+	item_param2			int unsigned not null default 0,
+	item_param3			int unsigned not null default 0,
+	item_param4			int unsigned not null default 0,
+	item_param5			int unsigned not null default 0,
+	expire_date			datetime not null,
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)
