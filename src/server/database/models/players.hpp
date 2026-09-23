@@ -880,7 +880,6 @@ namespace database::players
 		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
 		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
-		DEFINE_FIELD(building_info_africa, sqlpp::binary);
 		DEFINE_FIELD(crew_member_list, sqlpp::binary);
 		DEFINE_FIELD(crew_levels, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
@@ -908,7 +907,6 @@ namespace database::players
 			map_unlock_list_afghan_field_t,
 			map_unlock_list_africa_field_t,
 			building_info_afghan_field_t,
-			building_info_africa_field_t,
 			crew_member_list_field_t,
 			crew_levels_field_t,
 			defense_mission_info_field_t,
@@ -955,7 +953,7 @@ namespace database::players
 		void get_play_record(player_play_record_t& play_record) const;
 		void get_base_resources(base_resources_t& base_resources) const;
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
-		void get_building_info(building_info_t& building, const std::uint32_t map_location) const;
+		void get_building_info(building_info_t& building) const;
 		void get_crew_levels(crew_levels_t& crew_levels) const;
 		void get_defense_mission_info(defense_mission_info_t& defense_mission) const;
 
@@ -968,7 +966,7 @@ namespace database::players
 		bool set_play_record(player_play_record_t& play_record) const;
 		bool set_base_resources(base_resources_t& base_resources) const;
 		bool set_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
-		bool set_building_info(building_info_t& building, const std::uint32_t map_location) const;
+		bool set_building_info(building_info_t& building) const;
 		bool set_crew_levels(crew_levels_t& crew_levels) const;
 		bool set_defense_mission_info(defense_mission_info_t& defense_mission) const;
 

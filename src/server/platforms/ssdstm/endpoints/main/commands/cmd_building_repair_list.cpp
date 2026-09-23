@@ -48,13 +48,13 @@ namespace emulator::ssd
 			}
 		};
 
-		user->current_player->get_building_info(*building_info, map_location);
+		user->current_player->get_building_info(*building_info);
 
 		do_list(data["center_life_list"], database::players::edge_type_upper);
 		do_list(data["upper_life_list"], database::players::edge_type_upper);
 		do_list(data["left_life_list"], database::players::edge_type_left);
 
-		user->current_player->set_building_info(*building_info, map_location);
+		user->current_player->set_building_info(*building_info);
 
 		return result;
 	}

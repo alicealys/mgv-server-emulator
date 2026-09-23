@@ -21,7 +21,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		user->current_player->get_building_info(*building_info, map_location);
+		user->current_player->get_building_info(*building_info);
 
 		building_info->to_json(result["cell_info"]);
 		building_info->to_json_farming(result["farming_info"]);

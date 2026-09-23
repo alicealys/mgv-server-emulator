@@ -14,28 +14,22 @@ namespace emulator::ssd
 		const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
 		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
 
-		user->current_player->get_inventory_resource_list(*resource_list, 16);
-		user->current_player->get_stackable_item_list(*stackable_list, 16);
-		user->current_player->get_inventory(*player_inventory);
-
-		const auto _0 = gsl::finally([&]
-		{
-			user->current_player->set_inventory_resource_list(*resource_list);
-			user->current_player->set_stackable_item_list(*stackable_list);
-			user->current_player->set_inventory(*player_inventory);
-		});
-
 		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank);
+		if (!rewards.empty())
+		{
+			user->current_player->get_inventory_resource_list(*resource_list, rewards.size());
+			user->current_player->get_stackable_item_list(*stackable_list, rewards.size());
+			user->current_player->get_inventory(*player_inventory);
+		}
+
 		for (const auto& reward : rewards)
 		{
 			reward_list.push(reward.param);
 		}
 
-		auto reward_entries_idx = 0u;
-		for (auto r = rank; r <= 5; r++)
+		for (auto i = rank; i <= 5; i++)
 		{
-			auto& rank_entry = result[reward_entries_idx++];
-
+			auto& rank_entry = result[i - rank];
 			rank_entry["battle_pack_list"] = json::array();
 			rank_entry["expire_date"] = std::time(nullptr) + 14ull * 86400ull;
 			rank_entry["kub_boost_flag"] = 0;
@@ -46,54 +40,62 @@ namespace emulator::ssd
 			rank_entry["resources_list"] = json::array();
 			rank_entry["stackable_list"] = json::array();
 			rank_entry["text_id"] = 229691447841577;
+			rank_entry["energy"] = 0;
+		}
+		
+		// todo: give recipes?
 
-			auto energy = 0u;
-			auto stackable_count = 0u;
-			auto resource_count = 0u;
-
-			for (const auto& reward : rewards)
+		for (const auto& reward : rewards)
+		{
+			if (reward.rank < rank)
 			{
-				if (reward.rank != r)
-				{
-					continue;
-				}
-
-				switch (reward.param.category)
-				{
-				case 9:
-					energy += reward.param.num;
-					break;
-				case 1:
-				{
-					database::players::stackable_item_t item{};
-					item.count = reward.param.num;
-					item.production_index = reward.id_index;
-					auto count = item.count;
-					if (stackable_list->add_item(item)) // add it to present box if fail
-					{
-						item.count = count;
-						item.to_json(rank_entry["stackable_list"][stackable_count++]);
-					}
-					break;
-				}
-				case 0:
-				{
-					database::players::inventory_resource_t resource{};
-					resource.count = reward.param.num;
-					resource.resource_index = reward.id_index;
-					auto count = resource.count;
-					if (resource_list->add_resource(resource))
-					{
-						resource.count = count;
-						resource.to_json(rank_entry["resources_list"][resource_count++]);
-					}
-					break;
-				}
-				}
+				continue;
 			}
 
-			player_inventory->energy += energy;
-			rank_entry["energy"] = energy;
+			auto& rank_entry = result[reward.rank - rank];
+			auto& stackable_list_j = rank_entry["stackable_list"];
+			auto& resources_list_j = rank_entry["resources_list"];
+			auto& energy_j = rank_entry["energy"];
+
+			switch (reward.param.category)
+			{
+			case 9:
+				energy_j = energy_j.as<std::uint32_t>() + reward.param.num;
+				break;
+			case 1:
+			{
+				database::players::stackable_item_t item{};
+				item.count = reward.param.num;
+				item.production_index = reward.id_index;
+				auto count = item.count;
+				if (stackable_list->add_item(item)) // todo: add it to present box if fail
+				{
+					item.count = count;
+					item.to_json(stackable_list_j[stackable_list_j.size()]);
+				}
+				break;
+			}
+			case 0:
+			{
+				database::players::inventory_resource_t resource{};
+				resource.count = reward.param.num;
+				resource.resource_index = reward.id_index;
+				auto count = resource.count;
+				if (resource_list->add_resource(resource))
+				{
+					resource.count = count;
+					resource.to_json(resources_list_j[resources_list_j.size()]);
+				}
+				break;
+			}
+			}
+		}
+
+		if (!rewards.empty())
+		{
+			user->current_player->set_inventory_resource_list(*resource_list);
+			user->current_player->set_stackable_item_list(*stackable_list);
+			user->current_player->set_inventory(*player_inventory);
 		}
 	}
 
@@ -282,7 +284,7 @@ namespace emulator::ssd
 
 		if (animal_list_j.is_array() && animal_list_j.size())
 		{
-			//base_resources->parse_animals(animal_list_j[0]);
+			base_resources->parse_animals(animal_list_j[0]);
 		}
 
 		user->current_player->set_base_resources(*base_resources);
@@ -317,22 +319,12 @@ namespace emulator::ssd
 				{
 				case 0:
 					user->current_player->get_map_unlock_list_afghan(*map_unlock_list, map_unlock_j.size());
-					break;
-				case 1:
-					user->current_player->get_map_unlock_list_africa(*map_unlock_list, map_unlock_j.size());
-					break;
-				default:
-					continue;
-				}
-
-				map_unlock_list->parse_diff(map_unlock_j);
-
-				switch (location_index)
-				{
-				case 0:
+					map_unlock_list->parse_diff(map_unlock_j);
 					user->current_player->set_map_unlock_list_afghan(*map_unlock_list);
 					break;
 				case 1:
+					user->current_player->get_map_unlock_list_africa(*map_unlock_list, map_unlock_j.size());
+					map_unlock_list->parse_diff(map_unlock_j);
 					user->current_player->set_map_unlock_list_africa(*map_unlock_list);
 					break;
 				}

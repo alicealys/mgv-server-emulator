@@ -64,7 +64,7 @@ namespace emulator::ssd
 		}
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
-		user->current_player->get_building_info(*building_info, map_location);
+		user->current_player->get_building_info(*building_info);
 
 		auto& src_edge = building_info->cells[src_row][src_col].edges[departure_edge_type];
 		auto& dst_edge = building_info->cells[dst_row][dst_col].edges[destination_edge_type];
@@ -79,7 +79,7 @@ namespace emulator::ssd
 
 		dst_edge.rotation = destination_rotation;
 
-		user->current_player->set_building_info(*building_info, map_location);
+		user->current_player->set_building_info(*building_info);
 
 		return result;
 	}

@@ -43,12 +43,12 @@ namespace emulator::ssd
 		const auto current_life = current_life_j.as<std::uint16_t>();
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
-		user->current_player->get_building_info(*building_info, map_location);
+		user->current_player->get_building_info(*building_info);
 
 		building_info->cells[row][col].edges[edge_type].life = current_life;
 		building_info->cells[row][col].edges[edge_type].production_index = production_id;
 
-		user->current_player->set_building_info(*building_info, map_location);
+		user->current_player->set_building_info(*building_info);
 
 		return result;
 	}

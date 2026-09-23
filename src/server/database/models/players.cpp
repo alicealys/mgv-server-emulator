@@ -1833,13 +1833,6 @@ namespace database::players
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(list));
 			}();
 
-			static const auto building_info_africa = []()
-			{
-				static building_info_t building{};
-				building.load_default(0);
-				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
-			}();
-
 			static const auto building_info_afghan = []()
 			{
 				static building_info_t building{};
@@ -1862,7 +1855,6 @@ namespace database::players
 							 player::table.player_inventory = default_inventory,
 							 player::table.loadout_list = loadout_list,
 							 player::table.building_info_afghan = building_info_afghan,
-							 player::table.building_info_africa = building_info_africa,
 							 player::table.defense_mission_info = defense_mission_info,
 							 player::table.current_loadout = 0,
 							 player::table.loadout_count = initial_loadout_count,
@@ -1931,7 +1923,6 @@ namespace database::players
 		DEF_BINARY_GET(player, base_resources_t, base_resources);
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
-		DEF_BINARY_GET(player, building_info_t, building_info_africa);
 		DEF_BINARY_GET(player, crew_levels_t, crew_levels);
 		DEF_BINARY_GET(player, defense_mission_info_t, defense_mission_info);
 
@@ -1946,7 +1937,6 @@ namespace database::players
 		DEF_BINARY_SET(player, base_resources_t, base_resources);
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
-		DEF_BINARY_SET(player, building_info_t, building_info_africa);
 		DEF_BINARY_SET(player, crew_levels_t, crew_levels);
 		DEF_BINARY_SET(player, defense_mission_info_t, defense_mission_info);
 
@@ -2031,19 +2021,9 @@ namespace database::players
 		RUN_IMPL(impl::get_story_unlock_info, this->get_user_id(), story_unlock_info);
 	}
 
-	void player::get_building_info(building_info_t& building, const std::uint32_t map_location) const
+	void player::get_building_info(building_info_t& building) const
 	{
-		switch (map_location)
-		{
-		case 0:
-		{
-			RUN_IMPL(impl::get_building_info_afghan, this->get_player_id(), building);
-		}
-		case 1:
-		{
-			RUN_IMPL(impl::get_building_info_africa, this->get_player_id(), building);
-		}
-		}
+		RUN_IMPL(impl::get_building_info_afghan, this->get_player_id(), building);
 	}
 
 	void player::get_crew_levels(crew_levels_t& crew_levels) const
@@ -2158,21 +2138,9 @@ namespace database::players
 		RUN_IMPL(impl::set_story_unlock_info, this->get_user_id(), story_unlock_info);
 	}
 
-	bool player::set_building_info(building_info_t& building, const std::uint32_t map_location) const
+	bool player::set_building_info(building_info_t& building) const
 	{
-		switch (map_location)
-		{
-		case 0:
-		{
-			RUN_IMPL(impl::set_building_info_afghan, this->get_player_id(), building);
-		}
-		case 1:
-		{
-			RUN_IMPL(impl::set_building_info_africa, this->get_player_id(), building);
-		}
-		}
-
-		return false;
+		RUN_IMPL(impl::set_building_info_afghan, this->get_player_id(), building);
 	}
 
 	bool player::set_crew_levels(crew_levels_t& crew_levels) const

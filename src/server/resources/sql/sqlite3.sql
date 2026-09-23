@@ -52,7 +52,6 @@ create table if not exists `players`
 	map_unlock_list_afghan		blob default null,
 	map_unlock_list_africa		blob default null,
 	building_info_afghan		blob default null,
-	building_info_africa		blob default null,
 	defense_mission_info		blob default null,
 	defense_mission_record_list	blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)

@@ -101,7 +101,7 @@ namespace emulator::ssd
 		if (cell_info_j.is_object() || farming_update_list_j.is_array())
 		{
 			const auto building_info = std::make_unique<database::players::building_info_t>();
-			user->current_player->get_building_info(*building_info, 0);
+			user->current_player->get_building_info(*building_info);
 
 			if (cell_info_j.is_object())
 			{
@@ -113,7 +113,7 @@ namespace emulator::ssd
 				building_info->parse_farming(farming_update_list_j);
 			}
 
-			user->current_player->set_building_info(*building_info, 0);
+			user->current_player->set_building_info(*building_info);
 		}
 	}
 
