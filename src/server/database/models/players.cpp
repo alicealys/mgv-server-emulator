@@ -1790,7 +1790,7 @@ namespace database::players
 
 	void communication_gesture_info_t::to_json(json::value& data) const
 	{
-		for (auto i = 0; i < ARRAYSIZE(this->communication_slot); i++)
+		for (auto i = 0ull; i < ARRAYSIZE(this->communication_slot); i++)
 		{
 			data["communication_slot"][i] = this->communication_slot[i];
 			data["communication_type"][i] = this->communication_type[i];
