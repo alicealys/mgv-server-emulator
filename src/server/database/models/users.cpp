@@ -192,6 +192,7 @@ namespace database::users
 	GET_FIELD_C(user, std::uint16_t, in_port);
 	GET_FIELD_C(user, std::uint32_t, user_flag);
 	GET_FIELD_C(user, std::uint32_t, dlc_flag);
+	GET_FIELD_C(user, std::uint32_t, sv_coin);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
 
@@ -581,6 +582,67 @@ namespace database::users
 			});
 		}
 
+		template <database_type_t Type>
+		std::uint32_t get_sv_coins(const std::uint64_t user_id)
+		{
+			return database::access<std::uint32_t>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::select(user::table.sv_coin)
+							.from(user::table)
+								.where(user::table.user_id == user_id)
+				);
+
+				if (result.empty())
+				{
+					return 0u;
+				}
+
+				return static_cast<std::uint32_t>(result.front().sv_coin.value());
+			});
+		}
+
+		template <database_type_t Type>
+		bool spend_sv_coins(const std::uint64_t user_id, const std::uint32_t value)
+		{
+			if (value == 0)
+			{
+				return true;
+			}
+
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::update(user::table)
+						.set(user::table.sv_coin = user::table.sv_coin - value)
+							.where(user::table.user_id == user_id &&
+								   user::table.sv_coin >= value)
+					);
+
+				return result != 0;
+			});
+		}
+
+		template <database_type_t Type>
+		bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value)
+		{
+			if (value == 0)
+			{
+				return true;
+			}
+
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::update(user::table)
+						.set(user::table.sv_coin = user::table.sv_coin + value)
+							.where(user::table.user_id == user_id)
+					);
+
+				return result != 0;
+			});
+		}
+
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
 
@@ -616,6 +678,26 @@ namespace database::users
 	void user::set_dlc_flag(const std::uint32_t flag) const
 	{
 		RUN_IMPL(impl::set_dlc_flag, this->get_user_id(), flag);
+	}
+
+	bool user::spend_sv_coins(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::spend_sv_coins, this->get_user_id(), value);
+	}
+
+	bool user::add_sv_coins(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::add_sv_coins, this->get_user_id(), value);
+	}
+
+	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value)
+	{
+		RUN_IMPL(impl::add_sv_coins, user_id, value);
+	}
+
+	std::uint32_t get_sv_coins(const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::get_sv_coins, user_id);
 	}
 
 	std::optional<user> find(const std::uint64_t user_id)

@@ -63,6 +63,7 @@ namespace database::users
 		DEFINE_FIELD(user_creation_date, sqlpp::time_point);
 		DEFINE_FIELD(user_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(dlc_flag, sqlpp::integer_unsigned);
+		DEFINE_FIELD(sv_coin, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
 		DEFINE_FIELD(user_play_record, sqlpp::binary);
 		DEFINE_TABLE(users,
@@ -73,6 +74,7 @@ namespace database::users
 			currency_field_t,
 			ex_ip_field_t, ex_port_field_t, in_ip_field_t, in_port_field_t, nat_field_t,
 			last_update_field_t, user_creation_date_field_t, user_flag_field_t, dlc_flag_field_t,
+			sv_coin_field_t,
 			user_inventory_field_t, user_play_record_field_t
 		);
 
@@ -97,6 +99,7 @@ namespace database::users
 			this->creation_date_ = row.user_creation_date.value().time_since_epoch();
 			this->user_flag_ = static_cast<std::uint32_t>(row.user_flag);
 			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
+			this->sv_coin_ = static_cast<std::uint32_t>(row.sv_coin);
 
 			if (!row.player_id.is_null())
 			{
@@ -117,6 +120,7 @@ namespace database::users
 		GET_FIELD_H(std::uint16_t, in_port);
 		GET_FIELD_H(std::uint32_t, user_flag);
 		GET_FIELD_H(std::uint32_t, dlc_flag);
+		GET_FIELD_H(std::uint32_t, sv_coin);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
@@ -131,6 +135,9 @@ namespace database::users
 
 		void set_user_flag(const std::uint32_t flag) const;
 		void set_dlc_flag(const std::uint32_t flag) const;
+
+		bool spend_sv_coins(const std::uint32_t value) const;
+		bool add_sv_coins(const std::uint32_t value) const;
 
 		std::optional<players::player> current_player{};
 
@@ -160,6 +167,9 @@ namespace database::users
 	std::uint64_t get_user_count();
 	std::uint64_t get_online_user_count();
 	std::uint64_t get_online_user_count(const std::chrono::milliseconds within);
+
+	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value);
+	std::uint32_t get_sv_coins(const std::uint64_t user_id);
 
 	bool delete_all_user_data(const std::uint64_t account_id);
 }

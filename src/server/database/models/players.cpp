@@ -2477,7 +2477,7 @@ namespace database::players
 		}
 		case game::REWARD_COIN:
 		{
-			return false;
+			return database::users::add_sv_coins(this->get_user_id(), reward.num);
 		}
 		case game::REWARD_ENERGY:
 		{

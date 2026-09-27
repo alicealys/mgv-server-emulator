@@ -17,6 +17,7 @@ create table if not exists `users`
 	user_creation_date		datetime        not null,
 	user_flag				int unsigned 	default 0,
 	dlc_flag				int unsigned 	default 0,
+	sv_coin					int unsigned 	default 0,
 	user_inventory			blob			default null,
 	user_play_record		blob			default null
 )
