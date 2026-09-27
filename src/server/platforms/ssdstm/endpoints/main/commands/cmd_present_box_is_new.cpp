@@ -13,7 +13,7 @@ namespace emulator::ssd
 		const auto has_new = database::present_box::has_new_item(user->current_player->get_player_id());
 		result["is_new"] = std::uint8_t(has_new);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_present_box_is_new::flags()
