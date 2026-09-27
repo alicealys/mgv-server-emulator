@@ -8,7 +8,7 @@ namespace emulator::ssd
 		struct entry_t
 		{
 			std::uint32_t item_resource_id;
-			std::uint32_t num;
+			std::uint8_t num;
 		};
 
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;

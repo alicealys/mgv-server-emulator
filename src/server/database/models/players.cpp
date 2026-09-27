@@ -1323,6 +1323,27 @@ namespace database::players
 		return this->push(resource);
 	}
 
+	bool inventory_resource_list_t::spend_resource(const std::uint32_t id, std::uint32_t& count)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			auto& entry = this->operator[](i);
+			if (entry.get_resource_id() == id)
+			{
+				const auto amount = std::min(entry.count, count);
+				entry.count -= amount;
+				count -= amount;
+			}
+
+			if (count == 0u)
+			{
+				break;
+			}
+		}
+
+		return count == 0u;
+	}
+
 	inventory_resource_t* inventory_resource_list_t::get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type)
 	{
 		for (auto i = 0u; i < this->size(); i++)

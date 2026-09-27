@@ -705,6 +705,7 @@ namespace database::players
 		}
 
 		bool add_resource(inventory_resource_t& resource, const std::uint8_t inventory_type = inventory_storage);
+		bool spend_resource(const std::uint32_t id, std::uint32_t& count);
 
 	};
 
