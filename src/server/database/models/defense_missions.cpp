@@ -507,7 +507,7 @@ namespace database::defense_missions
 							 defense_mission::table.total_score = total_score,
 							 defense_mission::table.end_date = std::chrono::system_clock::time_point(end_date),
 							 defense_mission::table.next_wave_date = std::chrono::system_clock::time_point(next_wave_date))
-								.where(defense_mission::table.defense_mission_id == defense_mission_id && defense_mission::table.current_wave < current_wave));
+								.where(defense_mission::table.defense_mission_id == defense_mission_id && defense_mission::table.current_wave <= current_wave));
 			});
 		}
 

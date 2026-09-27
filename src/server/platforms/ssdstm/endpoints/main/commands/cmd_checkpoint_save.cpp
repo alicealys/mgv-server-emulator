@@ -134,11 +134,12 @@ namespace emulator::ssd
 		const auto now = std::chrono::system_clock::now().time_since_epoch();
 		const auto mission = database::defense_missions::get_current_mission(user->current_player->get_player_id());
 
-		if (!mission.has_value() || (now < mission->get_next_wave_date()))
+		if (!mission.has_value())
 		{
 			return;
 		}
 
+		const auto is_in_interval = now < mission->get_next_wave_date();
 		const auto iter = game::parameters_table.ssd_base_defense_settings->mission_settings.find(mission->get_mission_code());
 		if (iter == game::parameters_table.ssd_base_defense_settings->mission_settings.end())
 		{
@@ -171,14 +172,14 @@ namespace emulator::ssd
 			database::defense_missions::wave_result_t wave_result{};
 			database::defense_missions::wave_params_t wave_params{};
 
-			if (!json::read(wave_result, entry) || !wave_params.parse(entry))
+			if (!json::read(wave_result, entry) || !wave_params.parse(entry) || (is_in_interval && wave_result.result != 3))
 			{
 				continue;
 			}
 
 			wave_result.wave = mission->get_current_wave();
 
-			const auto is_win = wave_result.result != 2;
+			const auto is_win = wave_result.result == 1 || wave_result.result == 0;
 			const auto score_add = is_win ? wave_result.total_score : 0u;
 			const auto new_score = mission->get_total_score() + score_add;
 
@@ -186,36 +187,56 @@ namespace emulator::ssd
 
 			const auto this_wave = mission->get_current_wave();
 			const auto rank = database::defense_missions::calc_rank(*mission_settings, new_score);
-			const auto cleared = this_wave == mission_settings->max_wave_count - 1 && is_win;
-			const std::uint8_t next_wave = is_win ? this_wave + 1u : this_wave;
+
+			std::uint8_t next_wave = mission->get_current_wave();
+			std::uint8_t mission_result = 0u;
 
 			auto end_date = std::chrono::seconds(wave_result.end_date);
-			auto next_wave_date = end_date;
+			auto next_wave_date = is_in_interval ? mission->get_next_wave_date() : end_date;
 
 			database::defense_missions::reward_list_t reward_list{};
 
-			if (cleared)
+			switch (wave_result.result)
 			{
-				database::players::defense_mission_record_t mission_record{};
-				mission_record.mission_code = mission->get_mission_code();
-				mission_record.cleared = (wave_result.wave == mission_settings->max_wave_count) && is_win;
-				mission_record.clear_rank = rank;
-				mission_record.iris_score = new_score;
-				mission_record.waves = wave_result.wave;
-				defense_mission_record->try_add_item(mission_record);
-
-				this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
-			}
-			else if (is_win)
+			case 0: // wave success
+			case 1: // wave success + mission cleared
 			{
-				next_wave_date = std::chrono::duration_cast<std::chrono::seconds>(now);
-				if (this_wave < mission_settings->interval.size())
+				if (this_wave == mission_settings->max_wave_count - 1)
 				{
-					next_wave_date += mission_settings->interval[this_wave] * 1h;
+					mission_result = 1u;
+					database::players::defense_mission_record_t mission_record{};
+					mission_record.mission_code = mission->get_mission_code();
+					mission_record.cleared = 1;
+					mission_record.clear_rank = rank;
+					mission_record.iris_score = new_score;
+					mission_record.waves = wave_result.wave;
+					defense_mission_record->try_add_item(mission_record);
+
+					this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
 				}
+				else
+				{
+					next_wave++;
+					mission_result = 0u;
+					next_wave_date = std::chrono::duration_cast<std::chrono::seconds>(now);
+					if (this_wave < mission_settings->interval.size())
+					{
+						next_wave_date += mission_settings->interval[this_wave] * 1h;
+					}
+				}
+
+				break;
+			}
+			case 2: // wave fail
+				mission_result = 0u;
+				break;
+			case 3: // suspend mission
+				mission_result = 2u;
+				this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
+				break;
 			}
 
-			mission->update(cleared, next_wave, rank, new_score, end_date, next_wave_date);
+			mission->update(mission_result, next_wave, rank, new_score, end_date, next_wave_date);
 
 			database::defense_missions::injury_crew_list_t injury_crew_list{};
 			database::defense_missions::broken_facility_list_t broken_facility_list{};
