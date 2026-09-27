@@ -331,14 +331,11 @@ namespace database::players
 		utils::json_utils::get_or(gear_info_j["head_inventory_index"], this->gear_info.head_inventory_index);
 		utils::json_utils::get_or(gear_info_j["leg_inventory_index"], this->gear_info.leg_inventory_index);
 
-		if (!utils::json_utils::parse_array(gadget_list_j, this->gadget_list, [](item_t& dest, json::value& src)
-			{
-				utils::json_utils::get_or(src["count"], dest.count);
-				utils::json_utils::get_or(src["production_idx"], dest.idx);
-			}))
+		utils::json_utils::parse_array(gadget_list_j, this->gadget_list, [](item_t& dest, json::value& src)
 		{
-			return false;
-		}
+			utils::json_utils::get_or(src["count"], dest.count);
+			utils::json_utils::get_or(src["production_idx"], dest.idx);
+		});
 
 		const auto weapon_iter = [](weapon_t& dest, json::value& src)
 		{
@@ -349,34 +346,26 @@ namespace database::players
 			utils::json_utils::get_or(src["inventory_index"], dest.inventory_index);
 		};
 
-		if (!utils::json_utils::parse_array(main_weapon_list_j, this->main_weapon_list, weapon_iter) ||
-			!utils::json_utils::parse_array(sub_weapon_list_j, this->sub_weapon_list, weapon_iter))
-		{
-			return false;
-		}
+		utils::json_utils::parse_array(main_weapon_list_j, this->main_weapon_list, weapon_iter);
+		utils::json_utils::parse_array(sub_weapon_list_j, this->sub_weapon_list, weapon_iter);
 
-		if (!utils::json_utils::parse_array(porch_list_j, this->porch_list, [](item_t& dest, json::value& src)
-			{
-				utils::json_utils::get_or(src, dest.idx);
-				utils::json_utils::get_or(src, dest.count);
-			}, false))
+		utils::json_utils::parse_array(porch_list_j, this->porch_list, [](item_t& dest, json::value& src)
 		{
-			return false;
-		}
+			utils::json_utils::get_or(src["count"], dest.count);
+			utils::json_utils::get_or(src["production_idx"], dest.idx);
+		}, false);
 
-		if (!utils::json_utils::parse_array(skill_list_j, this->skill_list, [](skill_t& dest, json::value& src)
-			{
-				utils::json_utils::parse_array(src, dest.slot);
-			}))
+		utils::json_utils::parse_array(skill_list_j, this->skill_list, [](skill_t& dest, json::value& src)
 		{
-			return false;
-		}
+			utils::json_utils::parse_array(src["slot"], dest.slot);
+		});
 
 		utils::json_utils::get_or(data["class_info"], this->class_info);
-		
-		if (!utils::json_utils::parse_array(data["survival_list"], this->survival_list, false))
+		utils::json_utils::parse_array(data["survival_list"], this->survival_list, false);
+
+		if (this->class_info >= 5)
 		{
-			return false;
+			this->class_info = 0;
 		}
 
 		return true;
@@ -1809,6 +1798,96 @@ namespace database::players
 		}();
 
 		std::memcpy(this, default_info, sizeof(communication_gesture_info_t));
+	}
+
+
+	bool craft_recipe_internal(const std::uint32_t price, const game::cost_t* cost, const std::size_t cost_count, 
+		const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	{
+		if (price * amount > inventory_info.energy)
+		{
+			return false;
+		}
+
+		inventory_info.energy -= price * amount;
+
+		for (auto i = 0ull; i < cost_count; i++)
+		{
+			if (cost[i].id == 0)
+			{
+				continue;
+			}
+
+			auto found = false;
+			if (game::is_event_obtained_res(cost[i].id, inventory_info.event_obtained, &found) && found)
+			{
+				continue;
+			}
+
+			auto cost_value = cost[i].count * amount;
+			switch (cost[i].type)
+			{
+			case game::COST_TYPE_Resource:
+			{
+				for (auto o = 0ull; o < resource_list.size(); o++)
+				{
+					auto& entry = resource_list[o];
+					if (cost[i].id != entry.get_resource_id())
+					{
+						continue;
+					}
+
+					const auto sub_value = std::min(entry.count, cost_value);
+					entry.count -= sub_value;
+					cost_value -= sub_value;
+
+					if (cost_value == 0)
+					{
+						break;
+					}
+				}
+
+				break;
+			}
+			case game::COST_TYPE_Production:
+			{
+				for (auto o = 0ull; o < stackable_item_list.size(); o++)
+				{
+					auto& entry = stackable_item_list[o];
+					if (cost[i].id == entry.get_production_id())
+					{
+						const auto sub_value = std::min(entry.count, cost[i].count * amount);
+						entry.count -= sub_value;
+						cost_value -= sub_value;
+
+						if (cost_value == 0)
+						{
+							break;
+						}
+					}
+				}
+
+				break;
+			}
+			}
+
+			if (cost_value > 0)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	{
+		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info);
+	}
+
+	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	{
+		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info);
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);

@@ -50,14 +50,23 @@ namespace emulator::ssd
 			}
 
 			const auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
+			const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 			friend_user->current_player->get_inventory(*player_inventory_info);
+			friend_user->current_player->get_loadout_list(*loadout_list);
+
+			const auto loadout_idx = friend_user->current_player->get_current_loadout();
+			auto class_idx = loadout_list->list[loadout_idx].class_info;
+			if (class_idx >= 5)
+			{
+				class_idx = 0;
+			}
 
 			auto& result_entry = result["header_list"][idx++];
 			result_entry["account_id"]["id"] = id;
 			result_entry["account_id"]["type"] = type;
-			result_entry["current_class"] = player_inventory_info->class_opened; // idk
+			result_entry["current_class"] = class_idx;
 			result_entry["energy_invested_base"] = player_inventory_info->energy_invested[0]; // idk
-			result_entry["energy_invested_class"] = player_inventory_info->energy_invested[0]; // idk
+			result_entry["energy_invested_class"] = player_inventory_info->energy_invested[class_idx]; // idk
 			result_entry["name_plate"] = friend_user->current_player->get_nameplate();
 		}
 

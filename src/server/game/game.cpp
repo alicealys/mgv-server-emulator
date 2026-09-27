@@ -651,14 +651,16 @@ namespace game
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result)
 	{
+		// PRD_TYPE_Event
+
 		switch (resource_id)
 		{
-		case 1576527750:
+		case RES_BrokenGasCylinder:
 			*result = obtained[1];
 			return true;
-		//case 0: // ???
-		//	*result = obtained[0];
-		//	return true;
+		case RES_WheelChairParts:
+			*result = obtained[0];
+			return true;
 		}
 
 		return false;

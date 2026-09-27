@@ -52,8 +52,7 @@ namespace emulator::ssd
 		user->current_player->get_inventory(*player_inventory_info);
 		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(iter->second->price, iter->second->cost, craft_num,
-			*resources, *stackable_item_list, *player_inventory_info))
+  		if (!database::players::craft_recipe(*iter->second, craft_num, *resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_RESOURCE_SHORTAGE);
 		}
