@@ -119,12 +119,12 @@ List of implemeted/unimplemented server commands
 | CMD_BUILDING_MINING_MACHINE_REPAIR | ✔️ |  |
 | CMD_DEPLOY_GET_LIST | ❌ |  |
 | CMD_CREW_LOAD | ✔️ |  |
-| CMD_CREW_GROUP_TRANSFER | ❌ |  |
-| CMD_CREW_BANISH | ❌ |  |
+| CMD_CREW_GROUP_TRANSFER | ✔️ |  |
+| CMD_CREW_BANISH | ✔️ |  |
 | CMD_CREW_ADD | ✔️ |  |
 | CMD_CREW_UPDATE | ✔️ |  |
 | CMD_CREW_TREAT | ✔️ |  |
-| CMD_CREW_USE_ITEM | ❌ |  |
+| CMD_CREW_USE_ITEM | ✔️ |  |
 | CMD_CREW_USE_PARTY_ITEM | ❌ |  |
 | CMD_DEPLOY_LOAD_TEAM | ❌ |  |
 | CMD_DEPLOY_SAVE_TEAM | ❌ |  |
@@ -162,7 +162,7 @@ List of implemeted/unimplemented server commands
 | CMD_SEND_STATISTICS_DATA | ➖ |  |
 | CMD_STATISTICS_MATCHING_TIME | ➖ |  |
 | CMD_DEFENSE_MISSION_START | ✔️ |  |
-| CMD_DEFENSE_MISSION_CANCEL | ❌ |  |
+| CMD_DEFENSE_MISSION_CANCEL | ✔️ |  |
 | CMD_DEFENSE_MISSION_GET_HISTORY_LIST | ✔️ |  |
 | CMD_DEFENSE_MISSION_GET_HISTORY_DETAIL | ✔️ |  |
 | CMD_COOP_LOBBY_END | ❌ |  |

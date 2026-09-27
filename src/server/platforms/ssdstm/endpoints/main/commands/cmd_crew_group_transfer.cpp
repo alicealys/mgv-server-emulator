@@ -14,6 +14,9 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+		user->current_player->get_crew_member_list(*crew_member_list);
+
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
 			entry_t entry{};
@@ -22,10 +25,17 @@ namespace emulator::ssd
 				continue;
 			}
 
-			// TODO
+			const auto member = crew_member_list->find_member(entry.unique_id);
+			if (member == nullptr)
+			{
+				continue;
+			}
+
+			member->previous_group = member->current_group;
+			member->current_group = entry.group_id;
 		}
 
-		result["result"] = "ERR_NOTIMPLEMENTED";
+		user->current_player->set_crew_member_list(*crew_member_list);
 
 		return result;
 	}
