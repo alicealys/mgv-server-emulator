@@ -8,11 +8,11 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-        param_t param{};
-        if (!json::read(param, data))
-        {
-            return error(ERR_INVALIDARG);
-        }
+		param_t param{};
+		if (!json::read(param, data))
+		{
+			return error(ERR_INVALIDARG);
+		}
 
 		const auto sub_item = []<typename T>(T & list, const std::uint16_t inventory_index, const std::uint8_t inventory_type, std::uint16_t& num)
 		{
@@ -98,10 +98,10 @@ namespace emulator::ssd
 
 		user->current_player->set_base_resources(*base_resources);
 
-        result["gain_resources"] = json::array();
-        result["gain_stackables"] = json::array();
+		result["gain_resources"] = json::array();
+		result["gain_stackables"] = json::array();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_craft_deliver::flags()

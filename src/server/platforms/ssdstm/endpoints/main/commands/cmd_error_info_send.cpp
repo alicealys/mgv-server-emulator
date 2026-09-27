@@ -7,7 +7,7 @@ namespace emulator::ssd
 	json::value cmd_error_info_send::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
-        
+		
 		param_t param{};
 		if (!json::read(param, data))
 		{

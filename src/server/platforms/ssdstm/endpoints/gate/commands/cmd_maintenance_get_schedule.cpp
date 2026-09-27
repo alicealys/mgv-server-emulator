@@ -14,6 +14,6 @@ namespace emulator::ssd
 		result["maintenance_type"] = 0;
 		result["maintenance_count"] = 0;
 
-        return result;
+		return result;
 	}
 }

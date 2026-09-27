@@ -29,9 +29,9 @@ namespace emulator::ssd
 		result["reward"]["resources_list"] = json::array();
 		result["reward"]["stackable_list"] = json::array();
 		result["reward"]["text_id"] = 0;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_replay_end::flags()

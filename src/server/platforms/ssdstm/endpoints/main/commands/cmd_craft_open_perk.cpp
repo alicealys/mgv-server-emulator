@@ -15,9 +15,9 @@ namespace emulator::ssd
 		}
 
 		result["perk_id"] = 0;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_craft_open_perk::flags()

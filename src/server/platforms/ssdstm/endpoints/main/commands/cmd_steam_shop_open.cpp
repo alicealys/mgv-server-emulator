@@ -30,7 +30,7 @@ namespace emulator::ssd
 		result["transid"] = 0;
 		result["result"] = game::get_error(ERR_INVALIDARG);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_steam_shop_open::flags()

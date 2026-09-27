@@ -17,7 +17,7 @@ namespace emulator::ssd
 		user->current_player->get_avatar(*avatar);
 		avatar->to_json(result["avatar"]);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_avatar_load::flags()

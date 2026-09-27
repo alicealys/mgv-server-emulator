@@ -8,8 +8,8 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-        result["mission_list"] = json::array();
+		result["mission_list"] = json::array();
 
-        return result;
+		return result;
 	}
 }

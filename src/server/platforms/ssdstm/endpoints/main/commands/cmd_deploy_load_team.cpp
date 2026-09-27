@@ -18,6 +18,6 @@ namespace emulator::ssd
 		result["price_list"][4] = 0;
 		result["team_list"] = json::array();
 
-        return result;
+		return result;
 	}
 }

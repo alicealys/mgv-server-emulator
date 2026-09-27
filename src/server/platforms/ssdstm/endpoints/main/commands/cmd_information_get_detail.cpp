@@ -17,6 +17,6 @@ namespace emulator::ssd
 		result["title"]["info_id"] = 0;
 		result["url"] = "";
 
-        return result;
+		return result;
 	}
 }

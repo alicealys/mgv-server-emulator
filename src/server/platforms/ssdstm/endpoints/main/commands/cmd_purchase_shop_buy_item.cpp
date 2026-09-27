@@ -20,7 +20,7 @@ namespace emulator::ssd
 		result["present_id"] = 0;
 		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_purchase_shop_buy_item::flags()

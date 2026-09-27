@@ -12,6 +12,6 @@ namespace emulator::ssd
 		result["text"] = "";
 		result["url"] = "";
 
-        return result;
+		return result;
 	}
 }

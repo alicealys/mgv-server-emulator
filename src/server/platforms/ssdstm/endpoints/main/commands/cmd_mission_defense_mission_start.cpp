@@ -18,7 +18,7 @@ namespace emulator::ssd
 
 		user->current_player->set_defense_mission_info(info);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_defense_mission_start::flags()

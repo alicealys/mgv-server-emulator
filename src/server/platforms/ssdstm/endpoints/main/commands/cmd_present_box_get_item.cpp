@@ -54,7 +54,7 @@ namespace emulator::ssd
 
 		database::present_box::delete_item(item->get_present_id());
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_present_box_get_item::flags()

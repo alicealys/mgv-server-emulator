@@ -28,9 +28,9 @@ namespace emulator::ssd
 		reward_info["battle_pack_list"] = json::array();
 		reward_info["recipe_list"] = json::array();
 
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_purchase_deploy_reduction::flags()

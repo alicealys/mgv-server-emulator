@@ -21,6 +21,6 @@ namespace emulator::ssd
 		result["reward"]["stackable_list"] = json::array();
 		result["reward"]["text_id"] = 0;
 
-        return result;
+		return result;
 	}
 }

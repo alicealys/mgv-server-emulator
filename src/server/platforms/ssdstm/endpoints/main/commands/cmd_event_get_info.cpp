@@ -12,6 +12,6 @@ namespace emulator::ssd
 		result["event_list"] = json::array();
 		result["season_flag"] = 0;
 
-        return result;
+		return result;
 	}
 }

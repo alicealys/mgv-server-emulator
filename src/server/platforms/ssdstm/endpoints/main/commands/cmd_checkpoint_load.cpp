@@ -22,7 +22,7 @@ namespace emulator::ssd
 		result["gimmick_save_info_africa"] = json::null();
 		result["gimmick_timer_info"] = json::null();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_checkpoint_load::flags()

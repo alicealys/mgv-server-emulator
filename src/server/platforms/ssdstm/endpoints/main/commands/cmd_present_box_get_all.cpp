@@ -51,7 +51,7 @@ namespace emulator::ssd
 
 		database::present_box::delete_all_items(user->current_player->get_player_id());
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_present_box_get_all::flags()

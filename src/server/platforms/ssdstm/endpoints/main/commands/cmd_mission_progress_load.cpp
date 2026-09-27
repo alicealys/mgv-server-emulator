@@ -165,7 +165,7 @@ namespace emulator::ssd
 		
 		result["user_flag"] = user->get_user_flag();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_progress_load::flags()

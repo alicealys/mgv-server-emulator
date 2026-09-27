@@ -16,7 +16,7 @@ namespace emulator::ssd
 				mission->get_total_score(), mission->get_end_date(), mission->get_next_wave_date());
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_defense_mission_cancel::flags()

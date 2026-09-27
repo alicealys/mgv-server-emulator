@@ -10,7 +10,7 @@ namespace emulator::ssd
 
 		result["balance"] = user->get_sv_coin();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_svcoin_get_balance::flags()

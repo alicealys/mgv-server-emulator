@@ -20,7 +20,7 @@ namespace emulator::ssd
 
 		user->current_player->set_avatar(avatar);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_avatar_save::flags()

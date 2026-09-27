@@ -15,7 +15,7 @@ namespace emulator::ssd
 			history[i].to_json(result["defense_mission_history_list"][i]);
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_defense_mission_get_history_list::flags()

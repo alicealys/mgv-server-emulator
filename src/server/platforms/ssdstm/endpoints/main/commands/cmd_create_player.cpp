@@ -25,7 +25,7 @@ namespace emulator::ssd
 		result["player_id"] = player->get_player_id();
 		result["index"] = player->get_index();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_create_player::flags()

@@ -62,6 +62,6 @@ namespace emulator::ssd
 			result["list"][i]["steam_item_id"] = i;
 		}
 
-        return result;
+		return result;
 	}
 }

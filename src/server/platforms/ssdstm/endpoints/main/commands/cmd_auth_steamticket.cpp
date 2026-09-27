@@ -32,6 +32,6 @@ namespace emulator::ssd
 		result["currency"] = auth_result.currency;
 		result["loginid_password"] = auth_result.password;
 
-        return result;
+		return result;
 	}
 }

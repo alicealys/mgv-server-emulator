@@ -70,6 +70,6 @@ namespace emulator::ssd
 			result_entry["name_plate"] = friend_user->current_player->get_nameplate();
 		}
 
-        return result;
+		return result;
 	}
 }

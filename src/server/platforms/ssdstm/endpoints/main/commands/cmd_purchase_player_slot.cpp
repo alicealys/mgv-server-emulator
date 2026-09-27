@@ -11,9 +11,9 @@ namespace emulator::ssd
 		result["purchase_result"]["is_coin"] = 0;
 		result["purchase_result"]["payment"] = 0;
 		result["purchase_result"]["balance"] = 0;
-        result["result"] = "ERR_NOTIMPLEMENTED";
+		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_purchase_player_slot::flags()

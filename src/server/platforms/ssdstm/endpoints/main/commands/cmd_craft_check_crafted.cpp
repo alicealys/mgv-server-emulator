@@ -18,7 +18,7 @@ namespace emulator::ssd
 		result["crafted_nonstackable_items"] = json::array();
 		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_craft_check_crafted::flags()

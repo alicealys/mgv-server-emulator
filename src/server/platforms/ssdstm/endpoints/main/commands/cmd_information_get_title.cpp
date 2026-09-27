@@ -12,6 +12,6 @@ namespace emulator::ssd
 		result["info_list"] = json::array();
 		result["info_num"] = 0;
 
-        return result;
+		return result;
 	}
 }

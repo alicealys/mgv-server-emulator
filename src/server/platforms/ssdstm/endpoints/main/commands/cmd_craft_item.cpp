@@ -52,7 +52,7 @@ namespace emulator::ssd
 		user->current_player->get_inventory(*player_inventory_info);
 		user->get_inventory(*user_inventory_info);
 
-  		if (!database::players::craft_recipe(*iter->second, craft_num, *resources, *stackable_item_list, *player_inventory_info))
+		if (!database::players::craft_recipe(*iter->second, craft_num, *resources, *stackable_item_list, *player_inventory_info))
 		{
 			return error(ERR_RESOURCE_SHORTAGE);
 		}
@@ -148,7 +148,7 @@ namespace emulator::ssd
 		result["inventory_index_junk"] = 0xFFFF;
 		result["left_resources"] = json::array();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_craft_item::flags()

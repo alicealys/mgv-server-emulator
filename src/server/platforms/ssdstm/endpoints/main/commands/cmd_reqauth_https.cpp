@@ -67,6 +67,6 @@ namespace emulator::ssd
 			result["user_id"] = user_opt->get_id();
 		}
 
-        return result;
+		return result;
 	}
 }

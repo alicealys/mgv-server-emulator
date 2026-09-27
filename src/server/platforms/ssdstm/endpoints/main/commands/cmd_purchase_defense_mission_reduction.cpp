@@ -16,7 +16,7 @@ namespace emulator::ssd
 
 		result["result"] = "ERR_NOTIMPLEMENTED";
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_purchase_defense_mission_reduction::flags()

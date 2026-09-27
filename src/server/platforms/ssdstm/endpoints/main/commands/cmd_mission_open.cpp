@@ -44,7 +44,7 @@ namespace emulator::ssd
 			user->current_player->set_quest_record_list(*quest_record_list);
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_open::flags()

@@ -75,7 +75,7 @@ namespace emulator::ssd
 		result["player_capacity"] = 1;
 		result["player_num"] = players.size();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_get_playerlist::flags()

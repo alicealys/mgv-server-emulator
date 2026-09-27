@@ -123,7 +123,7 @@ namespace emulator::ssd
 
 		this->do_save(data, user);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_inventory_save::flags()

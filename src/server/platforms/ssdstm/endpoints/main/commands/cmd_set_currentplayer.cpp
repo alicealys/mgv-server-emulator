@@ -32,7 +32,7 @@ namespace emulator::ssd
 
 		result["player_id"] = player->get_player_id();
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_set_currentplayer::flags()

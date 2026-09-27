@@ -13,6 +13,6 @@ namespace emulator::ssd
 		result["expired_list"] = json::array{0, 0, 0, 0, 0};
 		result["next_date"] = std::numeric_limits<std::int32_t>::max();
 
-        return result;
+		return result;
 	}
 }

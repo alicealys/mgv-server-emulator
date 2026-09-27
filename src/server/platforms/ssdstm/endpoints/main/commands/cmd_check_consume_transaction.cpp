@@ -11,6 +11,6 @@ namespace emulator::ssd
 		// TODO?
 		result["in_transaction"] = 0;
 
-        return result;
+		return result;
 	}
 }

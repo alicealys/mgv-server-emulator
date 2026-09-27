@@ -13,7 +13,7 @@ namespace emulator::ssd
 			return error(ERR_DATABASE);
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_update_session::flags()

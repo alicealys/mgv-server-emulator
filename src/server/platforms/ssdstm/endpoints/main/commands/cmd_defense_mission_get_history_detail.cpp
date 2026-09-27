@@ -27,7 +27,7 @@ namespace emulator::ssd
 			waves[i].to_json(result["defense_mission_wave_history"][i]);
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_defense_mission_get_history_detail::flags()

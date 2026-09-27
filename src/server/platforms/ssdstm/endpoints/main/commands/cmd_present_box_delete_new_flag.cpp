@@ -27,7 +27,7 @@ namespace emulator::ssd
 			database::present_box::remove_new_flag(present_id);
 		}
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_present_box_delete_new_flag::flags()

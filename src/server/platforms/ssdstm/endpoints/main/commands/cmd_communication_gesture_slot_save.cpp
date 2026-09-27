@@ -16,7 +16,7 @@ namespace emulator::ssd
 
 		user->current_player->set_communication_gesture_info(info);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_communication_gesture_slot_save::flags()

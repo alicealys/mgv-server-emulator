@@ -27,7 +27,7 @@ namespace emulator::ssd
 		building_info->to_json_farming(result["farming_info"]);
 		result["defense_mission_disconnect"] = 0;
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_building_load::flags()

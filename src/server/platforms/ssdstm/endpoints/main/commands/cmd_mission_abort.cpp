@@ -8,7 +8,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_abort::flags()

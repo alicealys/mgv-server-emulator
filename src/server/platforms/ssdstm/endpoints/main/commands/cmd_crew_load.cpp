@@ -17,7 +17,7 @@ namespace emulator::ssd
 		crew_member_list->to_json(result["crew_list"]);
 		crew_levels->to_json(result["group_level"]);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_crew_load::flags()

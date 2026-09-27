@@ -46,7 +46,7 @@ namespace emulator::ssd
 
 		result["energy"] = param.energy;
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_craft_invest_to_player::flags()

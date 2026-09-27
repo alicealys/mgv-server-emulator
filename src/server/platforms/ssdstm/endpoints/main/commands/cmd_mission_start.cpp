@@ -28,7 +28,7 @@ namespace emulator::ssd
 		user->current_player->set_mission_info(*mission_info);
 		user->current_player->set_story_unlock_info(*story_unlock_info);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_mission_start::flags()

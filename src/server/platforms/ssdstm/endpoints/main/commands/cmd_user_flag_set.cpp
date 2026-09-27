@@ -18,7 +18,7 @@ namespace emulator::ssd
 		const auto flag = user->get_user_flag() | flag_j.as<std::uint32_t>();
 		user->set_user_flag(flag);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_user_flag_set::flags()

@@ -10,6 +10,6 @@ namespace emulator::ssd
 
 		// TODO
 
-        return result;
+		return result;
 	}
 }

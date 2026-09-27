@@ -20,6 +20,6 @@ namespace emulator::ssd
 			entry["md5"] = parameter->get_data_md5();
 		}
 
-        return result;
+		return result;
 	}
 }

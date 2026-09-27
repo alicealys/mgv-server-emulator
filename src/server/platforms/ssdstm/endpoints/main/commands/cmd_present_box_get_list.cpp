@@ -29,7 +29,7 @@ namespace emulator::ssd
 
 		result["present_num"] = count;
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_present_box_get_list::flags()

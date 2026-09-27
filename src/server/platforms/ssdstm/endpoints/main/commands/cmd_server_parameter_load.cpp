@@ -13,8 +13,8 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-        result["server_parameter_list"] = this->list_;
+		result["server_parameter_list"] = this->list_;
 
-        return result;
+		return result;
 	}
 }

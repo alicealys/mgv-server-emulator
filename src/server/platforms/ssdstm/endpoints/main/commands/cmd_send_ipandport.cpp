@@ -30,7 +30,7 @@ namespace emulator::ssd
 			ex_ip, ex_port, in_ip, in_port, nat
 		);
 
-        return result;
+		return result;
 	}
 
 	std::uint32_t cmd_send_ipandport::flags()
