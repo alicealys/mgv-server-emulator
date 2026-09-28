@@ -7,7 +7,7 @@ namespace emulator::ssd
 	{
 		struct entry_t
 		{
-			std::uint32_t unique_id;
+			std::uint64_t unique_id;
 			std::uint16_t group_id;
 		};
 

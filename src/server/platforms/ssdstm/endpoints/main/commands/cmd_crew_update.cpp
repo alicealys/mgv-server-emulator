@@ -2,6 +2,8 @@
 
 #include "cmd_crew_update.hpp"
 
+#include "database/models/crew_members.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_crew_update::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -16,10 +18,7 @@ namespace emulator::ssd
 			user->current_player->set_crew_levels(*crew_levels);
 		}
 
-		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-		user->current_player->get_crew_member_list(*crew_member_list);
-
-		const auto do_list = [&]<typename T>(const std::string_view& name, void(*accessor)(database::players::crew_member_t&, T&))
+		const auto do_list = [&]<typename T>(const std::string_view& name, void(*accessor)(const database::crew_members::crew_member& member, T&))
 		{
 			auto& list_j = data[name];
 			if (!list_j.is_array())
@@ -35,21 +34,20 @@ namespace emulator::ssd
 					continue;
 				}
 
-				const auto member = crew_member_list->find_member(entry.unique_id);
-				if (member == nullptr)
+				const auto member = database::crew_members::find(user->current_player->get_player_id(), entry.unique_id);
+				if (!member.has_value())
 				{
 					continue;
 				}
 
-				accessor(*member, entry);
+				accessor(member.value(), entry);
 			}
 		};
 
 		do_list.template operator()<group_transfer_entry_t>("group_transfer_list", 
-			[](database::players::crew_member_t& member, group_transfer_entry_t& entry)
+			[](const database::crew_members::crew_member& member, group_transfer_entry_t& entry)
 			{
-				member.previous_group = member.current_group;
-				member.current_group = entry.group_id;
+				member.update_group(entry.group_id);
 			}
 		);
 
@@ -62,19 +60,11 @@ namespace emulator::ssd
 		//);
 		
 		do_list.template operator()<update_nickname_entry_t>("update_nickname_list", 
-			[](database::players::crew_member_t& member, update_nickname_entry_t& entry)
+			[](const database::crew_members::crew_member& member, update_nickname_entry_t& entry)
 			{
-				if (entry.name.size() >= sizeof(member.nickname) - 1)
-				{
-					return;
-				}
-
-				std::memset(member.nickname, 0, sizeof(member.nickname));
-				snprintf(member.nickname, sizeof(member.nickname), "%s", entry.name.data());
+				member.update_nickname(entry.name);
 			}
 		);
-
-		user->current_player->set_crew_member_list(*crew_member_list);
 
 		return result;
 	}

@@ -8,19 +8,19 @@ namespace emulator::ssd
 		struct group_transfer_entry_t
 		{
 			std::uint16_t group_id;
-			std::uint32_t unique_id;
+			std::uint64_t unique_id;
 		};
 
 		struct update_nickname_entry_t
 		{
 			std::string name;
-			std::uint32_t unique_id;
+			std::uint64_t unique_id;
 		};
 
 		struct update_flag_entry_t
 		{
 			std::uint32_t flag;
-			std::uint32_t unique_id;
+			std::uint64_t unique_id;
 		};
 
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;

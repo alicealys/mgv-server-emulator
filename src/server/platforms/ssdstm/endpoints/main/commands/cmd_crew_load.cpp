@@ -2,20 +2,25 @@
 
 #include "cmd_crew_load.hpp"
 
+#include "database/models/crew_members.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_crew_load::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
 
-		auto crew_levels = std::make_unique<database::players::crew_levels_t>();
-		auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
+		database::players::crew_levels_t crew_levels{};
+		user->current_player->get_crew_levels(crew_levels);
+		crew_levels.to_json(result["group_level"]);
 
-		user->current_player->get_crew_levels(*crew_levels);
-		user->current_player->get_crew_member_list(*crew_member_list);
+		result["crew_list"] = json::array();
 
-		crew_member_list->to_json(result["crew_list"]);
-		crew_levels->to_json(result["group_level"]);
+		const auto crew_members = database::crew_members::get_all(user->current_player->get_player_id());
+		for (auto i = 0ull; i < crew_members.size(); i++)
+		{
+			crew_members[i].to_json(result["crew_list"][i]);
+		}
 
 		return result;
 	}

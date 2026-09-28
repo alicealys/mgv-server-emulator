@@ -7,7 +7,7 @@ namespace emulator::ssd
 	{
 		struct entry_t
 		{
-			std::uint32_t unique_id;
+			std::uint64_t unique_id;
 			std::uint32_t treat_item_injury_1;
 			std::uint32_t treat_item_injury_2;
 			std::uint32_t treat_item_sickness_1;

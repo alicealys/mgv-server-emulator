@@ -790,25 +790,6 @@ namespace database::players
 		}
 	};
 
-	class crew_member_list_t : public generic_item_list<crew_member_t, 30>
-	{
-	public:
-		inline bool are_elements_equal(const crew_member_t& l, const crew_member_t& r) const override
-		{
-			return l.unique_id == r.unique_id;
-		}
-
-		inline bool is_element_empty(const crew_member_t& value) const override
-		{
-			return value.unique_id == 0u;
-		}
-
-		bool parse_update(json::value& data);
-
-		crew_member_t* find_member(const std::uint32_t id);
-
-	};
-
 	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
@@ -842,7 +823,6 @@ namespace database::players
 		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
 		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
-		DEFINE_FIELD(crew_member_list, sqlpp::binary);
 		DEFINE_FIELD(crew_levels, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_record_list, sqlpp::binary);
@@ -870,7 +850,6 @@ namespace database::players
 			map_unlock_list_afghan_field_t,
 			map_unlock_list_africa_field_t,
 			building_info_afghan_field_t,
-			crew_member_list_field_t,
 			crew_levels_field_t,
 			defense_mission_info_field_t,
 			defense_mission_record_list_field_t,
@@ -943,7 +922,6 @@ namespace database::players
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
 		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
 		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
-		void get_crew_member_list(crew_member_list_t& crew_member_list, const std::size_t size_add = 0ull) const;
 		void get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add = 0ull) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
@@ -953,7 +931,6 @@ namespace database::players
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
 		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
-		bool set_crew_member_list(crew_member_list_t& crew_member_list) const;
 		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;

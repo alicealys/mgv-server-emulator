@@ -2,6 +2,8 @@
 
 #include "cmd_restore_save.hpp"
 
+#include "database/models/crew_members.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_restore_save::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -97,9 +99,23 @@ namespace emulator::ssd
 			auto& crew_list_j = crew_j["crew_list"];
 			if (crew_list_j.is_array())
 			{
-				auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-				crew_member_list->parse(crew_list_j);
-				user->current_player->set_crew_member_list(*crew_member_list);
+				database::crew_members::remove_all(user->current_player->get_player_id());
+				for (auto i = 0ull; i < crew_list_j.size(); i++)
+				{
+					database::crew_members::member_params_t new_member_params{};
+					if (!new_member_params.parse(crew_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(new_member_params.unique_index);
+					if (iter == game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
+					{
+						continue;
+					}
+
+					database::crew_members::create(user->current_player->get_player_id(), new_member_params);
+				}
 			}
 		}
 

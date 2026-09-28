@@ -2,13 +2,15 @@
 
 #include "cmd_crew_use_item.hpp"
 
+#include "database/models/crew_members.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_crew_use_item::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
 
-		std::uint32_t unique_id{};
+		std::uint64_t unique_id{};
 		if (!json::read(unique_id, data["unique_id"]))
 		{
 			return error(ERR_INVALIDARG);
@@ -20,16 +22,16 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-		const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
-		user->current_player->get_inventory_resource_list(*resource_list);
-		user->current_player->get_crew_member_list(*crew_member_list);
+		database::players::inventory_resource_list_t resource_list;
+		user->current_player->get_inventory_resource_list(resource_list);
 
-		const auto member = crew_member_list->find_member(unique_id);
-		if (member == nullptr)
+		const auto member = database::crew_members::find(user->current_player->get_player_id(), unique_id);
+		if (!member.has_value())
 		{
 			return error(ERR_NOT_FOUND);
 		}
+
+		std::array<std::uint32_t, 6> add_counts{};
 
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
@@ -40,31 +42,31 @@ namespace emulator::ssd
 			}
 
 			std::uint32_t count = entry.num;
-			if (!resource_list->spend_resource(entry.item_resource_id, count))
+			if (!resource_list.spend_resource(entry.item_resource_id, count))
 			{
 				return error(ERR_RESOURCE_SHORTAGE);
 			}
 
-			std::uint16_t* target = nullptr;
+			std::uint32_t* target = nullptr;
 			switch (entry.item_resource_id)
 			{
 				case game::RES_Crew_Growth_develop:
-					target = &member->item1_count;
+					target = &add_counts[0];
 					break;
 				case game::RES_Crew_Growth_food:
-					target = &member->item2_count;
+					target = &add_counts[1];
 					break;
 				case game::RES_Crew_Growth_medical:
-					target = &member->item3_count;
+					target = &add_counts[2];
 					break;
 				case game::RES_Crew_Growth_farm:
-					target = &member->item4_count;
+					target = &add_counts[3];
 					break;
 				case game::RES_Crew_Growth_defense:
-					target = &member->item5_count;
+					target = &add_counts[4];
 					break;
 				case game::RES_Crew_Growth_explore:
-					target = &member->item6_count;
+					target = &add_counts[5];
 					break;
 			}
 
@@ -81,8 +83,9 @@ namespace emulator::ssd
 			*target += entry.num;
 		}
 
-		user->current_player->set_inventory_resource_list(*resource_list);
-		user->current_player->set_crew_member_list(*crew_member_list);
+		member->add_items(add_counts);
+
+		user->current_player->set_inventory_resource_list(resource_list);
 
 		return result;
 	}

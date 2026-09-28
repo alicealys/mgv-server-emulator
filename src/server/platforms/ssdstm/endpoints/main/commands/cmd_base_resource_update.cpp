@@ -2,6 +2,8 @@
 
 #include "cmd_base_resource_update.hpp"
 
+#include "database/models/crew_members.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_base_resource_update::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -37,30 +39,39 @@ namespace emulator::ssd
 
 		if (crew_update_list_j.is_array() || crew_died_list_j.is_array())
 		{
-			auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-			user->current_player->get_crew_member_list(*crew_member_list);
-
 			if (crew_update_list_j.is_array())
 			{
-				crew_member_list->parse_update(crew_update_list_j);
+				for (auto i = 0ull; i < crew_update_list_j.size(); i++)
+				{
+					database::crew_members::member_params_t update_params{};
+					if (!update_params.parse_update(crew_update_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto member = database::crew_members::find(user->current_player->get_player_id(), update_params.unique_index);
+					if (!member.has_value())
+					{
+						continue;
+					}
+
+					member->update(update_params);
+				}
 			}
 
 			if (crew_died_list_j.is_array())
 			{
 				for (auto i = 0ull; i < crew_died_list_j.size(); i++)
 				{
-					std::uint32_t unique_id{};
+					std::uint64_t unique_id{};
 					if (!json::read(unique_id, crew_died_list_j[i]))
 					{
 						continue;
 					}
 
-					const auto member = crew_member_list->find_member(unique_id);
-					std::memset(member, 0, sizeof(database::players::crew_member_list_t));
+					database::crew_members::remove(user->current_player->get_player_id(), unique_id);
 				}
 			}
-
-			user->current_player->set_crew_member_list(*crew_member_list);
 		}
 
 		if (farming_update_list_j.is_array())

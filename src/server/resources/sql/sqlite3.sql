@@ -168,8 +168,6 @@ create table if not exists `deployment_teams`
 	mission_id			int unsigned not null default 0,
 	mission_type		int unsigned not null default 0,
 	mission_info		int unsigned not null default 0,
-	mission_name_id_01	int unsigned not null default 0,
-	mission_name_id_02	int unsigned not null default 0,
 	crew_id_01			bigint unsigned default null,
 	crew_id_02			bigint unsigned default null,
 	crew_id_03			bigint unsigned default null,
@@ -198,3 +196,44 @@ begin
     )
     where team_id = NEW.player_id;
 end
+-- query:mgssd.crew_members.create
+create table if not exists `crew_members`
+(
+	member_id			integer	primary key autoincrement,
+	f_player_id			bigint unsigned	not null,
+	member_type 		int unsigned not null default 0,
+	face_id				int unsigned not null default 0,
+	body_id				int unsigned not null default 0,
+	race_id				int unsigned not null default 0,
+	sex_id				int unsigned not null default 0,
+	voice_type			int unsigned not null default 0,
+	previous_group		int unsigned not null default 0,
+	current_group		int unsigned not null default 0,
+	previous_job		int unsigned not null default 0,
+	item1_count			int unsigned not null default 0,
+	item2_count			int unsigned not null default 0,
+	item3_count			int unsigned not null default 0,
+	item4_count			int unsigned not null default 0,
+	item5_count			int unsigned not null default 0,
+	item6_count			int unsigned not null default 0,
+	life				int unsigned not null default 0,
+	life_max			int unsigned not null default 0,
+	health_condition	int unsigned not null default 0,
+	health_flag			int unsigned not null default 0,
+	map_location		int unsigned not null default 0,
+	skill				int unsigned not null default 0,
+	sanity				int unsigned not null default 0,
+	survival_days		int unsigned not null default 0,
+	injury_id_1			int unsigned not null default 0,
+	injury_id_2			int unsigned not null default 0,
+	injury_time_1		int unsigned not null default 0,
+	injury_time_2		int unsigned not null default 0,
+	sickness_id_1		int unsigned not null default 0,
+	sickness_id_2		int unsigned not null default 0,
+	sickness_time_1		int unsigned not null default 0,
+	sickness_time_2		int unsigned not null default 0,
+	nickname			varchar(64) default null,
+	motivation_history	varchar(64) default null,
+	creation_date	    datetime not null,
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)

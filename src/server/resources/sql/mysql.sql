@@ -201,3 +201,45 @@ begin
 	from deployment_teams where f_player_id = NEW.f_player_id;
 	set NEW.team_index = total_rows;
 end
+-- query:mgssd.crew_members.create
+create table if not exists `crew_members`
+(
+	member_id			bigint unsigned	not null	auto_increment,
+	f_player_id			bigint unsigned	not null,
+	member_type 		int unsigned not null default 0,
+	face_id				int unsigned not null default 0,
+	body_id				int unsigned not null default 0,
+	race_id				int unsigned not null default 0,
+	sex_id				int unsigned not null default 0,
+	voice_type			int unsigned not null default 0,
+	previous_group		int unsigned not null default 0,
+	current_group		int unsigned not null default 0,
+	previous_job		int unsigned not null default 0,
+	item1_count			int unsigned not null default 0,
+	item2_count			int unsigned not null default 0,
+	item3_count			int unsigned not null default 0,
+	item4_count			int unsigned not null default 0,
+	item5_count			int unsigned not null default 0,
+	item6_count			int unsigned not null default 0,
+	life				int unsigned not null default 0,
+	life_max			int unsigned not null default 0,
+	health_condition    int unsigned not null default 0,
+	health_flag			int unsigned not null default 0,
+	map_location		int unsigned not null default 0,
+	skill				int unsigned not null default 0,
+	sanity				int unsigned not null default 0,
+	survival_days		int unsigned not null default 0,
+	injury_id_1			int unsigned not null default 0,
+	injury_id_2			int unsigned not null default 0,
+	injury_time_1		int unsigned not null default 0,
+	injury_time_2		int unsigned not null default 0,
+	sickness_id_1		int unsigned not null default 0,
+	sickness_id_2		int unsigned not null default 0,
+	sickness_time_1		int unsigned not null default 0,
+	sickness_time_2		int unsigned not null default 0,
+	nickname			varchar(64) default null,
+	motivation_history	varchar(64) default null,
+	creation_date	    datetime not null,
+	primary key (`member_id`),
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)

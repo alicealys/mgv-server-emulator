@@ -4,6 +4,7 @@
 #include "cmd_inventory_save.hpp"
 
 #include "database/models/present_box.hpp"
+#include "database/models/crew_members.hpp"
 
 namespace emulator::ssd
 {
@@ -59,10 +60,7 @@ namespace emulator::ssd
 			}
 
 			auto& rank_entry = result[reward.rank - rank];
-			auto& stackable_list_j = rank_entry["stackable_list"];
-			auto& resources_list_j = rank_entry["resources_list"];
 			auto& present_list_j = rank_entry["present_list"];
-			auto& energy_j = rank_entry["energy"];
 
 			if (!user->current_player->give_reward(reward.param, stackable_list.get(), 
 				resource_list.get(), player_inventory.get(), rank_entry))
@@ -412,79 +410,60 @@ namespace emulator::ssd
 		{
 			auto count = 0u;
 
-			const auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-			user->current_player->get_crew_member_list(*crew_member_list, reward_crew_j.size());
 			for (auto i = 0ull; i < reward_crew_j.size(); i++)
 			{
-				database::players::crew_member_t new_member{};
-				if (!new_member.parse_add_param(reward_crew_j[i]))
+				database::crew_members::member_params_t new_member_params{};
+				if (!new_member_params.parse_add_param(reward_crew_j[i]))
 				{
 					continue;
 				}
 
-				const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(new_member.unique_index);
-				if (iter == game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
+				const auto added_member_id = database::crew_members::create(user->current_player->get_player_id(), new_member_params);
+				if (added_member_id == 0ull)
 				{
-					continue;
+					return error(ERR_DATABASE);
 				}
 
-				new_member.unique_id = utils::cryptography::random::get_integer() % 1000000;
-				new_member.face_id = iter->second->face;
-				new_member.race_id = iter->second->race;
-				new_member.body_id = iter->second->body;
-				new_member.ability_accessory = 0;
-				new_member.ability_animal = 0;
-				new_member.ability_base_defense = iter->second->base_defense;
-				new_member.ability_defense_unit = 0;
-				new_member.ability_develop = iter->second->develop;
-				new_member.ability_expedition = iter->second->combat_deploy;
-				new_member.ability_food = iter->second->food;
-				new_member.ability_gadget = 0;
-				new_member.ability_medical = iter->second->medic;
-				new_member.ability_plant = iter->second->farm;
-				new_member.resistance_food_shortage = iter->second->hunger_resist;
-				new_member.resistance_sleepless = iter->second->sleeplack_resist;
-				new_member.resistance_water_shortage = iter->second->thirst_resist;
-				new_member.sanity = 1000;
-				new_member.max_life = iter->second->life;
-				new_member.life = iter->second->life;
-				new_member.initial_max_life = iter->second->life;
-				new_member.current_group = 1;
-				new_member.previous_group = 1;
-
-				crew_member_list->push(new_member);
-				new_member.to_json(result["added_crew"][count++]);
+				const auto new_member = database::crew_members::find(user->current_player->get_player_id(), added_member_id);
+				new_member->to_json(result["added_crew"][count++]);
 			}
-
-			user->current_player->set_crew_member_list(*crew_member_list);
 		}
 
 		if (crew_update_list_j.is_array() || crew_died_list_j.is_array())
 		{
-			auto crew_member_list = std::make_unique<database::players::crew_member_list_t>();
-			user->current_player->get_crew_member_list(*crew_member_list);
-
 			if (crew_update_list_j.is_array())
 			{
-				crew_member_list->parse_update(crew_update_list_j);
+				for (auto i = 0ull; i < crew_update_list_j.size(); i++)
+				{
+					database::crew_members::member_params_t update_params{};
+					if (!update_params.parse_update(crew_update_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto member = database::crew_members::find(user->current_player->get_player_id(), update_params.unique_index);
+					if (!member.has_value())
+					{
+						continue;
+					}
+
+					member->update(update_params);
+				}
 			}
 
 			if (crew_died_list_j.is_array())
 			{
 				for (auto i = 0ull; i < crew_died_list_j.size(); i++)
 				{
-					std::uint32_t unique_id{};
+					std::uint64_t unique_id{};
 					if (!json::read(unique_id, crew_died_list_j[i]))
 					{
 						continue;
 					}
 
-					const auto member = crew_member_list->find_member(unique_id);
-					std::memset(member, 0, sizeof(database::players::crew_member_list_t));
+					database::crew_members::remove(user->current_player->get_player_id(), unique_id);
 				}
 			}
-
-			user->current_player->set_crew_member_list(*crew_member_list);
 		}
 
 		if (group_level_j.is_object())

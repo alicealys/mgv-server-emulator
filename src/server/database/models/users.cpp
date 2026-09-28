@@ -4,6 +4,7 @@
 #include "defense_missions.hpp"
 #include "present_box.hpp"
 #include "deployments.hpp"
+#include "crew_members.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -794,6 +795,7 @@ namespace database::users
 			defense_missions::delete_player_data(player.get_player_id());
 			present_box::delete_player_data(player.get_player_id());
 			deployments::delete_player_data(player.get_player_id());
+			crew_members::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 
