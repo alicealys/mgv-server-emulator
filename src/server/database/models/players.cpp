@@ -2,6 +2,7 @@
 
 #include "players.hpp"
 #include "users.hpp"
+#include "deployments.hpp"
 #include "../auth.hpp"
 #include "component/command.hpp"
 
@@ -1249,6 +1250,16 @@ namespace database::players
 		return &(*iter);
 	}
 
+	bool nonstackable_item_list_t::add_item(nonstackable_item_t& item)
+	{
+		if (!this->find_free_index(item.inventory_index, item.obtain_order))
+		{
+			return false;
+		}
+
+		return this->try_add_item(item);
+	}
+
 	bool inventory_resource_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const
 	{
 		index = 0u;
@@ -2052,6 +2063,11 @@ namespace database::players
 				throw std::runtime_error("[database::players::create] Insertion failed");
 			}
 
+			for (auto i = 0u; i < deployments::min_team_count; i++)
+			{
+				deployments::create_team(found->get_player_id());
+			}
+
 			return found.value();
 		}
 
@@ -2396,7 +2412,7 @@ namespace database::players
 	}
 
 	bool player::give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, 
-		inventory_resource_list_t* resource_list, player_inventory_t* inventory_info) const
+		inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const
 	{
 		switch (reward.category)
 		{
@@ -2419,6 +2435,13 @@ namespace database::players
 			if (!resource_list->add_resource(resource))
 			{
 				return false;
+			}
+
+			if (reward_info.is_object())
+			{
+				auto& resources_list_j = reward_info["resources_list"];
+				resource.count = static_cast<std::uint16_t>(reward.num);
+				resource.to_json(resources_list_j[resources_list_j.size()]);
 			}
 
 			return true;
@@ -2447,6 +2470,13 @@ namespace database::players
 			if (!stackable_list->add_item(stackable_item))
 			{
 				return false;
+			}
+
+			if (reward_info.is_object())
+			{
+				auto& stackable_list_j = reward_info["stackable_list"];
+				stackable_item.count = static_cast<std::uint16_t>(reward.num);
+				stackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
 			}
 
 			return true;
@@ -2487,6 +2517,16 @@ namespace database::players
 			}
 
 			inventory_info->energy += reward.num;
+
+			if (reward_info.is_object())
+			{
+				auto& energy_j = reward_info["energy"];
+				if (energy_j.is_uint64())
+				{
+					energy_j = energy_j.as<std::uint32_t>() + reward.num;
+				}
+			}
+
 			return true;
 		}
 		case game::REWARD_BATTLE_PACK:

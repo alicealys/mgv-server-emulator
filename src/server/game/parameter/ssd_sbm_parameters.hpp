@@ -10,6 +10,9 @@ namespace game::parameters
 		ssd_sbm_parameters();
 		bool parse(json::value& data) override;
 
+		std::uint32_t get_resource_id(const std::uint32_t resource_index) const;
+		std::uint32_t get_production_id(const std::uint32_t production_index) const;
+
 		std::unordered_map<std::uint32_t, std::shared_ptr<resource_t>> resources;
 		std::unordered_map<std::uint32_t, std::shared_ptr<production_t>> productions;
 		std::unordered_map<std::uint32_t, std::shared_ptr<recipe_t>> recipes;

@@ -36,7 +36,8 @@ namespace emulator::ssd
 		user->current_player->get_inventory_resource_list(*resource_list);
 		user->current_player->get_inventory(*inventory_info);
 
-		if (!user->current_player->give_reward(item->get_reward(), stackable_list.get(), resource_list.get(), inventory_info.get()))
+		json::value empty;
+		if (!user->current_player->give_reward(item->get_reward(), stackable_list.get(), resource_list.get(), inventory_info.get(), empty))
 		{
 			return error(ERR_DATABASE);
 		}

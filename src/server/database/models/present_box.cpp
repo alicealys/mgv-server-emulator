@@ -364,11 +364,6 @@ namespace database::present_box
 	public:
 		void create(database_t& database) override
 		{
-			game::reward_t param{};
-			param.code = 1994203852;
-			param.category = game::REWARD_PRODUCTION;
-			param.num = 301;
-			add_item(3, present_flag_expire, std::chrono::seconds(std::time(nullptr)), param);
 			database.run_query("mgssd.present_box_entries.create");
 		}
 	};

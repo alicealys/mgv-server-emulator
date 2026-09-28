@@ -161,3 +161,43 @@ create table if not exists `present_box_entries`
 	primary key (`present_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )
+-- query:mgssd.deployment_teams.create
+create table if not exists `deployment_teams`
+(
+	team_id				bigint unsigned	not null	auto_increment,
+	f_player_id			bigint unsigned	not null,
+	team_index			bigint unsigned	not null,
+	params				tinyblob default null,
+	info_name			varchar(64) default null,
+	info_status			int unsigned not null default 0,
+	info_combat			int unsigned not null default 0,
+	info_survive		int unsigned not null default 0,
+	mission_id			int unsigned not null default 0,
+	mission_type		int unsigned not null default 0,
+	mission_info		int unsigned not null default 0,
+	crew_id_01			bigint unsigned default null,
+	crew_id_02			bigint unsigned default null,
+	crew_id_03			bigint unsigned default null,
+	crew_id_04			bigint unsigned default null,
+	item_01				bigint unsigned not null default 0,
+	item_02				bigint unsigned not null default 0,
+	item_03				bigint unsigned not null default 0,
+	item_04				bigint unsigned not null default 0,
+	item_05				bigint unsigned not null default 0,
+	complete_date		datetime not null,
+	creation_date		datetime not null,
+	primary key (`team_id`),
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)
+-- query:mgssd.deployment_teams.remove_insert_trigger
+drop trigger if exists deployment_teams_insert_trigger
+-- query:mgssd.deployment_teams.add_insert_trigger
+create trigger deployment_teams_insert_trigger
+before insert on deployment_teams
+for each row
+begin
+	declare total_rows int;
+    select count(*) into total_rows 
+	from deployment_teams where f_player_id = NEW.f_player_id;
+	set NEW.team_index = total_rows;
+end

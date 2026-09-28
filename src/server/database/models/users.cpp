@@ -2,6 +2,8 @@
 
 #include "players.hpp"
 #include "defense_missions.hpp"
+#include "present_box.hpp"
+#include "deployments.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -790,6 +792,8 @@ namespace database::users
 		for (const auto& player : players)
 		{
 			defense_missions::delete_player_data(player.get_player_id());
+			present_box::delete_player_data(player.get_player_id());
+			deployments::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 

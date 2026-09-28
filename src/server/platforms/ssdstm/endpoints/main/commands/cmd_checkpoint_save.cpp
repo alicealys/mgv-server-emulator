@@ -63,54 +63,13 @@ namespace emulator::ssd
 			auto& resources_list_j = rank_entry["resources_list"];
 			auto& present_list_j = rank_entry["present_list"];
 			auto& energy_j = rank_entry["energy"];
-			
-			const auto give_as_present = [&]()
+
+			if (!user->current_player->give_reward(reward.param, stackable_list.get(), 
+				resource_list.get(), player_inventory.get(), rank_entry))
 			{
 				database::present_box::add_item(user->current_player->get_player_id(),
 					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param);
-			};
-
-			switch (reward.param.category)
-			{
-			case game::REWARD_ENERGY:
-				energy_j = energy_j.as<std::uint32_t>() + reward.param.num;
-				break;
-			case game::REWARD_PRODUCTION:
-			{
-				database::players::stackable_item_t item{};
-				item.count = reward.param.num;
-				item.production_index = reward.id_index;
-				auto count = item.count;
-				if (stackable_list->add_item(item))
-				{
-					item.count = count;
-					item.to_json(stackable_list_j[stackable_list_j.size()]);
-				}
-				else
-				{
-					give_as_present();
-					reward.param.to_json(present_list_j[present_list_j.size()]);
-				}
-				break;
-			}
-			case game::REWARD_RESOURCE:
-			{
-				database::players::inventory_resource_t resource{};
-				resource.count = reward.param.num;
-				resource.resource_index = reward.id_index;
-				auto count = resource.count;
-				if (resource_list->add_resource(resource))
-				{
-					resource.count = count;
-					resource.to_json(resources_list_j[resources_list_j.size()]);
-				}
-				else
-				{
-					give_as_present();
-					reward.param.to_json(present_list_j[present_list_j.size()]);
-				}
-				break;
-			}
+				reward.param.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
 

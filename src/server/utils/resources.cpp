@@ -20,6 +20,7 @@ namespace utils::resources
 			{RESOURCE_BASE_DEFENSE_REWARD_POOLS, "resources/data/base_defense_reward_pools.json"},
 			{RESOURCE_LANG_STRINGS, "resources/data/lang_strings.json"},
 			{RESOURCE_STEAM_SHOP_ITEM_LIST, "resources/data/steam_shop_item_list.json"},
+			{RESOURCE_DEPLOYMENTS_MISSION_LIST, "resources/data/deployments_mission_list.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},

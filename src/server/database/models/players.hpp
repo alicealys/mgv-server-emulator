@@ -652,6 +652,7 @@ namespace database::players
 		bool parse_life_diff(json::value& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 		nonstackable_item_t* find_at_index(const std::uint16_t inventory_index);
+		bool add_item(nonstackable_item_t& item);
 
 	};
 
@@ -957,7 +958,8 @@ namespace database::players
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 
-		bool give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, inventory_resource_list_t* resource_list, player_inventory_t* inventory_info) const;
+		bool give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, 
+			inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const;
 	};
 
 	std::optional<player> find(const std::uint64_t id);

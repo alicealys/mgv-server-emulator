@@ -31,7 +31,8 @@ namespace emulator::ssd
 			}
 
 			const auto& reward = item.get_reward();
-			if (!user->current_player->give_reward(reward, stackable_list.get(), resource_list.get(), inventory_info.get()))
+			json::value empty;
+			if (!user->current_player->give_reward(reward, stackable_list.get(), resource_list.get(), inventory_info.get(), empty))
 			{
 				continue;
 			}

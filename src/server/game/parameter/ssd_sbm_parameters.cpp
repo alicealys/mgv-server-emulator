@@ -9,6 +9,38 @@ namespace game::parameters
 		this->load("SsdSbmParameters");
 	}
 
+	std::uint32_t ssd_sbm_parameters::get_resource_id(const std::uint32_t resource_index) const
+	{
+		if (resource_index > this->resources_list.size())
+		{
+			return 0u;
+		}
+
+		const auto& resource = this->resources_list[resource_index];
+		if (resource == nullptr)
+		{
+			return 0u;
+		}
+
+		return resource->id;
+	}
+
+	std::uint32_t ssd_sbm_parameters::get_production_id(const std::uint32_t production_index) const
+	{
+		if (production_index > this->productions_list.size())
+		{
+			return 0u;
+		}
+
+		const auto& resource = this->productions_list[production_index];
+		if (resource == nullptr)
+		{
+			return 0u;
+		}
+
+		return resource->id;
+	}
+
 	bool ssd_sbm_parameters::parse(json::value& data)
 	{
 		for (auto i = 0ull; i < data["customize_option"].size(); i++)
