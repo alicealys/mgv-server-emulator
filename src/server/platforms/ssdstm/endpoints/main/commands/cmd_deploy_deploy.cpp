@@ -37,7 +37,6 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
-		const auto now = std::chrono::system_clock::now();
 		if (team->get_info_status() != database::deployments::team_status_deploy_none)
 		{
 			return error(ERR_ALREADY_DEPLOY);

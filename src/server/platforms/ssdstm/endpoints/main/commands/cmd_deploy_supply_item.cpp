@@ -89,7 +89,7 @@ namespace emulator::ssd
 				item_to_update.valid = true;
 
 				if (current_item.f.id_index == item_to_update.data.f.id_index &&
-					item_to_update.data.f.type == item_to_update.data.f.type)
+					current_item.f.type == item_to_update.data.f.type)
 				{
 					item_to_update.data.f.param1 += current_item.f.param1;
 				}
@@ -110,7 +110,6 @@ namespace emulator::ssd
 				}
 
 				item->count -= entry.storage.count;
-				database::deployments::team_item_t team_item{};
 				item_to_update.data.f.id_index = item->production_index;
 				item_to_update.data.f.param1 = entry.storage.count;
 				item_to_update.data.f.param2 = 0; // ?
@@ -118,7 +117,7 @@ namespace emulator::ssd
 				item_to_update.valid = true;
 
 				if (current_item.f.id_index == item_to_update.data.f.id_index &&
-					item_to_update.data.f.type == item_to_update.data.f.type)
+					current_item.f.type == item_to_update.data.f.type)
 				{
 					item_to_update.data.f.param1 += current_item.f.param1;
 				}
@@ -144,7 +143,6 @@ namespace emulator::ssd
 					return error(ERR_DATABASE);
 				}
 
-				database::deployments::team_item_t team_item{};
 				item_to_update.data.f.id_index = static_cast<std::uint16_t>(production->second->index);
 				item_to_update.data.f.param1 = item->life;
 				item_to_update.data.f.param2 = item->life_max;
