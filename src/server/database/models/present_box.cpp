@@ -12,7 +12,7 @@ namespace database::present_box
 {
 	namespace
 	{
-		std::uint32_t category_caps[game::REWARD_COUNT] =
+		std::uint32_t category_caps[game::ITEM_CATEGORY_COUNT] =
 		{
 			99999, // REWARD_RESOURCE = 0,
 			300,   // REWARD_PRODUCTION = 1,

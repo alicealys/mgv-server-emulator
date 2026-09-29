@@ -2152,7 +2152,7 @@ namespace database::players
 	{
 		switch (reward.category)
 		{
-		case game::REWARD_RESOURCE:
+		case game::ITEM_CATEGORY_RESOURCE:
 		{
 			if (resource_list == nullptr)
 			{
@@ -2182,7 +2182,7 @@ namespace database::players
 
 			return true;
 		}
-		case game::REWARD_PRODUCTION:
+		case game::ITEM_CATEGORY_PRODUCTION:
 		{
 			if (stackable_list == nullptr)
 			{
@@ -2217,35 +2217,35 @@ namespace database::players
 
 			return true;
 		}
-		case game::REWARD_RECIPE:
+		case game::ITEM_CATEGORY_RECIPE:
 		{
 			return false;
 		}
-		case game::REWARD_PRESET_RADIO:
+		case game::ITEM_CATEGORY_PRESET_RADIO:
 		{
 			return false;
 		}
-		case game::REWARD_GESTURE:
+		case game::ITEM_CATEGORY_GESTURE:
 		{
 			return false;
 		}
-		case game::REWARD_COMMUNICATION_MARKER:
+		case game::ITEM_CATEGORY_COMMUNICATION_MARKER:
 		{
 			return false;
 		}
-		case game::REWARD_NAMEPLATE:
+		case game::ITEM_CATEGORY_NAMEPLATE:
 		{
 			return false;
 		}
-		case game::REWARD_PRIVILEGE:
+		case game::ITEM_CATEGORY_PRIVILEGE:
 		{
 			return false;
 		}
-		case game::REWARD_COIN:
+		case game::ITEM_CATEGORY_COIN:
 		{
 			return database::users::add_sv_coins(this->get_user_id(), reward.num);
 		}
-		case game::REWARD_ENERGY:
+		case game::ITEM_CATEGORY_ENERGY:
 		{
 			if (inventory_info == nullptr)
 			{
@@ -2265,19 +2265,19 @@ namespace database::players
 
 			return true;
 		}
-		case game::REWARD_BATTLE_PACK:
+		case game::ITEM_CATEGORY_BATTLE_PACK:
 		{
 			return false;
 		}
-		case game::REWARD_FACE_PAINT:
+		case game::ITEM_CATEGORY_FACE_PAINT:
 		{
 			return false;
 		}
-		case game::REWARD_CASSETTE:
+		case game::ITEM_CATEGORY_CASSETTE:
 		{
 			return false;
 		}
-		case game::REWARD_CHARACTER_SLOT:
+		case game::ITEM_CATEGORY_CHARACTER_SLOT:
 		{
 			return false;
 		}
