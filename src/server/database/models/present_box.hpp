@@ -73,10 +73,10 @@ namespace database::present_box
 		void to_json(json::value& data) const;
 		void to_json_item(json::value& data) const;
 
-		const game::reward_t& get_reward() const;
+		const game::item_t& get_reward() const;
 
 	private:
-		game::reward_t reward_{};
+		game::item_t reward_{};
 
 	};
 
@@ -86,7 +86,7 @@ namespace database::present_box
 	std::vector<present_box_entry> get_all_items(const std::uint64_t player_id);
 	std::size_t get_present_count(const std::uint64_t player_id);
 	void delete_all_items(const std::uint64_t player_id);
-	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::reward_t& item);
+	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item);
 	bool has_new_item(const std::uint64_t player_id);
 	void delete_player_data(const std::uint64_t player_id);
 }

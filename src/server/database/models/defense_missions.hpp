@@ -80,7 +80,7 @@ namespace database::defense_missions
 	{
 		std::uint8_t rank;
 		std::uint32_t id_index;
-		game::reward_t param;
+		game::item_t param;
 	};
 
 	enum reward_type_t
@@ -145,15 +145,15 @@ namespace database::defense_missions
 		}
 	};
 
-	class reward_list_t final : public generic_item_list<game::reward_t, 32>
+	class reward_list_t final : public generic_item_list<game::item_t, 32>
 	{
 	public:
-		inline bool are_elements_equal(const game::reward_t& l, const game::reward_t& r) const override
+		inline bool are_elements_equal(const game::item_t& l, const game::item_t& r) const override
 		{
 			return false;
 		}
 
-		inline bool is_element_empty(const game::reward_t& value) const override
+		inline bool is_element_empty(const game::item_t& value) const override
 		{
 			return value.code == 0;
 		}

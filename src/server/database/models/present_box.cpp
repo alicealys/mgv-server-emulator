@@ -36,7 +36,7 @@ namespace database::present_box
 	GET_FIELD_C(present_box_entry, std::uint32_t, flags);
 	GET_FIELD_C(present_box_entry, std::chrono::seconds, expire_date);
 
-	const game::reward_t& present_box_entry::get_reward() const
+	const game::item_t& present_box_entry::get_reward() const
 	{
 		return this->reward_;
 	}
@@ -151,7 +151,7 @@ namespace database::present_box
 
 		template <database_type_t Type>
 		void add_item_internal(database_t& db, const std::uint64_t player_id, const std::uint32_t flags, 
-			const std::chrono::seconds expire_date, game::reward_t& item, const std::size_t depth = 0u)
+			const std::chrono::seconds expire_date, game::item_t& item, const std::size_t depth = 0u)
 		{
 			if (depth > 3)
 			{
@@ -233,11 +233,11 @@ namespace database::present_box
 		}
 
 		template <database_type_t Type>
-		void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::reward_t& item)
+		void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
 		{
 			database::access([&](database::database_t& db)
 			{
-				game::reward_t add_item{item};
+				game::item_t add_item{item};
 				db.get_database<Type>()->start_transaction();
 				add_item_internal<Type>(db, player_id, flags, expire_date, add_item);
 				db.get_database<Type>()->commit_transaction();
@@ -344,7 +344,7 @@ namespace database::present_box
 		RUN_IMPL(impl::delete_all_items, player_id);
 	}
 
-	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::reward_t& item)
+	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
 	{
 		RUN_IMPL(impl::add_item, player_id, flags, expire_date, item);
 	}

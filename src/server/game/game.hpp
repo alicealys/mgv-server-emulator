@@ -94,25 +94,6 @@ namespace game
 	extern std::unordered_set<std::uint32_t> mission_list;
 	extern std::unordered_set<std::uint32_t> quest_list;
 
-	enum reward_category_t
-	{
-		REWARD_RESOURCE = 0,
-		REWARD_PRODUCTION = 1,
-		REWARD_RECIPE = 2,
-		REWARD_PRESET_RADIO = 3,
-		REWARD_GESTURE = 4,
-		REWARD_COMMUNICATION_MARKER = 5,
-		REWARD_NAMEPLATE = 6,
-		REWARD_PRIVILEGE = 7,
-		REWARD_COIN = 8,
-		REWARD_ENERGY = 9,
-		REWARD_BATTLE_PACK = 10,
-		REWARD_FACE_PAINT = 11,
-		REWARD_CASSETTE = 12,
-		REWARD_CHARACTER_SLOT = 13,
-		REWARD_COUNT = 14,
-	};
-
 	enum string_hash_t
 	{
         ACC_Arm_00 = 0x5E30C809,
@@ -5955,7 +5936,26 @@ namespace game
         WORMHOLE_POINT = 0x5EF3AF5B,
 	};
 
-	struct reward_t
+    enum item_category_t
+    {
+        REWARD_RESOURCE = 0,
+        REWARD_PRODUCTION = 1,
+        REWARD_RECIPE = 2,
+        REWARD_PRESET_RADIO = 3,
+        REWARD_GESTURE = 4,
+        REWARD_COMMUNICATION_MARKER = 5,
+        REWARD_NAMEPLATE = 6,
+        REWARD_PRIVILEGE = 7,
+        REWARD_COIN = 8,
+        REWARD_ENERGY = 9,
+        REWARD_BATTLE_PACK = 10,
+        REWARD_FACE_PAINT = 11,
+        REWARD_CASSETTE = 12,
+        REWARD_CHARACTER_SLOT = 13,
+        REWARD_COUNT = 14,
+    };
+
+	struct item_t
 	{
 		std::uint8_t category;
 		std::uint32_t code;

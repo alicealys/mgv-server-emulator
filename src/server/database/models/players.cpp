@@ -2147,7 +2147,7 @@ namespace database::players
 		RUN_IMPL(impl::set_nameplate, this->get_user_id(), nameplate);
 	}
 
-	bool player::give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, 
+	bool player::give_reward(const game::item_t& reward, stackable_item_list_t* stackable_list, 
 		inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const
 	{
 		switch (reward.category)

@@ -935,7 +935,7 @@ namespace database::players
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 
-		bool give_reward(const game::reward_t& reward, stackable_item_list_t* stackable_list, 
+		bool give_reward(const game::item_t& reward, stackable_item_list_t* stackable_list, 
 			inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const;
 	};
 

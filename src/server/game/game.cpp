@@ -557,12 +557,12 @@ namespace game
 	}
 
 
-	bool reward_t::parse(json::value& data)
+	bool item_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
 	}
 
-	void reward_t::to_json(json::value& data) const
+	void item_t::to_json(json::value& data) const
 	{
 		data["category"] = this->category;
 		data["code"] = this->code;

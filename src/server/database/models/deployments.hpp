@@ -53,7 +53,7 @@ namespace database::deployments
 			std::uint32_t combat_rate;
 			std::uint32_t rate;
 			std::uint32_t survival_rate;
-			game::reward_t item_info;
+			game::item_t item_info;
 		};
 
 		std::uint32_t combat;
