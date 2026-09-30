@@ -256,4 +256,16 @@ namespace database
 
 		throw std::runtime_error("utils::set_binary_field invalid database type");
 	}
+
+	inline auto nullable_integer(const std::uint64_t value)
+	{
+		if (value == 0ull)
+		{
+			return sqlpp::value_or_null<sqlpp::integer_unsigned>(sqlpp::null);
+		}
+		else
+		{
+			return sqlpp::value_or_null(value);
+		}
+	}
 }

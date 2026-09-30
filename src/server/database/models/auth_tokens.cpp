@@ -126,4 +126,4 @@ namespace database::auth_tokens
 	};
 }
 
-REGISTER_TABLE(database::auth_tokens::table, 1)
+REGISTER_TABLE(database::auth_tokens::table, -1)

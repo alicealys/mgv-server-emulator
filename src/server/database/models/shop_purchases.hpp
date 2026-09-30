@@ -115,7 +115,7 @@ namespace database::shop_purchases
 	{
 	public:
 		DEFINE_FIELD(purchase_id, sqlpp::integer_unsigned);
-		DEFINE_FIELD(user_id, sqlpp::integer_unsigned);
+		DEFINE_FIELD(f_user_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(lang_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(event_type, sqlpp::integer_unsigned);
 		DEFINE_FIELD(product_type, sqlpp::integer_unsigned);
@@ -134,7 +134,7 @@ namespace database::shop_purchases
 		DEFINE_FIELD(expire_date, sqlpp::time_point);
 		DEFINE_TABLE(shop_purchases, 
 			purchase_id_field_t,
-			user_id_field_t,
+			f_user_id_field_t,
 			lang_id_field_t,
 			event_type_field_t,
 			product_type_field_t,
@@ -159,7 +159,7 @@ namespace database::shop_purchases
 		shop_purchase(const sqlpp::result_row_t<Args...>& row)
 		{
 			this->purchase_id_ = row.purchase_id;
-			this->user_id_ = row.user_id;
+			this->user_id_ = row.f_user_id;
 			this->lang_id_ = row.lang_id;
 			this->event_type_ = static_cast<std::uint32_t>(row.event_type);
 			this->product_type_ = static_cast<std::uint32_t>(row.product_type);

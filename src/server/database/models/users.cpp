@@ -1146,4 +1146,4 @@ namespace database::users
 	};
 }
 
-REGISTER_TABLE(database::users::table, 2)
+REGISTER_TABLE(database::users::table, -1)

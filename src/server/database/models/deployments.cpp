@@ -269,7 +269,7 @@ namespace database::deployments
 				return list;
 			});
 		}
-		
+
 		template <database_type_t Type>
 		std::size_t get_team_count(const std::uint64_t player_id)
 		{
@@ -297,7 +297,7 @@ namespace database::deployments
 							.where(deployment_team::table.team_id == team_id));
 			});
 		}
-					
+
 		template <database_type_t Type>
 		void update_team_status(const std::uint64_t team_id, const std::uint32_t status)
 		{
@@ -308,7 +308,7 @@ namespace database::deployments
 						.where(deployment_team::table.team_id == team_id));
 			});
 		}
-					
+
 		template <database_type_t Type>
 		void update_team_info_by_index(const std::uint64_t player_id,  
 			const std::uint64_t team_index, const std::uint32_t combat, const std::string& name, 
@@ -335,7 +335,7 @@ namespace database::deployments
 						.where(deployment_team::table.team_id == team_id));
 			});
 		}
-						
+
 		template <database_type_t Type>
 		void update_team_params_by_index(const std::uint64_t player_id, const std::uint64_t team_index, const team_params_t& params)
 		{
@@ -346,7 +346,7 @@ namespace database::deployments
 						.where(deployment_team::table.f_player_id == player_id && deployment_team::table.team_index == team_index));
 			});
 		}
-		
+
 		template <database_type_t Type>
 		void update_team_item(const std::uint64_t team_id, const std::uint32_t index, const team_item_t& item)
 		{
@@ -377,21 +377,21 @@ namespace database::deployments
 				}
 			});
 		}
-				
+
 		template <database_type_t Type>
 		void update_team_crew_ids(const std::uint64_t team_id, const std::uint64_t crew_id_01, const std::uint64_t crew_id_02, const std::uint64_t crew_id_03, const std::uint64_t crew_id_04)
 		{
 			return database::access([&](database::database_t& db)
 			{
 				db.exec<Type>(sqlpp::update(deployment_team::table)
-					.set(deployment_team::table.crew_id_01 = crew_id_01,
-						 deployment_team::table.crew_id_02 = crew_id_02,
-						 deployment_team::table.crew_id_03 = crew_id_03,
-						 deployment_team::table.crew_id_04 = crew_id_04
-						).where(deployment_team::table.team_id == team_id));
+					.set(deployment_team::table.crew_id_01 = nullable_integer(crew_id_01),
+						 deployment_team::table.crew_id_02 = nullable_integer(crew_id_02),
+						 deployment_team::table.crew_id_03 = nullable_integer(crew_id_03),
+						 deployment_team::table.crew_id_04 = nullable_integer(crew_id_04))
+							.where(deployment_team::table.team_id == team_id));
 			});
 		}
-						
+
 		template <database_type_t Type>
 		void update_team_mission(const std::uint64_t team_id, const std::uint32_t mission_id, const std::uint32_t mission_info,
 			const std::uint32_t mission_type, const std::chrono::system_clock::time_point complete_date)
@@ -406,7 +406,7 @@ namespace database::deployments
 							.where(deployment_team::table.team_id == team_id));
 			});
 		}
-								
+
 		template <database_type_t Type>
 		bool deploy(const std::uint64_t team_id, const deploy_params_t& params)
 		{
@@ -419,10 +419,10 @@ namespace database::deployments
 							 deployment_team::table.info_status = params.status,
 							 deployment_team::table.info_name = params.name,
 							 deployment_team::table.params = params.team_params.serialize(),
-							 deployment_team::table.crew_id_01 = params.crew_ids[0],
-							 deployment_team::table.crew_id_02 = params.crew_ids[1],
-							 deployment_team::table.crew_id_03 = params.crew_ids[2],
-							 deployment_team::table.crew_id_04 = params.crew_ids[3],
+							 deployment_team::table.crew_id_01 = nullable_integer(params.crew_ids[0]),
+							 deployment_team::table.crew_id_02 = nullable_integer(params.crew_ids[1]),
+							 deployment_team::table.crew_id_03 = nullable_integer(params.crew_ids[2]),
+							 deployment_team::table.crew_id_04 = nullable_integer(params.crew_ids[3]),
 							 deployment_team::table.mission_id = params.mission_id,
 							 deployment_team::table.mission_info = params.mission_info,
 							 deployment_team::table.mission_type = params.mission_type,
@@ -585,6 +585,9 @@ namespace database::deployments
 			database.run_query("mgssd.deployment_teams.remove_insert_trigger");
 			database.run_query("mgssd.deployment_teams.add_insert_trigger");
 
+			database.run_query("mgssd.deployment_teams.remove_update_trigger");
+			database.run_query("mgssd.deployment_teams.add_update_trigger");
+
 			get_deployments_mission_list();
 			get_deployments_mission_map();
 
@@ -596,4 +599,4 @@ namespace database::deployments
 	};
 }
 
-REGISTER_TABLE(database::deployments::table, 2)
+REGISTER_TABLE(database::deployments::table, 3)

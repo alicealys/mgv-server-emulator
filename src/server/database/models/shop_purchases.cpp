@@ -200,7 +200,7 @@ namespace database::shop_purchases
 			{
 				const auto result = db.get_database<Type>()->operator()(
 					sqlpp::insert_into(shop_purchase::table)
-						.set(shop_purchase::table.user_id = user_id, 
+						.set(shop_purchase::table.f_user_id = user_id,
 							 shop_purchase::table.lang_id = params.lang_id,
 							 shop_purchase::table.event_type = params.event_type,
 							 shop_purchase::table.product_type = params.product_type,
@@ -233,7 +233,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(shop_purchase::table.product_type, sqlpp::count(1))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id)
+								.where(shop_purchase::table.f_user_id == user_id)
 									.group_by(shop_purchase::table.product_type));
 
 				for (const auto& row : results)
@@ -254,7 +254,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(sqlpp::count(1))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id && shop_purchase::table.product_type == product_type));
+								.where(shop_purchase::table.f_user_id == user_id && shop_purchase::table.product_type == product_type));
 
 				if (results.empty())
 				{
@@ -275,7 +275,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(sqlpp::all_of(shop_purchase::table))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id && shop_purchase::table.expire_date > now)
+								.where(shop_purchase::table.f_user_id == user_id && shop_purchase::table.expire_date > now)
 									.order_by(shop_purchase::table.purchase_date.desc()).limit(limit).offset(offset));
 
 				std::vector<shop_purchase> list;
@@ -299,7 +299,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(sqlpp::count(1))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id && shop_purchase::table.expire_date > now));
+								.where(shop_purchase::table.f_user_id == user_id && shop_purchase::table.expire_date > now));
 				
 				if (results.empty())
 				{
@@ -319,7 +319,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(sqlpp::all_of(shop_purchase::table))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id && shop_purchase::table.product_type == item_type)
+								.where(shop_purchase::table.f_user_id == user_id && shop_purchase::table.product_type == item_type)
 									.order_by(shop_purchase::table.purchase_date.desc()).limit(1u));
 
 				if (results.empty())
@@ -340,7 +340,7 @@ namespace database::shop_purchases
 				auto results = db.get_database<Type>()->operator()(
 					sqlpp::select(sqlpp::all_of(shop_purchase::table))
 							.from(shop_purchase::table)
-								.where(shop_purchase::table.user_id == user_id && 
+								.where(shop_purchase::table.f_user_id == user_id &&
 									   shop_purchase::table.product_type >= item_type_beg && shop_purchase::table.product_type < item_type_end)
 									.order_by(shop_purchase::table.purchase_date.desc()).limit(1u));
 
@@ -360,7 +360,7 @@ namespace database::shop_purchases
 			{
 				db.get_database<Type>()->operator()(
 					sqlpp::remove_from(shop_purchase::table)
-						.where(shop_purchase::table.user_id == user_id));
+						.where(shop_purchase::table.f_user_id == user_id));
 			});
 		}
 	}

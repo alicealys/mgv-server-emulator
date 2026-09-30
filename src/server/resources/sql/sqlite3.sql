@@ -169,10 +169,10 @@ create table if not exists `deployment_teams`
 	mission_id			int unsigned not null default 0,
 	mission_type		int unsigned not null default 0,
 	mission_info		int unsigned not null default 0,
-	crew_id_01			bigint unsigned default null,
-	crew_id_02			bigint unsigned default null,
-	crew_id_03			bigint unsigned default null,
-	crew_id_04			bigint unsigned default null,
+	crew_id_01			bigint unsigned default null unique,
+	crew_id_02			bigint unsigned default null unique,
+	crew_id_03			bigint unsigned default null unique,
+	crew_id_04			bigint unsigned default null unique,
 	item_01				bigint unsigned not null default 0,
 	item_02				bigint unsigned not null default 0,
 	item_03				bigint unsigned not null default 0,
@@ -180,7 +180,11 @@ create table if not exists `deployment_teams`
 	item_05				bigint unsigned not null default 0,
 	complete_date		datetime not null,
 	creation_date		datetime not null,
-	foreign key (`f_player_id`) references `players`(`player_id`)
+	foreign key (`f_player_id`) references `players`(`player_id`),
+	foreign key (`crew_id_01`) references `crew_memebers`(`member_id`),
+	foreign key (`crew_id_02`) references `crew_memebers`(`member_id`),
+	foreign key (`crew_id_03`) references `crew_memebers`(`member_id`),
+	foreign key (`crew_id_04`) references `crew_memebers`(`member_id`)
 )
 -- query:mgssd.deployment_teams.remove_insert_trigger
 drop trigger if exists deployment_teams_insert_trigger
@@ -196,6 +200,22 @@ begin
         where f_player_id = NEW.f_player_id
     )
     where team_id = NEW.player_id;
+end
+-- query:mgssd.deployment_teams.remove_update_trigger
+drop trigger if exists deployment_teams_update_trigger
+-- query:mgssd.deployment_teams.add_update_trigger
+create trigger deployment_teams_update_trigger
+before update on deployment_teams
+for each row
+begin
+	select raise(abort, 'deployment teams crew member id check fail')
+	where ((NEW.crew_id_01 is not null) + (NEW.crew_id_02 is not null) + 
+		   (NEW.crew_id_03 is not null) + (NEW.crew_id_04 is not null)) > 
+		(select COUNT(*) 
+			from crew_members 
+			where f_player_id = NEW.f_player_id  and current_group = 7
+			and member_id in (NEW.crew_id_01, NEW.crew_id_02, NEW.crew_id_03, NEW.crew_id_04)
+	);
 end
 -- query:mgssd.crew_members.create
 create table if not exists `crew_members`
@@ -242,7 +262,7 @@ create table if not exists `crew_members`
 create table if not exists `shop_purchases`
 (
 	purchase_id			    integer	primary key autoincrement,
-	user_id					bigint unsigned	not null,
+	f_user_id				bigint unsigned	not null,
 	lang_id					bigint unsigned	not null default 0,
 	event_type				int unsigned not null default 0,
 	product_type			int unsigned not null default 0,
@@ -259,5 +279,5 @@ create table if not exists `shop_purchases`
 	item_num				int unsigned not null default 0,
 	purchase_date           datetime not null,
 	expire_date				datetime not null,
-	foreign key (`user_id`) references users(`user_id`)
+	foreign key (`f_user_id`) references users(`user_id`)
 )
