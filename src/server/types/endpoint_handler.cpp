@@ -53,12 +53,12 @@ namespace emulator
 		auto get_json_response = [&]
 		{
 			const auto flags = handler->second->flags();
-			if ((flags & CMD_NEEDS_USER) && !user.has_value())
+			if ((flags & CMD_NEEDS_USER) != 0 && !user.has_value())
 			{
 				return error(ERR_INVALID_SESSION);
 			}
 
-			if ((flags & CMD_NEEDS_PLAYER) && (!user.has_value() || !user->current_player.has_value()))
+			if ((flags & CMD_NEEDS_PLAYER) != 0 && (!user.has_value() || !user->current_player.has_value()))
 			{
 				return error(ERR_INVALID_SESSION);
 			}

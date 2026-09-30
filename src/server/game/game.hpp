@@ -6222,4 +6222,6 @@ namespace game
 	std::int16_t calc_gradeup_life(const std::uint32_t base_life, const std::uint32_t grade);
 
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result);
+
+    std::uint32_t calc_time_reduction_cost(const std::uint32_t time_left);
 }

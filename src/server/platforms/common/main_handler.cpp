@@ -70,11 +70,18 @@ namespace emulator
 			}
 
 			const auto& session_key = session_key_j.get<std::string>();
-			user = database::users::find_from_session_id(session_key, false);
-			if (!user.has_value())
+			const auto found_user = database::users::find_from_session_id(session_key, true);
+			if (!found_user.has_value())
 			{
 				data_j = json::null{};
 				return {};
+			}
+
+			user.emplace(found_user.value());
+
+			if (found_user->current_player.has_value())
+			{
+				user->current_player.emplace(found_user->current_player.value());
 			}
 
 			utils::cryptography::blowfish session_blow;

@@ -95,6 +95,23 @@ namespace database::deployments
         std::uint32_t required_time;
 		std::uint32_t success_rate;
 		std::uint32_t injure_rate;
+
+		void parse(const std::string& data);
+		std::string serialize() const;
+	};
+
+	struct deploy_params_t
+	{
+		std::uint32_t combat;
+		std::uint32_t survive;
+		std::uint32_t status;
+		std::string name;
+		std::uint32_t mission_id;
+		std::uint32_t mission_type;
+		std::uint32_t mission_info;
+		std::chrono::system_clock::time_point complete_date;
+		team_params_t team_params;
+		std::array<std::uint64_t, 4> crew_ids;
 	};
 
 	const std::vector<deployment_mission_info_t>& get_deployments_mission_list();
@@ -106,7 +123,7 @@ namespace database::deployments
 		DEFINE_FIELD(team_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(f_player_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(team_index, sqlpp::integer_unsigned);
-		DEFINE_FIELD(params, sqlpp::binary);
+		DEFINE_FIELD(params, sqlpp::text);
 		DEFINE_FIELD(info_name, sqlpp::text);
 		DEFINE_FIELD(info_status, sqlpp::integer_unsigned);
 		DEFINE_FIELD(info_combat, sqlpp::integer_unsigned);
@@ -176,7 +193,7 @@ namespace database::deployments
 			this->item_05_.packed = row.item_05;
 			this->complete_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.complete_date.value().time_since_epoch());
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());
-			load_binary_field(&this->params_, row.params.value());
+			this->params_.parse(row.params.value());
 		}
 
 		GET_FIELD_H(std::uint64_t, team_id);
@@ -212,6 +229,8 @@ namespace database::deployments
 		void update_params(const team_params_t& params) const;
 		void update_item(const std::uint32_t index, const team_item_t& item) const;
 		void update_crew_ids(const std::uint64_t crew_id_01, const std::uint64_t crew_id_02, const std::uint64_t crew_id_03, const std::uint64_t crew_id_04) const;
+
+		bool deploy(const deploy_params_t& params) const;
 
 		void to_json(json::value& data) const;
 

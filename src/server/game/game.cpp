@@ -670,4 +670,9 @@ namespace game
 
 		return false;
 	}
+
+	std::uint32_t calc_time_reduction_cost(const std::uint32_t time_left)
+	{
+		return static_cast<std::uint32_t>(std::roundf(static_cast<float>(time_left) * 0.00133f + 5.f)); // todo
+	}
 }

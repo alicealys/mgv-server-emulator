@@ -149,7 +149,7 @@ namespace database::users
 
 			if (!row.player_id.is_null())
 			{
-				this->current_player.emplace(players::player(row));
+				this->current_player.emplace(row);
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace database::users
 
 		std::optional<players::player> create_additional_player() const;
 
-		std::optional<players::player> current_player{};
+		std::optional<players::player> current_player;
 
 	private:
 		std::uint32_t nat_{};

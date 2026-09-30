@@ -104,6 +104,22 @@ namespace database::deployments
 		data["type"] = this->type;
 	}
 
+	void team_params_t::parse(const std::string& data)
+	{
+		const auto raw_data = utils::cryptography::base64::decode(data);
+		if (raw_data.size() != sizeof(team_params_t))
+		{
+			return;
+		}
+
+		std::memcpy(this, raw_data.data(), raw_data.size());
+	}
+
+	std::string team_params_t::serialize() const
+	{
+		return utils::encoding::encode_base64(*this);
+	}
+
 	GET_FIELD_C(deployment_team, std::uint64_t, team_id);
 	GET_FIELD_C(deployment_team, std::uint64_t, player_id);
 	GET_FIELD_C(deployment_team, std::uint64_t, index);
@@ -183,7 +199,7 @@ namespace database::deployments
 							 deployment_team::table.complete_date = std::chrono::system_clock::now(),
 							 deployment_team::table.creation_date = std::chrono::system_clock::now(),
 							 deployment_team::table.info_status = static_cast<std::uint32_t>(team_status_deploy_none),
-							 deployment_team::table.params = sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(params))
+							 deployment_team::table.params = params.serialize()
 				));
 			});
 		}
@@ -315,7 +331,7 @@ namespace database::deployments
 			return database::access([&](database::database_t& db)
 			{
 				db.exec<Type>(sqlpp::update(deployment_team::table)
-					.set(deployment_team::table.params = sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(params)))
+					.set(deployment_team::table.params = params.serialize())
 						.where(deployment_team::table.team_id == team_id));
 			});
 		}
@@ -326,7 +342,7 @@ namespace database::deployments
 			return database::access([&](database::database_t& db)
 			{
 				db.exec<Type>(sqlpp::update(deployment_team::table)
-					.set(deployment_team::table.params = sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(params)))
+					.set(deployment_team::table.params = params.serialize())
 						.where(deployment_team::table.f_player_id == player_id && deployment_team::table.team_index == team_index));
 			});
 		}
@@ -390,6 +406,31 @@ namespace database::deployments
 							.where(deployment_team::table.team_id == team_id));
 			});
 		}
+								
+		template <database_type_t Type>
+		bool deploy(const std::uint64_t team_id, const deploy_params_t& params)
+		{
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(deployment_team::table)
+						.set(deployment_team::table.info_combat = params.combat,
+							 deployment_team::table.info_survive = params.survive,
+							 deployment_team::table.info_status = params.status,
+							 deployment_team::table.info_name = params.name,
+							 deployment_team::table.params = params.team_params.serialize(),
+							 deployment_team::table.crew_id_01 = params.crew_ids[0],
+							 deployment_team::table.crew_id_02 = params.crew_ids[1],
+							 deployment_team::table.crew_id_03 = params.crew_ids[2],
+							 deployment_team::table.crew_id_04 = params.crew_ids[3],
+							 deployment_team::table.mission_id = params.mission_id,
+							 deployment_team::table.mission_info = params.mission_info,
+							 deployment_team::table.mission_type = params.mission_type,
+							 deployment_team::table.complete_date = params.complete_date)
+								.where(deployment_team::table.team_id == team_id));
+				return result != 0ull;
+			});
+		}
 
 		template <database_type_t Type>
 		void delete_player_data(const std::uint64_t player_id)
@@ -426,6 +467,11 @@ namespace database::deployments
 	void deployment_team::update_crew_ids(const std::uint64_t crew_id_01, const std::uint64_t crew_id_02, const std::uint64_t crew_id_03, const std::uint64_t crew_id_04) const
 	{
 		RUN_IMPL(impl::update_team_crew_ids, this->get_team_id(), crew_id_01, crew_id_02, crew_id_03, crew_id_04);
+	}
+
+	bool deployment_team::deploy(const deploy_params_t& params) const
+	{
+		RUN_IMPL(impl::deploy, this->get_team_id(), params);
 	}
 
 	void deployment_team::update_mission(const std::uint32_t mission_id, const std::uint32_t mission_info, 

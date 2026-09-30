@@ -282,7 +282,7 @@ namespace database::defense_missions
 
 		void to_json(json::value& data) const;
 		std::vector<defense_mission_wave> get_waves() const;
-		void update(const std::uint8_t result, const std::uint8_t current_wave, 
+		bool update(const std::uint8_t result, const std::uint8_t current_wave, 
 			const std::uint8_t clear_rank, const std::uint32_t total_score, 
 			const std::chrono::seconds end_date, const std::chrono::seconds next_wave_date) const;
 

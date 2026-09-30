@@ -47,25 +47,29 @@ namespace emulator::ssd
 			return error(ERR_SHORTAGE);
 		}
 
-		team->update_crew_ids(
-			param.team_info.crew_id_list[0], param.team_info.crew_id_list[1],
-			param.team_info.crew_id_list[2], param.team_info.crew_id_list[3]);
+		database::deployments::deploy_params_t deploy_params;
+		deploy_params.crew_ids[0] = param.team_info.crew_id_list[0];
+		deploy_params.crew_ids[1] = param.team_info.crew_id_list[1];
+		deploy_params.crew_ids[2] = param.team_info.crew_id_list[2];
+		deploy_params.crew_ids[3] = param.team_info.crew_id_list[3];
+		deploy_params.name = utils::cryptography::base64::decode(param.team_info.name);
+		deploy_params.combat = param.team_info.combat;
+		deploy_params.survive = param.team_info.survive;
+		deploy_params.status = database::deployments::team_status_deploy_progress;
+		deploy_params.team_params = team_params;
+		deploy_params.mission_id = param.mission_id;
+		deploy_params.mission_info = param.mission_info;
+		deploy_params.mission_type = param.mission_type;
+		deploy_params.complete_date = std::chrono::system_clock::now() + param.required_time * 1s;
 
-		const auto name = utils::cryptography::base64::decode(param.team_info.name);
-		team->update_info(param.team_info.combat, name, param.team_info.survive);
-		team->update_status(database::deployments::team_status_deploy_progress);
-		team->update_params(team_params);
-		team->update_mission(param.mission_id, param.mission_info, param.mission_type, param.required_time);
-
-		const auto updated_team = database::deployments::find_team_by_index(user->current_player->get_player_id(), param.team_info.index);
-		if (!updated_team.has_value())
+		if (!team->deploy(deploy_params))
 		{
 			return error(ERR_DATABASE);
 		}
 
-		result["team_status"] = updated_team->get_info_status();
-		result["team_index"] = updated_team->get_index();
-		result["complete_time"] = updated_team->get_complete_date().count();
+		result["team_status"] = deploy_params.status;
+		result["team_index"] = team->get_index();
+		result["complete_time"] = std::chrono::duration_cast<std::chrono::seconds>(deploy_params.complete_date.time_since_epoch()).count();
 
 		return result;
 	}

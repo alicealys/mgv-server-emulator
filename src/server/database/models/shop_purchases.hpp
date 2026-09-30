@@ -71,8 +71,8 @@ namespace database::shop_purchases
 		product_60113 = 60113, // 87155778956332
 		product_60114 = 60114, // 0
 		product_60626 = 60626, // 189297463612136
-		product_90010 = 90010, // 0
-		product_90020 = 90020, // 0
+		product_deploy_reduction = 90010, // 0
+		product_defense_mission_reduction = 90020, // 0
 	};
 
 	enum event_type_t : std::uint32_t

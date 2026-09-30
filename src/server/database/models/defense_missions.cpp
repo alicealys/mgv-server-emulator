@@ -458,12 +458,12 @@ namespace database::defense_missions
 		}
 
 		template <database_type_t Type>
-		void update_mission(const std::uint64_t defense_mission_id, const std::uint8_t result, 
+		bool update_mission(const std::uint64_t defense_mission_id, const std::uint8_t result,
 			const std::uint8_t current_wave, const std::uint8_t clear_rank, const std::uint32_t total_score, const std::chrono::seconds end_date, const std::chrono::seconds next_wave_date)
 		{
-			return database::access([&](database::database_t& db)
+			return database::access<bool>([&](database::database_t& db)
 			{
-				db.exec<Type>(sqlpp::update(defense_mission::table)
+				const auto result_db = db.exec<Type>(sqlpp::update(defense_mission::table)
 						.set(defense_mission::table.result = static_cast<std::uint32_t>(result),
 							 defense_mission::table.current_wave = current_wave,
 							 defense_mission::table.clear_rank = static_cast<std::uint32_t>(clear_rank),
@@ -471,6 +471,7 @@ namespace database::defense_missions
 							 defense_mission::table.end_date = std::chrono::system_clock::time_point(end_date),
 							 defense_mission::table.next_wave_date = std::chrono::system_clock::time_point(next_wave_date))
 								.where(defense_mission::table.defense_mission_id == defense_mission_id && defense_mission::table.current_wave <= current_wave));
+				return result_db != 0ull;
 			});
 		}
 
@@ -531,7 +532,7 @@ namespace database::defense_missions
 		RUN_IMPL(impl::get_waves, this->get_defense_mission_id());
 	}
 
-	void defense_mission::update(const std::uint8_t result, const std::uint8_t current_wave, 
+	bool defense_mission::update(const std::uint8_t result, const std::uint8_t current_wave,
 		const std::uint8_t clear_rank, const std::uint32_t total_score, const std::chrono::seconds end_date, const std::chrono::seconds next_wave_date) const
 	{
 		RUN_IMPL(impl::update_mission, this->get_defense_mission_id(), result, current_wave, clear_rank, total_score, end_date, next_wave_date);

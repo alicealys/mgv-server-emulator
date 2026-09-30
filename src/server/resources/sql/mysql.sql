@@ -168,7 +168,7 @@ create table if not exists `deployment_teams`
 	team_id				bigint unsigned	not null	auto_increment,
 	f_player_id			bigint unsigned	not null,
 	team_index			bigint unsigned	not null,
-	params				tinyblob default null,
+	params				varchar(64) default null,
 	info_name			varchar(64) default null,
 	info_status			int unsigned not null default 0,
 	info_combat			int unsigned not null default 0,
