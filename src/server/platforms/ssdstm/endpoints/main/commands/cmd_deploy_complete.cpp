@@ -65,11 +65,11 @@ namespace emulator::ssd
 
 		database::players::inventory_resource_list_t resource_list;
 		database::players::stackable_item_list_t stackable_list;
-		database::players::player_inventory_t inventory_info{};
+		database::players::player_inventory_t player_inventory{};
 
 		user->current_player->get_inventory_resource_list(resource_list);
 		user->current_player->get_stackable_item_list(stackable_list);
-		user->current_player->get_inventory(inventory_info);
+		user->current_player->get_inventory(player_inventory);
 
 		const auto& params = team->get_params();
 
@@ -86,6 +86,11 @@ namespace emulator::ssd
 
 		if (is_win)
 		{
+			database::users::give_item_params_t give_params{};
+			give_params.resource_list = &resource_list;
+			give_params.stackable_list = &stackable_list;
+			give_params.player_inventory = &player_inventory;
+
 			for (auto i = 0ull; i < iter->second.reward_list.size(); i++)
 			{
 				const auto& reward = iter->second.reward_list[i];
@@ -94,8 +99,7 @@ namespace emulator::ssd
 					continue;
 				}
 
-				if (!user->current_player->give_reward(reward.item_info, &stackable_list, &resource_list, 
-					&inventory_info, reward_info))
+				if (!user->give_item(reward.item_info, give_params, reward_info))
 				{
 					database::present_box::add_item(user->current_player->get_player_id(),
 						database::present_box::present_flag_expire | database::present_box::present_flag_new,
@@ -119,7 +123,7 @@ namespace emulator::ssd
 
 		user->current_player->set_inventory_resource_list(resource_list);
 		user->current_player->set_stackable_item_list(stackable_list);
-		user->current_player->set_inventory(inventory_info);
+		user->current_player->set_inventory(player_inventory);
 
 		reward_info["present_num"] = database::present_box::get_present_count(user->current_player->get_player_id());
 

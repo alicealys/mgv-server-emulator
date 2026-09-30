@@ -6086,6 +6086,7 @@ namespace game
 	struct production_t
 	{
 		bool parse(json::value& data);
+        bool is_stackable() const;
 		std::shared_ptr<survival_gear_t> get_survival_gear();
 
 		std::uint32_t id;

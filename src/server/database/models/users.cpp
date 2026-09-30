@@ -5,6 +5,7 @@
 #include "present_box.hpp"
 #include "deployments.hpp"
 #include "crew_members.hpp"
+#include "shop_purchases.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -76,7 +77,6 @@ namespace database::users
 						players::player::table.playtime, 
 						players::player::table.point, 
 						players::player::table.nameplate,
-						players::player::table.loadout_count,
 						players::player::table.current_loadout,
 						players::player::table.player_creation_date)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
@@ -173,13 +173,54 @@ namespace database::users
 
 	void user_inventory_t::open_production(const std::uint32_t index)
 	{
-		if (index >= sizeof(this->production_opened) * 8)
-		{
-			return;
-		}
+		this->set_obtained_generic(this->production_opened, index);
+	}
 
-		const auto byte_index = (index >> 3);
-		this->production_opened[byte_index] |= (1 << (index & 7));
+	void user_inventory_t::set_obtained_gesture(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->gesture_obtained, index);
+		this->set_obtained_generic(this->gesture_new, index);
+	}
+
+	void user_inventory_t::set_obtained_radio(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->preset_radio_obtained, index);
+		this->set_obtained_generic(this->preset_radio_new, index);
+	}
+
+	void user_inventory_t::set_obtained_marker(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->command_marker_obtained, index);
+		this->set_obtained_generic(this->command_marker_new, index);
+	}
+
+	void user_inventory_t::set_obtained_nameplate(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->name_plate_obtained, index);
+		this->set_obtained_generic(this->name_plate_new, index);
+	}
+
+	void user_inventory_t::set_obtained_recipe(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->recipe_new, index);
+		this->set_obtained_generic(this->recipe_opened, index);
+	}
+
+	void user_inventory_t::set_obtained_battle_pack(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->battle_pack_opened, index);
+	}
+
+	void user_inventory_t::set_obtained_face_paint(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->face_paint_obtained, index);
+		this->set_obtained_generic(this->face_paint_new, index);
+	}
+
+	void user_inventory_t::set_obtained_cassette(const std::uint32_t index)
+	{
+		this->set_obtained_generic(this->cassette_obtained, index);
+		this->set_obtained_generic(this->cassette_new, index);
 	}
 
 	GET_FIELD_C(user, std::uint64_t, user_id);
@@ -198,6 +239,17 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, sv_coin);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
+
+
+	std::uint32_t user::get_loadout_count() const
+	{
+		if (this->loadout_count_ >= players::max_loadout_count)
+		{
+			return players::max_loadout_count;
+		}
+
+		return this->loadout_count_;
+	}
 
 	bool user_inventory_t::parse_save(json::value& data)
 	{
@@ -415,6 +467,7 @@ namespace database::users
 						.set(user::table.account_id = account_id,
 							 user::table.currency = "",
 							 user::table.user_inventory = default_inventory,
+							 user::table.loadout_count = players::initial_loadout_count,
 							 user::table.last_update = std::chrono::system_clock::now(),
 							 user::table.user_creation_date = std::chrono::system_clock::now()));
 			});
@@ -646,6 +699,19 @@ namespace database::users
 			});
 		}
 
+		template <database_type_t Type>
+		bool set_loadout_count(const std::uint64_t user_id, const std::uint32_t loadout_count)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.loadout_count = loadout_count)
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
+
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
 
@@ -692,6 +758,231 @@ namespace database::users
 	{
 		RUN_IMPL(impl::add_sv_coins, this->get_user_id(), value);
 	}
+
+	bool user::set_loadout_count(const std::uint32_t loadout_count) const
+	{
+		RUN_IMPL(impl::set_loadout_count, this->get_user_id(), loadout_count);
+	}
+
+
+	bool user::give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
+	{
+		switch (reward.category)
+		{
+		case game::ITEM_CATEGORY_RESOURCE:
+		{
+			if (params.resource_list == nullptr)
+			{
+				return false;
+			}
+
+			const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(reward.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+			{
+				return false;
+			}
+
+			database::players::inventory_resource_t resource{};
+			resource.resource_index = iter->second->index;
+			resource.count = static_cast<std::uint16_t>(reward.num);
+			if (!params.resource_list->add_resource(resource))
+			{
+				return false;
+			}
+
+			if (reward_info.is_object())
+			{
+				auto& resources_list_j = reward_info["resources_list"];
+				resource.count = static_cast<std::uint16_t>(reward.num);
+				resource.to_json(resources_list_j[resources_list_j.size()]);
+			}
+
+			return true;
+		}
+		case game::ITEM_CATEGORY_PRODUCTION:
+		{
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(reward.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+			{
+				return false;
+			}
+
+			if (params.user_inventory != nullptr)
+			{
+				params.user_inventory->set_obtained_generic(params.user_inventory->production_opened, iter->second->index);
+			}
+
+			if (iter->second->only_flag)
+			{
+				return params.user_inventory != nullptr;
+			}
+
+			if (iter->second->is_stackable())
+			{
+				if (params.stackable_list == nullptr)
+				{
+					return false;
+				}
+
+				database::players::stackable_item_t stackable_item{};
+				stackable_item.production_index = iter->second->index;
+				stackable_item.count = static_cast<std::uint16_t>(reward.num);
+
+				if (!params.stackable_list->add_item(stackable_item))
+				{
+					return false;
+				}
+
+				if (reward_info.is_object())
+				{
+					auto& stackable_list_j = reward_info["stackable_list"];
+					stackable_item.count = static_cast<std::uint16_t>(reward.num);
+					stackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+				}
+
+				return true;
+			}
+			else
+			{
+				if (params.nonstackable_list == nullptr)
+				{
+					return false;
+				}
+
+				database::players::nonstackable_item_t nonstackable_item{};
+				nonstackable_item.initialize(*iter->second);
+
+				if (!params.nonstackable_list->add_item(nonstackable_item))
+				{
+					return false;
+				}
+
+				if (reward_info.is_object())
+				{
+					auto& stackable_list_j = reward_info["nonstackable_list"];
+					nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+				}
+
+				return true;
+			}
+		}
+		case game::ITEM_CATEGORY_RECIPE:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_recipe(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_PRESET_RADIO:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_radio(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_GESTURE:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_gesture(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_COMMUNICATION_MARKER:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_marker(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_NAMEPLATE:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_nameplate(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_PRIVILEGE:
+		{
+			return false;
+		}
+		case game::ITEM_CATEGORY_COIN:
+		{
+			return this->add_sv_coins(reward.num);
+		}
+		case game::ITEM_CATEGORY_ENERGY:
+		{
+			if (params.player_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.player_inventory->energy += reward.num;
+
+			if (reward_info.is_object())
+			{
+				auto& energy_j = reward_info["energy"];
+				if (energy_j.is_uint64())
+				{
+					energy_j = energy_j.as<std::uint32_t>() + reward.num;
+				}
+			}
+
+			return true;
+		}
+		case game::ITEM_CATEGORY_BATTLE_PACK:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_battle_pack(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_FACE_PAINT:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_face_paint(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_CASSETTE:
+		{
+			if (params.user_inventory == nullptr)
+			{
+				return false;
+			}
+
+			params.user_inventory->set_obtained_cassette(reward.code);
+			return true;
+		}
+		case game::ITEM_CATEGORY_CHARACTER_SLOT:
+		{
+			return false;
+		}
+		}
+
+		return false;
+	}
+
 
 	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value)
 	{
@@ -793,6 +1084,7 @@ namespace database::users
 		for (const auto& player : players)
 		{
 			defense_missions::delete_player_data(player.get_player_id());
+			shop_purchases::delete_player_data(player.get_player_id());
 			present_box::delete_player_data(player.get_player_id());
 			deployments::delete_player_data(player.get_player_id());
 			crew_members::delete_player_data(player.get_player_id());

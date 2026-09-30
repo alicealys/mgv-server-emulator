@@ -24,7 +24,6 @@ namespace database::players
 				player::table.player_id, 
 				player::table.player_index, 
 				player::table.f_user_id, 
-				player::table.loadout_count, 
 				player::table.current_loadout,
 				player::table.playtime,
 				player::table.nameplate,
@@ -322,8 +321,17 @@ namespace database::players
 		}
 
 		index = index_j.as<std::uint32_t>();
+		if (index >= max_loadout_count)
+		{
+			return false;
+		}
 		
 		utils::json_utils::parse_string(name_j, this->name);
+
+		if (this->name[0] == 0)
+		{
+			snprintf(this->name, sizeof(this->name), "LOAD OUT %i", index);
+		}
 
 		utils::json_utils::get_or(gear_info_j["arm_inventory_index"], this->gear_info.arm_inventory_index);
 		utils::json_utils::get_or(gear_info_j["body_inventory_index"], this->gear_info.body_inventory_index);
@@ -435,6 +443,50 @@ namespace database::players
 		for (auto i = 0ull; i < ARRAYSIZE(this->survival_list); i++)
 		{
 			survival_list_j[i] = this->survival_list[i];
+		}
+	}
+
+	void nonstackable_item_t::initialize(const game::production_t& production)
+	{
+		this->life = static_cast<std::uint16_t>(production.life);
+		this->life_max = static_cast<std::uint16_t>(production.life);
+		this->production_id = production.id;
+		this->spec = 1000;
+		this->flag = 1;
+
+		const auto& customize = production.customize;
+		if (customize == nullptr)
+		{
+			return;
+		}
+
+		this->color = 255;
+		this->color2 = 255;
+		this->option_slot = static_cast<std::uint16_t>(customize->option_slots_min);
+		auto opt_idx = 0u;
+
+		for (auto i = 0ull; i < customize->option_slots.size(); i++)
+		{
+			auto& option_slot_entry = customize->option_slots[i];
+			if (option_slot_entry == nullptr || !option_slot_entry->not_empty)
+			{
+				continue;
+			}
+
+			auto& option = this->option_list[opt_idx++];
+			for (auto o = 0ull; o < option_slot_entry->options.size(); o++)
+			{
+				if (!option_slot_entry->options[o].obtained)
+				{
+					continue;
+				}
+
+				option.obtained |= 1 << o;
+				if (option.option_id == 0)
+				{
+					option.option_id = option_slot_entry->options[o].optid;
+				}
+			}
 		}
 	}
 
@@ -1689,16 +1741,6 @@ namespace database::players
 		return this->current_loadout_;
 	}
 
-	std::uint32_t player::get_loadout_count() const
-	{
-		if (this->loadout_count_ >= max_loadout_count)
-		{
-			return max_loadout_count;
-		}
-
-		return this->loadout_count_;
-	}
-
 	std::string player::get_name() const
 	{
 		return std::format("{}_player{:02}", this->get_account_id(), this->get_index() + 1);
@@ -1801,7 +1843,6 @@ namespace database::players
 							 player::table.defense_mission_info = defense_mission_info,
 							 player::table.communication_gesture_info = communication_gesture_info,
 							 player::table.current_loadout = 0,
-							 player::table.loadout_count = initial_loadout_count,
 							 player::table.player_creation_date = std::chrono::system_clock::now()));
 			});
 
@@ -2145,145 +2186,6 @@ namespace database::players
 	void player::set_nameplate(const std::uint16_t nameplate) const
 	{
 		RUN_IMPL(impl::set_nameplate, this->get_user_id(), nameplate);
-	}
-
-	bool player::give_reward(const game::item_t& reward, stackable_item_list_t* stackable_list, 
-		inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const
-	{
-		switch (reward.category)
-		{
-		case game::ITEM_CATEGORY_RESOURCE:
-		{
-			if (resource_list == nullptr)
-			{
-				return false;
-			}
-
-			const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(reward.code);
-			if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
-			{
-				return false;
-			}
-
-			database::players::inventory_resource_t resource{};
-			resource.resource_index = iter->second->index;
-			resource.count = static_cast<std::uint16_t>(reward.num);
-			if (!resource_list->add_resource(resource))
-			{
-				return false;
-			}
-
-			if (reward_info.is_object())
-			{
-				auto& resources_list_j = reward_info["resources_list"];
-				resource.count = static_cast<std::uint16_t>(reward.num);
-				resource.to_json(resources_list_j[resources_list_j.size()]);
-			}
-
-			return true;
-		}
-		case game::ITEM_CATEGORY_PRODUCTION:
-		{
-			if (stackable_list == nullptr)
-			{
-				return false;
-			}
-
-			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(reward.code);
-			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
-			{
-				return false;
-			}
-
-			if (iter->second->countable)
-			{
-				return false;
-			}
-
-			database::players::stackable_item_t stackable_item{};
-			stackable_item.production_index = iter->second->index;
-			stackable_item.count = static_cast<std::uint16_t>(reward.num);
-			if (!stackable_list->add_item(stackable_item))
-			{
-				return false;
-			}
-
-			if (reward_info.is_object())
-			{
-				auto& stackable_list_j = reward_info["stackable_list"];
-				stackable_item.count = static_cast<std::uint16_t>(reward.num);
-				stackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
-			}
-
-			return true;
-		}
-		case game::ITEM_CATEGORY_RECIPE:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_PRESET_RADIO:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_GESTURE:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_COMMUNICATION_MARKER:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_NAMEPLATE:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_PRIVILEGE:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_COIN:
-		{
-			return database::users::add_sv_coins(this->get_user_id(), reward.num);
-		}
-		case game::ITEM_CATEGORY_ENERGY:
-		{
-			if (inventory_info == nullptr)
-			{
-				return false;
-			}
-
-			inventory_info->energy += reward.num;
-
-			if (reward_info.is_object())
-			{
-				auto& energy_j = reward_info["energy"];
-				if (energy_j.is_uint64())
-				{
-					energy_j = energy_j.as<std::uint32_t>() + reward.num;
-				}
-			}
-
-			return true;
-		}
-		case game::ITEM_CATEGORY_BATTLE_PACK:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_FACE_PAINT:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_CASSETTE:
-		{
-			return false;
-		}
-		case game::ITEM_CATEGORY_CHARACTER_SLOT:
-		{
-			return false;
-		}
-		}
-
-		return false;
 	}
 
 	std::optional<player> find(const std::uint64_t id)

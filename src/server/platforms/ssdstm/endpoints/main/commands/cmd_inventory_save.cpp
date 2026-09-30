@@ -41,7 +41,7 @@ namespace emulator::ssd
 		if (loadout_list_j.is_array())
 		{
 			const auto new_loadout = std::make_unique<database::players::loadout_t>();
-			const auto loadout_count = std::min(static_cast<std::size_t>(user->current_player->get_loadout_count()), loadout_list_j.size());
+			const auto loadout_count = std::min(static_cast<std::size_t>(user->get_loadout_count()), loadout_list_j.size());
 
 			const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 			user->current_player->get_loadout_list(*loadout_list);
@@ -55,7 +55,7 @@ namespace emulator::ssd
 					continue;
 				}
 
-				if (index >= user->current_player->get_loadout_count())
+				if (index >= user->get_loadout_count())
 				{
 					continue;
 				}

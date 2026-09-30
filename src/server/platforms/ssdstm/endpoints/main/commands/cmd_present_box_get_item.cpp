@@ -27,17 +27,24 @@ namespace emulator::ssd
 		{
 			return error(ERR_NOT_FOUND);
 		}
+		database::players::stackable_item_list_t stackable_list{};
+		database::players::nonstackable_item_list_t nonstackable_list{};
+		database::players::inventory_resource_list_t resource_list{};
+		database::players::player_inventory_t player_inventory{};
 
-		const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
-		const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
-		const auto inventory_info = std::make_unique<database::players::player_inventory_t>();
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_nonstackable_item_list(nonstackable_list);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_inventory(player_inventory);
 
-		user->current_player->get_stackable_item_list(*stackable_list);
-		user->current_player->get_inventory_resource_list(*resource_list);
-		user->current_player->get_inventory(*inventory_info);
+		database::users::give_item_params_t give_params{};
+		give_params.resource_list = &resource_list;
+		give_params.stackable_list = &stackable_list;
+		give_params.nonstackable_list = &nonstackable_list;
+		give_params.player_inventory = &player_inventory;
 
 		json::value empty;
-		if (!user->current_player->give_reward(item->get_reward(), stackable_list.get(), resource_list.get(), inventory_info.get(), empty))
+		if (!user->give_item(item->get_reward(), give_params, empty))
 		{
 			return error(ERR_DATABASE);
 		}
@@ -49,9 +56,10 @@ namespace emulator::ssd
 		result["present"]["param4"] = item->get_reward().param4;
 		result["present"]["param5"] = item->get_reward().param5;
 
-		user->current_player->set_stackable_item_list(*stackable_list);
-		user->current_player->set_inventory_resource_list(*resource_list);
-		user->current_player->set_inventory(*inventory_info);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_nonstackable_item_list(nonstackable_list);
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_inventory(player_inventory);
 
 		database::present_box::delete_item(item->get_present_id());
 

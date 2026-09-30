@@ -599,6 +599,11 @@ namespace game
 		return json::read(*this, data);
 	}
 
+	bool production_t::is_stackable() const
+	{
+		return this->countable && !this->only_flag;
+	}
+
 	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
 	{
 		const auto iter = parameters_table.ssd_sbm_parameters->survival_gears.find(this->related_id);

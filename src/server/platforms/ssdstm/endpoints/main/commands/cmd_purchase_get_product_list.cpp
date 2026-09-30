@@ -2,19 +2,19 @@
 
 #include "cmd_purchase_get_product_list.hpp"
 
+#include "database/models/shop_purchases.hpp"
+
 namespace emulator::ssd
 {
-	cmd_purchase_get_product_list::cmd_purchase_get_product_list()
-	{
-		this->list_ = resource(RESOURCE_PRODUCT_LIST);
-	}
-
 	json::value cmd_purchase_get_product_list::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
 
-		// TODO?
-		result["product_list"] = this->list_;
+		const auto& products = database::shop_purchases::get_shop_product_list();
+		for (auto i = 0ull; i < products.size(); i++)
+		{
+			products[i].to_json(result["product_list"][i]);
+		}
 
 		return result;
 	}

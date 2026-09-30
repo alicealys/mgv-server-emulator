@@ -3,6 +3,7 @@
 #include "cmd_mission_progress_load.hpp"
 
 #include "database/models/defense_missions.hpp"
+#include "database/models/shop_purchases.hpp"
 
 namespace emulator::ssd
 {
@@ -57,7 +58,11 @@ namespace emulator::ssd
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
 
-		result["additional_storage_info"]["count"] = json::array{0, 0};
+		auto shop_purchase_counts = database::shop_purchases::get_purchase_counts(user->get_user_id());
+
+		result["additional_storage_info"]["count"][0] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_weapons];
+		result["additional_storage_info"]["count"][1] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_gear];
+
 		result["battle_pack_list"] = json::array();
 		result["bgm_my_list"] = json::array();
 		result["boost_list"] = json::array();
@@ -114,7 +119,7 @@ namespace emulator::ssd
 		user_inventory->to_json(result["inventory_user_info"]);
 
 		auto& loadout_list_j = result["load_out_list"];
-		for (auto i = 0u; i < player->get_loadout_count(); i++)
+		for (auto i = 0u; i < user->get_loadout_count(); i++)
 		{
 			loadout_list->list[i].to_json(loadout_list_j[i], static_cast<std::uint16_t>(i));
 		}

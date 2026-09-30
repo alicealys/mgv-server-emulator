@@ -18,6 +18,7 @@ create table if not exists `users`
 	user_flag				int unsigned 	default 0,
 	dlc_flag				int unsigned 	default 0,
 	sv_coin					int unsigned 	default 0,
+	loadout_count			int unsigned default 4,
 	user_inventory			blob			default null,
 	user_play_record		blob			default null,
 	primary key (`user_id`)
@@ -33,7 +34,6 @@ create table if not exists `players`
 	point						int unsigned default 0,
 	nameplate					int unsigned default 0,
 	current_loadout				int unsigned default 0,
-	loadout_count				int unsigned default 4,
 	crew_levels					tinyblob default null,
 	communication_gesture_info	tinyblob default null,
 	avatar						blob default null,
@@ -242,4 +242,28 @@ create table if not exists `crew_members`
 	creation_date	    datetime not null,
 	primary key (`member_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)
+)
+-- query:mgstpp.shop_purchases.create
+create table if not exists `shop_purchases`
+(
+	purchase_id			    bigint unsigned	not null	auto_increment,
+	user_id					bigint unsigned	not null,
+	lang_id					bigint unsigned	not null default 0,
+	event_type				int unsigned not null default 0,
+	product_type			int unsigned not null default 0,
+	purchase_quantity		int unsigned not null default 0,
+	coin_quantity			int unsigned not null default 0,
+	remaining_coin			int unsigned not null default 0,
+	item_category			int unsigned not null default 0,
+	item_code				int unsigned not null default 0,
+	item_param1				int unsigned not null default 0,
+	item_param2				int unsigned not null default 0,
+	item_param3				int unsigned not null default 0,
+	item_param4				int unsigned not null default 0,
+	item_param5				int unsigned not null default 0,
+	item_num				int unsigned not null default 0,
+	purchase_date           datetime not null,
+	expire_date				datetime not null,
+	primary key (`purchase_id`),
+	foreign key (`user_id`) references users(`user_id`)
 )

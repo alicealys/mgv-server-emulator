@@ -11,15 +11,20 @@ namespace emulator::ssd
 		json::value result;
 
 		const auto items = database::present_box::get_all_items(user->current_player->get_player_id());
-		const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
-		const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
-		const auto inventory_info = std::make_unique<database::players::player_inventory_t>();
+		database::players::stackable_item_list_t stackable_list{};
+		database::players::inventory_resource_list_t resource_list{};
+		database::players::player_inventory_t inventory_info{};
 
-		user->current_player->get_stackable_item_list(*stackable_list);
-		user->current_player->get_inventory_resource_list(*resource_list);
-		user->current_player->get_inventory(*inventory_info);
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_inventory(inventory_info);
 
 		const auto now = std::chrono::system_clock::now();
+
+		database::users::give_item_params_t give_params{};
+		give_params.resource_list = &resource_list;
+		give_params.stackable_list = &stackable_list;
+		give_params.player_inventory = &inventory_info;
 
 		auto count = 0u;
 		for (auto i = 0ull; i < items.size(); i++)
@@ -32,7 +37,7 @@ namespace emulator::ssd
 
 			const auto& reward = item.get_reward();
 			json::value empty;
-			if (!user->current_player->give_reward(reward, stackable_list.get(), resource_list.get(), inventory_info.get(), empty))
+			if (!user->give_item(reward, give_params, empty))
 			{
 				continue;
 			}
@@ -46,9 +51,9 @@ namespace emulator::ssd
 			entry_j["param5"] = reward.param5;
 		}
 
-		user->current_player->set_stackable_item_list(*stackable_list);
-		user->current_player->set_inventory_resource_list(*resource_list);
-		user->current_player->set_inventory(*inventory_info);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_inventory(inventory_info);
 
 		database::present_box::delete_all_items(user->current_player->get_player_id());
 

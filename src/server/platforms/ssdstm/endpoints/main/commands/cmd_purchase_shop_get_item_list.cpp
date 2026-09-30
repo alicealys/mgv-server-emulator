@@ -2,29 +2,32 @@
 
 #include "cmd_purchase_shop_get_item_list.hpp"
 
+#include "database/models/shop_purchases.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_purchase_shop_get_item_list::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
 
-		// id
-		// lang_id
-		// item.category
-		// item.code
-		// item.param1
-		// item.param2
-		// item.param3
-		// item.param4
-		// item.param5
-		// item.num
-		// limit_count
-		// current_count
-		// price
-		// flag
-		result["item_list"] = json::array();
-		result["next_date"] = 0;
-		result["result"] = "ERR_NOTIMPLEMENTED";
+		auto product_counts = database::shop_purchases::get_purchase_counts(user->get_user_id());
+		const auto& products = database::shop_purchases::get_shop_item_list();
+		for (auto i = 0ull; i < products.size(); i++)
+		{
+			auto& entry = result["item_list"][i];
+
+			entry["id"] = products[i].product_id;
+			entry["lang_id"] = products[i].lang_id;
+			entry["limit_count"] = products[i].limit_count;
+			entry["price"] = products[i].price;
+
+			entry["flag"] = 0; //?
+			entry["current_count"] = product_counts[products[i].product_id];
+
+			products[i].item.to_json(entry["item"]);
+		}
+
+		result["next_date"] = std::time(nullptr) + 14ull * 86400ull; // todo
 
 		return result;
 	}

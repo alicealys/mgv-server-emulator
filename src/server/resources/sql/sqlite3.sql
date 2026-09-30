@@ -18,6 +18,7 @@ create table if not exists `users`
 	user_flag				int unsigned 	default 0,
 	dlc_flag				int unsigned 	default 0,
 	sv_coin					int unsigned 	default 0,
+	loadout_count			int unsigned default 4,
 	user_inventory			blob			default null,
 	user_play_record		blob			default null
 )
@@ -32,7 +33,6 @@ create table if not exists `players`
 	point						int unsigned default 0,
 	nameplate					int unsigned default 0,
 	current_loadout				int unsigned default 0,
-	loadout_count				int unsigned default 4,
 	crew_levels					blob default null,
 	avatar						blob default null,
 	loadout_list				blob default null,

@@ -60,59 +60,19 @@ namespace emulator::ssd
 		const auto survival_gear = iter->second->production->get_survival_gear();
 
 		database::players::nonstackable_item_t nonstackable_item{};
-		if (!iter->second->production->countable)
+		if (!iter->second->production->is_stackable())
 		{
 			assert(survival_gear == nullptr);
 
 			auto nonstackable_item_list = std::make_unique<database::players::nonstackable_item_list_t>();
 			user->current_player->get_nonstackable_item_list(*nonstackable_item_list, 1);
 
-			std::uint16_t free_index{};
-			std::uint32_t obtain_order{};
-			if (!nonstackable_item_list->find_free_index(free_index, obtain_order))
+			nonstackable_item.initialize(*iter->second->production);
+			if (!nonstackable_item_list->add_item(nonstackable_item))
 			{
 				return error(ERR_OVER_CAPACITY);
 			}
 
-			nonstackable_item.life = static_cast<std::uint16_t>(iter->second->production->life);
-			nonstackable_item.life_max = static_cast<std::uint16_t>(iter->second->production->life);
-			nonstackable_item.production_id = iter->second->production->id;
-			nonstackable_item.inventory_index = free_index;
-			//nonstackable_item.obtain_order = obtain_order;
-			nonstackable_item.spec = 1000;
-			nonstackable_item.flag = 1;
-
-			const auto& customize = iter->second->production->customize;
-			if (customize != nullptr)
-			{
-				nonstackable_item.color = 255;
-				nonstackable_item.color2 = 255;
-				nonstackable_item.option_slot = static_cast<std::uint16_t>(customize->option_slots_min);
-				auto opt_idx = 0u;
-				for (auto i = 0ull; i < customize->option_slots.size(); i++)
-				{
-					auto& option_slot = customize->option_slots[i];
-					if (option_slot == nullptr || !option_slot->not_empty)
-					{
-						continue;
-					}
-
-					auto& option = nonstackable_item.option_list[opt_idx++];
-					for (auto o = 0ull; o < option_slot->options.size(); o++)
-					{
-						if (option_slot->options[o].obtained)
-						{
-							option.obtained |= 1 << o;
-							if (option.option_id == 0)
-							{
-								option.option_id = option_slot->options[o].optid;
-							}
-						}
-					}
-				}
-			}
-
-			nonstackable_item_list->push(nonstackable_item);
 			user->current_player->set_nonstackable_item_list(*nonstackable_item_list);
 		}
 		else

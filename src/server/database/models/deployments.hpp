@@ -9,7 +9,6 @@ namespace database::deployments
 {
 	constexpr const auto min_team_count = 1u;
 	constexpr const auto max_team_count = 5u;
-	constexpr const auto team_price = 1000u;
 
 	enum team_item_type_t
 	{

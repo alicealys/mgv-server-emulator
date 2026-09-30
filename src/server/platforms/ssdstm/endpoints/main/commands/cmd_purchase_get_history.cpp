@@ -2,6 +2,8 @@
 
 #include "cmd_purchase_get_history.hpp"
 
+#include "database/models/shop_purchases.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_purchase_get_history::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -14,25 +16,13 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		// date
-		// item_type
-		// lang_id
-		// item.category
-		// item.code
-		// item.param1
-		// item.param2
-		// item.param3
-		// item.param4
-		// item.param5
-		// item.num
-		// event_type
-		// coin_quantity
-		// item_quantity
-		// expire_date
-		// remaining_coin
-		result["list"] = json::array();
-		result["history_num"] = 0;
-		result["result"] = "ERR_NOTIMPLEMENTED";
+		const auto history = database::shop_purchases::get_history(user->get_user_id(), param.start, param.num);
+		for (auto i = 0ull; i < history.size(); i++)
+		{
+			history[i].to_json(result["list"][i]);
+		}
+
+		result["history_num"] = database::shop_purchases::get_history_size(user->get_user_id());
 
 		return result;
 	}

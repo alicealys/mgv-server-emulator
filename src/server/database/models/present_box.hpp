@@ -86,7 +86,7 @@ namespace database::present_box
 	std::vector<present_box_entry> get_all_items(const std::uint64_t player_id);
 	std::size_t get_present_count(const std::uint64_t player_id);
 	void delete_all_items(const std::uint64_t player_id);
-	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item);
+	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item);
 	bool has_new_item(const std::uint64_t player_id);
 	void delete_player_data(const std::uint64_t player_id);
 }

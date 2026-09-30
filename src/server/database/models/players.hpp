@@ -9,7 +9,8 @@
 namespace database::players
 {
 	constexpr const auto player_capacity = 1u;
-	constexpr const auto max_loadout_count = 8u;
+	constexpr const auto max_player_count = 4u;
+	constexpr const auto max_loadout_count = 9u;
 	constexpr const auto initial_loadout_count = 4u;
 
 #pragma pack(push, 1)
@@ -71,6 +72,7 @@ namespace database::players
 		option_t option_list[8];
 		perk_t perk_list[5];
 
+		void initialize(const game::production_t& production);
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
 	};
@@ -94,9 +96,8 @@ namespace database::players
 		std::uint32_t inventory_index : 7;
 		std::uint32_t obtain_order : 7;
 		std::uint32_t damaged_in_count : 8;
-		std::uint32_t production_index : 10;
+		std::uint32_t production_index : 15;
 		std::uint32_t count : 17;
-		std::uint32_t unused : 5;
 
 		inline std::uint32_t get_production_id() const
 		{
@@ -501,68 +502,6 @@ namespace database::players
 		void load_default(const std::uint32_t map_location);
 	};
 
-	struct crew_member_t
-	{
-		std::uint16_t ability_accessory;
-		std::uint16_t ability_animal;
-		std::uint16_t ability_base_defense;
-		std::uint16_t ability_defense_unit;
-		std::uint16_t ability_develop;
-		std::uint16_t ability_expedition;
-		std::uint16_t ability_food;
-		std::uint16_t ability_gadget;
-		std::uint16_t ability_medical;
-		std::uint16_t ability_plant;
-		std::uint16_t condition;
-		std::uint16_t current_group;
-		std::uint16_t first_name_index;
-		std::uint16_t health_flag;
-		std::uint16_t initial_max_life;
-		std::uint16_t item1_count;
-		std::uint16_t item2_count;
-		std::uint16_t item3_count;
-		std::uint16_t item4_count;
-		std::uint16_t item5_count;
-		std::uint16_t item6_count;
-		std::uint16_t last_name_index;
-		std::uint16_t life;
-		std::uint16_t map_location;
-		std::uint16_t max_life;
-		std::uint16_t previous_group;
-		std::uint16_t previous_job;
-		std::uint16_t race_id;
-		std::uint16_t resistance_food_shortage;
-		std::uint16_t resistance_sleepless;
-		std::uint16_t resistance_water_shortage;
-		std::uint16_t sanity;
-		std::uint16_t skill;
-		std::uint16_t survival_days;
-		std::uint16_t voice_type;
-		std::uint32_t injury_id_1;
-		std::uint32_t injury_id_2;
-		std::uint32_t injury_time_1;
-		std::uint32_t injury_time_2;
-		std::uint32_t sickness_id_1;
-		std::uint32_t sickness_id_2;
-		std::uint32_t sickness_time_1;
-		std::uint32_t sickness_time_2;
-		std::uint32_t body_id;
-		std::uint32_t face_id;
-		std::uint32_t generation_date;
-		std::uint32_t unique_id;
-		std::uint32_t sex_id;
-		std::uint32_t unique_index;
-		std::uint8_t motivation_history_event[10];
-		std::uint8_t motivation_history_value[10];
-		char nickname[32];
-		
-		bool parse(json::value& data);
-		bool parse_update(json::value& data);
-		bool parse_add_param(json::value& data);
-		void apply_update(const crew_member_t& diff);
-		void to_json(json::value& data) const;
-	};
-
 	struct crew_levels_t
 	{
 		std::uint8_t base_defense;
@@ -804,7 +743,6 @@ namespace database::players
 		DEFINE_FIELD(nameplate, sqlpp::integer_unsigned);
 		DEFINE_FIELD(playtime, sqlpp::integer_unsigned);
 		DEFINE_FIELD(current_loadout, sqlpp::integer_unsigned);
-		DEFINE_FIELD(loadout_count, sqlpp::integer_unsigned);
 		DEFINE_FIELD(avatar, sqlpp::binary);
 		DEFINE_FIELD(mission_info, sqlpp::binary);
 		DEFINE_FIELD(loadout_list, sqlpp::binary);
@@ -831,7 +769,6 @@ namespace database::players
 			player_creation_date_field_t,
 			point_field_t, nameplate_field_t, playtime_field_t,
 			current_loadout_field_t,
-			loadout_count_field_t,
 			avatar_field_t, 
 			mission_info_field_t, 
 			loadout_list_field_t,
@@ -869,7 +806,6 @@ namespace database::players
 			this->nameplate_ = static_cast<std::uint32_t>(row.nameplate);
 			this->point_ = static_cast<std::uint32_t>(row.point);
 			this->current_loadout_ = static_cast<std::uint32_t>(row.current_loadout);
-			this->loadout_count_ = static_cast<std::uint32_t>(row.loadout_count);
 			this->creation_date_ = row.player_creation_date.value().time_since_epoch();
 		}
 
@@ -881,7 +817,6 @@ namespace database::players
 		GET_FIELD_H(std::uint32_t, nameplate);
 		GET_FIELD_H(std::uint32_t, point);
 		GET_FIELD_H(std::uint32_t, current_loadout);
-		GET_FIELD_H(std::uint32_t, loadout_count);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
 		std::string get_name() const;
@@ -934,9 +869,6 @@ namespace database::players
 		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
-
-		bool give_reward(const game::item_t& reward, stackable_item_list_t* stackable_list, 
-			inventory_resource_list_t* resource_list, player_inventory_t* inventory_info, json::value& reward_info) const;
 	};
 
 	std::optional<player> find(const std::uint64_t id);

@@ -13,16 +13,18 @@ namespace emulator::ssd
 		database::defense_missions::reward_list_t& reward_list,
 		const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
 	{
-		const auto resource_list = std::make_unique<database::players::inventory_resource_list_t>();
-		const auto stackable_list = std::make_unique<database::players::stackable_item_list_t>();
-		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
+		database::players::stackable_item_list_t stackable_list{};
+		database::players::nonstackable_item_list_t nonstackable_list{};
+		database::players::inventory_resource_list_t resource_list{};
+		database::players::player_inventory_t player_inventory{};
 
 		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank);
 		if (!rewards.empty())
 		{
-			user->current_player->get_inventory_resource_list(*resource_list, rewards.size());
-			user->current_player->get_stackable_item_list(*stackable_list, rewards.size());
-			user->current_player->get_inventory(*player_inventory);
+			user->current_player->get_stackable_item_list(stackable_list);
+			user->current_player->get_nonstackable_item_list(nonstackable_list);
+			user->current_player->get_inventory_resource_list(resource_list);
+			user->current_player->get_inventory(player_inventory);
 		}
 
 		for (const auto& reward : rewards)
@@ -52,6 +54,12 @@ namespace emulator::ssd
 		
 		// todo: give recipes?
 
+		database::users::give_item_params_t give_params{};
+		give_params.resource_list = &resource_list;
+		give_params.stackable_list = &stackable_list;
+		give_params.nonstackable_list = &nonstackable_list;
+		give_params.player_inventory = &player_inventory;
+
 		for (const auto& reward : rewards)
 		{
 			if (reward.rank < rank)
@@ -62,8 +70,7 @@ namespace emulator::ssd
 			auto& rank_entry = result[reward.rank - rank];
 			auto& present_list_j = rank_entry["present_list"];
 
-			if (!user->current_player->give_reward(reward.param, stackable_list.get(), 
-				resource_list.get(), player_inventory.get(), rank_entry))
+			if (!user->give_item(reward.param, give_params, rank_entry))
 			{
 				database::present_box::add_item(user->current_player->get_player_id(),
 					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param);
@@ -80,9 +87,10 @@ namespace emulator::ssd
 
 		if (!rewards.empty())
 		{
-			user->current_player->set_inventory_resource_list(*resource_list);
-			user->current_player->set_stackable_item_list(*stackable_list);
-			user->current_player->set_inventory(*player_inventory);
+			user->current_player->set_inventory_resource_list(resource_list);
+			user->current_player->set_stackable_item_list(stackable_list);
+			user->current_player->set_nonstackable_item_list(nonstackable_list);
+			user->current_player->set_inventory(player_inventory);
 		}
 	}
 

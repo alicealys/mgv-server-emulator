@@ -191,43 +191,6 @@ namespace database::defense_missions
 		return 5u;
 	}
 
-	std::uint32_t find_random_resource(const std::uint8_t rarity, std::uint8_t& category)
-	{
-		const auto find = []<typename T, typename F>(const T& list, F&& f)
-		{
-			const auto offset = utils::cryptography::random::get_integer() % list.size();
-			for (auto i = 0ull; i < list.size(); i++)
-			{
-				auto index = (i + offset) % list.size();
-				auto& entry = list[index];
-				if (entry != nullptr && f(*entry))
-				{
-					return entry->id;
-				}
-			}
-
-			return 0u;
-		};
-
-		const auto is_resource = utils::cryptography::random::get_integer() % 1 == 1;
-		if (is_resource)
-		{
-			category = 0;
-			return find(game::parameters_table.ssd_sbm_parameters->resources_list, [&](const game::resource_t& resource)
-			{
-				return resource.rarity == rarity;
-			});
-		}
-		else
-		{
-			category = 1;
-			return find(game::parameters_table.ssd_sbm_parameters->productions_list, [&](const game::production_t& production)
-			{
-				return production.rarity == rarity && production.countable;
-			});
-		}
-	}
-
 	std::vector<reward_info_t> generate_rewards(const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
 	{
 		std::vector<reward_info_t> rewards;

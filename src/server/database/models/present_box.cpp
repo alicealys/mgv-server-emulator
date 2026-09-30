@@ -150,15 +150,28 @@ namespace database::present_box
 		}
 
 		template <database_type_t Type>
-		void add_item_internal(database_t& db, const std::uint64_t player_id, const std::uint32_t flags, 
+		std::uint64_t add_item_internal(database_t& db, const std::uint64_t player_id, const std::uint32_t flags, 
 			const std::chrono::seconds expire_date, game::item_t& item, const std::size_t depth = 0u)
 		{
 			if (depth > 3)
 			{
-				return;
+				return 0ull;
 			}
 
-			const auto can_stack = category_caps[item.category] > 0;
+			auto can_stack = false;
+			if (item.category == game::ITEM_CATEGORY_PRODUCTION)
+			{
+				const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(item.code);
+				if (iter != game::parameters_table.ssd_sbm_parameters->productions.end())
+				{
+					can_stack = iter->second->is_stackable();
+				}
+			}
+			else
+			{
+				can_stack = category_caps[item.category] > 0;
+			}
+
 			if (can_stack)
 			{
 				const auto existing = db.exec<Type>(
@@ -175,10 +188,12 @@ namespace database::present_box
 						)
 				);
 
+				std::uint64_t result_id = 0ull;
+
 				const auto capped_amount = std::min(item.num, category_caps[item.category]);
 				if (existing.empty())
 				{
-					db.exec<Type>(sqlpp::insert_into(present_box_entry::table)
+					result_id = db.exec<Type>(sqlpp::insert_into(present_box_entry::table)
 						.set(present_box_entry::table.f_player_id = player_id,
 							present_box_entry::table.flags = flags,
 							present_box_entry::table.expire_date = std::chrono::system_clock::time_point(expire_date),
@@ -200,6 +215,8 @@ namespace database::present_box
 					present_box_entry entry(existing.front());
 					const auto add_amount = std::min(static_cast<std::uint32_t>(category_caps[item.category] - entry.get_reward().num), capped_amount);
 				
+					result_id = entry.get_present_id();
+
 					db.exec<Type>(sqlpp::update(present_box_entry::table)
 						.set(present_box_entry::table.item_num = present_box_entry::table.item_num + add_amount,
 							 present_box_entry::table.expire_date = std::chrono::system_clock::time_point(expire_date))
@@ -210,12 +227,16 @@ namespace database::present_box
 
 				if (item.num > 0)
 				{
-					add_item_internal<Type>(db, player_id, flags, expire_date, item, depth + 1);
+					return add_item_internal<Type>(db, player_id, flags, expire_date, item, depth + 1);
+				}
+				else
+				{
+					return result_id;
 				}
 			}
 			else
 			{
-				db.exec<Type>(sqlpp::insert_into(present_box_entry::table)
+				return db.exec<Type>(sqlpp::insert_into(present_box_entry::table)
 					.set(present_box_entry::table.f_player_id = player_id,
 						present_box_entry::table.flags = flags,
 						present_box_entry::table.expire_date = std::chrono::system_clock::time_point(expire_date),
@@ -233,15 +254,16 @@ namespace database::present_box
 		}
 
 		template <database_type_t Type>
-		void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
+		std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
 		{
-			database::access([&](database::database_t& db)
+			return database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				game::item_t add_item{item};
 				db.get_database<Type>()->start_transaction();
-				add_item_internal<Type>(db, player_id, flags, expire_date, add_item);
+				const auto result = add_item_internal<Type>(db, player_id, flags, expire_date, add_item);
 				db.get_database<Type>()->commit_transaction();
 				delete_exceeding<Type>(player_id);
+				return result;
 			});
 		}
 
@@ -344,7 +366,7 @@ namespace database::present_box
 		RUN_IMPL(impl::delete_all_items, player_id);
 	}
 
-	void add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
+	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
 	{
 		RUN_IMPL(impl::add_item, player_id, flags, expire_date, item);
 	}

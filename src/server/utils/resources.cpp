@@ -14,13 +14,14 @@ namespace utils::resources
 		{
 			{RESOURCE_DATA, "resources/data/data.json"},
 			{RESOURCE_GDPR_CHECK, "resources/data/gdpr_check.json"},
-			{RESOURCE_PRODUCT_LIST, "resources/data/product_list.json"},
 			{RESOURCE_SERVER_PARAMETER_LIST, "resources/data/server_parameter_list.json"},
 			{RESOURCE_DEFAULT_DATA, "resources/data/default_data.json"},
 			{RESOURCE_BASE_DEFENSE_REWARD_POOLS, "resources/data/base_defense_reward_pools.json"},
 			{RESOURCE_LANG_STRINGS, "resources/data/lang_strings.json"},
 			{RESOURCE_STEAM_SHOP_ITEM_LIST, "resources/data/steam_shop_item_list.json"},
 			{RESOURCE_DEPLOYMENTS_MISSION_LIST, "resources/data/deployments_mission_list.json"},
+			{RESOURCE_SHOP_PRODUCT_LIST, "resources/data/shop_product_list.json"},
+			{RESOURCE_SHOP_ITEM_LIST, "resources/data/shop_item_list.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},
