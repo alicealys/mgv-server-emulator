@@ -217,7 +217,7 @@ begin
 	     (NEW.crew_id_03 is not null) + (NEW.crew_id_04 is not null)) > 
 		(select COUNT(*) 
 			from crew_members 
-			where f_player_id = NEW.f_player_id 
+			where f_player_id = NEW.f_player_id and current_group = 7
 			and member_id in (NEW.crew_id_01, NEW.crew_id_02, NEW.crew_id_03, NEW.crew_id_04))
 	) then 
 		signal sqlstate '45000' 
