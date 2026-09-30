@@ -72,7 +72,7 @@ namespace emulator::ssd
 			entry["point"] = player.get_point();
 		}
 
-		result["player_capacity"] = 1;
+		result["player_capacity"] = user->get_player_capacity();
 		result["player_num"] = players.size();
 
 		return result;

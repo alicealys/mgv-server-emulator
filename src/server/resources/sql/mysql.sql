@@ -19,6 +19,7 @@ create table if not exists `users`
 	dlc_flag				int unsigned 	default 0,
 	sv_coin					int unsigned 	default 0,
 	loadout_count			int unsigned default 4,
+	player_capacity			bigint unsigned not null default 1,
 	user_inventory			blob			default null,
 	user_play_record		blob			default null,
 	primary key (`user_id`)
@@ -27,7 +28,7 @@ create table if not exists `users`
 create table if not exists `players`
 (
 	player_id					bigint unsigned	not null	auto_increment,
-	f_user_id					bigint unsigned unique,
+	f_user_id					bigint unsigned not null,
 	player_index				bigint unsigned default 0,
 	player_creation_date		datetime        not null,
 	playtime					int unsigned default 0,

@@ -1880,6 +1880,24 @@ namespace database::players
 		}
 
 		template <database_type_t Type>
+		std::size_t get_player_count(const std::uint64_t user_id)
+		{
+			return database::access<std::size_t>([&](database::database_t& db) -> std::size_t
+			{
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::count(1)).from(player::table)
+						.where(player::table.f_user_id == user_id));
+
+				if (results.empty())
+				{
+					return 0ull;
+				}
+
+				return results.front().count;
+			});
+		}
+
+		template <database_type_t Type>
 		void delete_player_data(const std::uint64_t player_id)
 		{
 			return database::access([&](database_t& db)
@@ -2201,6 +2219,11 @@ namespace database::players
 	std::vector<player> get_player_list(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::get_player_list, user_id);
+	}
+
+	std::size_t get_player_count(const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::get_player_count, user_id);
 	}
 
 	std::optional<player> create(const std::uint64_t user_id)

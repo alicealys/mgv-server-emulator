@@ -19,9 +19,9 @@ namespace database::shop_purchases
 		product_10093 = 10093, // 176702308069091
 		product_10094 = 10094, // 0
 		product_additional_slot_avatar = 20010, // 0
-		product_20011 = 20011, // 118282266416844
-		product_20012 = 20012, // 0
-		product_20013 = 20013, // 0
+		product_additional_slot_avatar_1 = 20011, // 118282266416844
+		product_additional_slot_avatar_2 = 20012, // 0
+		product_additional_slot_avatar_3 = 20013, // 0
 		product_increase_storage_limit_weapons = 20020, // 0
 		product_increase_storage_limit_gear = 20030, // 0
 		product_additional_slot_loadout = 20050, // 0

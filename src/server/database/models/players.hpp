@@ -8,7 +8,6 @@
 
 namespace database::players
 {
-	constexpr const auto player_capacity = 1u;
 	constexpr const auto max_player_count = 4u;
 	constexpr const auto max_loadout_count = 9u;
 	constexpr const auto initial_loadout_count = 4u;
@@ -874,6 +873,7 @@ namespace database::players
 	std::optional<player> find(const std::uint64_t id);
 	std::optional<player> find_by_index(const std::uint64_t user_id, const std::uint64_t player_index);
 	std::vector<player> get_player_list(const std::uint64_t user_id);
+	std::size_t get_player_count(const std::uint64_t user_id);
 	std::optional<player> create(const std::uint64_t user_id);
 
 	void delete_player_data(const std::uint64_t player_id);

@@ -11,27 +11,16 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto players = database::players::get_player_list(user->get_user_id());
-		if (players.size() >= database::players::max_player_count)
+		const auto player_count = static_cast<std::uint32_t>(database::players::get_player_count(user->get_user_id()));
+		if (player_count >= database::players::max_player_count)
 		{
 			return error(ERR_OVER_CAPACITY);
 		}
 
-		return database::shop_purchases::purchase_product(user.value(), database::shop_purchases::product_additional_slot_avatar, [&](json::value& result)
+		const auto product_type = database::shop_purchases::product_additional_slot_avatar + player_count;
+		return database::shop_purchases::purchase_product(user.value(), product_type, [&](json::value& result)
 		{
-			const auto player = database::players::create(user->get_user_id());
-			if (!player.has_value())
-			{
-				return false;
-			}
-
-			const auto team_count = database::deployments::get_team_count(user->current_player->get_player_id());
-			for (auto i = 1ull; i < team_count; i++)
-			{
-				database::deployments::create_team(player->get_player_id());
-			}
-
-			return true;
+			return user->inc_player_capacity();
 		});
 	}
 

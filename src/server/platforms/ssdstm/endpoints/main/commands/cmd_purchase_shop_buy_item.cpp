@@ -23,8 +23,19 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
+		const auto player_count = static_cast<std::uint32_t>(database::players::get_player_count(user->get_user_id()));
+		const auto player_slot_product_type = database::shop_purchases::product_additional_slot_avatar + player_count;
+		const auto is_player_slot_purchase = product->product_id == player_slot_product_type && 
+			product->item.category == game::ITEM_CATEGORY_CHARACTER_SLOT && product->item.param1 == player_count + 1;
+
+		const auto item = database::shop_purchases::find_item(id);
+		if (!item.has_value() && !is_player_slot_purchase)
+		{
+			return error(ERR_NOT_FOUND);
+		}
+
 		const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
-		if (purchase_count > product->limit_count)
+		if (purchase_count > product->limit_count && product->limit_count != 0)
 		{
 			return error(ERR_OVER_CAPACITY);
 		}
@@ -42,7 +53,7 @@ namespace emulator::ssd
 			json::value empty;
 			if (user->give_item(product->item, give_params, empty))
 			{
-				return user->set_inventory(user_inventory);
+				return user->set_inventory(user_inventory) || is_player_slot_purchase;
 			}
 
 			const auto expire_date = std::chrono::system_clock::now() + database::shop_purchases::purchase_duration;

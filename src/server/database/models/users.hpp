@@ -95,6 +95,7 @@ namespace database::users
 		DEFINE_FIELD(dlc_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sv_coin, sqlpp::integer_unsigned);
 		DEFINE_FIELD(loadout_count, sqlpp::integer_unsigned);
+		DEFINE_FIELD(player_capacity, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
 		DEFINE_FIELD(user_play_record, sqlpp::binary);
 		DEFINE_TABLE(users,
@@ -116,6 +117,7 @@ namespace database::users
 			dlc_flag_field_t,
 			sv_coin_field_t, 
 			loadout_count_field_t,
+			player_capacity_field_t,
 			user_inventory_field_t,
 			user_play_record_field_t
 		);
@@ -143,6 +145,7 @@ namespace database::users
 			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
 			this->sv_coin_ = static_cast<std::uint32_t>(row.sv_coin);
 			this->loadout_count_ = static_cast<std::uint32_t>(row.loadout_count);
+			this->player_capacity_ = row.player_capacity;
 
 			if (!row.player_id.is_null())
 			{
@@ -165,6 +168,7 @@ namespace database::users
 		GET_FIELD_H(std::uint32_t, dlc_flag);
 		GET_FIELD_H(std::uint32_t, sv_coin);
 		GET_FIELD_H(std::uint32_t, loadout_count);
+		GET_FIELD_H(std::uint64_t, player_capacity);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
@@ -184,8 +188,11 @@ namespace database::users
 		bool add_sv_coins(const std::uint32_t value) const;
 
 		bool set_loadout_count(const std::uint32_t loadout_count) const;
+		bool inc_player_capacity() const;
 
 		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
+
+		std::optional<players::player> create_additional_player() const;
 
 		std::optional<players::player> current_player{};
 

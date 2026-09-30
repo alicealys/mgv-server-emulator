@@ -79,7 +79,7 @@ namespace database::users
 						players::player::table.nameplate,
 						players::player::table.current_loadout,
 						players::player::table.player_creation_date)
-					.from(user::table.left_outer_join(players::player::table).on(user::table.user_id == players::player::table.f_user_id));
+					.from(user::table.left_outer_join(players::player::table).on(user::table.current_player_id == players::player::table.player_id));
 		}
 
 		const json::value& get_default_data()
@@ -237,6 +237,7 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, user_flag);
 	GET_FIELD_C(user, std::uint32_t, dlc_flag);
 	GET_FIELD_C(user, std::uint32_t, sv_coin);
+	GET_FIELD_C(user, std::uint64_t, player_capacity);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
 
@@ -468,6 +469,7 @@ namespace database::users
 							 user::table.currency = "",
 							 user::table.user_inventory = default_inventory,
 							 user::table.loadout_count = players::initial_loadout_count,
+							 user::table.player_capacity = 1,
 							 user::table.last_update = std::chrono::system_clock::now(),
 							 user::table.user_creation_date = std::chrono::system_clock::now()));
 			});
@@ -711,6 +713,19 @@ namespace database::users
 				return result != 0ull;
 			});
 		}
+		
+		template <database_type_t Type>
+		bool inc_player_capacity(const std::uint64_t user_id)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.player_capacity = user::table.player_capacity + 1)
+							.where(user::table.user_id == user_id && user::table.player_capacity < database::players::max_player_count));
+				return result != 0ull;
+			});
+		}
 
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
@@ -764,6 +779,10 @@ namespace database::users
 		RUN_IMPL(impl::set_loadout_count, this->get_user_id(), loadout_count);
 	}
 
+	bool user::inc_player_capacity() const
+	{
+		RUN_IMPL(impl::inc_player_capacity, this->get_user_id());
+	}
 
 	bool user::give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
 	{
@@ -976,13 +995,34 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_CHARACTER_SLOT:
 		{
-			return false;
+			return this->inc_player_capacity();
 		}
 		}
 
 		return false;
 	}
 
+	std::optional<players::player> user::create_additional_player() const
+	{
+		if (!this->current_player.has_value())
+		{
+			return {};
+		}
+
+		auto player = database::players::create(this->get_user_id());
+		if (!player.has_value())
+		{
+			return player;
+		}
+
+		const auto team_count = database::deployments::get_team_count(this->current_player->get_player_id());
+		for (auto i = 1ull; i < team_count; i++)
+		{
+			database::deployments::create_team(player->get_player_id());
+		}
+
+		return player;
+	}
 
 	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value)
 	{
