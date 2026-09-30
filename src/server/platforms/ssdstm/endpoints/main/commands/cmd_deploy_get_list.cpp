@@ -10,14 +10,21 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto teams = database::deployments::get_all_teams(user->current_player->get_player_id());
-		auto max_combat = 0u;
-		auto max_survive = 0u;
+		param_t param{};
+		if (!json::read(param, data))
+		{
+			return error(ERR_INVALIDARG);
+		}
 
+		std::unordered_set<std::uint32_t> active_missions;
+
+		const auto teams = database::deployments::get_all_teams(user->current_player->get_player_id());
 		for (auto i = 0ull; i < teams.size(); i++)
 		{
-			max_combat = std::max(max_combat, teams[i].get_info_combat());
-			max_survive = std::max(max_survive, teams[i].get_info_survive());
+			if (teams[i].get_info_status() == database::deployments::team_status_deploy_progress)
+			{
+				active_missions.insert(teams[i].get_mission_id());
+			}
 		}
 
 		result["mission_list"] = json::array();
@@ -26,7 +33,16 @@ namespace emulator::ssd
 		const auto& mission_list = database::deployments::get_deployments_mission_list();
 		for (auto i = 0ull; i < mission_list.size(); i++)
 		{
-			if (max_combat < mission_list[i].combat || max_survive < mission_list[i].survival)
+			if (active_missions.contains(mission_list[i].id))
+			{
+				auto& entry = result["mission_list"][count++];
+				mission_list[i].to_json(entry);
+				entry["inactive"] = 1;
+				entry["is_new"] = 0;
+				continue;
+			}
+
+			if (param.level < mission_list[i].difficulty + 1)
 			{
 				continue;
 			}

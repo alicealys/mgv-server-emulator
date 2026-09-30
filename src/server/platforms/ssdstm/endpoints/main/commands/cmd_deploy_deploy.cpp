@@ -42,11 +42,6 @@ namespace emulator::ssd
 			return error(ERR_ALREADY_DEPLOY);
 		}
 
-		if (team->get_info_combat() < iter->second.combat || team->get_info_survive() < iter->second.survival)
-		{
-			return error(ERR_SHORTAGE);
-		}
-
 		database::deployments::deploy_params_t deploy_params;
 		deploy_params.crew_ids[0] = param.team_info.crew_id_list[0];
 		deploy_params.crew_ids[1] = param.team_info.crew_id_list[1];
