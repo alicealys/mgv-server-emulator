@@ -64,7 +64,7 @@ namespace emulator::ssd
 			if (present_id == 0ull)
 			{
 				user->add_sv_coins(product->price);
-				result["result"] = game::get_error(ERR_DATABASE);
+				result["result"] = game::error_map[ERR_DATABASE];
 				return false;
 			}
 

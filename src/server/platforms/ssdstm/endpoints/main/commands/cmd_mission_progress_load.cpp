@@ -23,13 +23,10 @@ namespace emulator::ssd
 		const auto user_play_record = std::make_unique<database::users::user_play_record_t>();
 		const auto player_play_record = std::make_unique<database::players::player_play_record_t>();
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
-		const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-		const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
 		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
 		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
-		const auto defense_mission_record_list = std::make_unique<database::players::defense_mission_record_list_t>();
 
 		const auto& player = user->current_player;
 
@@ -43,15 +40,14 @@ namespace emulator::ssd
 		player->get_inventory_resource_list(*inventory_resources);
 		player->get_stackable_item_list(*stackable_item_list);
 		player->get_story_unlock_info(*story_unlock_info);
-		player->get_mission_record_list(*mission_record_list);
-		player->get_quest_record_list(*quest_record_list);
 		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
-		player->get_defense_mission_record_list(*defense_mission_record_list);
 
 		const auto gimmick_info = player->get_gimmick_info();
 		const auto defense_mission_info = player->get_defense_mission_info();
 		const auto communication_gesture_info = player->get_communication_gesture_info();
+		const auto mission_record_list = player->get_mission_record_list();
+		const auto quest_record_list = player->get_quest_record_list();
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -99,7 +95,21 @@ namespace emulator::ssd
 		}
 
 		defense_mission_info.parameter.to_json(result["defense_mission_parameter"]);
-		defense_mission_record_list->to_json(result["defense_mission_record_info_list"]);
+
+		{
+			auto count = 0u;
+			const auto defense_mission_record_list = database::defense_missions::get_record_list(user->current_player->get_player_id());
+			for (auto i = 0ull; i < defense_mission_record_list.size(); i++)
+			{
+				if (defense_mission_record_list[i].cleared == 0)
+				{
+					continue;
+				}
+
+				auto& entry = result["defense_mission_record_info_list"][count++];
+				defense_mission_record_list[i].to_json(entry);
+			}
+		}
 
 		result["defense_reward_limit_list"] = json::array{};
 
@@ -122,7 +132,7 @@ namespace emulator::ssd
 			loadout_list->list[i].to_json(loadout_list_j[i], static_cast<std::uint16_t>(i));
 		}
 
-		mission_record_list->to_json(result["mission_record_info_list"]);
+		mission_record_list.to_json(result["mission_record_info_list"]);
 		nonstackable_list->to_json(result["nonstackable_list"]);
 
 		result["order_expired_list"] = json::array{0, 0, 0, 0, 0};
@@ -140,7 +150,7 @@ namespace emulator::ssd
 			result["play_record_user_total_additional_130"][i] = user_play_record->additional[i];
 		}
 
-		quest_record_list->to_json(result["quest_record_info_list"]);
+		quest_record_list.to_json(result["quest_record_info_list"]);
 		result["recipe_list"] = json::array();
 
 		for (auto i = 0; i < 256; i++)

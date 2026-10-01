@@ -34,6 +34,8 @@ namespace database::players
 				player::table.crew_levels,
 				player::table.communication_gesture_info,
 				player::table.defense_mission_info,
+				player::table.mission_record_list,
+				player::table.quest_record_list,
 				users::user::table.account_id
 			).from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
 		}
@@ -918,53 +920,143 @@ namespace database::players
 		resource_count_j["update_remaining_time"] = this->update_remaining_time;
 	}
 
-	bool mission_record_list_t::open_mission(const std::uint16_t mission_code)
+	bool mission_record_list_internal_t::parse_diff_single(json::value& data)
 	{
-		if (!game::mission_list.contains(mission_code))
+		entry_t entry{};
+		if (!json::read(entry, data))
 		{
 			return false;
 		}
 
-		mission_record_t record{};
-		record.mission_code = mission_code;
-		return this->try_add_item(record, false);
-	}
-
-	bool mission_record_t::parse(json::value& data)
-	{
-		if (!json::read(*this, data))
+		const auto index = game::get_mission_index(entry.mission_code);
+		if (index == -1)
 		{
 			return false;
 		}
 
-		return game::mission_list.contains(this->mission_code);
+		const auto byte_index = (index >> 3);
+		const auto mask = (1 << (index & 7));
+
+		this->open[byte_index] |= mask;
+		if (entry.clear_flag != 0)
+		{
+			this->cleared[byte_index] |= mask;
+		}
+
+		return true;
 	}
 
-	void mission_record_t::to_json(json::value& data) const
+	bool mission_record_list_internal_t::parse_diff(json::value& data)
 	{
-		data["clear_flag"] = this->clear_flag;
-		data["clear_rank"] = 0;
-		data["clear_time"] = 0;
-		data["mission_code"] = this->mission_code;
-		data["new_flag"] = 0;
-		data["score"] = 0;
-	}
-
-	bool quest_record_t::parse(json::value& data)
-	{
-		if (!json::read(*this, data))
+		if (!data.is_array())
 		{
 			return false;
 		}
 
-		return game::quest_list.contains(this->mission_code);
+		for (auto i = 0ull; i < data.size(); i++)
+		{
+			this->parse_diff_single(data[i]);
+		}
+
+		return true;
 	}
 
-	void quest_record_t::to_json(json::value& data) const
+	bool mission_record_list_internal_t::open_mission(const std::uint32_t mission_id)
 	{
-		data["flagset"] = this->flagset;
-		data["mission_code"] = this->mission_code;
-		data["repop_count"] = this->repop_count;
+		const auto index = game::get_mission_index(mission_id);
+		if (index == -1)
+		{
+			return false;
+		}
+
+		const auto byte_index = (index >> 3);
+		const auto mask = (1 << (index & 7));
+		this->open[byte_index] |= mask;
+		return true;
+	}
+
+	void mission_record_list_internal_t::to_json(json::value& data) const
+	{
+		const auto& mission_list = game::get_mission_list();
+
+		auto count = 0u;
+		for (auto i = 0ull; i < mission_list.mission_id_list.size(); i++)
+		{
+			const auto byte_index = (i >> 3);
+			const auto mask = (1 << (i & 7));
+
+			if ((this->open[byte_index] & mask) != mask)
+			{
+				continue;
+			}
+
+			auto& entry = data[count++];
+			entry["clear_flag"] = std::uint8_t((this->cleared[byte_index] & mask) == mask);
+			entry["clear_rank"] = 0;
+			entry["clear_time"] = 0;
+			entry["mission_code"] = mission_list.mission_id_list[i];
+			entry["new_flag"] = 0;
+			entry["score"] = 0;
+		}
+	}
+
+	bool quest_record_list_internal_t::parse_diff(json::value& data)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < data.size(); i++)
+		{
+			entry_t entry{};
+			if (!json::read(entry, data[i]))
+			{
+				continue;
+			}
+
+			const auto index = game::get_quest_index(entry.mission_code);
+			if (index == -1)
+			{
+				continue;
+			}
+
+			this->list[index].open = 1;
+			this->list[index].flagset = entry.flagset;
+			this->list[index].repop_count = entry.repop_count;
+		}
+
+		return true;
+	}
+
+	bool quest_record_list_internal_t::open_mission(const std::uint32_t quest_id)
+	{
+		const auto index = game::get_quest_index(quest_id);
+		if (index == -1)
+		{
+			return false;
+		}
+
+		this->list[index].open = 1;
+		return true;
+	}
+
+	void quest_record_list_internal_t::to_json(json::value& data) const
+	{
+		auto count = 0u;
+		const auto& mission_list = game::get_mission_list();
+		for (auto i = 0ull; i < mission_list.quest_id_list.size(); i++)
+		{
+			if (this->list[i].open == 0)
+			{
+				continue;
+			}
+
+			auto& entry = data[count++];
+			entry["flagset"] = this->list[i].flagset;
+			entry["mission_code"] = mission_list.quest_id_list[i];
+			entry["repop_count"] = this->list[i].repop_count;
+		}
 	}
 
 	bool map_unlock_t::parse(json::value& data)
@@ -1585,26 +1677,6 @@ namespace database::players
 		data["plant"] = this->plant;
 	}
 
-	bool defense_mission_record_t::parse(json::value& data)
-	{
-		if (!json::read(*this, data))
-		{
-			return false;
-		}
-
-		return game::parameters_table.ssd_base_defense_settings->mission_settings.contains(this->mission_code);
-	}
-
-	void defense_mission_record_t::to_json(json::value& data) const
-	{
-		data["mission_code"] = this->mission_code;
-		data["cleared"] = this->cleared;
-		data["clear_rank"] = this->clear_rank;
-		data["clear_rank"] = this->clear_rank;
-		data["iris_score"] = this->iris_score;
-		data["waves"] = this->waves;
-	}
-
 	bool defense_mission_info_t::status_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
@@ -1776,6 +1848,8 @@ namespace database::players
 	GET_FIELD_C(player, crew_levels_t, crew_levels);
 	GET_FIELD_C(player, defense_mission_info_t, defense_mission_info);
 	GET_FIELD_C(player, communication_gesture_info_t, communication_gesture_info);
+	GET_FIELD_C(player, mission_record_list_t, mission_record_list);
+	GET_FIELD_C(player, quest_record_list_t, quest_record_list);
 	GET_FIELD_C(player, std::chrono::microseconds, creation_date);
 
 	std::uint32_t player::get_current_loadout() const
@@ -1869,14 +1943,14 @@ namespace database::players
 			{
 				static defense_mission_info_t info{};
 				info.initialize();
-				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(info));
+				return info.serialize();
 			}();
 
 			static const auto communication_gesture_info = []()
 			{
 				static communication_gesture_info_t info{};
 				info.initialize();
-				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(info));
+				return info.serialize();
 			}();
 
 			const auto id = database::access<std::uint64_t>([&](database::database_t& db)
@@ -1996,20 +2070,16 @@ namespace database::players
 		DEF_STRUCT_SET(player, crew_levels_t, crew_levels);
 		DEF_STRUCT_SET(player, defense_mission_info_t, defense_mission_info);
 		DEF_STRUCT_SET(player, communication_gesture_info_t, communication_gesture_info);
+		DEF_STRUCT_SET(player, mission_record_list_t, mission_record_list);
+		DEF_STRUCT_SET(player, quest_record_list_t, quest_record_list);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
-		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
-		DEF_ARRAY_GET(player, quest_record_list_t, quest_record_list);
-		DEF_ARRAY_GET(player, defense_mission_record_list_t, defense_mission_record_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
-		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
-		DEF_ARRAY_SET(player, quest_record_list_t, quest_record_list);
-		DEF_ARRAY_SET(player, defense_mission_record_list_t, defense_mission_record_list);
 	}
 
 	void player::get_loadout_list(loadout_list_t& loadout_list) const
@@ -2067,16 +2137,6 @@ namespace database::players
 		RUN_IMPL(impl::get_building_info_afghan, this->get_player_id(), building);
 	}
 
-	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
-	{
-		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
-	}
-
-	void player::get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add) const
-	{
-		RUN_IMPL(impl::get_quest_record_list, this->get_user_id(), quest_record_list, size_add);
-	}
-
 	void player::get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_inventory_resource_list, this->get_user_id(), inventory_resource_list, size_add);
@@ -2095,11 +2155,6 @@ namespace database::players
 	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
 		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
-	}
-
-	void player::get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add) const
-	{
-		RUN_IMPL(impl::get_defense_mission_record_list, this->get_user_id(), defense_mission_record_list, size_add);
 	}
 
 	bool player::set_avatar(avatar_t& avatar) const
@@ -2212,11 +2267,6 @@ namespace database::players
 	bool player::set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
 		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
-	}
-
-	bool player::set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const
-	{
-		RUN_IMPL(impl::set_defense_mission_record_list, this->get_user_id(), defense_mission_record_list);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const

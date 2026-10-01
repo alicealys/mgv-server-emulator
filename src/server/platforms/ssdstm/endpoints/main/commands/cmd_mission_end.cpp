@@ -32,12 +32,9 @@ namespace emulator::ssd
 
 		if (mission_record_info_j.is_object())
 		{
-			const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-			user->current_player->get_mission_record_list(*mission_record_list);
-			database::players::mission_record_t record{};
-			record.parse(mission_record_info_j);
-			mission_record_list->try_add_item(record);
-			user->current_player->set_mission_record_list(*mission_record_list);
+			auto mission_record_list = user->current_player->get_mission_record_list();
+			mission_record_list.parse_diff_single(mission_record_info_j);
+			user->current_player->set_mission_record_list(mission_record_list);
 		}
 
 		if (open_list_j.is_object())
@@ -45,8 +42,7 @@ namespace emulator::ssd
 			auto& mission_code_list_j = open_list_j["mission_code_list"];
 			if (mission_code_list_j.is_array())
 			{
-				const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-				user->current_player->get_mission_record_list(*mission_record_list);
+				auto mission_record_list = user->current_player->get_mission_record_list();
 
 				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 				{
@@ -57,19 +53,18 @@ namespace emulator::ssd
 					}
 
 					const auto mission_code = mission_code_j.as<std::uint16_t>();
-					mission_record_list->open_mission(mission_code);
+					mission_record_list.open_mission(mission_code);
 				}
 
-				user->current_player->set_mission_record_list(*mission_record_list);
+				user->current_player->set_mission_record_list(mission_record_list);
 			}
 
 			auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
 			if (quest_mission_code_list_j.is_array())
 			{
-				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
-				user->current_player->get_quest_record_list(*quest_record_list, quest_mission_code_list_j.size());
-				quest_record_list->parse_diff(quest_mission_code_list_j);
-				user->current_player->set_quest_record_list(*quest_record_list);
+				auto quest_record_list = user->current_player->get_quest_record_list();
+				quest_record_list.parse_diff(quest_mission_code_list_j);
+				user->current_player->set_quest_record_list(quest_record_list);
 			}
 		}
 

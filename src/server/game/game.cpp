@@ -192,351 +192,210 @@ namespace game
 		std::uint8_t static_key[16] = {0x17, 0xF0, 0xF7, 0xA6, 0x2E, 0x8F, 0xEE, 0x67, 0x78, 0x66, 0x79, 0xD0, 0x8C, 0x8A, 0x0A, 0x1C};
 		std::uint8_t static_key_tpp[16] = {0xD8, 0x89, 0x0A, 0xF0, 0x66, 0xC9, 0x6B, 0x40, 0xD7, 0x01, 0xAE, 0xFC, 0x43, 0x6F, 0xF9, 0xFE};
 
-		std::unordered_map<std::uint32_t, std::string> error_map =
+		mission_list_t load_mission_list()
 		{
-			{NOERR, "NOERR"},
-			{ERR_DEFENSE_MISSION_ALREADY_STARTED, "ERR_DEFENSE_MISSION_ALREADY_STARTED"},
-			{ERR_DEFENSE_MISSION_NOT_IN_MISSION, "ERR_DEFENSE_MISSION_NOT_IN_MISSION"},
-			{ERR_PURCHASE_LIMIT, "ERR_PURCHASE_LIMIT"},
-			{ERR_NOT_DEPLOY, "ERR_NOT_DEPLOY"},
-			{ERR_ALREADY_DEPLOY, "ERR_ALREADY_DEPLOY"},
-			{ERR_INACTIVE, "ERR_INACTIVE"},
-			{ERR_SHORTAGE, "ERR_SHORTAGE"},
-			{ERR_ALREADY_ENABLED, "ERR_ALREADY_ENABLED"},
-			{ERR_NOT_FOUND, "ERR_NOT_FOUND"},
-			{ERR_EXPIRED, "ERR_EXPIRED"},
-			{ERR_RESTRICT_USER, "ERR_RESTRICT_USER"},
-			{ERR_COOP_ITEM_USED, "ERR_COOP_ITEM_USED"},
-			{ERR_COOP_ITEM_NOT_IN_MISSION, "ERR_COOP_ITEM_NOT_IN_MISSION"},
-			{ERR_CREW_NOT_FOUND, "ERR_CREW_NOT_FOUND"},
-			{ERR_BASE_RESOURCE_SHORTAGE, "ERR_BASE_RESOURCE_SHORTAGE"},
-			{ERR_BUILDING_OVERLAPPED, "ERR_BUILDING_OVERLAPPED"},
-			{ERR_BUILDING_MATERIAL_SHORTAGE, "ERR_BUILDING_MATERIAL_SHORTAGE"},
-			{ERR_BUILDING_DOES_NOT_MEET_CONDITIONS, "ERR_BUILDING_DOES_NOT_MEET_CONDITIONS"},
-			{ERR_CRAFT_MATERIAL_SHORTAGE, "ERR_CRAFT_MATERIAL_SHORTAGE"},
-			{ERR_CRAFT_DOES_NOT_MEET_CONDITIONS, "ERR_CRAFT_DOES_NOT_MEET_CONDITIONS"},
-			{ERR_PERMISSION_DENIED, "ERR_PERMISSION_DENIED"},
-			{ERR_ALREADY_LOCKED, "ERR_ALREADY_LOCKED"},
-			{ERR_NOT_IN_ROOM, "ERR_NOT_IN_ROOM"},
-			{ERR_ROOM_NOT_FOUND, "ERR_ROOM_NOT_FOUND"},
-			{ERR_PASSWORD_DO_NOT_MATCH, "ERR_PASSWORD_DO_NOT_MATCH"},
-			{ERR_ROOMTOOMANY, "ERR_ROOMTOOMANY"},
-			{ERR_ALREADYINROOM, "ERR_ALREADYINROOM"},
-			{ERR_NOT_SOLD, "ERR_NOT_SOLD"},
-			{ERR_MAINTENANCE, "ERR_MAINTENANCE"},
-			{ERR_BANNED, "ERR_BANNED"},
-			{ERR_GMP_FULL, "ERR_GMP_FULL"},
-			{ERR_GMP_SHORTAGE, "ERR_GMP_SHORTAGE"},
-			{ERR_RESOURCE_FULL, "ERR_RESOURCE_FULL"},
-			{ERR_RESOURCE_SHORTAGE, "ERR_RESOURCE_SHORTAGE"},
-			{ERR_ALREADY_EXCHANGED, "ERR_ALREADY_EXCHANGED"},
-			{ERR_DETAIL_NOTFOUND, "ERR_DETAIL_NOTFOUND"},
-			{ERR_NOT_COMPLETE, "ERR_NOT_COMPLETE"},
-			{ERR_ALREADY_COMPLETED, "ERR_ALREADY_COMPLETED"},
-			{ERR_MBCOIN_SHORTAGE, "ERR_MBCOIN_SHORTAGE"},
-			{ERR_PAYMENT_INCONSISTENCY, "ERR_PAYMENT_INCONSISTENCY"},
-			{ERR_OVER_CAPACITY, "ERR_OVER_CAPACITY"},
-			{ERR_TARGETPLAYER_NOTFOUND, "ERR_TARGETPLAYER_NOTFOUND"},
-			{ERR_NOTEMPTY, "ERR_NOTEMPTY"},
-			{ERR_PLAYER_COUNT_FULL, "ERR_PLAYER_COUNT_FULL"},
-			{ERR_PLAYER_NOTFOUND, "ERR_PLAYER_NOTFOUND"},
-			{ERR_AUTH_LIMIT, "ERR_AUTH_LIMIT"},
-			{ERR_AUTHKONAMIID_SSLETC, "ERR_AUTHKONAMIID_SSLETC"},
-			{ERR_AUTHKONAMIID_AUTH, "ERR_AUTHKONAMIID_AUTH"},
-			{ERR_LOGIN_FAILED, "ERR_LOGIN_FAILED"},
-			{ERR_INVALID_SESSION, "ERR_INVALID_SESSION"},
-			{ERR_INVALID_TICKET, "ERR_INVALID_TICKET"},
-			{ERR_PREPARE_CIPHERINFO, "ERR_PREPARE_CIPHERINFO"},
-			{ERR_READ_CIPHERINFO, "ERR_READ_CIPHERINFO"},
-			{ERR_READ_PASSPHRASE, "ERR_READ_PASSPHRASE"},
-			{ERR_GET_TICKETINFO, "ERR_GET_TICKETINFO"},
-			{ERR_DEFCLIENTVER, "ERR_DEFCLIENTVER"},
-			{ERR_ALREADYLOGGEDIN, "ERR_ALREADYLOGGEDIN"},
-			{ERR_ALREADY_EXISTS, "ERR_ALREADY_EXISTS"},
-			{ERR_INVALID_ACCOUNT, "ERR_INVALID_ACCOUNT"},
-			{ERR_INVALIDARG, "ERR_INVALIDARG"},
-			{ERR_DATABASE, "ERR_DATABASE"},
-			{ERR_FLOWID_OUTOFRANGE, "ERR_FLOWID_OUTOFRANGE"},
-			{ERR_UNSELECTED_USE_FLOW, "ERR_UNSELECTED_USE_FLOW"},
-			{ERR_RESULT_ILLEGAL_FLOW, "ERR_RESULT_ILLEGAL_FLOW"},
-			{ERR_OPTION_ILLEGAL_FLOW, "ERR_OPTION_ILLEGAL_FLOW"},
-			{ERR_RESULT_OUTOFRANGE, "ERR_RESULT_OUTOFRANGE"},
-			{ERR_OPTION_OUTOFRANGE, "ERR_OPTION_OUTOFRANGE"},
-			{ERR_UNKNOWN, "ERR_UNKNOWN"},
-			{ERR_TIMEOUT, "ERR_TIMEOUT"},
-		};
+			auto list = utils::resources::load_json(RESOURCE_MISSION_LIST);
+			
+			const auto parse_part = [](json::value& data, std::vector<std::uint32_t>& list, std::unordered_map<std::uint32_t, std::int32_t>& map)
+			{
+				if (!data.is_array())
+				{
+					return;
+				}
+
+				for (auto i = 0ull; i < data.size(); i++)
+				{
+					mission_list_t::entry_t entry{};
+					if (!json::read(entry, data[i]))
+					{
+						continue;
+					}
+
+					if (list.size() <= entry.index)
+					{
+						list.resize(entry.index + 1ull);
+					}
+
+					list[entry.index] = entry.id;
+					map.insert(std::make_pair(entry.id, entry.index));
+				}
+			};
+
+			mission_list_t mission_list;
+
+			parse_part(list["mission_id_list"], mission_list.mission_id_list, mission_list.mission_id_map);
+			parse_part(list["quest_id_list"], mission_list.quest_id_list, mission_list.quest_id_map);
+			parse_part(list["defense_mission_id_list"], mission_list.defense_mission_id_list, mission_list.defense_mission_id_map);
+
+			return mission_list;
+		}
 	}
 
-	std::unordered_set<std::uint32_t> mission_list =
+	std::array<std::string, ERR_COUNT> error_map =
 	{
-		30010,
-		10010,
-		40040,
-		40050,
-		40060,
-		40070,
-		40010,
-		40025,
-		40015,
-		40020,
-		40030,
-		40035,
-		10020,
-		40075,
-		40077,
-		20010,
-		20020,
-		20030,
-		40080,
-		40090,
-		40130,
-		10030,
-		40145,
-		20110,
-		20120,
-		20130,
-		40140,
-		40150,
-		40155,
-		10035,
-		30020,
-		40160,
-		40180,
-		40170,
-		10040,
-		20210,
-		20220,
-		20230,
-		40220,
-		40230,
-		10050,
-		40250,
-		40260,
-		40270,
-		10060,
-		40310,
-		40320,
-		20610,
-		20620,
-		20630,
-		20710,
-		20720,
-		20730,
-		20105,
-		20115,
-		20125,
-		20725,
-		31010,
-		31020,
-		00001,
-		00005,
-		21000,
-		21005,
-		21010,
-		21020,
-		21019,
-		21025,
-		01010,
-		01020,
-		01030,
-		01040,
-		02010,
-		12010,
-		12020,
-		12030,
-		32010,
-		60010,
-		60011,
-		60012,
-		60013,
-		60014,
-		65010,
-		65020,
-		65030,
-		65040,
-		65050,
-		65060,
-		62010,
+		"NOERR",
+		"ERR_DEFENSE_MISSION_ALREADY_STARTED",
+		"ERR_DEFENSE_MISSION_NOT_IN_MISSION",
+		"ERR_PURCHASE_LIMIT",
+		"ERR_NOT_DEPLOY",
+		"ERR_ALREADY_DEPLOY",
+		"ERR_INACTIVE",
+		"ERR_SHORTAGE",
+		"ERR_ALREADY_ENABLED",
+		"ERR_NOT_FOUND",
+		"ERR_EXPIRED",
+		"ERR_RESTRICT_USER",
+		"ERR_COOP_ITEM_USED",
+		"ERR_COOP_ITEM_NOT_IN_MISSION",
+		"ERR_CREW_NOT_FOUND",
+		"ERR_BASE_RESOURCE_SHORTAGE",
+		"ERR_BUILDING_OVERLAPPED",
+		"ERR_BUILDING_MATERIAL_SHORTAGE",
+		"ERR_BUILDING_DOES_NOT_MEET_CONDITIONS",
+		"ERR_CRAFT_MATERIAL_SHORTAGE",
+		"ERR_CRAFT_DOES_NOT_MEET_CONDITIONS",
+		"ERR_PERMISSION_DENIED",
+		"ERR_ALREADY_LOCKED",
+		"ERR_NOT_IN_ROOM",
+		"ERR_ROOM_NOT_FOUND",
+		"ERR_PASSWORD_DO_NOT_MATCH",
+		"ERR_ROOMTOOMANY",
+		"ERR_ALREADYINROOM",
+		"ERR_NOT_SOLD",
+		"ERR_MAINTENANCE",
+		"ERR_BANNED",
+		"ERR_GMP_FULL",
+		"ERR_GMP_SHORTAGE",
+		"ERR_RESOURCE_FULL",
+		"ERR_RESOURCE_SHORTAGE",
+		"ERR_ALREADY_EXCHANGED",
+		"ERR_DETAIL_NOTFOUND",
+		"ERR_NOT_COMPLETE",
+		"ERR_ALREADY_COMPLETED",
+		"ERR_MBCOIN_SHORTAGE",
+		"ERR_PAYMENT_INCONSISTENCY",
+		"ERR_OVER_CAPACITY",
+		"ERR_TARGETPLAYER_NOTFOUND",
+		"ERR_NOTEMPTY",
+		"ERR_PLAYER_COUNT_FULL",
+		"ERR_PLAYER_NOTFOUND",
+		"ERR_AUTH_LIMIT",
+		"ERR_AUTHKONAMIID_SSLETC",
+		"ERR_AUTHKONAMIID_AUTH",
+		"ERR_LOGIN_FAILED",
+		"ERR_INVALID_SESSION",
+		"ERR_INVALID_TICKET",
+		"ERR_PREPARE_CIPHERINFO",
+		"ERR_READ_CIPHERINFO",
+		"ERR_READ_PASSPHRASE",
+		"ERR_GET_TICKETINFO",
+		"ERR_DEFCLIENTVER",
+		"ERR_ALREADYLOGGEDIN",
+		"ERR_ALREADY_EXISTS",
+		"ERR_INVALID_ACCOUNT",
+		"ERR_INVALIDARG",
+		"ERR_DATABASE",
+		"ERR_FLOWID_OUTOFRANGE",
+		"ERR_UNSELECTED_USE_FLOW",
+		"ERR_RESULT_ILLEGAL_FLOW",
+		"ERR_OPTION_ILLEGAL_FLOW",
+		"ERR_RESULT_OUTOFRANGE",
+		"ERR_OPTION_OUTOFRANGE",
+		"ERR_UNKNOWN",
+		"ERR_TIMEOUT",
 	};
 
-	std::unordered_set<std::uint32_t> quest_list =
+	const mission_list_t& get_mission_list()
 	{
-		22010,
-		22020,
-		22030,
-		22040,
-		22050,
-		22060,
-		22140,
-		22150,
-		22090,
-		22100,
-		22120,
-		22130,
-		22160,
-		11010,
-		11020,
-		11030,
-		11040,
-		11050,
-		11060,
-		11070,
-		11080,
-		11100,
-		11110,
-		11090,
-		11120,
-		11130,
-		11140,
-		11150,
-		11160,
-		11170,
-		11180,
-		11190,
-		11200,
-		11210,
-		11220,
-		11230,
-		11240,
-		11250,
-		11260,
-		11270,
-		11280,
-		11290,
-		11700,
-		11710,
-		11720,
-		11730,
-		11740,
-		11750,
-		11760,
-		44050,
-		44010,
-		44020,
-		44030,
-		44040,
-		44060,
-		44070,
-		44080,
-		44090,
-		44100,
-		44110,
-		44120,
-		44130,
-		44140,
-		44150,
-		44160,
-		44170,
-		44180,
-		44190,
-		44200,
-		33080,
-		33090,
-		33100,
-		33110,
-		11300,
-		11310,
-		11320,
-		11330,
-		11340,
-		33040,
-		33050,
-		33060,
-		33070,
-		33071,
-		33010,
-		33020,
-		33030,
-		44220,
-		44210,
-		44230,
-		44240,
-		44250,
-		44260,
-		44270,
-		44280,
-		44290,
-		44300,
-		33260,
-		33270,
-		33220,
-		33230,
-		33240,
-		33250,
-		33280,
-		33290,
-		33300,
-		11350,
-		54010,
-		54020,
-		54030,
-		54040,
-		54050,
-		54060,
-		54070,
-		54080,
-		54090,
-		54100,
-		11901,
-		11902,
-		11903,
-		11911,
-		11912,
-		11913,
-		11921,
-		11922,
-		11923,
-		11924,
-		11925,
-		11926,
-		11928,
-		11929,
-		11930,
-		11931,
-		61010,
-		61020,
-		61030,
-		61040,
-		54110,
-		54120,
-		54130,
-		54140,
-		54150,
-		54160,
-		54170,
-		54180,
-		54190,
-		54200,
-		54210,
-		54220,
-		54230,
-		54240,
-		54250,
-		54260,
-		54270,
-		54280,
-		54290,
-		54300,
-		54310,
-		74010,
-		74020,
-		74030,
-		74040,
-	};
+		static const auto mission_list = load_mission_list();
+		return mission_list;
+	}
 
-	std::string get_error(const std::uint32_t error)
+	std::int32_t get_mission_index(const std::uint32_t mission_id)
 	{
-		if (error > ERR_COUNT)
+		const auto& list = get_mission_list();
+		const auto iter = list.mission_id_map.find(mission_id);
+		if (iter == list.mission_id_map.end())
 		{
-			throw std::runtime_error("invalid error");
+			return -1;
 		}
 
-		return error_map.at(error);
+		return static_cast<std::int32_t>(iter->second);
 	}
 
-	const std::unordered_map<std::uint32_t, std::string>& get_error_map()
+	std::int32_t get_quest_index(const std::uint32_t quest_id)
 	{
-		return error_map;
+		const auto& list = get_mission_list();
+		const auto iter = list.quest_id_map.find(quest_id);
+		if (iter == list.quest_id_map.end())
+		{
+			return -1;
+		}
+
+		return static_cast<std::int32_t>(iter->second);
+	}
+
+	std::int32_t get_defense_mission_index(const std::uint32_t mission_id)
+	{
+		const auto& list = get_mission_list();
+		const auto iter = list.defense_mission_id_map.find(mission_id);
+		if (iter == list.defense_mission_id_map.end())
+		{
+			return -1;
+		}
+
+		return static_cast<std::int32_t>(iter->second);
+	}
+
+	std::uint32_t get_mission_id(const std::uint32_t index)
+	{
+		const auto& list = get_mission_list();
+		if (list.mission_id_list.size() <= index)
+		{
+			return 0u;
+		}
+
+		return list.mission_id_list[index];
+	}
+
+	std::uint32_t get_quest_id(const std::uint32_t index)
+	{
+		const auto& list = get_mission_list();
+		if (list.quest_id_list.size() <= index)
+		{
+			return 0u;
+		}
+
+		return list.quest_id_list[index];
+	}
+
+	std::uint32_t get_defense_mission_id(const std::uint32_t index)
+	{
+		const auto& list = get_mission_list();
+		if (list.defense_mission_id_list.size() <= index)
+		{
+			return 0u;
+		}
+
+		return list.defense_mission_id_list[index];
+	}
+
+	std::uint32_t get_mission_count()
+	{
+		const auto& list = get_mission_list();
+		return static_cast<std::uint32_t>(list.mission_id_list.size());
+	}
+
+	std::uint32_t get_quest_count()
+	{
+		const auto& list = get_mission_list();
+		return static_cast<std::uint32_t>(list.quest_id_list.size());
+	}
+
+	std::uint32_t get_defense_mission_count()
+	{
+		const auto& list = get_mission_list();
+		return static_cast<std::uint32_t>(list.defense_mission_id_list.size());
 	}
 
 	std::uint8_t* get_static_key(const std::uint32_t type)

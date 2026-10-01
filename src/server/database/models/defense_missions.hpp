@@ -225,6 +225,17 @@ namespace database::defense_missions
 
 	};
 
+	struct defense_mission_record_t
+	{
+		std::uint8_t clear_rank;
+		std::uint8_t waves;
+		std::uint8_t cleared;
+		std::uint32_t iris_score;
+		std::uint32_t mission_code;
+
+		void to_json(json::value& data) const;
+	};
+
 	class defense_mission
 	{
 	public:
@@ -301,6 +312,8 @@ namespace database::defense_missions
 		broken_facility_list_t& broken_facility_list,
 		injury_crew_list_t& injury_crew_list,
 		reward_list_t& reward_list);
+
+	std::vector<defense_mission_record_t> get_record_list(const std::uint64_t player_id);
 
 	void delete_player_data(const std::uint64_t player_id);
 }

@@ -107,6 +107,7 @@ RESOURCE_STEAM_SHOP_ITEM_LIST      RCDATA "resources/data/steam_shop_item_list.j
 RESOURCE_DEPLOYMENTS_MISSION_LIST  RCDATA "resources/data/deployments_mission_list.json"
 RESOURCE_SHOP_PRODUCT_LIST         RCDATA "resources/data/shop_product_list.json"
 RESOURCE_SHOP_ITEM_LIST            RCDATA "resources/data/shop_item_list.json"
+RESOURCE_MISSION_LIST              RCDATA "resources/data/mission_list.json"
 
 RESOURCE_SQL_MYSQL                 RCDATA "resources/sql/mysql.sql"
 RESOURCE_SQL_SQLITE3               RCDATA "resources/sql/sqlite3.sql"

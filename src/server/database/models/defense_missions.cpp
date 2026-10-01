@@ -270,6 +270,15 @@ namespace database::defense_missions
 		return rewards;
 	}
 
+	void defense_mission_record_t::to_json(json::value& data) const
+	{
+		data["clear_rank"] = this->clear_rank;
+		data["waves"] = this->waves;
+		data["cleared"] = this->cleared;
+		data["iris_score"] = this->iris_score;
+		data["mission_code"] = this->mission_code;
+	}
+
 	GET_FIELD_C(defense_mission_wave, std::uint64_t, defense_mission_id);
 	GET_FIELD_C(defense_mission_wave, std::uint64_t, defense_mission_wave_id);
 	GET_FIELD_C(defense_mission_wave, std::uint8_t, wave);
@@ -475,6 +484,41 @@ namespace database::defense_missions
 			});
 		}
 
+		
+		template <database_type_t Type>
+		std::vector<defense_mission_record_t> get_record_list(const std::uint64_t player_id)
+		{
+			return database::access<std::vector<defense_mission_record_t>>([&](database::database_t& db)
+				-> std::vector<defense_mission_record_t>
+			{
+				auto results = db.exec<Type>(
+					sqlpp::select(defense_mission::table.mission_code,
+								  sqlpp::max(defense_mission::table.total_score).as(sqlpp::alias::a),
+								  sqlpp::max(defense_mission::table.current_wave).as(sqlpp::alias::b),
+								  sqlpp::min(defense_mission::table.clear_rank).as(sqlpp::alias::c),
+								  sqlpp::max(defense_mission::table.result == 1).as(sqlpp::alias::d))
+						.from(defense_mission::table)
+							.where(defense_mission::table.f_player_id == player_id)
+								.group_by(defense_mission::table.mission_code));
+
+				std::vector<defense_mission_record_t> list;
+
+				for (const auto& row : results)
+				{
+					defense_mission_record_t record{};
+					record.mission_code = static_cast<std::uint32_t>(row.mission_code);
+					record.iris_score = static_cast<std::uint32_t>(row.a);
+					record.waves = static_cast<std::uint8_t>(row.b);
+					record.clear_rank = static_cast<std::uint8_t>(row.c);
+					record.cleared = static_cast<std::uint8_t>(row.d);
+					list.emplace_back(record);
+				}
+
+				return list;
+			});
+		}
+
+
 		template <database_type_t Type>
 		void delete_player_data(const std::uint64_t player_id)
 		{
@@ -572,6 +616,11 @@ namespace database::defense_missions
 		broken_facility_list_t& broken_facility_list, injury_crew_list_t& injury_crew_list, reward_list_t& reward_list)
 	{
 		RUN_IMPL(impl::add_wave, defense_mission_id, result, params, broken_facility_list, injury_crew_list, reward_list);
+	}
+
+	std::vector<defense_mission_record_t> get_record_list(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::get_record_list, player_id);
 	}
 
 	void delete_player_data(const std::uint64_t player_id)

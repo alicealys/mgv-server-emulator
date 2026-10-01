@@ -395,19 +395,6 @@ namespace database::players
 		std::uint32_t additional[46];
 	};
 
-	struct mission_record_t
-	{
-		std::uint8_t clear_flag;
-		//std::uint8_t clear_rank; // always zero?
-		//std::uint8_t new_flag;
-		std::uint16_t mission_code;
-		//std::uint32_t clear_time;
-		//std::uint32_t score;
-
-		bool parse(json::value& data);
-		void to_json(json::value& data) const;
-	};
-
 	struct quest_record_t
 	{
 		std::uint8_t flagset;
@@ -514,18 +501,6 @@ namespace database::players
 		void to_json(json::value& data) const;
 	};
 
-	struct defense_mission_record_t
-	{
-		std::uint8_t cleared;
-		std::uint8_t clear_rank;
-		std::uint8_t waves;
-		std::uint16_t mission_code;
-		std::uint32_t iris_score;
-
-		bool parse(json::value& data);
-		void to_json(json::value& data) const;
-	};
-
 	struct defense_mission_info_internal_t
 	{
 		struct status_t
@@ -570,7 +545,54 @@ namespace database::players
 		void to_json(json::value& value) const;
 		bool parse_diff(json::value& value);
 	};
+
+	struct mission_record_list_internal_t
+	{
+		struct entry_t
+		{
+			std::uint8_t clear_flag;
+			//std::uint8_t clear_rank;
+			//std::uint8_t new_flag;
+			std::uint16_t mission_code;
+			//std::uint32_t clear_time;
+			//std::uint32_t score;
+		};
+
+		std::uint8_t open[16];
+		std::uint8_t cleared[16];
+
+		bool open_mission(const std::uint32_t mission_code);
+		bool parse_diff_single(json::value& data);
+		bool parse_diff(json::value& data);
+		void to_json(json::value& data) const;
+	};
+
+	struct quest_record_list_internal_t
+	{
+		struct entry_t
+		{
+			std::uint8_t flagset;
+			std::uint8_t repop_count;
+			std::uint32_t mission_code;
+		};
+
+		struct quest_t
+		{
+			std::uint8_t open : 1;
+			std::uint8_t flagset : 7;
+			std::uint8_t repop_count : 8;
+		};
+
+		quest_t list[180];
+
+		bool open_mission(const std::uint32_t mission_code);
+		bool parse_diff(json::value& data);
+		void to_json(json::value& data) const;
+	};
 #pragma pack(pop)
+
+	using mission_record_list_t = database_struct<mission_record_list_internal_t>;
+	using quest_record_list_t = database_struct<quest_record_list_internal_t>;
 
 	using avatar_t = database_struct<avatar_internal_t>;
 	using gimmick_info_t = database_struct<gimmick_info_internal_t>;
@@ -662,55 +684,6 @@ namespace database::players
 
 	};
 
-	class mission_record_list_t final : public generic_item_list<mission_record_t, 256>
-	{
-	public:
-		inline bool are_elements_equal(const mission_record_t& l, const mission_record_t& r) const override
-		{
-			return l.mission_code == r.mission_code;
-		}
-
-		inline bool is_element_empty(const mission_record_t& value) const override
-		{
-			return value.mission_code == 0;
-		}
-
-		bool open_mission(const std::uint16_t mission_code);
-
-	};
-
-	class quest_record_list_t final : public generic_item_list<quest_record_t, 256>
-	{
-	public:
-		inline bool are_elements_equal(const quest_record_t& l, const quest_record_t& r) const override
-		{
-			return l.mission_code == r.mission_code;
-		}
-
-		inline bool is_element_empty(const quest_record_t& value) const override
-		{
-			return value.mission_code == 0;
-		}
-
-		bool open_mission(const std::uint16_t mission_code);
-
-	};
-
-	class defense_mission_record_list_t final : public generic_item_list<defense_mission_record_t, 50>
-	{
-	public:
-		inline bool are_elements_equal(const defense_mission_record_t& l, const defense_mission_record_t& r) const override
-		{
-			return l.mission_code == r.mission_code;
-		}
-
-		inline bool is_element_empty(const defense_mission_record_t& value) const override
-		{
-			return value.mission_code == 0;
-		}
-
-	};
-
 	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
@@ -745,7 +718,6 @@ namespace database::players
 		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
 		DEFINE_FIELD(crew_levels, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
-		DEFINE_FIELD(defense_mission_record_list, sqlpp::binary);
 		DEFINE_FIELD(communication_gesture_info, sqlpp::binary);
 		DEFINE_TABLE(players, 
 			player_id_field_t, 
@@ -776,7 +748,6 @@ namespace database::players
 			building_info_afghan_field_t,
 			crew_levels_field_t,
 			defense_mission_info_field_t,
-			defense_mission_record_list_field_t,
 			communication_gesture_info_field_t
 		);
 
@@ -799,6 +770,8 @@ namespace database::players
 			this->crew_levels_.deserialize(row.crew_levels.value());
 			this->defense_mission_info_.deserialize(row.defense_mission_info.value());
 			this->communication_gesture_info_.deserialize(row.communication_gesture_info.value());
+			this->mission_record_list_.deserialize(row.mission_record_list.value());
+			this->quest_record_list_.deserialize(row.quest_record_list.value());
 		}
 
 		GET_FIELD_H(std::uint64_t, player_id);
@@ -814,6 +787,8 @@ namespace database::players
 		GET_FIELD_H(crew_levels_t, crew_levels);
 		GET_FIELD_H(defense_mission_info_t, defense_mission_info);
 		GET_FIELD_H(communication_gesture_info_t, communication_gesture_info);
+		GET_FIELD_H(mission_record_list_t, mission_record_list);
+		GET_FIELD_H(quest_record_list_t, quest_record_list);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
 		std::string get_name() const;
@@ -845,20 +820,16 @@ namespace database::players
 		bool set_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const;
 		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
+		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
+		bool set_quest_record_list(quest_record_list_t& quest_record_list) const;
 
-		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
-		void get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add = 0ull) const;
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
-		void get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add = 0ull) const;
 
-		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
-		bool set_quest_record_list(quest_record_list_t& quest_record_list) const;
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
-		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 

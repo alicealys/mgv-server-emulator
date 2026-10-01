@@ -111,14 +111,11 @@ namespace emulator::ssd
 			return;
 		}
 
-		database::players::defense_mission_record_list_t defense_mission_record;
-		user->current_player->get_defense_mission_record_list(defense_mission_record);
 		auto defense_mission_info = user->current_player->get_defense_mission_info();
 
 		const auto _0 = gsl::finally([&]
 		{
 			user->current_player->set_defense_mission_info(defense_mission_info);
-			user->current_player->set_defense_mission_record_list(defense_mission_record);
 		});
 
 		result["defense_reward_limit_result"]["limit_result"] = json::array();
@@ -167,14 +164,6 @@ namespace emulator::ssd
 				if (this_wave == mission_settings->max_wave_count - 1)
 				{
 					mission_result = 1u;
-					database::players::defense_mission_record_t mission_record{};
-					mission_record.mission_code = mission->get_mission_code();
-					mission_record.cleared = 1;
-					mission_record.clear_rank = rank;
-					mission_record.iris_score = new_score;
-					mission_record.waves = wave_result.wave;
-					defense_mission_record.try_add_item(mission_record);
-
 					this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
 				}
 				else
@@ -372,8 +361,7 @@ namespace emulator::ssd
 			auto& mission_code_list_j = open_list_j["mission_code_list"];
 			if (mission_code_list_j.is_array())
 			{
-				const auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-				user->current_player->get_mission_record_list(*mission_record_list, mission_code_list_j.size());
+				 auto mission_record_list = user->current_player->get_mission_record_list();
 
 				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 				{
@@ -384,19 +372,18 @@ namespace emulator::ssd
 					}
 
 					const auto mission_code = mission_code_j.as<std::uint16_t>();
-					mission_record_list->open_mission(mission_code);
+					mission_record_list.open_mission(mission_code);
 				}
 
-				user->current_player->set_mission_record_list(*mission_record_list);
+				user->current_player->set_mission_record_list(mission_record_list);
 			}
 
 			auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
 			if (quest_mission_code_list_j.is_array())
 			{
-				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
-				user->current_player->get_quest_record_list(*quest_record_list, quest_mission_code_list_j.size());
-				quest_record_list->parse_diff(quest_mission_code_list_j);
-				user->current_player->set_quest_record_list(*quest_record_list);
+				 auto quest_record_list = user->current_player->get_quest_record_list();
+				quest_record_list.parse_diff(quest_mission_code_list_j);
+				user->current_player->set_quest_record_list(quest_record_list);
 			}
 		}
 
@@ -404,10 +391,9 @@ namespace emulator::ssd
 		{
 			for (auto i = 0ull; i < quest_record_info_j.size(); i++)
 			{
-				const auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
-				user->current_player->get_quest_record_list(*quest_record_list);
-				quest_record_list->parse_diff(quest_record_info_j);
-				user->current_player->set_quest_record_list(*quest_record_list);
+				auto quest_record_list = user->current_player->get_quest_record_list();
+				quest_record_list.parse_diff(quest_record_info_j);
+				user->current_player->set_quest_record_list(quest_record_list);
 			}
 		}
 

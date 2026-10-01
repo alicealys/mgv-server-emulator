@@ -28,7 +28,7 @@ namespace emulator::ssd
 
 		result["orderid"] = 0;
 		result["transid"] = 0;
-		result["result"] = game::get_error(ERR_INVALIDARG);
+		result["result"] = game::error_map[ERR_INVALIDARG];
 
 		return result;
 	}

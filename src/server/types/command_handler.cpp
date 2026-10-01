@@ -14,7 +14,7 @@ namespace emulator
 	json::value error(const std::uint32_t id)
 	{
 		json::value result;
-		result["result"] = game::get_error(id);
+		result["result"] = game::error_map[id];
 		return result;
 	}
 

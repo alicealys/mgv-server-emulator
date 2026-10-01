@@ -463,7 +463,7 @@ namespace database::shop_purchases
 		const auto product = find_product(product_type);
 		if (!product.has_value())
 		{
-			result["result"] = game::get_error(ERR_NOT_FOUND);
+			result["result"] = game::error_map[ERR_NOT_FOUND];
 			return result;
 		}
 
@@ -480,14 +480,14 @@ namespace database::shop_purchases
 
 		if (!user.spend_sv_coins(product.price))
 		{
-			result["result"] = game::get_error(ERR_MBCOIN_SHORTAGE);
+			result["result"] = game::error_map[ERR_MBCOIN_SHORTAGE];
 			return result;
 		}
 
 		if (!add_product(user.get_user_id(), product) || !callback(result))
 		{
 			user.add_sv_coins(product.price);
-			result["result"] = game::get_error(ERR_DATABASE);
+			result["result"] = game::error_map[ERR_DATABASE];
 			return result;
 		}
 

@@ -22,6 +22,7 @@ namespace utils::resources
 			{RESOURCE_DEPLOYMENTS_MISSION_LIST, "resources/data/deployments_mission_list.json"},
 			{RESOURCE_SHOP_PRODUCT_LIST, "resources/data/shop_product_list.json"},
 			{RESOURCE_SHOP_ITEM_LIST, "resources/data/shop_item_list.json"},
+			{RESOURCE_MISSION_LIST, "resources/data/mission_list.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},

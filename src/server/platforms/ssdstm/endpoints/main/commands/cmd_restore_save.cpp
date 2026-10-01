@@ -147,7 +147,6 @@ namespace emulator::ssd
 			auto& user_flag_j = mission_progress_j["user_flag"];
 			auto& defense_mission_status_j = mission_progress_j["defense_mission_status"];
 			auto& defense_mission_parameter_j = mission_progress_j["defense_mission_parameter"];
-			auto& defense_mission_record_info_list_j = mission_progress_j["defense_mission_record_info_list"];
 			auto& communication_gesture_slot_j = mission_progress_j["communication_gesture_slot"];
 
 			auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
@@ -219,19 +218,19 @@ namespace emulator::ssd
 
 			if (mission_record_info_list_j.is_array())
 			{
-				auto mission_record_list = std::make_unique<database::players::mission_record_list_t>();
-				if (mission_record_list->parse(mission_record_info_list_j))
+				database::players::mission_record_list_t mission_record_list{};
+				if (mission_record_list.parse_diff(mission_record_info_list_j))
 				{
-					user->current_player->set_mission_record_list(*mission_record_list);
+					user->current_player->set_mission_record_list(mission_record_list);
 				}
 			}
 
 			if (quest_record_info_list_j.is_array())
 			{
-				auto quest_record_list = std::make_unique<database::players::quest_record_list_t>();
-				if (quest_record_list->parse(quest_record_info_list_j))
+				database::players::quest_record_list_t quest_record_list{};
+				if (quest_record_list.parse_diff(quest_record_info_list_j))
 				{
-					user->current_player->set_quest_record_list(*quest_record_list);
+					user->current_player->set_quest_record_list(quest_record_list);
 				}
 			}
 
@@ -325,13 +324,6 @@ namespace emulator::ssd
 			if (defense_mission_parameter_j.is_object())
 			{
 				defense_mission_info.parameter.parse(defense_mission_parameter_j);
-			}
-
-			if (defense_mission_record_info_list_j.is_array())
-			{
-				database::players::defense_mission_record_list_t list{};
-				list.parse(defense_mission_record_info_list_j);
-				user->current_player->set_defense_mission_record_list(list);
 			}
 
 			user->current_player->set_defense_mission_info(defense_mission_info);
