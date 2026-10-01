@@ -963,7 +963,7 @@ namespace database::users
 			if (reward_info.is_object())
 			{
 				auto& energy_j = reward_info["energy"];
-				if (energy_j.is_uint64())
+				if (energy_j.is_number())
 				{
 					energy_j = energy_j.as<std::uint32_t>() + reward.num;
 				}

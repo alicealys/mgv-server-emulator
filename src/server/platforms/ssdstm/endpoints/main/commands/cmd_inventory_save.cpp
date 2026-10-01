@@ -15,6 +15,7 @@ namespace emulator::ssd
 		auto& nonstackable_life_update_list_j = data["nonstackable_life_update_list"];
 		auto& stackable_list_j = data["stackable_list"];
 		auto& resource_list_j = data["resource_list"];
+		auto& battle_pack_list_j = data["battle_pack_list"];
 		auto& cell_info_j = data["cell_info"];
 		auto& farming_update_list_j = data["farming_update_list"];
 
@@ -88,6 +89,14 @@ namespace emulator::ssd
 			user->current_player->get_inventory_resource_list(*resource_list, resource_list_j.size());
 			resource_list->parse_diff(resource_list_j);
 			user->current_player->set_inventory_resource_list(*resource_list);
+		}
+
+		if (battle_pack_list_j.is_array())
+		{
+			const auto battle_pack_list = std::make_unique<database::players::battle_pack_list_t>();
+			user->current_player->get_battle_pack_list(*battle_pack_list, battle_pack_list_j.size());
+			battle_pack_list->parse_diff(battle_pack_list_j);
+			user->current_player->set_battle_pack_list(*battle_pack_list);
 		}
 
 		if (nonstackable_life_update_list_j.is_array())

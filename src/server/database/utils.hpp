@@ -29,8 +29,10 @@ namespace database
 			}
 
 			const auto size = data.size() / sizeof(T);
-			this->resize(std::min(MaxSize, size + add_size));
-			std::memcpy(this->data(), data.data(), data.size());
+			const auto capped_size = std::min(MaxSize, size + add_size);
+			this->resize(capped_size);
+			const auto copy_size = std::min(data.size(), capped_size * sizeof(T));
+			std::memcpy(this->data(), data.data(), copy_size);
 			return true;
 		}
 
@@ -70,12 +72,12 @@ namespace database
 			return buffer;
 		}
 
-		bool is_full() const
+		inline bool is_full() const
 		{
 			return this->size() >= MaxSize;
 		}
 
-		std::size_t max_size() const
+		inline std::size_t max_size() const
 		{
 			return MaxSize;
 		}

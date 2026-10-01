@@ -120,7 +120,7 @@ namespace game
     std::uint32_t get_quest_count();
     std::uint32_t get_defense_mission_count();
 
-	enum string_hash_t
+	enum string_hash_t : std::uint32_t
 	{
         ACC_Arm_00 = 0x5E30C809,
         ACC_Arm_01 = 0xADEFF394,
@@ -6109,11 +6109,44 @@ namespace game
 		std::uint64_t icon_path;
 	};
 
+    struct accessory_t
+    {
+        bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t id;
+        std::uint32_t armor;
+        std::uint32_t typeId;
+        std::uint32_t outfit_m;
+        std::uint32_t outfit_f;
+        std::uint32_t def_cid1;
+        bool cid1_fixed;
+        std::uint32_t def_cid2;
+        bool cid2_fixed;
+        std::uint32_t sode;
+    };
+
+    struct equip_t
+    {
+        bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t id;
+        std::uint32_t type;
+        std::uint32_t related_id;
+        std::uint32_t block;
+        std::string parts;
+        std::string package;
+        std::string fova;
+    };
+
 	struct production_t
 	{
 		bool parse(json::value& data);
         bool is_stackable() const;
-		std::shared_ptr<survival_gear_t> get_survival_gear();
+        std::shared_ptr<survival_gear_t> get_survival_gear();
+        std::shared_ptr<equip_t> get_equip();
+        std::shared_ptr<accessory_t> get_accessory();
 
 		std::uint32_t id;
 		std::uint32_t index;
@@ -6193,6 +6226,24 @@ namespace game
 
 		std::shared_ptr<production_t> production;
 	};
+
+    struct battle_pack_t
+    {
+        bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t id;
+        std::uint32_t index;
+        std::uint32_t type;
+        std::uint32_t material;
+        std::uint32_t rarity;
+        float weight;
+        std::uint64_t lang_name;
+        std::uint64_t lang_name2;
+        std::uint64_t lang_name3;
+        std::uint64_t lang_info;
+        std::string icon_path;
+    };
 
 	struct crew_member_type_t
 	{

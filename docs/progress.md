@@ -168,7 +168,7 @@ List of implemeted/unimplemented server commands
 | CMD_COOP_LOBBY_END | ❌ |  |
 | CMD_USER_FLAG_SET | ✔️ |  |
 | CMD_GET_FRIEND_HEADERS | ✔️ |  |
-| CMD_CRAFT_BP_LOTTERY | ❌ |  |
+| CMD_CRAFT_BP_LOTTERY | ✔️ |  |
 | CMD_CRAFT_DELIVER | ✔️ |  |
 | CMD_SURVIVE_SUPPLY_LOTTERY | ❌ |  |
 | CMD_CRAFT_OPEN_PERK | ❌ |  |

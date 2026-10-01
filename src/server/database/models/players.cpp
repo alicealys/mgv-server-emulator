@@ -635,6 +635,50 @@ namespace database::players
 		return true;
 	}
 
+	bool battle_pack_t::parse(json::value& data)
+	{
+		std::memset(this, 0, sizeof(battle_pack_t));
+
+		battle_pack_t::parseable parsed_data{};
+		if (!json::read(parsed_data, data))
+		{
+			return false;
+		}
+
+		this->flag = parsed_data.flag;
+		this->inventory_type = parsed_data.inventory_type;
+		this->cbox_index = parsed_data.cbox_index;
+		this->inventory_index = parsed_data.inventory_index;
+		this->obtain_order = parsed_data.obtain_order;
+		this->count = parsed_data.count;
+
+		std::uint32_t resource_id{};
+		if (!json::read(resource_id, data["recipe_id"]))
+		{
+			return false;
+		}
+
+		const auto iter = game::parameters_table.ssd_sbm_parameters->battle_packs.find(resource_id);
+		if (iter == game::parameters_table.ssd_sbm_parameters->battle_packs.end())
+		{
+			return false;
+		}
+
+		this->bp_index = iter->second->index;
+		return true;
+	}
+
+	void battle_pack_t::to_json(json::value& data) const
+	{
+		data["cbox_index"] = this->cbox_index;
+		data["count"] = this->count;
+		data["flag"] = this->flag;
+		data["inventory_index"] = this->inventory_index;
+		data["inventory_type"] = this->inventory_type;
+		data["obtain_order"] = this->obtain_order;
+		data["recipe_id"] = this->get_battle_pack_id();
+	}
+
 	void inventory_resource_t::to_json(json::value& data) const
 	{
 		data["inventory_index"] = this->inventory_index;
@@ -1057,17 +1101,6 @@ namespace database::players
 			entry["mission_code"] = mission_list.quest_id_list[i];
 			entry["repop_count"] = this->list[i].repop_count;
 		}
-	}
-
-	bool map_unlock_t::parse(json::value& data)
-	{
-		utils::json_utils::get_or(data, this->value); 
-		return true;
-	}
-
-	void map_unlock_t::to_json(json::value& data) const
-	{
-		data = this->value;
 	}
 
 	void map_unlock_list_t::to_json(json::value& data) const
@@ -1656,6 +1689,107 @@ namespace database::players
 		return this->push(item);
 	}
 
+	battle_pack_t* battle_pack_list_t::find_item(const std::uint32_t battle_pack_id)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			if (this->operator[](i).get_battle_pack_id() == battle_pack_id)
+			{
+				return &this->operator[](i);
+			}
+		}
+
+		return nullptr;
+	}
+
+	battle_pack_t* battle_pack_list_t::get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type)
+	{
+		for (auto i = 0u; i < this->size(); i++)
+		{
+			auto& entry = this->operator[](i);
+			if (entry.inventory_index == inventory_index && entry.inventory_type == inventory_type)
+			{
+				return &entry;
+			}
+		}
+
+		return nullptr;
+	}
+
+	bool battle_pack_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const
+	{
+		index = 0u;
+		obtain_order = 0u;
+
+		for (auto i = 0u; i < this->size(); )
+		{
+			auto& entry = this->operator[](i);
+			obtain_order = std::max(obtain_order, static_cast<std::uint16_t>(entry.obtain_order));
+
+			if (entry.inventory_index == index && entry.inventory_type == inventory_type && entry.bp_index != 0)
+			{
+				++index;
+				i = 0u;
+				continue;
+			}
+			else
+			{
+				++i;
+			}
+		}
+
+		++obtain_order;
+		return index < max_battle_packs;
+	}
+
+	bool battle_pack_list_t::add_item(battle_pack_t& item, const std::uint8_t inventory_type)
+	{
+		std::int64_t free_index = -1;
+		for (auto o = 0ull; o < this->size(); o++)
+		{
+			auto& entry = this->operator[](o);
+			if (entry.bp_index == item.bp_index && entry.inventory_type == inventory_type &&
+				entry.count < max_item_count)
+			{
+				const auto add_count = std::min(item.count, max_item_count - entry.count);
+				entry.count += add_count;
+				if (add_count == item.count)
+				{
+					std::memcpy(&item, &entry, sizeof(stackable_item_t));
+					return true;
+				}
+				else
+				{
+					item.count -= add_count;
+				}
+			}
+			else if (this->is_element_empty(this->operator[](o)) && free_index == -1)
+			{
+				free_index = static_cast<std::int64_t>(o);
+			}
+		}
+
+		item.inventory_type = inventory_type;
+		std::uint16_t inventory_index{};
+		std::uint16_t obtain_order{};
+		if (!this->find_free_index(item.inventory_type, inventory_index, obtain_order))
+		{
+			return false;
+		}
+
+		item.inventory_index = inventory_index;
+		item.obtain_order = inventory_index;
+
+		if (free_index != -1)
+		{
+			auto& entry = this->operator[](free_index);
+			std::memcpy(&entry, &item, sizeof(stackable_item_t));
+			return true;
+		}
+
+		return this->push(item);
+	}
+
 	bool crew_levels_internal_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["base_defense"], this->base_defense);
@@ -2076,10 +2210,12 @@ namespace database::players
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
+		DEF_ARRAY_GET(player, battle_pack_list_t, battle_pack_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_SET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
+		DEF_ARRAY_SET(player, battle_pack_list_t, battle_pack_list);
 	}
 
 	void player::get_loadout_list(loadout_list_t& loadout_list) const
@@ -2145,6 +2281,11 @@ namespace database::players
 	void player::get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list, size_add);
+	}
+
+	void player::get_battle_pack_list(battle_pack_list_t& battle_pack_list, const std::size_t size_add) const
+	{
+		RUN_IMPL(impl::get_battle_pack_list, this->get_user_id(), battle_pack_list, size_add);
 	}
 
 	void player::get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const
@@ -2257,6 +2398,11 @@ namespace database::players
 	bool player::set_stackable_item_list(stackable_item_list_t& stackable_item_list) const
 	{
 		RUN_IMPL(impl::set_stackable_item_list, this->get_user_id(), stackable_item_list);
+	}
+
+	bool player::set_battle_pack_list(battle_pack_list_t& battle_pack_list) const
+	{
+		RUN_IMPL(impl::set_battle_pack_list, this->get_user_id(), battle_pack_list);
 	}
 
 	bool player::set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const

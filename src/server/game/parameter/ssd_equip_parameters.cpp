@@ -11,6 +11,17 @@ namespace game::parameters
 
 	bool ssd_equip_parameters::parse(json::value& data)
 	{
+		for (auto i = 0ull; i < data["equipId"].size(); i++)
+		{
+			auto equip = std::make_shared<equip_t>();
+			if (!equip->parse(data["equipId"][i]))
+			{
+				continue;
+			}
+
+			this->equips[equip->id] = equip;
+		}
+
 		return true;
 	}
 }

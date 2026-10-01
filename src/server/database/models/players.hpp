@@ -91,9 +91,9 @@ namespace database::players
 
 		std::uint32_t flag : 1;
 		std::uint32_t inventory_type : 1;
-		std::uint32_t cbox_index : 7;
-		std::uint32_t inventory_index : 7;
-		std::uint32_t obtain_order : 7;
+		std::uint32_t cbox_index : 3;
+		std::uint32_t inventory_index : 11;
+		std::uint32_t obtain_order : 8;
 		std::uint32_t damaged_in_count : 8;
 		std::uint32_t production_index : 15;
 		std::uint32_t count : 17;
@@ -361,13 +361,12 @@ namespace database::players
 
 		std::uint32_t flag : 1;
 		std::uint32_t inventory_type : 1;
-		std::uint32_t cbox_index : 7;
-		std::uint32_t inventory_index : 7;
-		std::uint32_t obtain_order : 7;
+		std::uint32_t cbox_index : 3;
+		std::uint32_t inventory_index : 11;
+		std::uint32_t obtain_order : 8;
 		std::uint32_t damaged_in_count : 8;
-		std::uint32_t resource_index : 10;
+		std::uint32_t resource_index : 15;
 		std::uint32_t count : 17;
-		std::uint32_t unused : 5;
 		
 		inline std::uint32_t get_resource_id() const
 		{
@@ -389,27 +388,52 @@ namespace database::players
 		void to_json(json::value& data) const;
 	};
 
+	struct battle_pack_t
+	{
+		struct parseable
+		{
+			std::uint8_t flag;
+			std::uint8_t inventory_type;
+			std::uint8_t cbox_index;
+			std::uint8_t inventory_index;
+			std::uint8_t obtain_order;
+			std::uint32_t count;
+		};
+
+		std::uint32_t flag : 1;
+		std::uint32_t inventory_type : 1;
+		std::uint32_t cbox_index : 3;
+		std::uint32_t inventory_index : 7;
+		std::uint32_t obtain_order : 7;
+		std::uint32_t bp_index : 7;
+		std::uint32_t count : 17;
+		std::uint32_t unused : 15;
+
+		inline std::uint32_t get_battle_pack_id() const
+		{
+			if (this->bp_index > game::parameters_table.ssd_sbm_parameters->battle_pack_list.size())
+			{
+				return 0u;
+			}
+
+			const auto& res = game::parameters_table.ssd_sbm_parameters->battle_pack_list[this->bp_index];
+			if (res == nullptr)
+			{
+				return 0u;
+			}
+
+			return res->id;
+		}
+
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
+	};
+
+
 	struct player_play_record_t
 	{
 		std::uint32_t first[191];
 		std::uint32_t additional[46];
-	};
-
-	struct quest_record_t
-	{
-		std::uint8_t flagset;
-		std::uint32_t mission_code;
-		std::uint16_t repop_count;
-
-		bool parse(json::value& data);
-		void to_json(json::value& data) const;
-	};
-
-	struct map_unlock_t
-	{
-		std::uint16_t value;
-		bool parse(json::value& data);
-		void to_json(json::value& data) const;
 	};
 
 	struct story_unlock_info_t
@@ -591,6 +615,10 @@ namespace database::players
 	};
 #pragma pack(pop)
 
+	static_assert(sizeof(battle_pack_t) == 8);
+	static_assert(sizeof(inventory_resource_t) == 8);
+	static_assert(sizeof(stackable_item_t) == 8);
+
 	using mission_record_list_t = database_struct<mission_record_list_internal_t>;
 	using quest_record_list_t = database_struct<quest_record_list_internal_t>;
 
@@ -684,6 +712,33 @@ namespace database::players
 
 	};
 
+	constexpr const auto max_battle_packs = 64;
+	class battle_pack_list_t final : public generic_item_list<battle_pack_t, max_battle_packs>
+	{
+	public:
+		inline bool are_elements_equal(const battle_pack_t& l, const battle_pack_t& r) const override
+		{
+			return l.inventory_index == r.inventory_index && l.inventory_type == r.inventory_type;
+		}
+
+		inline bool is_element_empty(const battle_pack_t& value) const override
+		{
+			return value.bp_index == 0 || value.count == 0;
+		}
+
+		battle_pack_t* find_item(const std::uint32_t production_id);
+		battle_pack_t* get_entry(const std::uint16_t inventory_index, const std::uint8_t inventory_type);
+		bool find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const;
+
+		inline void import_element(battle_pack_t& dest, const battle_pack_t& src) const override
+		{
+			std::memcpy(&dest, &src, sizeof(battle_pack_t));
+		}
+
+		bool add_item(battle_pack_t& item, const std::uint8_t inventory_type = inventory_storage);
+
+	};
+
 	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
@@ -713,6 +768,7 @@ namespace database::players
 		DEFINE_FIELD(quest_record_list, sqlpp::binary);
 		DEFINE_FIELD(inventory_resource_list, sqlpp::binary);
 		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
+		DEFINE_FIELD(battle_pack_list, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_afghan, sqlpp::binary);
 		DEFINE_FIELD(map_unlock_list_africa, sqlpp::binary);
 		DEFINE_FIELD(building_info_afghan, sqlpp::binary);
@@ -743,6 +799,7 @@ namespace database::players
 			quest_record_list_field_t,
 			inventory_resource_list_field_t,
 			stackable_item_list_field_t,
+			battle_pack_list_field_t,
 			map_unlock_list_afghan_field_t,
 			map_unlock_list_africa_field_t,
 			building_info_afghan_field_t,
@@ -826,10 +883,12 @@ namespace database::players
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
+		void get_battle_pack_list(battle_pack_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
 
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
+		bool set_battle_pack_list(battle_pack_list_t& stackable_item_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
 

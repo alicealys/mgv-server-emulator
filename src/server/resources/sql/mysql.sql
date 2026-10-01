@@ -52,6 +52,7 @@ create table if not exists `players`
 	story_unlock_info  			blob default null,
 	stackable_item_list  		blob default null,
 	inventory_resource_list 	blob default null,
+	battle_pack_list		 	blob default null,
 	map_unlock_list_afghan		blob default null,
 	map_unlock_list_africa		blob default null,
 	nonstackable_item_list		mediumblob default null,

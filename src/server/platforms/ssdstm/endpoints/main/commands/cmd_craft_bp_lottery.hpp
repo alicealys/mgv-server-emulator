@@ -8,8 +8,8 @@ namespace emulator::ssd
 		struct entry_t
 		{
 			std::uint16_t inventory_index;
-			std::uint16_t inventory_type;
-			std::uint16_t num;
+			std::uint8_t inventory_type;
+			std::uint8_t num;
 		};
 
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;

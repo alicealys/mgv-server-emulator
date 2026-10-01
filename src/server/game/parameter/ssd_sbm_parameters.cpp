@@ -41,6 +41,22 @@ namespace game::parameters
 		return resource->id;
 	}
 
+	std::uint32_t ssd_sbm_parameters::get_battle_pack_id(const std::uint32_t bp_index) const
+	{
+		if (bp_index > this->battle_pack_list.size())
+		{
+			return 0u;
+		}
+
+		const auto& resource = this->battle_pack_list[bp_index];
+		if (resource == nullptr)
+		{
+			return 0u;
+		}
+
+		return resource->id;
+	}
+
 	bool ssd_sbm_parameters::parse(json::value& data)
 	{
 		for (auto i = 0ull; i < data["customize_option"].size(); i++)
@@ -113,6 +129,18 @@ namespace game::parameters
 			this->customize[inst->id] = inst;
 		}
 
+
+		for (auto i = 0ull; i < data["accessory"].size(); i++)
+		{
+			auto accessory = std::make_shared<accessory_t>();
+			if (!accessory->parse(data["accessory"][i]))
+			{
+				console::warning("invalid accessory at index %lli\n", i);
+			}
+
+			this->accessories[accessory->id] = accessory;
+		}
+
 		for (auto i = 0ull; i < data["resource"].size(); i++)
 		{
 			auto res = std::make_shared<resource_t>();
@@ -125,7 +153,7 @@ namespace game::parameters
 			this->resources[res->id] = res;
 			if (res->index >= this->resources_list.size())
 			{
-				this->resources_list.resize(res->index + 1);
+				this->resources_list.resize(res->index + 1ull);
 			}
 
 			this->resources_list[res->index] = res;
@@ -156,7 +184,7 @@ namespace game::parameters
 			this->productions[prod->id] = prod;
 			if (prod->index >= this->productions_list.size())
 			{
-				this->productions_list.resize(prod->index + 1);
+				this->productions_list.resize(prod->index + 1ull);
 			}
 
 			this->productions_list[prod->index] = prod;
@@ -182,6 +210,12 @@ namespace game::parameters
 			}
 
 			this->recipes[recipe->id] = recipe;
+			if (recipe->index >= this->recipes_list.size())
+			{
+				this->recipes_list.resize(recipe->index + 1ull);
+			}
+
+			this->recipes_list[recipe->index] = recipe;
 		}
 
 		for (auto i = 0ull; i < data["gradeup_spec"].size(); i++)
@@ -189,6 +223,24 @@ namespace game::parameters
 			gradeup_spec_t spec{};
 			spec.parse(data["gradeup_spec"][i]);
 			this->gradeup_spec[spec.rarity] = spec;
+		}
+
+		for (auto i = 0ull; i < data["battle_pack"].size(); i++)
+		{
+			auto res = std::make_shared<battle_pack_t>();
+			if (!res->parse(data["battle_pack"][i]))
+			{
+				console::warning("invalid battle_pack at index %lli\n", i);
+				continue;
+			}
+
+			this->battle_packs[res->id] = res;
+			if (res->index >= this->battle_pack_list.size())
+			{
+				this->battle_pack_list.resize(res->index + 1ull);
+			}
+
+			this->battle_pack_list[res->index] = res;
 		}
 
 		for (auto i = 0ull; i < data["survival"].size(); i++)

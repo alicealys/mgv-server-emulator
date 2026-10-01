@@ -25,6 +25,7 @@ namespace emulator::ssd
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
+		const auto battle_pack_list = std::make_unique<database::players::battle_pack_list_t>();
 		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
 		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
 
@@ -39,6 +40,7 @@ namespace emulator::ssd
 		player->get_nonstackable_item_list(*nonstackable_list);
 		player->get_inventory_resource_list(*inventory_resources);
 		player->get_stackable_item_list(*stackable_item_list);
+		player->get_battle_pack_list(*battle_pack_list);
 		player->get_story_unlock_info(*story_unlock_info);
 		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
@@ -57,7 +59,7 @@ namespace emulator::ssd
 		result["additional_storage_info"]["count"][0] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_weapons];
 		result["additional_storage_info"]["count"][1] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_gear];
 
-		result["battle_pack_list"] = json::array();
+		battle_pack_list->to_json(result["battle_pack_list"]);
 		result["bgm_my_list"] = json::array();
 		result["boost_list"] = json::array();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
