@@ -7,7 +7,7 @@
 
 namespace database::crew_members
 {
-	constexpr const auto max_crew_members = 30ull;
+	constexpr const auto max_crew_members = 30u;
 	
 	struct motivation_history_internal_t
 	{

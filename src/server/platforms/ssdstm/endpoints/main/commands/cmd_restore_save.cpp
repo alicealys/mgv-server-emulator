@@ -108,7 +108,7 @@ namespace emulator::ssd
 			if (crew_list_j.is_array())
 			{
 				database::crew_members::remove_all(user->current_player->get_player_id());
-				const auto member_count = std::min(database::crew_members::max_crew_members, crew_list_j.size());
+				const auto member_count = std::min(static_cast<std::size_t>(database::crew_members::max_crew_members), crew_list_j.size());
 
 				for (auto i = 0ull; i < member_count; i++)
 				{

@@ -52,7 +52,6 @@ create table if not exists `players`
 	quest_record_list  			blob default null,
 	stackable_item_list  		blob default null,
 	inventory_resource_list 	blob default null,
-	crew_member_list			blob default null,
 	defense_mission_record_list	blob default null,
 	map_unlock_list_afghan		blob default null,
 	map_unlock_list_africa		blob default null,
