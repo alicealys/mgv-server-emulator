@@ -211,7 +211,7 @@ namespace game
 						continue;
 					}
 
-					if (list.size() <= entry.index)
+					if (list.size() <= static_cast<std::size_t>(entry.index))
 					{
 						list.resize(entry.index + 1ull);
 					}

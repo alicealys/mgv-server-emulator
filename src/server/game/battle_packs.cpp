@@ -9,11 +9,6 @@ namespace game
 {
 	namespace
 	{
-		game::item_t lottery_none()
-		{
-			return {};
-		}
-
 		std::uint32_t rand_index(const std::vector<std::uint32_t>& pool)
 		{
 			if (pool.size() == 0)
@@ -81,7 +76,7 @@ namespace game
 				return set.contains(resource.material) || Rarity >= 4;
 			});
 
-			console::print("[battle packs] lottery_material %i pool size: %lli\n", Rarity, pool.size());
+			console::debug("[battle packs] lottery_material %i pool size: %lli\n", Rarity, pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RESOURCE;
@@ -100,7 +95,7 @@ namespace game
 				return resource.lang_name == 115687727752924;
 			});
 
-			console::print("[battle packs] lottery_crew_growth pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_crew_growth pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RESOURCE;
@@ -152,7 +147,7 @@ namespace game
 				return equip_types.contains(equip->type);
 			});
 
-			console::print("[battle packs] lottery_junk_weapon %i pool size: %lli\n", Rarity, pool.size());
+			console::debug("[battle packs] lottery_junk_weapon %i pool size: %lli\n", Rarity, pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
@@ -173,7 +168,7 @@ namespace game
 					recipe.production->rarity == Rarity;
 			});
 
-			console::print("[battle packs] lottery_junk_accessory pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_junk_accessory pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
@@ -216,7 +211,7 @@ namespace game
 				return equip_types.contains(equip->type);
 			});
 
-			console::print("[battle packs] lottery_junk_weapon_legendary_closerange pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_junk_weapon_legendary_closerange pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
@@ -258,7 +253,7 @@ namespace game
 				return equip_types.contains(equip->type);
 			});
 
-			console::print("[battle packs] lottery_junk_weapon_legendary_longrange pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_junk_weapon_legendary_longrange pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
@@ -301,7 +296,7 @@ namespace game
 				return accessory->typeId == Type;
 			});
 
-			console::print("[battle packs] lottery_junk_accessory_legendary %i pool size: %lli\n", Type, pool.size());
+			console::debug("[battle packs] lottery_junk_accessory_legendary %i pool size: %lli\n", Type, pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
@@ -331,7 +326,7 @@ namespace game
 				return resource.material == MATERIAL_ENHANCEMENT;
 			});
 
-			console::print("[battle packs] lottery_weapon_enhance pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_weapon_enhance pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RESOURCE;
@@ -361,7 +356,7 @@ namespace game
 				return recipe.production != nullptr && recipe.production->type == PRD_TYPE_Cure && recipe.production->rarity == 1;
 			});
 
-			console::print("[battle packs] lottery_medical pool size: %lli\n", pool.size());
+			console::debug("[battle packs] lottery_medical pool size: %lli\n", pool.size());
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_PRODUCTION;
