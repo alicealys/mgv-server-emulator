@@ -34,8 +34,10 @@ create table if not exists `players`
 	point						int unsigned default 0,
 	nameplate					int unsigned default 0,
 	current_loadout				int unsigned default 0,
-	crew_levels					blob default null,
-	avatar						blob default null,
+	crew_levels					varchar(64) default null,
+	defense_mission_info		varchar(64) default null,
+	communication_gesture_info	varchar(64) default null,
+	avatar						varchar(256) default null,
 	loadout_list				blob default null,
 	mission_info				blob default null,
 	player_inventory			blob default null,
@@ -54,9 +56,7 @@ create table if not exists `players`
 	map_unlock_list_afghan		blob default null,
 	map_unlock_list_africa		blob default null,
 	building_info_afghan		blob default null,
-	defense_mission_info		blob default null,
 	defense_mission_record_list	blob default null,
-	communication_gesture_info	blob default null,
 	foreign key (`f_user_id`) references users(`user_id`)
 )
 -- query:mgssd.players.remove_insert_trigger

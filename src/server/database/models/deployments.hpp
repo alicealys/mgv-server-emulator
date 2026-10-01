@@ -87,7 +87,7 @@ namespace database::deployments
 		void to_json(json::value& data) const;
 	};
 
-	struct team_params_t
+	struct team_params_internal_t
 	{
 		std::uint32_t use_fast_travel;
         std::uint32_t required_combat;
@@ -95,10 +95,9 @@ namespace database::deployments
         std::uint32_t required_time;
 		std::uint32_t success_rate;
 		std::uint32_t injure_rate;
-
-		void parse(const std::string& data);
-		std::string serialize() const;
 	};
+
+	using team_params_t = database_struct<team_params_internal_t>;
 
 	struct deploy_params_t
 	{
@@ -193,7 +192,7 @@ namespace database::deployments
 			this->item_05_.packed = row.item_05;
 			this->complete_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.complete_date.value().time_since_epoch());
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());
-			this->params_.parse(row.params.value());
+			this->params_.deserialize(row.params.value());
 		}
 
 		GET_FIELD_H(std::uint64_t, team_id);

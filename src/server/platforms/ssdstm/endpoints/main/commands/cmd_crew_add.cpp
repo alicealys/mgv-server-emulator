@@ -16,6 +16,12 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		const auto count = database::crew_members::get_member_count(user->current_player->get_player_id());
+		if (count >= database::crew_members::max_crew_members)
+		{
+			return error(ERR_OVER_CAPACITY);
+		}
+
 		database::crew_members::member_params_t new_member_params{};
 		if (!new_member_params.parse_add_param(add_crew_param))
 		{

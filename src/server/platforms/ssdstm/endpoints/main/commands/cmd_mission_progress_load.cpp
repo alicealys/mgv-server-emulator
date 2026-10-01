@@ -16,7 +16,6 @@ namespace emulator::ssd
 		const auto mission_info = std::make_unique<database::players::mission_info_t>();
 		const auto gimmick_data_afghan = std::make_unique<database::players::gimmick_save_data_t>();
 		const auto gimmick_data_africa = std::make_unique<database::players::gimmick_save_data_t>();
-		const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
 		const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
 		const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
@@ -30,14 +29,11 @@ namespace emulator::ssd
 		const auto stackable_item_list = std::make_unique<database::players::stackable_item_list_t>();
 		const auto map_unlock_list_afghan = std::make_unique<database::players::map_unlock_list_t>();
 		const auto map_unlock_list_africa = std::make_unique<database::players::map_unlock_list_t>();
-		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
 		const auto defense_mission_record_list = std::make_unique<database::players::defense_mission_record_list_t>();
-		const auto communication_gesture_info = std::make_unique<database::players::communication_gesture_info_t>();
 
 		const auto& player = user->current_player;
 
 		player->get_mission_info(*mission_info);
-		player->get_gimmick_info(*gimmick_info);
 		player->get_gimmick_save_data(*gimmick_data_afghan, 0);
 		player->get_gimmick_save_data(*gimmick_data_africa, 1);
 		player->get_inventory(*player_inventory);
@@ -51,9 +47,11 @@ namespace emulator::ssd
 		player->get_quest_record_list(*quest_record_list);
 		player->get_map_unlock_list_afghan(*map_unlock_list_afghan);
 		player->get_map_unlock_list_africa(*map_unlock_list_africa);
-		player->get_defense_mission_info(*defense_mission_info);
 		player->get_defense_mission_record_list(*defense_mission_record_list);
-		player->get_communication_gesture_info(*communication_gesture_info);
+
+		const auto gimmick_info = player->get_gimmick_info();
+		const auto defense_mission_info = player->get_defense_mission_info();
+		const auto communication_gesture_info = player->get_communication_gesture_info();
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -68,7 +66,7 @@ namespace emulator::ssd
 		result["boost_list"] = json::array();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
 		result["cage_list"] = json::array();
-		communication_gesture_info->to_json(result["communication_gesture_slot"]);
+		communication_gesture_info.to_json(result["communication_gesture_slot"]);
 
 		result["coop_embedded_mission_record_info_list"] = json::array();
 		result["coop_event_mission_record_info_list"] = json::array();
@@ -86,7 +84,7 @@ namespace emulator::ssd
 			result["defense_mission_status"]["mission_start_date"] = latest_defense_mission->get_start_date();
 			result["defense_mission_status"]["next_wave_start_date"] = latest_defense_mission->get_next_wave_date();
 			result["defense_mission_status"]["total_score"] = latest_defense_mission->get_total_score();
-			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info->status.mining_machine_life;
+			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info.status.mining_machine_life;
 			result["defense_mission_status"]["disconnect_flag"] = 0;
 		}
 		else
@@ -96,24 +94,24 @@ namespace emulator::ssd
 			result["defense_mission_status"]["mission_start_date"] = 0;
 			result["defense_mission_status"]["next_wave_start_date"] = 0;
 			result["defense_mission_status"]["total_score"] = 0;
-			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info->status.mining_machine_life;
+			result["defense_mission_status"]["mining_machine_life"] = defense_mission_info.status.mining_machine_life;
 			result["defense_mission_status"]["disconnect_flag"] = 0;
 		}
 
-		defense_mission_info->parameter.to_json(result["defense_mission_parameter"]);
+		defense_mission_info.parameter.to_json(result["defense_mission_parameter"]);
 		defense_mission_record_list->to_json(result["defense_mission_record_info_list"]);
 
 		result["defense_reward_limit_list"] = json::array{};
 
 		result["gimmick_save_info_afghan"]["map_location"] = 0;
 		gimmick_data_afghan->to_json(result["gimmick_save_info_afghan"], 0);
-		gimmick_info->resource_afghan.to_json(result["gimmick_save_info_afghan"]);
+		gimmick_info.resource_afghan.to_json(result["gimmick_save_info_afghan"]);
 
 		result["gimmick_save_info_africa"]["map_location"] = 1;
 		gimmick_data_africa->to_json(result["gimmick_save_info_africa"], 1);
-		gimmick_info->resource_africa.to_json(result["gimmick_save_info_afghan"]);
+		gimmick_info.resource_africa.to_json(result["gimmick_save_info_afghan"]);
 
-		gimmick_info->timer.to_json(result["gimmick_timer_info"]);
+		gimmick_info.timer.to_json(result["gimmick_timer_info"]);
 
 		player_inventory->to_json(result["inventory_player_info"], static_cast<std::uint16_t>(player->get_nameplate()));
 		user_inventory->to_json(result["inventory_user_info"]);

@@ -104,22 +104,6 @@ namespace database::deployments
 		data["type"] = this->type;
 	}
 
-	void team_params_t::parse(const std::string& data)
-	{
-		const auto raw_data = utils::cryptography::base64::decode(data);
-		if (raw_data.size() != sizeof(team_params_t))
-		{
-			return;
-		}
-
-		std::memcpy(this, raw_data.data(), raw_data.size());
-	}
-
-	std::string team_params_t::serialize() const
-	{
-		return utils::encoding::encode_base64(*this);
-	}
-
 	GET_FIELD_C(deployment_team, std::uint64_t, team_id);
 	GET_FIELD_C(deployment_team, std::uint64_t, player_id);
 	GET_FIELD_C(deployment_team, std::uint64_t, index);

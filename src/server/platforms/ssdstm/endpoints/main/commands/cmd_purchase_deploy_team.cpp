@@ -22,6 +22,12 @@ namespace emulator::ssd
 		{
 			for (auto i = 0ull; i < players.size(); i++)
 			{
+				const auto other_team_count = database::deployments::get_team_count(players[i].get_player_id());
+				if (other_team_count > team_count)
+				{
+					continue;
+				}
+
 				const auto team_id = database::deployments::create_team(players[i].get_player_id());
 				const auto result_team = database::deployments::find_team(team_id);
 				if (!result_team.has_value())

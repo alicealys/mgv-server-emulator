@@ -50,23 +50,22 @@ namespace emulator
 		console::debug("[Endpoint] Handling command \"%s\" (%lli)\n", msgid_str.data(), id);
 #endif
 
-		auto get_json_response = [&]
+		json::value json_res;
+
+		const auto flags = handler->second->flags();
+		if ((flags & CMD_NEEDS_USER) != 0 && !user.has_value())
 		{
-			const auto flags = handler->second->flags();
-			if ((flags & CMD_NEEDS_USER) != 0 && !user.has_value())
-			{
-				return error(ERR_INVALID_SESSION);
-			}
+			json_res = error(ERR_INVALID_SESSION);
+		}
+		else if ((flags & CMD_NEEDS_PLAYER) != 0 && (!user.has_value() || !user->current_player.has_value()))
+		{
+			json_res = error(ERR_INVALID_SESSION);
+		}
+		else
+		{
+			json_res = handler->second->execute(json_req["data"], user);
+		}
 
-			if ((flags & CMD_NEEDS_PLAYER) != 0 && (!user.has_value() || !user->current_player.has_value()))
-			{
-				return error(ERR_INVALID_SESSION);
-			}
-
-			return handler->second->execute(json_req["data"], user);
-		};
-
-		auto json_res = get_json_response();
 		if (!json_res.is_object())
 		{
 			json_res = json::object();

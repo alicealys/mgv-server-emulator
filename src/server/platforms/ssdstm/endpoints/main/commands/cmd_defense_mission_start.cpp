@@ -22,9 +22,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		database::players::defense_mission_info_t info{};
-		user->current_player->get_defense_mission_info(info);
-
+		auto info = user->current_player->get_defense_mission_info();
 		if (info.status.mining_machine_life == 0)
 		{
 			return error(ERR_DATABASE);

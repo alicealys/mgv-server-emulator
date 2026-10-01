@@ -195,3 +195,17 @@ public: \
 				return result != 0ull; \
 			}); \
 		} \
+
+#define DEF_STRUCT_SET(__table__, __type__, __name__) \
+		template <database_type_t Type> \
+		bool set_##__name__(const std::uint64_t __table__##id, const __type__& __name__) \
+		{ \
+			return database::access<bool>([&](database::database_t& db) \
+			{ \
+				auto result = db.get_database<Type>()->operator()( \
+					sqlpp::update(__table__::table) \
+							.set(__table__::table.__name__ = __name__.serialize()) \
+								.where(__table__::table.__table__##_id == __table__##id)); \
+				return result != 0ull; \
+			}); \
+		} \

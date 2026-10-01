@@ -29,6 +29,11 @@ namespace database::players
 				player::table.nameplate,
 				player::table.player_creation_date,
 				player::table.point,
+				player::table.avatar,
+				player::table.gimmick_info,
+				player::table.crew_levels,
+				player::table.communication_gesture_info,
+				player::table.defense_mission_info,
 				users::user::table.account_id
 			).from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
 		}
@@ -196,7 +201,7 @@ namespace database::players
 		}
 	}
 
-	void avatar_t::to_json(json::value& data) const
+	void avatar_internal_t::to_json(json::value& data) const
 	{
 		data["accessory"] = this->accessory;
 		data["beard_length"] = this->beard_length;
@@ -223,9 +228,9 @@ namespace database::players
 		data["parameter"] = utils::encoding::encode_base64(this->motion_frame_list);
 	}
 
-	bool avatar_t::parse(json::value& data)
+	bool avatar_internal_t::parse(json::value& data)
 	{
-		std::memset(this, 0, sizeof(avatar_t));
+		std::memset(this, 0, sizeof(avatar_internal_t));
 
 		auto& name_j = data["avatar_name"];
 		auto& parameter_j = data["parameter"];
@@ -973,6 +978,43 @@ namespace database::players
 		data = this->value;
 	}
 
+	void map_unlock_list_t::to_json(json::value& data) const
+	{
+		auto count = 0u;
+		for (auto i = 0ull; i < sizeof(this->map) * 8; i++)
+		{
+			const auto byte_index = (i >> 3);
+			const auto mask = (1 << (i & 7));
+			const auto is_unlocked = (this->map[byte_index] & mask) == mask;
+			if (is_unlocked)
+			{
+				data[count++] = i;
+			}
+		}
+	}
+
+	bool map_unlock_list_t::parse_diff(json::value& data)
+	{
+		if (!data.is_array())
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < data.size(); i++)
+		{
+			std::uint32_t map_part{};
+			if (!json::read(map_part, data[i]))
+			{
+				continue;
+			}
+
+			const auto byte_index = (map_part >> 3);
+			this->map[byte_index] |= (1 << (map_part & 7));
+		}
+
+		return true;
+	}
+
 	bool story_unlock_info_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["demo_open_flag"], this->demo_open_flag);
@@ -1522,7 +1564,7 @@ namespace database::players
 		return this->push(item);
 	}
 
-	bool crew_levels_t::parse(json::value& data)
+	bool crew_levels_internal_t::parse(json::value& data)
 	{
 		utils::json_utils::get_or(data["base_defense"], this->base_defense);
 		utils::json_utils::get_or(data["combat_deploy"], this->combat_deploy);
@@ -1533,7 +1575,7 @@ namespace database::players
 		return true;
 	}
 
-	void crew_levels_t::to_json(json::value& data) const
+	void crew_levels_internal_t::to_json(json::value& data) const
 	{
 		data["base_defense"] = this->base_defense;
 		data["combat_deploy"] = this->combat_deploy;
@@ -1586,13 +1628,13 @@ namespace database::players
 		data["attack_time"] = this->attack_time;
 	}
 
-	void defense_mission_info_t::initialize()
+	void defense_mission_info_internal_t::initialize()
 	{
 		std::memset(this, 0, sizeof(defense_mission_info_t));
 		this->status.mining_machine_life = 9360;
 	}
 
-	bool communication_gesture_info_t::parse(json::value& data)
+	bool communication_gesture_info_internal_t::parse(json::value& data)
 	{
 		if (!data.is_object())
 		{
@@ -1609,7 +1651,7 @@ namespace database::players
 		return true;
 	}
 
-	void communication_gesture_info_t::to_json(json::value& data) const
+	void communication_gesture_info_internal_t::to_json(json::value& data) const
 	{
 		for (auto i = 0ull; i < ARRAYSIZE(this->communication_slot); i++)
 		{
@@ -1619,7 +1661,7 @@ namespace database::players
 		}
 	}
 
-	void communication_gesture_info_t::initialize()
+	void communication_gesture_info_internal_t::initialize()
 	{
 		static const auto default_info = []()
 		{
@@ -1729,6 +1771,11 @@ namespace database::players
 	GET_FIELD_C(player, std::uint32_t, playtime);
 	GET_FIELD_C(player, std::uint32_t, nameplate);
 	GET_FIELD_C(player, std::uint32_t, point);
+	GET_FIELD_C(player, avatar_t, avatar);
+	GET_FIELD_C(player, gimmick_info_t, gimmick_info);
+	GET_FIELD_C(player, crew_levels_t, crew_levels);
+	GET_FIELD_C(player, defense_mission_info_t, defense_mission_info);
+	GET_FIELD_C(player, communication_gesture_info_t, communication_gesture_info);
 	GET_FIELD_C(player, std::chrono::microseconds, creation_date);
 
 	std::uint32_t player::get_current_loadout() const
@@ -1920,43 +1967,41 @@ namespace database::players
 			});
 		}
 
-		DEF_BINARY_GET(player, avatar_t, avatar);
 		DEF_BINARY_GET(player, loadout_list_t, loadout_list);
 		DEF_BINARY_GET(player, mission_info_t, mission_info);
 		DEF_BINARY_GET(player, player_inventory_t, player_inventory);
-		DEF_BINARY_GET(player, gimmick_info_t, gimmick_info);
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_GET(player, gimmick_save_data_t, gimmick_data_africa);
 		DEF_BINARY_GET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_GET(player, base_resources_t, base_resources);
 		DEF_BINARY_GET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_GET(player, building_info_t, building_info_afghan);
-		DEF_BINARY_GET(player, crew_levels_t, crew_levels);
-		DEF_BINARY_GET(player, defense_mission_info_t, defense_mission_info);
-		DEF_BINARY_GET(player, communication_gesture_info_t, communication_gesture_info);
+		DEF_BINARY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
+		DEF_BINARY_GET(player, map_unlock_list_t, map_unlock_list_africa);
 
-		DEF_BINARY_SET(player, avatar_t, avatar);
 		DEF_BINARY_SET(player, loadout_list_t, loadout_list);
 		DEF_BINARY_SET(player, mission_info_t, mission_info);
 		DEF_BINARY_SET(player, player_inventory_t, player_inventory);
-		DEF_BINARY_SET(player, gimmick_info_t, gimmick_info);
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_afghan);
 		DEF_BINARY_SET(player, gimmick_save_data_t, gimmick_data_africa);
 		DEF_BINARY_SET(player, player_play_record_t, player_play_record);
 		DEF_BINARY_SET(player, base_resources_t, base_resources);
 		DEF_BINARY_SET(player, story_unlock_info_t, story_unlock_info);
 		DEF_BINARY_SET(player, building_info_t, building_info_afghan);
-		DEF_BINARY_SET(player, crew_levels_t, crew_levels);
-		DEF_BINARY_SET(player, defense_mission_info_t, defense_mission_info);
-		DEF_BINARY_SET(player, communication_gesture_info_t, communication_gesture_info);
+		DEF_BINARY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
+		DEF_BINARY_SET(player, map_unlock_list_t, map_unlock_list_africa);
+
+		DEF_STRUCT_SET(player, avatar_t, avatar);
+		DEF_STRUCT_SET(player, gimmick_info_t, gimmick_info);
+		DEF_STRUCT_SET(player, crew_levels_t, crew_levels);
+		DEF_STRUCT_SET(player, defense_mission_info_t, defense_mission_info);
+		DEF_STRUCT_SET(player, communication_gesture_info_t, communication_gesture_info);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
 		DEF_ARRAY_GET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_GET(player, mission_record_list_t, mission_record_list);
 		DEF_ARRAY_GET(player, quest_record_list_t, quest_record_list);
-		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_afghan);
-		DEF_ARRAY_GET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_GET(player, defense_mission_record_list_t, defense_mission_record_list);
 
 		DEF_ARRAY_SET(player, nonstackable_item_list_t, nonstackable_item_list);
@@ -1964,14 +2009,7 @@ namespace database::players
 		DEF_ARRAY_SET(player, inventory_resource_list_t, inventory_resource_list);
 		DEF_ARRAY_SET(player, mission_record_list_t, mission_record_list);
 		DEF_ARRAY_SET(player, quest_record_list_t, quest_record_list);
-		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_afghan);
-		DEF_ARRAY_SET(player, map_unlock_list_t, map_unlock_list_africa);
 		DEF_ARRAY_SET(player, defense_mission_record_list_t, defense_mission_record_list);
-	}
-
-	void player::get_avatar(avatar_t& avatar) const
-	{
-		RUN_IMPL(impl::get_avatar, this->get_player_id(), avatar);
 	}
 
 	void player::get_loadout_list(loadout_list_t& loadout_list) const
@@ -1992,11 +2030,6 @@ namespace database::players
 	void player::get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_item_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_nonstackable_item_list, this->get_player_id(), nonstackable_item_list, size_add);
-	}
-
-	void player::get_gimmick_info(gimmick_info_t& gimmick_info) const
-	{
-		RUN_IMPL(impl::get_gimmick_info, this->get_player_id(), gimmick_info);
 	}
 
 	void player::get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map_location) const
@@ -2034,21 +2067,6 @@ namespace database::players
 		RUN_IMPL(impl::get_building_info_afghan, this->get_player_id(), building);
 	}
 
-	void player::get_crew_levels(crew_levels_t& crew_levels) const
-	{
-		RUN_IMPL(impl::get_crew_levels, this->get_user_id(), crew_levels);
-	}
-
-	void player::get_defense_mission_info(defense_mission_info_t& defense_mission_info) const
-	{
-		RUN_IMPL(impl::get_defense_mission_info, this->get_user_id(), defense_mission_info);
-	}
-
-	void player::get_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const
-	{
-		RUN_IMPL(impl::get_communication_gesture_info, this->get_user_id(), communication_gesture_info);
-	}
-
 	void player::get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add) const
 	{
 		RUN_IMPL(impl::get_mission_record_list, this->get_user_id(), mission_record_list, size_add);
@@ -2069,14 +2087,14 @@ namespace database::players
 		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list, size_add);
 	}
 
-	void player::get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add) const
+	void player::get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::get_map_unlock_list_afghan, this->get_user_id(), map_unlock_list, size_add);
+		RUN_IMPL(impl::get_map_unlock_list_afghan, this->get_user_id(), map_unlock_list);
 	}
 
-	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add) const
+	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list, size_add);
+		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
 	}
 
 	void player::get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add) const

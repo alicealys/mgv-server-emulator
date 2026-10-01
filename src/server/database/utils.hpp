@@ -268,4 +268,25 @@ namespace database
 			return sqlpp::value_or_null(value);
 		}
 	}
+
+	template <typename T>
+	class database_struct : public T
+	{
+	public:
+		std::string serialize() const
+		{
+			return utils::encoding::encode_base64(*this);
+		}
+
+		void deserialize(const std::string& data)
+		{
+			const auto deserialized = utils::cryptography::base64::decode(data);
+			if (deserialized.size() != sizeof(T))
+			{
+				return;
+			}
+
+			std::memcpy(this, deserialized.data(), deserialized.size());
+		}
+	};
 }

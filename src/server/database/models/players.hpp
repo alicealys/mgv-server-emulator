@@ -13,7 +13,7 @@ namespace database::players
 	constexpr const auto initial_loadout_count = 4u;
 
 #pragma pack(push, 1)
-	struct avatar_t
+	struct avatar_internal_t
 	{
 		std::uint8_t accessory;
 		std::uint8_t beard_length;
@@ -310,7 +310,7 @@ namespace database::players
 		void to_json(json::value& data) const;
 	};
 
-	struct gimmick_info_t
+	struct gimmick_info_internal_t
 	{
 		gimmick_resource_info_t resource_afghan;
 		gimmick_resource_info_t resource_africa;
@@ -501,7 +501,7 @@ namespace database::players
 		void load_default(const std::uint32_t map_location);
 	};
 
-	struct crew_levels_t
+	struct crew_levels_internal_t
 	{
 		std::uint8_t base_defense;
 		std::uint8_t combat_deploy;
@@ -526,7 +526,7 @@ namespace database::players
 		void to_json(json::value& data) const;
 	};
 
-	struct defense_mission_info_t
+	struct defense_mission_info_internal_t
 	{
 		struct status_t
 		{
@@ -552,7 +552,7 @@ namespace database::players
 		void initialize();
 	};
 
-	struct communication_gesture_info_t
+	struct communication_gesture_info_internal_t
 	{
 		std::uint8_t communication_slot[16];
 		std::uint8_t communication_type[16];
@@ -562,7 +562,21 @@ namespace database::players
 		void to_json(json::value& data) const;
 		void initialize();
 	};
+
+	struct map_unlock_list_t
+	{
+		std::uint8_t map[2738];
+
+		void to_json(json::value& value) const;
+		bool parse_diff(json::value& value);
+	};
 #pragma pack(pop)
+
+	using avatar_t = database_struct<avatar_internal_t>;
+	using gimmick_info_t = database_struct<gimmick_info_internal_t>;
+	using crew_levels_t = database_struct<crew_levels_internal_t>;
+	using defense_mission_info_t = database_struct<defense_mission_info_internal_t>;
+	using communication_gesture_info_t = database_struct<communication_gesture_info_internal_t>;
 
 	constexpr const auto max_item_count = 99999u;
 
@@ -697,37 +711,6 @@ namespace database::players
 
 	};
 
-	class map_unlock_list_t final : public generic_item_list<map_unlock_t, 21904>
-	{
-	public:
-		inline bool are_elements_equal(const map_unlock_t& l, const map_unlock_t& r) const override
-		{
-			return l.value == r.value;
-		}
-
-		inline bool is_element_empty(const map_unlock_t& value) const override
-		{
-			return value.value == 0u;
-		}
-
-		virtual void to_json(json::value& data) const override
-		{
-			auto idx = 1;
-			data[0] = 0;
-
-			const auto list = this->data();
-			for (auto i = 0ull; i < this->size(); i++)
-			{
-				if (this->is_element_empty(list[i]))
-				{
-					continue;
-				}
-
-				list[i].to_json(data[idx++]);
-			}
-		}
-	};
-
 	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
@@ -764,9 +747,14 @@ namespace database::players
 		DEFINE_FIELD(defense_mission_info, sqlpp::binary);
 		DEFINE_FIELD(defense_mission_record_list, sqlpp::binary);
 		DEFINE_FIELD(communication_gesture_info, sqlpp::binary);
-		DEFINE_TABLE(players, player_id_field_t, f_user_id_field_t, player_index_field_t,
+		DEFINE_TABLE(players, 
+			player_id_field_t, 
+			f_user_id_field_t, 
+			player_index_field_t,
 			player_creation_date_field_t,
-			point_field_t, nameplate_field_t, playtime_field_t,
+			point_field_t, 
+			nameplate_field_t, 
+			playtime_field_t,
 			current_loadout_field_t,
 			avatar_field_t, 
 			mission_info_field_t, 
@@ -806,6 +794,11 @@ namespace database::players
 			this->point_ = static_cast<std::uint32_t>(row.point);
 			this->current_loadout_ = static_cast<std::uint32_t>(row.current_loadout);
 			this->creation_date_ = row.player_creation_date.value().time_since_epoch();
+			this->avatar_.deserialize(row.avatar.value());
+			this->gimmick_info_.deserialize(row.gimmick_info.value());
+			this->crew_levels_.deserialize(row.crew_levels.value());
+			this->defense_mission_info_.deserialize(row.defense_mission_info.value());
+			this->communication_gesture_info_.deserialize(row.communication_gesture_info.value());
 		}
 
 		GET_FIELD_H(std::uint64_t, player_id);
@@ -816,24 +809,26 @@ namespace database::players
 		GET_FIELD_H(std::uint32_t, nameplate);
 		GET_FIELD_H(std::uint32_t, point);
 		GET_FIELD_H(std::uint32_t, current_loadout);
+		GET_FIELD_H(avatar_t, avatar);
+		GET_FIELD_H(gimmick_info_t, gimmick_info);
+		GET_FIELD_H(crew_levels_t, crew_levels);
+		GET_FIELD_H(defense_mission_info_t, defense_mission_info);
+		GET_FIELD_H(communication_gesture_info_t, communication_gesture_info);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
 		std::string get_name() const;
 		std::uint64_t get_id() const;
 
-		void get_avatar(avatar_t& avatar) const;
 		void get_loadout_list(loadout_list_t& loadout) const;
 		void get_mission_info(mission_info_t& mission_info) const;
 		void get_inventory(player_inventory_t& inventory) const;
-		void get_gimmick_info(gimmick_info_t& gimmick_info) const;
 		void get_gimmick_save_data(gimmick_save_data_t& gimmick_data, const std::uint32_t map_location) const;
 		void get_play_record(player_play_record_t& play_record) const;
 		void get_base_resources(base_resources_t& base_resources) const;
 		void get_story_unlock_info(story_unlock_info_t& story_unlock_info) const;
 		void get_building_info(building_info_t& building) const;
-		void get_crew_levels(crew_levels_t& crew_levels) const;
-		void get_defense_mission_info(defense_mission_info_t& defense_mission) const;
-		void get_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const;
+		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
+		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 
 		bool set_avatar(avatar_t& avatar) const;
 		bool set_loadout_list(loadout_list_t& loadout) const;
@@ -848,14 +843,14 @@ namespace database::players
 		bool set_crew_levels(crew_levels_t& crew_levels) const;
 		bool set_defense_mission_info(defense_mission_info_t& defense_mission) const;
 		bool set_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const;
+		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
+		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 
 		void get_mission_record_list(mission_record_list_t& mission_record_list, const std::size_t size_add = 0ull) const;
 		void get_quest_record_list(quest_record_list_t& quest_record_list, const std::size_t size_add = 0ull) const;
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;
 		void get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add = 0ull) const;
-		void get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
-		void get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list, const std::size_t size_add = 0ull) const;
 		void get_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list, const std::size_t size_add = 0ull) const;
 
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
@@ -863,11 +858,10 @@ namespace database::players
 		bool set_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list) const;
 		bool set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const;
 		bool set_stackable_item_list(stackable_item_list_t& stackable_item_list) const;
-		bool set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const;
-		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 		bool set_defense_mission_record_list(defense_mission_record_list_t& defense_mission_record_list) const;
 
 		void set_nameplate(const std::uint16_t nameplate) const;
+
 	};
 
 	std::optional<player> find(const std::uint64_t id);

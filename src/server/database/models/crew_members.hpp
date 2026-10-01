@@ -7,15 +7,17 @@
 
 namespace database::crew_members
 {
-	struct motivation_history_t
+	constexpr const auto max_crew_members = 30ull;
+	
+	struct motivation_history_internal_t
 	{
 		std::uint8_t event[10];
 		std::uint8_t value[10];
 
-		void parse(const std::string& data);
-		std::string serialize() const;
 		void to_json(json::value& data) const;
 	};
+
+	using motivation_history_t = database_struct<motivation_history_internal_t>;
 
 	struct member_params_t
 	{
@@ -196,7 +198,7 @@ namespace database::crew_members
 			this->sickness_time_2_ = static_cast<std::uint32_t>(row.sickness_time_2);
 
 			this->nickname_ = row.nickname;
-			this->motivation_history_.parse(row.motivation_history.value());
+			this->motivation_history_.deserialize(row.motivation_history.value());
 
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());
 		}
@@ -259,6 +261,7 @@ namespace database::crew_members
 
 	std::optional<crew_member> find(const std::uint64_t player_id, const std::uint64_t member_id);
 	std::vector<crew_member> get_all(const std::uint64_t player_id);
+	std::size_t get_member_count(const std::uint64_t player_id);
 
 	bool remove(const std::uint64_t player_id, const std::uint64_t member_id);
 	void remove_all(const std::uint64_t player_id);

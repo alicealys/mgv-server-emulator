@@ -78,7 +78,13 @@ namespace database::users
 						players::player::table.point, 
 						players::player::table.nameplate,
 						players::player::table.current_loadout,
-						players::player::table.player_creation_date)
+						players::player::table.player_creation_date,
+						players::player::table.avatar,
+						players::player::table.gimmick_info,
+						players::player::table.crew_levels,
+						players::player::table.communication_gesture_info,
+						players::player::table.defense_mission_info
+					)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.current_player_id == players::player::table.player_id));
 		}
 

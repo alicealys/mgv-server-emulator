@@ -111,16 +111,14 @@ namespace emulator::ssd
 			return;
 		}
 
-		const auto defense_mission_info = std::make_unique<database::players::defense_mission_info_t>();
-		const auto defense_mission_record = std::make_unique<database::players::defense_mission_record_list_t>();
-
-		user->current_player->get_defense_mission_info(*defense_mission_info);
-		user->current_player->get_defense_mission_record_list(*defense_mission_record);
+		database::players::defense_mission_record_list_t defense_mission_record;
+		user->current_player->get_defense_mission_record_list(defense_mission_record);
+		auto defense_mission_info = user->current_player->get_defense_mission_info();
 
 		const auto _0 = gsl::finally([&]
 		{
-			user->current_player->set_defense_mission_info(*defense_mission_info);
-			user->current_player->set_defense_mission_record_list(*defense_mission_record);
+			user->current_player->set_defense_mission_info(defense_mission_info);
+			user->current_player->set_defense_mission_record_list(defense_mission_record);
 		});
 
 		result["defense_reward_limit_result"]["limit_result"] = json::array();
@@ -148,7 +146,7 @@ namespace emulator::ssd
 			const auto score_add = is_win ? wave_result.total_score : 0u;
 			const auto new_score = mission->get_total_score() + score_add;
 
-			defense_mission_info->status.mining_machine_life = wave_params.mining_machine_life_after;
+			defense_mission_info.status.mining_machine_life = wave_params.mining_machine_life_after;
 
 			const auto this_wave = mission->get_current_wave();
 			const auto rank = database::defense_missions::calc_rank(*mission_settings, new_score);
@@ -175,7 +173,7 @@ namespace emulator::ssd
 					mission_record.clear_rank = rank;
 					mission_record.iris_score = new_score;
 					mission_record.waves = wave_result.wave;
-					defense_mission_record->try_add_item(mission_record);
+					defense_mission_record.try_add_item(mission_record);
 
 					this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
 				}
@@ -255,8 +253,7 @@ namespace emulator::ssd
 				return error(ERR_INVALIDARG);
 			}
 
-			const auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
-			user->current_player->get_gimmick_info(*gimmick_info);
+			auto gimmick_info = user->current_player->get_gimmick_info();
 
 			const auto map_location = map_location_j.as<std::uint32_t>();
 			if (map_location > 1)
@@ -267,19 +264,19 @@ namespace emulator::ssd
 			switch (map_location)
 			{
 			case 0:
-				gimmick_info->resource_afghan.parse(gimmick_timer_info_j);
+				gimmick_info.resource_afghan.parse(gimmick_timer_info_j);
 				break;
 			case 1:
-				gimmick_info->resource_africa.parse(gimmick_timer_info_j);
+				gimmick_info.resource_africa.parse(gimmick_timer_info_j);
 				break;
 			}
 
 			if (gimmick_timer_info_j.is_object())
 			{
-				gimmick_info->timer.parse(gimmick_timer_info_j);
+				gimmick_info.timer.parse(gimmick_timer_info_j);
 			}
 
-			user->current_player->set_gimmick_info(*gimmick_info);
+			user->current_player->set_gimmick_info(gimmick_info);
 
 			const auto gimmick_data = std::make_unique<database::players::gimmick_save_data_t>();
 			gimmick_data->parse(gimmick_save_info_j);
@@ -335,12 +332,12 @@ namespace emulator::ssd
 				switch (location_index)
 				{
 				case 0:
-					user->current_player->get_map_unlock_list_afghan(*map_unlock_list, map_unlock_j.size());
+					user->current_player->get_map_unlock_list_afghan(*map_unlock_list);
 					map_unlock_list->parse_diff(map_unlock_j);
 					user->current_player->set_map_unlock_list_afghan(*map_unlock_list);
 					break;
 				case 1:
-					user->current_player->get_map_unlock_list_africa(*map_unlock_list, map_unlock_j.size());
+					user->current_player->get_map_unlock_list_africa(*map_unlock_list);
 					map_unlock_list->parse_diff(map_unlock_j);
 					user->current_player->set_map_unlock_list_africa(*map_unlock_list);
 					break;
@@ -426,6 +423,12 @@ namespace emulator::ssd
 					continue;
 				}
 
+				const auto member_count = database::crew_members::get_member_count(user->current_player->get_player_id());
+				if (member_count >= database::crew_members::max_crew_members)
+				{
+					return error(ERR_OVER_CAPACITY);
+				}
+
 				const auto added_member_id = database::crew_members::create(user->current_player->get_player_id(), new_member_params);
 				if (added_member_id == 0ull)
 				{
@@ -495,8 +498,7 @@ namespace emulator::ssd
 
 		if (defense_mission_parameter_j.is_object())
 		{
-			database::players::defense_mission_info_t info{};
-			user->current_player->get_defense_mission_info(info);
+			auto info = user->current_player->get_defense_mission_info();
 			info.parameter.parse(defense_mission_parameter_j);
 			user->current_player->set_defense_mission_info(info);
 		}

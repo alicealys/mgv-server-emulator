@@ -8,8 +8,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		database::players::defense_mission_info_t info{};
-		user->current_player->get_defense_mission_info(info);
+		auto info = user->current_player->get_defense_mission_info();
 
 		if (!info.parameter.parse(data["defense_mission_parameter"]))
 		{

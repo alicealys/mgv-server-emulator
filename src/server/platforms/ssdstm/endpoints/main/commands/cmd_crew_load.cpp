@@ -10,8 +10,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		database::players::crew_levels_t crew_levels{};
-		user->current_player->get_crew_levels(crew_levels);
+		auto crew_levels = user->current_player->get_crew_levels();
 		crew_levels.to_json(result["group_level"]);
 
 		result["crew_list"] = json::array();

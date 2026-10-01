@@ -13,9 +13,8 @@ namespace emulator::ssd
 			return error(ERR_PLAYER_NOTFOUND);
 		}
 
-		auto avatar = std::make_unique<database::players::avatar_t>();
-		user->current_player->get_avatar(*avatar);
-		avatar->to_json(result["avatar"]);
+		const auto avatar = user->current_player->get_avatar();
+		avatar.to_json(result["avatar"]);
 
 		return result;
 	}

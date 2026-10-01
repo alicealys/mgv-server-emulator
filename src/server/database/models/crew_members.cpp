@@ -197,23 +197,7 @@ namespace database::crew_members
 		return true;
 	}
 
-	void motivation_history_t::parse(const std::string& data)
-	{
-		const auto raw_data = utils::cryptography::base64::decode(data);
-		if (raw_data.size() != sizeof(motivation_history_t))
-		{
-			return;
-		}
-
-		std::memcpy(this, raw_data.data(), raw_data.size());
-	}
-
-	std::string motivation_history_t::serialize() const
-	{
-		return utils::encoding::encode_base64(*this);
-	}
-
-	void motivation_history_t::to_json(json::value& data) const
+	void motivation_history_internal_t::to_json(json::value& data) const
 	{
 		for (auto i = 0ull; i < ARRAYSIZE(this->event); i++)
 		{
@@ -315,7 +299,25 @@ namespace database::crew_members
 			});
 		}
 		
+		template <database_type_t Type>
+		std::size_t get_member_count(const std::uint64_t player_id)
+		{
+			return database::access<std::size_t>([&](database::database_t& db) -> std::size_t
+			{
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::count(1))
+						.from(crew_member::table)
+							.where(crew_member::table.f_player_id == player_id));
 
+				if (results.empty())
+				{
+					return 0u;
+				}
+
+				return results.front().count;
+			});
+		}
+		
 		template <database_type_t Type>
 		void update1(const std::uint64_t player_id, const std::uint64_t member_id, const member_params_t& params)
 		{
@@ -586,6 +588,11 @@ namespace database::crew_members
 	std::vector<crew_member> get_all(const std::uint64_t player_id)
 	{
 		RUN_IMPL(impl::get_all, player_id);
+	}
+
+	std::size_t get_member_count(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::get_member_count, player_id);
 	}
 
 	bool remove(const std::uint64_t player_id, const std::uint64_t member_id)

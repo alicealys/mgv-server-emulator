@@ -12,7 +12,6 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		auto avatar = std::make_unique<database::players::avatar_t>();
 		auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 		auto inventory = std::make_unique<database::players::player_inventory_t>();
 		auto mission_info = std::make_unique<database::players::mission_info_t>();
@@ -28,7 +27,7 @@ namespace emulator::ssd
 			auto& equipment_info = entry["equipment_info"];
 			auto& status = entry["avatar_status_info"];
 
-			player.get_avatar(*avatar);
+			const auto avatar = player.get_avatar();
 			player.get_loadout_list(*loadout_list);
 			player.get_inventory(*inventory);
 			player.get_mission_info(*mission_info);
@@ -38,7 +37,7 @@ namespace emulator::ssd
 			const auto current_loadout_idx = player.get_current_loadout();
 			const auto& current_loadout = loadout_list->list[current_loadout_idx];
 
-			avatar->to_json(entry["avatar_info"]);
+			avatar.to_json(entry["avatar_info"]);
 			current_loadout.to_json(equipment_info["loadout"], current_loadout_idx);
 			nonstackable_list->to_json(equipment_info["nonstackable_list"]);
 

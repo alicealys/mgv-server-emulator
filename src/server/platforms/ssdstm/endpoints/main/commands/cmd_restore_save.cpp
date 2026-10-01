@@ -3,6 +3,7 @@
 #include "cmd_restore_save.hpp"
 
 #include "database/models/crew_members.hpp"
+#include "database/models/deployments.hpp"
 
 namespace emulator::ssd
 {
@@ -86,21 +87,30 @@ namespace emulator::ssd
 			}
 		}
 
+		const auto team_count = database::deployments::get_team_count(user->current_player->get_player_id());
+		database::deployments::delete_player_data(user->current_player->get_player_id());
+		for (auto i = 0ull; i < team_count; i++)
+		{
+			database::deployments::create_team(user->current_player->get_player_id());
+		}
+
 		if (crew_j.is_object())
 		{
 			auto& crew_level_j = crew_j["group_level"];
 			if (crew_level_j.is_object())
 			{
-				auto crew_levels = std::make_unique<database::players::crew_levels_t>();
-				crew_levels->parse(crew_level_j);
-				user->current_player->set_crew_levels(*crew_levels);
+				database::players::crew_levels_t crew_levels{};
+				crew_levels.parse(crew_level_j);
+				user->current_player->set_crew_levels(crew_levels);
 			}
 
 			auto& crew_list_j = crew_j["crew_list"];
 			if (crew_list_j.is_array())
 			{
 				database::crew_members::remove_all(user->current_player->get_player_id());
-				for (auto i = 0ull; i < crew_list_j.size(); i++)
+				const auto member_count = std::min(database::crew_members::max_crew_members, crew_list_j.size());
+
+				for (auto i = 0ull; i < member_count; i++)
 				{
 					database::crew_members::member_params_t new_member_params{};
 					if (!new_member_params.parse(crew_list_j[i]))
@@ -118,12 +128,6 @@ namespace emulator::ssd
 				}
 			}
 		}
-
-		// TODO: deploy team
-		// if (deploy_team_j.is_object())
-		// {
-		// 
-		// }
 
 		if (mission_progress_j.is_object())
 		{
