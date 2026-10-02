@@ -1128,7 +1128,7 @@ namespace database::players
 		for (auto i = 0ull; i < data.size(); i++)
 		{
 			std::uint32_t map_part{};
-			if (!json::read(map_part, data[i]))
+			if (!json::read(map_part, data[i]) || map_part >= sizeof(this->map) * 8)
 			{
 				continue;
 			}
@@ -2260,12 +2260,12 @@ namespace database::players
 
 	void player::get_play_record(player_play_record_t& play_record) const
 	{
-		RUN_IMPL(impl::get_player_play_record, this->get_user_id(), play_record);
+		RUN_IMPL(impl::get_player_play_record, this->get_player_id(), play_record);
 	}
 
 	void player::get_story_unlock_info(story_unlock_info_t& story_unlock_info) const
 	{
-		RUN_IMPL(impl::get_story_unlock_info, this->get_user_id(), story_unlock_info);
+		RUN_IMPL(impl::get_story_unlock_info, this->get_player_id(), story_unlock_info);
 	}
 
 	void player::get_building_info(building_info_t& building) const
@@ -2275,27 +2275,27 @@ namespace database::players
 
 	void player::get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_inventory_resource_list, this->get_user_id(), inventory_resource_list, size_add);
+		RUN_IMPL(impl::get_inventory_resource_list, this->get_player_id(), inventory_resource_list, size_add);
 	}
 
 	void player::get_stackable_item_list(stackable_item_list_t& stackable_item_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_stackable_item_list, this->get_user_id(), stackable_item_list, size_add);
+		RUN_IMPL(impl::get_stackable_item_list, this->get_player_id(), stackable_item_list, size_add);
 	}
 
 	void player::get_battle_pack_list(battle_pack_list_t& battle_pack_list, const std::size_t size_add) const
 	{
-		RUN_IMPL(impl::get_battle_pack_list, this->get_user_id(), battle_pack_list, size_add);
+		RUN_IMPL(impl::get_battle_pack_list, this->get_player_id(), battle_pack_list, size_add);
 	}
 
 	void player::get_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::get_map_unlock_list_afghan, this->get_user_id(), map_unlock_list);
+		RUN_IMPL(impl::get_map_unlock_list_afghan, this->get_player_id(), map_unlock_list);
 	}
 
 	void player::get_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
+		RUN_IMPL(impl::get_map_unlock_list_africa, this->get_player_id(), map_unlock_list);
 	}
 
 	bool player::set_avatar(avatar_t& avatar) const
@@ -2347,17 +2347,17 @@ namespace database::players
 
 	bool player::set_play_record(player_play_record_t& play_record) const
 	{
-		RUN_IMPL(impl::set_player_play_record, this->get_user_id(), play_record);
+		RUN_IMPL(impl::set_player_play_record, this->get_player_id(), play_record);
 	}
 
 	bool player::set_base_resources(base_resources_t& base_resources) const
 	{
-		RUN_IMPL(impl::set_base_resources, this->get_user_id(), base_resources);
+		RUN_IMPL(impl::set_base_resources, this->get_player_id(), base_resources);
 	}
 
 	bool player::set_story_unlock_info(story_unlock_info_t& story_unlock_info) const
 	{
-		RUN_IMPL(impl::set_story_unlock_info, this->get_user_id(), story_unlock_info);
+		RUN_IMPL(impl::set_story_unlock_info, this->get_player_id(), story_unlock_info);
 	}
 
 	bool player::set_building_info(building_info_t& building) const
@@ -2367,57 +2367,57 @@ namespace database::players
 
 	bool player::set_crew_levels(crew_levels_t& crew_levels) const
 	{
-		RUN_IMPL(impl::set_crew_levels, this->get_user_id(), crew_levels);
+		RUN_IMPL(impl::set_crew_levels, this->get_player_id(), crew_levels);
 	}
 
 	bool player::set_defense_mission_info(defense_mission_info_t& defense_mission_info) const
 	{
-		RUN_IMPL(impl::set_defense_mission_info, this->get_user_id(), defense_mission_info);
+		RUN_IMPL(impl::set_defense_mission_info, this->get_player_id(), defense_mission_info);
 	}
 
 	bool player::set_communication_gesture_info(communication_gesture_info_t& communication_gesture_info) const
 	{
-		RUN_IMPL(impl::set_communication_gesture_info, this->get_user_id(), communication_gesture_info);
+		RUN_IMPL(impl::set_communication_gesture_info, this->get_player_id(), communication_gesture_info);
 	}
 
 	bool player::set_mission_record_list(mission_record_list_t& set_mission_record_list) const
 	{
-		RUN_IMPL(impl::set_mission_record_list, this->get_user_id(), set_mission_record_list);
+		RUN_IMPL(impl::set_mission_record_list, this->get_player_id(), set_mission_record_list);
 	}
 
 	bool player::set_quest_record_list(quest_record_list_t& quest_record_list) const
 	{
-		RUN_IMPL(impl::set_quest_record_list, this->get_user_id(), quest_record_list);
+		RUN_IMPL(impl::set_quest_record_list, this->get_player_id(), quest_record_list);
 	}
 
 	bool player::set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const
 	{
-		RUN_IMPL(impl::set_inventory_resource_list, this->get_user_id(), inventory_resource_list);
+		RUN_IMPL(impl::set_inventory_resource_list, this->get_player_id(), inventory_resource_list);
 	}
 
 	bool player::set_stackable_item_list(stackable_item_list_t& stackable_item_list) const
 	{
-		RUN_IMPL(impl::set_stackable_item_list, this->get_user_id(), stackable_item_list);
+		RUN_IMPL(impl::set_stackable_item_list, this->get_player_id(), stackable_item_list);
 	}
 
 	bool player::set_battle_pack_list(battle_pack_list_t& battle_pack_list) const
 	{
-		RUN_IMPL(impl::set_battle_pack_list, this->get_user_id(), battle_pack_list);
+		RUN_IMPL(impl::set_battle_pack_list, this->get_player_id(), battle_pack_list);
 	}
 
 	bool player::set_map_unlock_list_afghan(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::set_map_unlock_list_afghan, this->get_user_id(), map_unlock_list);
+		RUN_IMPL(impl::set_map_unlock_list_afghan, this->get_player_id(), map_unlock_list);
 	}
 
 	bool player::set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const
 	{
-		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_user_id(), map_unlock_list);
+		RUN_IMPL(impl::set_map_unlock_list_africa, this->get_player_id(), map_unlock_list);
 	}
 
 	void player::set_nameplate(const std::uint16_t nameplate) const
 	{
-		RUN_IMPL(impl::set_nameplate, this->get_user_id(), nameplate);
+		RUN_IMPL(impl::set_nameplate, this->get_player_id(), nameplate);
 	}
 
 	std::optional<player> find(const std::uint64_t id)

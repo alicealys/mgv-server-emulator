@@ -28,7 +28,7 @@ List of implemeted/unimplemented server commands
 | CMD_SEND_HEARTBEAT | ➖ |  |
 | CMD_ERROR_INFO_SEND | ➖ |  |
 | CMD_ERROR_LANG_ID_SEND | ➖ |  |
-| CMD_GET_INFORMATIONLIST | ❌ |  |
+| CMD_GET_INFORMATIONLIST | ✔️ |  |
 | CMD_UPDATE_SESSION | ✔️ |  |
 | CMD_SVCOIN_GET_BALANCE | ✔️ |  |
 | CMD_CHECK_CONSUME_TRANSACTION | ➖ |  |
@@ -133,9 +133,9 @@ List of implemeted/unimplemented server commands
 | CMD_DEPLOY_SUPPLY_ITEM | ✔️ |  |
 | CMD_SERVER_PARAMETER_LOAD | ✔️ |  |
 | CMD_SERVER_PARAMETER_GET_URL_LIST | ✔️ |  |
-| CMD_INFORMATION_GET_TITLE | ❌ |  |
-| CMD_INFORMATION_GET_TEXT | ❌ |  |
-| CMD_INFORMATION_GET_DETAIL | ❌ |  |
+| CMD_INFORMATION_GET_TITLE | ✔️ |  |
+| CMD_INFORMATION_GET_TEXT | ✔️ |  |
+| CMD_INFORMATION_GET_DETAIL | ✔️ |  |
 | CMD_PRESENT_BOX_GET_LIST | ✔️ |  |
 | CMD_PRESENT_BOX_GET_ITEM | ✔️ |  |
 | CMD_PRESENT_BOX_GET_ALL | ✔️ |  |

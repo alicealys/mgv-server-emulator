@@ -1,16 +1,33 @@
 {
     "info_product_name_svcoin": {
         "ANY": "SV Coins : {}",
-        "KR": "SV Coins : {}",
-        "CH": "SV Coins : {}",
-        "JP": "SV Coins : {}",
-        "RU": "SV Coins : {}",
-        "AR": "SV Coins : {}",
-        "GR": "SV Coins : {}",
-        "IT": "SV Coins : {}",
-        "PR": "SV Coins : {}",
-        "SP": "SV Coins : {}",
-        "FR": "SV Coins : {}",
-        "EN": "SV Coins : {}"
+        "KR": "",
+        "CH": "",
+        "JP": "",
+        "RU": "",
+        "AR": "",
+        "GR": "",
+        "IT": "",
+        "PR": "",
+        "SP": "",
+        "FR": "",
+        "EN": ""
+    },
+    "info_list_sample1_text": {
+        "ANY": "LANG_ANY",
+        "KR": "LANG_KR",
+        "CH": "LANG_CH",
+        "JP": "LANG_JP",
+        "RU": "LANG_RU",
+        "AR": "LANG_AR",
+        "GR": "LANG_GR",
+        "IT": "LANG_IT",
+        "PR": "LANG_PR",
+        "SP": "LANG_SP",
+        "FR": "LANG_FR",
+        "EN": "LANG_EN"
+    },
+    "info_list_sample1_title": {
+        "ANY": "MGV Server Emulator {version} [{online_players} / {total_players} online players]"
     }
 }

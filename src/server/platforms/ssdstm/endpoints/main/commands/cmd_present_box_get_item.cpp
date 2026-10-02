@@ -31,17 +31,20 @@ namespace emulator::ssd
 		database::players::nonstackable_item_list_t nonstackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
+		database::users::user_inventory_t user_inventory{};
 
 		user->current_player->get_stackable_item_list(stackable_list);
 		user->current_player->get_nonstackable_item_list(nonstackable_list);
 		user->current_player->get_inventory_resource_list(resource_list);
 		user->current_player->get_inventory(player_inventory);
+		user->get_inventory(user_inventory);
 
 		database::users::give_item_params_t give_params{};
 		give_params.resource_list = &resource_list;
 		give_params.stackable_list = &stackable_list;
 		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
+		give_params.user_inventory = &user_inventory;
 
 		json::value empty;
 		if (!user->give_item(item->get_reward(), give_params, empty))
