@@ -503,7 +503,7 @@ namespace database::shop_purchases
 	public:
 		void create(database_t& database) override
 		{
-			database.run_query("mgstpp.shop_purchases.create");
+			database.run_query("mgssd.shop_purchases.create");
 
 			get_shop_product_list();
 			get_shop_product_map();

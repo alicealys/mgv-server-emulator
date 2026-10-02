@@ -24,6 +24,7 @@ namespace utils::resources
 			{RESOURCE_SHOP_ITEM_LIST, "resources/data/shop_item_list.json"},
 			{RESOURCE_MISSION_LIST, "resources/data/mission_list.json"},
 			{RESOURCE_INFORMATION_LIST, "resources/data/information_list.json"},
+			{RESOURCE_WICKED_REPORT_TYPES, "resources/data/wicked_report_types.json"},
 
 			{RESOURCE_SQL_MYSQL, "resources/sql/mysql.sql"},
 			{RESOURCE_SQL_SQLITE3, "resources/sql/sqlite3.sql"},

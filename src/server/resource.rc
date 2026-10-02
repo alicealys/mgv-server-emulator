@@ -109,6 +109,7 @@ RESOURCE_SHOP_PRODUCT_LIST         RCDATA "resources/data/shop_product_list.json
 RESOURCE_SHOP_ITEM_LIST            RCDATA "resources/data/shop_item_list.json"
 RESOURCE_MISSION_LIST              RCDATA "resources/data/mission_list.json"
 RESOURCE_INFORMATION_LIST          RCDATA "resources/data/information_list.json"
+RESOURCE_WICKED_REPORT_TYPES       RCDATA "resources/data/wicked_report_types.json"
 
 RESOURCE_SQL_MYSQL                 RCDATA "resources/sql/mysql.sql"
 RESOURCE_SQL_SQLITE3               RCDATA "resources/sql/sqlite3.sql"

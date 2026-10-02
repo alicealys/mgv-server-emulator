@@ -257,7 +257,7 @@ create table if not exists `crew_members`
 	creation_date	    datetime not null,
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )
--- query:mgstpp.shop_purchases.create
+-- query:mgssd.shop_purchases.create
 create table if not exists `shop_purchases`
 (
 	purchase_id			    integer	primary key autoincrement,
@@ -279,4 +279,17 @@ create table if not exists `shop_purchases`
 	purchase_date           datetime not null,
 	expire_date				datetime not null,
 	foreign key (`f_user_id`) references users(`user_id`)
+)
+-- query:mgssd.wicked_reports.create
+create table if not exists `wicked_reports`
+(
+	report_id			    integer	primary key autoincrement,
+	target_user_id			bigint unsigned	not null, -- no fk because user could be deleted and reports should persist
+	source_user_id			bigint unsigned	not null, -- ^
+	report_type_01			int unsigned not null default 0,
+	report_type_02			int unsigned not null default 0,
+	report_type_03			int unsigned not null default 0,
+	report_type_04			int unsigned not null default 0,
+	report_type_05			int unsigned not null default 0,
+	report_date				datetime not null
 )

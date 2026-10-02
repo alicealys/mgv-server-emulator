@@ -29,5 +29,75 @@
     },
     "info_list_sample1_title": {
         "ANY": "MGV Server Emulator {version} [{online_players} / {total_players} online players]"
+    },
+    "wicked_report1_text": {
+        "ANY": "Cheating",
+        "KR": "부정행위",
+        "CH": "欺騙行為",
+        "JP": "チート行為",
+        "RU": "Нечестная игра",
+        "AR": "LANG_AR",
+        "GR": "Cheaten",
+        "IT": "Uso di trucchi",
+        "PR": "Trapaça",
+        "SP": "Hacer trampa",
+        "FR": "Triche",
+        "EN": "Cheating"
+    },
+    "wicked_report2_text": {
+        "ANY": "Using external programs",
+        "KR": "외부 프로그램 사용",
+        "CH": "使用外部程式",
+        "JP": "外部プログラム使用",
+        "RU": "Использование внешних программ",
+        "AR": "LANG_AR",
+        "GR": "Verwendung externer Programme",
+        "IT": "Uso di programmi esterni",
+        "PR": "Uso de programas externos",
+        "SP": "Usar programas externos",
+        "FR": "Utilisation de programmes tiers",
+        "EN": "Using external programs"
+    },
+    "wicked_report3_text": {
+        "ANY": "Inappropriate naming / remark",
+        "KR": "부적절한 명칭·발언",
+        "CH": "不當名稱 / 發言",
+        "JP": "不適切名称・発言",
+        "RU": "Неподобающее имя/комментарий",
+        "AR": "LANG_AR",
+        "GR": "Name/Kommentar ist unangemessen",
+        "IT": "Nomi / commenti non appropriati",
+        "PR": "Nomenclatura/comentário inadequado",
+        "SP": "Nombre/comentario inapropiado",
+        "FR": "Nom ou remarque inappropriés",
+        "EN": "Inappropriate naming / remark"
+    },
+    "wicked_report4_text": {
+        "ANY": "Insulting / abusive language",
+        "KR": "비방·폭언",
+        "CH": "中傷 / 辱罵性語言",
+        "JP": "誹謗中傷・暴言",
+        "RU": "Оскорбительная/грубая лексика",
+        "AR": "LANG_AR",
+        "GR": "Beleidigungen",
+        "IT": "Insulti / linguaggio offensivo",
+        "PR": "Insulto/linguagem abusiva",
+        "SP": "Lenguaje insultante/abusivo",
+        "FR": "Insultes, langage grossier",
+        "EN": "Insulting / abusive language"
+    },
+    "wicked_report5_text": {
+        "ANY": "Inappropriate behavior",
+        "KR": "부적절한 행동",
+        "CH": "不當行為",
+        "JP": "迷惑行為",
+        "RU": "Неподобающее поведение",
+        "AR": "LANG_AR",
+        "GR": "Unangemessenes Verhalten",
+        "IT": "Comportamento inappropriato",
+        "PR": "Comportamento inadequado",
+        "SP": "Conducta inapropiada",
+        "FR": "Comportement inapproprié",
+        "EN": "Inappropriate behavior"
     }
 }
