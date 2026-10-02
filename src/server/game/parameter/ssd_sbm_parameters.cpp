@@ -218,6 +218,24 @@ namespace game::parameters
 			this->recipes_list[recipe->index] = recipe;
 		}
 
+		for (auto i = 0ull; i < data["cassette"].size(); i++)
+		{
+			auto cassette = std::make_shared<cassette_t>();
+			if (!cassette->parse(data["cassette"][i]))
+			{
+				console::warning("invalid cassette at index %lli\n", i);
+				continue;
+			}
+
+			this->cassettes[cassette->id] = cassette;
+			if (cassette->index >= this->cassettes_list.size())
+			{
+				this->cassettes_list.resize(cassette->index + 1ull);
+			}
+
+			this->cassettes_list[cassette->index] = cassette;
+		}
+
 		for (auto i = 0ull; i < data["gradeup_spec"].size(); i++)
 		{
 			gradeup_spec_t spec{};

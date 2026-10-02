@@ -60,7 +60,8 @@ namespace emulator::ssd
 		result["additional_storage_info"]["count"][1] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_gear];
 
 		battle_pack_list->to_json(result["battle_pack_list"]);
-		result["bgm_my_list"] = json::array();
+
+		user_inventory->bgm_settings.to_json(result["bgm_my_list"]);
 		result["boost_list"] = json::array();
 		result["bp_mission_list"] = default_data["bp_mission_list"];
 		result["cage_list"] = json::array();

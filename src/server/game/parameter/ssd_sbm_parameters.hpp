@@ -23,11 +23,13 @@ namespace game::parameters
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_option_group_t>> customize_option_group;
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_option_t>> customize_option;
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_t>> customize;
+		std::unordered_map<std::uint32_t, std::shared_ptr<cassette_t>> cassettes;
 		std::array<gradeup_spec_t, 255> gradeup_spec;
 		std::vector<std::shared_ptr<production_t>> productions_list;
 		std::vector<std::shared_ptr<recipe_t>> recipes_list;
 		std::vector<std::shared_ptr<resource_t>> resources_list;
 		std::vector<std::shared_ptr<battle_pack_t>> battle_pack_list;
+		std::vector<std::shared_ptr<cassette_t>> cassettes_list;
 
 	};
 }

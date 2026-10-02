@@ -16,6 +16,17 @@
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
 
+template <>
+struct glz::meta<database::users::bgm_settings_t::playlist_t::parseable>
+{
+	using T = database::users::bgm_settings_t::playlist_t::parseable;
+	static constexpr auto value = glz::object(
+		"cassette_ids", &T::cassette_ids,
+		"index", &T::index,
+		"name", &T::name
+	);
+};
+
 namespace database::users
 {
 	namespace
@@ -103,6 +114,57 @@ namespace database::users
 		}
 	}
 
+	bool bgm_settings_t::parse(json::value& data)
+	{
+		if (!data.is_object())
+		{
+			return false;
+		}
+
+		utils::json_utils::get_or(data["setting"], this->setting, this->setting);
+
+		auto& list_infos = data["list_infos"];
+		if (!list_infos.is_array())
+		{
+			return true;
+		}
+
+		const auto count = std::min(list_infos.size(), ARRAYSIZE(this->playlists));
+		for (auto i = 0ull; i < count; i++)
+		{
+			playlist_t::parseable entry{};
+			if (!json::read(entry, list_infos[i]) || entry.index >= ARRAYSIZE(this->playlists))
+			{
+				continue;
+			}
+
+			utils::json_utils::parse_string(list_infos[i]["name"], this->playlists[entry.index].name);
+
+			for (auto o = 0ull; o < ARRAYSIZE(this->playlists[entry.index].cassette_ids); o++)
+			{
+				this->playlists[entry.index].cassette_ids[o] = entry.cassette_ids[o];
+			}
+		}
+
+		return true;
+	}
+
+	void bgm_settings_t::to_json(json::value& data) const
+	{
+		auto count = 0u;
+		for (auto i = 0ull; i < ARRAYSIZE(this->playlists); i++)
+		{
+			auto& entry = data[count++];
+			entry["index"] = i;
+			entry["name"] = this->playlists[i].name;
+
+			for (auto o = 0ull; o < ARRAYSIZE(this->playlists[i].cassette_ids); o++)
+			{
+				entry["cassette_ids"][o] = this->playlists[i].cassette_ids[o];
+			}
+		}
+	}
+
 	void user_inventory_t::initialize()
 	{
 		static const auto default_inventory = []()
@@ -144,7 +206,7 @@ namespace database::users
 			load("recipe_used", data.recipe_used);
 			load("resource_opened", data.resource_opened);
 
-			data.bgm_my_list_setting = default_data["bgm_my_list_setting"].as<std::uint8_t>();
+			data.bgm_settings.setting = default_data["bgm_my_list_setting"].as<std::uint8_t>();
 
 			return &data;
 		}();
@@ -176,7 +238,7 @@ namespace database::users
 		data["recipe_opened"] = utils::encoding::encode_base64(this->recipe_opened);
 		data["recipe_used"] = utils::encoding::encode_base64(this->recipe_used);
 		data["resource_opened"] = utils::encoding::encode_base64(this->resource_opened);
-		data["bgm_my_list_setting"] = this->bgm_my_list_setting;
+		data["bgm_my_list_setting"] = this->bgm_settings.setting;
 	}
 
 	void user_inventory_t::open_production(const std::uint32_t index)
@@ -324,7 +386,7 @@ namespace database::users
 		try_parse_part("recipe_used", this->recipe_used);
 		try_parse_part("resource_opened", this->resource_opened, true);
 
-		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_settings.setting, this->bgm_settings.setting);
 		return true;
 	}
 
@@ -353,7 +415,7 @@ namespace database::users
 		utils::json_utils::parse_base64(data["recipe_used"], this->recipe_used);
 		utils::json_utils::parse_base64(data["resource_opened"], this->resource_opened);
 
-		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_my_list_setting, this->bgm_my_list_setting);
+		utils::json_utils::get_or(data["bgm_my_list_setting"], this->bgm_settings.setting, this->bgm_settings.setting);
 		return true;
 	}
 

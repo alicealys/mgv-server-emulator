@@ -458,6 +458,11 @@ namespace game
 		return json::read(*this, data);
 	}
 
+	bool cassette_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
 	bool production_t::is_stackable() const
 	{
 		return this->countable && !this->only_flag;

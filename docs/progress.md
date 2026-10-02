@@ -179,5 +179,5 @@ List of implemeted/unimplemented server commands
 | CMD_CRAFT_CHECK_CRAFTED_ALL | ❌ |  |
 | CMD_CRAFT_INVEST_TO_PLAYER | ✔️ |  |
 | CMD_INVENTORY_SAVE | ✔️ |  |
-| CMD_BGM_MY_LIST_SAVE | ❌ |  |
+| CMD_BGM_MY_LIST_SAVE | ✔️ |  |
 | CMD_GET_FRIEND_LOADOUT | ✔️ |  |

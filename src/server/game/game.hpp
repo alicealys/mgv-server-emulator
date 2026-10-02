@@ -6245,6 +6245,14 @@ namespace game
         std::string icon_path;
     };
 
+    struct cassette_t
+    {
+        bool parse(json::value& data);
+
+        std::uint32_t id;
+        std::uint32_t index;
+    };
+
 	struct crew_member_type_t
 	{
 		bool parse(json::value& data);

@@ -5,12 +5,33 @@
 
 namespace database::users
 {
+	struct bgm_settings_t
+	{
+		struct playlist_t
+		{
+			struct parseable
+			{
+				std::array<std::uint8_t, 32> cassette_ids;
+				std::uint8_t index;
+				std::string name;
+			};
+
+			std::uint8_t cassette_ids[32];
+			char name[24];
+		};
+
+		std::uint8_t setting;
+		playlist_t playlists[5];
+
+		bool parse(json::value& data);
+		void to_json(json::value& data) const;
+	};
+
 	struct user_inventory_t
 	{
 		std::uint8_t archive_new[32];
 		std::uint8_t archive_obtained[32];
 		std::uint8_t battle_pack_opened[128];
-		std::uint8_t bgm_my_list_setting;
 		std::uint8_t cassette_new[64];
 		std::uint8_t cassette_obtained[64];
 		std::uint8_t command_marker_new[16];
@@ -30,6 +51,7 @@ namespace database::users
 		std::uint8_t recipe_opened[256];
 		std::uint8_t recipe_used[256];
 		std::uint8_t resource_opened[128];
+		bgm_settings_t bgm_settings;
 
 		void initialize();
 		bool parse_save(json::value& data);
