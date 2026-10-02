@@ -170,7 +170,7 @@ List of implemeted/unimplemented server commands
 | CMD_GET_FRIEND_HEADERS | ✔️ |  |
 | CMD_CRAFT_BP_LOTTERY | ✔️ |  |
 | CMD_CRAFT_DELIVER | ✔️ |  |
-| CMD_SURVIVE_SUPPLY_LOTTERY | ❌ |  |
+| CMD_SURVIVE_SUPPLY_LOTTERY | ➖ |  |
 | CMD_CRAFT_OPEN_PERK | ❌ |  |
 | CMD_CRAFT_GRADE_UP | ✔️ |  |
 | CMD_CRAFT_REFORGE | ❌ |  |
@@ -180,4 +180,4 @@ List of implemeted/unimplemented server commands
 | CMD_CRAFT_INVEST_TO_PLAYER | ✔️ |  |
 | CMD_INVENTORY_SAVE | ✔️ |  |
 | CMD_BGM_MY_LIST_SAVE | ❌ |  |
-| CMD_GET_FRIEND_LOADOUT | ❌ |  |
+| CMD_GET_FRIEND_LOADOUT | ✔️ |  |
