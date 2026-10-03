@@ -81,7 +81,7 @@ List of implemeted/unimplemented server commands
 | CMD_COOP_FLAG_RESET | ❌ |  |
 | CMD_COOP_LOBBY_END | ❌ |  |
 | CMD_CRAFT_ITEM | ✔️ |  |
-| CMD_GET_CRAFT_PARAM | ❌ |  |
+| CMD_GET_CRAFT_PARAM | ✔️ |  |
 | CMD_CHECKPOINT_SAVE | ✔️ |  |
 | CMD_CHECKPOINT_LOAD | ✔️ |  |
 | CMD_AVATAR_SAVE | ✔️ |  |

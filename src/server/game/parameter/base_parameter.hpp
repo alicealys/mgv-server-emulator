@@ -14,6 +14,7 @@ namespace game::parameters
 		const std::string& get_data_path();
 		const std::string& get_data_md5();
 		const std::string& name();
+		const std::string& dump();
 
 	protected:
 		void load(const std::string& name);
@@ -22,6 +23,7 @@ namespace game::parameters
 	private:
 		std::string data_path_;
 		std::string data_md5_;
+		std::string data_dump_;
 		std::string name_;
 
 	};

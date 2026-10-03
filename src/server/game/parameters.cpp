@@ -32,6 +32,11 @@ namespace game
 		return this->name_;
 	}
 
+	const std::string& parameters::base_parameter::dump()
+	{
+		return this->data_dump_;
+	}
+
 	void parameters::base_parameter::load(const std::string& name)
 	{
 		console::log("[Game Parameter] Loading \"%s.json\"\n", name.data());
@@ -48,7 +53,7 @@ namespace game
 		const auto data = utils::resources::load(resource_id.value());
 
 		auto json = json::parse(data);
-		const auto dump = json::dump(json);
+		this->data_dump_ = json::dump(json);
 
 		if (!this->parse(json))
 		{
@@ -58,7 +63,7 @@ namespace game
 		utils::cryptography::blowfish blow;
 		blow.set_key(game::get_static_key(game::key_type_tpp), game::get_static_key_len());
 
-		auto encrypted_data = utils::compression::zlib::compress(dump);
+		auto encrypted_data = utils::compression::zlib::compress(this->data_dump_);
 		encrypted_data = blow.encrypt_internal(encrypted_data);
 
 		this->data_path_ = std::format("tmp/parameter/{}.param", name);
