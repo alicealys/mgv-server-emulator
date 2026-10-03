@@ -10,7 +10,6 @@ namespace emulator::ssd
 
 		result["left_resources"] = json::array();
 		result["nonstackable_list"] = json::array();
-		result["result"] = "ERR_NOTIMPLEMENTED";
 
 		return result;
 	}

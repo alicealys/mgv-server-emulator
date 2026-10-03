@@ -175,8 +175,8 @@ List of implemeted/unimplemented server commands
 | CMD_CRAFT_GRADE_UP | ✔️ |  |
 | CMD_CRAFT_REFORGE | ✔️ |  |
 | CMD_CRAFT_OBTAIN_OPTION | ✔️ |  |
-| CMD_CRAFT_CHECK_CRAFTED | ❌ |  |
-| CMD_CRAFT_CHECK_CRAFTED_ALL | ❌ |  |
+| CMD_CRAFT_CHECK_CRAFTED | ✔️ |  |
+| CMD_CRAFT_CHECK_CRAFTED_ALL | ✔️ |  |
 | CMD_CRAFT_INVEST_TO_PLAYER | ✔️ |  |
 | CMD_INVENTORY_SAVE | ✔️ |  |
 | CMD_BGM_MY_LIST_SAVE | ✔️ |  |
