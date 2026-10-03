@@ -171,7 +171,7 @@ List of implemeted/unimplemented server commands
 | CMD_CRAFT_BP_LOTTERY | ✔️ |  |
 | CMD_CRAFT_DELIVER | ✔️ |  |
 | CMD_SURVIVE_SUPPLY_LOTTERY | ➖ |  |
-| CMD_CRAFT_OPEN_PERK | ❌ |  |
+| CMD_CRAFT_OPEN_PERK | ✔️ |  |
 | CMD_CRAFT_GRADE_UP | ✔️ |  |
 | CMD_CRAFT_REFORGE | ❌ |  |
 | CMD_CRAFT_OBTAIN_OPTION | ✔️ |  |

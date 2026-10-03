@@ -939,7 +939,7 @@ namespace database::users
 				}
 
 				database::players::nonstackable_item_t nonstackable_item{};
-				nonstackable_item.initialize(*iter->second);
+				nonstackable_item.initialize(iter->second, nullptr);
 
 				if (!params.nonstackable_list->add_item(nonstackable_item))
 				{
@@ -957,12 +957,37 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_RECIPE:
 		{
-			if (params.user_inventory == nullptr)
+			if (params.user_inventory != nullptr)
+			{
+				params.user_inventory->set_obtained_recipe(reward.code);
+			}
+
+			const auto recipe_iter = game::parameters_table.ssd_sbm_parameters->recipes.find(reward.code);
+			if (recipe_iter == game::parameters_table.ssd_sbm_parameters->recipes.end())
 			{
 				return false;
 			}
 
-			params.user_inventory->set_obtained_recipe(reward.code);
+			if (recipe_iter->second->production == nullptr || recipe_iter->second->production->is_stackable())
+			{
+				return false;
+			}
+
+			database::players::nonstackable_item_t nonstackable_item{};
+			nonstackable_item.flag |= 16;
+			nonstackable_item.production_id = recipe_iter->second->id;
+
+			if (!params.nonstackable_list->add_item(nonstackable_item))
+			{
+				return false;
+			}
+
+			if (reward_info.is_object())
+			{
+				auto& stackable_list_j = reward_info["nonstackable_list"];
+				nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+			}
+
 			return true;
 		}
 		case game::ITEM_CATEGORY_PRESET_RADIO:

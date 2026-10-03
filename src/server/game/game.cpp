@@ -516,6 +516,11 @@ namespace game
 		return json::read(*this, data);
 	}
 
+	bool potential_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
 	bool accessory_t::parse(json::value& data)
 	{
 		return json::read(*this, data);

@@ -71,7 +71,7 @@ namespace database::players
 		option_t option_list[8];
 		perk_t perk_list[5];
 
-		void initialize(const game::production_t& production);
+		void initialize(const std::shared_ptr<game::production_t>& production, const std::shared_ptr<game::potential_t>& potential);
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
 	};

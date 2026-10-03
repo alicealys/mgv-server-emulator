@@ -57,6 +57,25 @@ namespace game
 			return result;
 		}
 
+		std::vector<std::uint32_t> list_recipes(bool (*filter)(const game::recipe_t&))
+		{
+			const auto& recipes_list = game::parameters_table.ssd_sbm_parameters->recipes_list;
+
+			std::vector<std::uint32_t> result{};
+
+			for (auto i = 0ull; i < recipes_list.size(); i++)
+			{
+				const auto& prod = recipes_list[i];
+
+				if (prod != nullptr && filter(*prod))
+				{
+					result.emplace_back(prod->id);
+				}
+			}
+
+			return result;
+		}
+
 		template <std::uint32_t Rarity>
 		game::item_t lottery_material()
 		{
@@ -110,7 +129,7 @@ namespace game
 		template <std::uint32_t Rarity>
 		game::item_t lottery_junk_weapon()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Weapon || recipe.production->rarity != Rarity || !recipe.junk)
 				{
@@ -150,7 +169,7 @@ namespace game
 			console::debug("[battle packs] lottery_junk_weapon %i pool size: %lli\n", Rarity, pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -162,7 +181,7 @@ namespace game
 		template <std::uint32_t Rarity>
 		game::item_t lottery_junk_accessory()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				return recipe.production != nullptr && recipe.production->type == PRD_TYPE_Accessory &&
 					recipe.production->rarity == Rarity;
@@ -171,7 +190,7 @@ namespace game
 			console::debug("[battle packs] lottery_junk_accessory pool size: %lli\n", pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -182,7 +201,7 @@ namespace game
 
 		game::item_t lottery_junk_weapon_legendary_closerange()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Weapon || recipe.production->rarity != 4 || !recipe.junk)
 				{
@@ -214,7 +233,7 @@ namespace game
 			console::debug("[battle packs] lottery_junk_weapon_legendary_closerange pool size: %lli\n", pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -225,7 +244,7 @@ namespace game
 
 		game::item_t lottery_junk_weapon_legendary_longrange()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Weapon || recipe.production->rarity != 4 || !recipe.junk)
 				{
@@ -256,7 +275,7 @@ namespace game
 			console::debug("[battle packs] lottery_junk_weapon_legendary_longrange pool size: %lli\n", pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -268,7 +287,7 @@ namespace game
 		template <std::uint32_t Type>
 		game::item_t lottery_junk_accessory_legendary()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Accessory || recipe.production->rarity != 4)
 				{
@@ -299,7 +318,7 @@ namespace game
 			console::debug("[battle packs] lottery_junk_accessory_legendary %i pool size: %lli\n", Type, pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -312,7 +331,7 @@ namespace game
 		game::item_t lottery_production_single()
 		{
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.code = Production;
 			item.num = 1;
 
@@ -359,7 +378,7 @@ namespace game
 			console::debug("[battle packs] lottery_medical pool size: %lli\n", pool.size());
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_PRODUCTION;
+			item.category = game::ITEM_CATEGORY_RECIPE;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -401,14 +420,14 @@ namespace game
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Body, lottery_junk_accessory_legendary<ACC_TYPE_Body>);
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Arm, lottery_junk_accessory_legendary<ACC_TYPE_Arm>);
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Leg, lottery_junk_accessory_legendary<ACC_TYPE_Leg>);
-		register_battle_pack_lottery(BP_Junk_Weapon_Legendary_singleQuest, lottery_production_single<PRD_EQP_WP_sg01_sw1>);
-		register_battle_pack_lottery(BP_Boss01Reward_Weapon, lottery_production_single<PRD_EQP_WP_sr03>);
-		register_battle_pack_lottery(BP_Boss01Reward_Accessory, lottery_production_single<PRD_ACC_Body_15>);
+		register_battle_pack_lottery(BP_Junk_Weapon_Legendary_singleQuest, lottery_production_single<RCP_EQP_WP_sg01_sw1_TypeA>);
+		register_battle_pack_lottery(BP_Boss01Reward_Weapon, lottery_production_single<RCP_EQP_WP_sr03_TypeA>);
+		register_battle_pack_lottery(BP_Boss01Reward_Accessory, lottery_production_single<RCP_ACC_Body_15_TypeA>);
 		register_battle_pack_lottery(BP_Boss01Reward_Material, lottery_material<3>);
 		register_battle_pack_lottery(BP_Boss02Reward_WeaponEnhance, lottery_weapon_enhance);
 		register_battle_pack_lottery(BP_Boss02Reward_AccessoryEnhance, lottery_weapon_enhance);
 		register_battle_pack_lottery(BP_Boss02Reward_Material, lottery_material<3>);
-		register_battle_pack_lottery(BP_Boss03Reward_01, lottery_production_single<PRD_ACC_Body_15>);
+		register_battle_pack_lottery(BP_Boss03Reward_01, lottery_production_single<RCP_ACC_Body_15_TypeA>);
 		register_battle_pack_lottery(BP_Boss03Reward_02, lottery_material<3>);
 		register_battle_pack_lottery(BP_Boss03Reward_03, lottery_material<2>);
 		register_battle_pack_lottery(BP_Boss04Reward_01, lottery_material<4>);

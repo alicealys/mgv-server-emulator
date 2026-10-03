@@ -159,6 +159,18 @@ namespace game::parameters
 			this->resources_list[res->index] = res;
 		}
 
+		for (auto i = 0ull; i < data["potential"].size(); i++)
+		{
+			auto potential = std::make_shared<potential_t>();
+			if (!potential->parse(data["potential"][i]))
+			{
+				console::warning("invalid potential at index %lli\n", i);
+				continue;
+			}
+
+			this->potentials[potential->id] = potential;
+		}
+
 		for (auto i = 0ull; i < data["production"].size(); i++)
 		{
 			auto prod = std::make_shared<production_t>();
@@ -199,14 +211,29 @@ namespace game::parameters
 				continue;
 			}
 
-			const auto iter = this->productions.find(recipe->production_id);
-			if (iter == this->productions.end())
 			{
-				console::warning("recipe %s has invalid production id %lli\n", recipe->id_str.data(), recipe->production_id);
+				const auto iter = this->productions.find(recipe->production_id);
+				if (iter == this->productions.end())
+				{
+					console::warning("recipe %s has invalid production id %lli\n", recipe->id_str.data(), recipe->production_id);
+				}
+				else
+				{
+					recipe->production = iter->second;
+				}
 			}
-			else
+
+			if (recipe->potential_id != 0u)
 			{
-				recipe->production = iter->second;
+				const auto iter = this->potentials.find(recipe->potential_id);
+				if (iter == this->potentials.end())
+				{
+					console::warning("recipe %s has invalid potential id %lli\n", recipe->id_str.data(), recipe->potential_id);
+				}
+				else
+				{
+					recipe->potential = iter->second;
+				}
 			}
 
 			this->recipes[recipe->id] = recipe;

@@ -24,6 +24,7 @@ namespace game::parameters
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_option_t>> customize_option;
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_t>> customize;
 		std::unordered_map<std::uint32_t, std::shared_ptr<cassette_t>> cassettes;
+		std::unordered_map<std::uint32_t, std::shared_ptr<potential_t>> potentials;
 		std::array<gradeup_spec_t, 255> gradeup_spec;
 		std::vector<std::shared_ptr<production_t>> productions_list;
 		std::vector<std::shared_ptr<recipe_t>> recipes_list;

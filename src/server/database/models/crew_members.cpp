@@ -138,8 +138,6 @@ namespace database::crew_members
 
 	bool member_params_t::parse_add_param(json::value& data)
 	{
-		utils::json_utils::get_or(data["body_id"], this->body_id);
-		utils::json_utils::get_or(data["face_id"], this->face_id);
 		utils::json_utils::get_or(data["generation_date"], this->generation_date);
 		utils::json_utils::get_or(data["item1_count"], this->item1_count);
 		utils::json_utils::get_or(data["item2_count"], this->item2_count);
@@ -148,8 +146,6 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["item5_count"], this->item5_count);
 		utils::json_utils::get_or(data["item6_count"], this->item6_count);
 		utils::json_utils::get_or(data["map_location"], this->map_location);
-		utils::json_utils::get_or(data["race_id"], this->race_id);
-		utils::json_utils::get_or(data["sex_id"], this->sex_id);
 		utils::json_utils::get_or(data["voice_type"], this->voice_type);
 
 		if (this->map_location > 1)
@@ -190,6 +186,10 @@ namespace database::crew_members
 
 		this->life = iter->second->life;
 		this->max_life = iter->second->life;
+		this->face_id = iter->second->face;
+		this->body_id = iter->second->body;
+		this->sex_id = iter->second->sex;
+		this->race_id = iter->second->race;
 		this->sanity = 1000;
 		this->previous_group = 1;
 		this->current_group = 1;

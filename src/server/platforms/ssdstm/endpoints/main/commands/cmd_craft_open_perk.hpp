@@ -9,7 +9,7 @@ namespace emulator::ssd
 		{
 			std::uint32_t perk_id;
 			std::uint32_t recipe_id;
-			std::uint32_t target_item;
+			std::uint16_t target_item;
 		};
 
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;

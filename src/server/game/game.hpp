@@ -6140,6 +6140,44 @@ namespace game
         std::string fova;
     };
 
+    struct perk2_t
+    {
+        struct cost_t
+        {
+            std::uint32_t res_id;
+            std::uint32_t kub;
+        };
+
+        std::string id_str;
+        std::uint32_t id;
+        std::uint32_t buff_id;
+        bool risk;
+    };
+
+    struct potential_t
+    {
+        bool parse(json::value& data);
+
+        struct perk_t
+        {
+            std::uint32_t id;
+            bool lock;
+        };
+
+        std::string id_str;
+        std::uint32_t id;
+        float weight;
+        float spec_min;
+        float spec_max;
+        float life_min;
+        float life_max;
+        std::uint32_t opt_min;
+        std::uint32_t opt_max;
+        std::uint32_t res_id;
+        std::uint32_t res_count;
+        std::array<perk_t, 5> perk;
+    };
+
 	struct production_t
 	{
 		bool parse(json::value& data);
@@ -6194,7 +6232,7 @@ namespace game
 		std::uint64_t icon_path;
 		std::array<std::uint32_t, 3> perk;
 		std::string id_str;
-		std::shared_ptr<customize_t> customize;
+        std::shared_ptr<customize_t> customize;
 	};
 
 	struct recipe_t
@@ -6225,7 +6263,8 @@ namespace game
 		std::uint32_t production_id;
 
 		std::shared_ptr<production_t> production;
-	};
+        std::shared_ptr<potential_t> potential;
+    };
 
     struct battle_pack_t
     {

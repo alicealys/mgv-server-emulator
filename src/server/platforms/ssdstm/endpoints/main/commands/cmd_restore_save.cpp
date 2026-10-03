@@ -141,6 +141,7 @@ namespace emulator::ssd
 			auto& mission_record_info_list_j = mission_progress_j["mission_record_info_list"];
 			auto& quest_record_info_list_j = mission_progress_j["quest_record_info_list"];
 			auto& nonstackable_list_j = mission_progress_j["nonstackable_list"];
+			auto& battle_pack_list_j = mission_progress_j["battle_pack_list"];
 			auto& resource_list_j = mission_progress_j["resource_list"];
 			auto& stackable_list_j = mission_progress_j["stackable_list"];
 			auto& story_unlock_info_j = mission_progress_j["story_unlock_info"];
@@ -240,6 +241,15 @@ namespace emulator::ssd
 				if (nonstackable_list->parse(nonstackable_list_j))
 				{
 					user->current_player->set_nonstackable_item_list(*nonstackable_list);
+				}
+			}
+
+			if (battle_pack_list_j.is_array())
+			{
+				auto battle_pack_list = std::make_unique<database::players::battle_pack_list_t>();
+				if (battle_pack_list->parse(battle_pack_list_j))
+				{
+					user->current_player->set_battle_pack_list(*battle_pack_list);
 				}
 			}
 

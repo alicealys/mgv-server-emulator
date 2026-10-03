@@ -453,45 +453,94 @@ namespace database::players
 		}
 	}
 
-	void nonstackable_item_t::initialize(const game::production_t& production)
+	void nonstackable_item_t::initialize(const std::shared_ptr<game::production_t>& production, const std::shared_ptr<game::potential_t>& potential)
 	{
-		this->life = static_cast<std::uint16_t>(production.life);
-		this->life_max = static_cast<std::uint16_t>(production.life);
-		this->production_id = production.id;
-		this->spec = 1000;
+		this->production_id = production->id;
 		this->flag = 1;
 
-		const auto& customize = production.customize;
-		if (customize == nullptr)
+		auto perk_count = 0u;
+		if (potential == nullptr)
 		{
-			return;
-		}
-
-		this->color = 255;
-		this->color2 = 255;
-		this->option_slot = static_cast<std::uint16_t>(customize->option_slots_min);
-		auto opt_idx = 0u;
-
-		for (auto i = 0ull; i < customize->option_slots.size(); i++)
-		{
-			auto& option_slot_entry = customize->option_slots[i];
-			if (option_slot_entry == nullptr || !option_slot_entry->not_empty)
+			for (auto i = 0ull; i < production->perk.size(); i++)
 			{
-				continue;
-			}
-
-			auto& option = this->option_list[opt_idx++];
-			for (auto o = 0ull; o < option_slot_entry->options.size(); o++)
-			{
-				if (!option_slot_entry->options[o].obtained)
+				if (production->perk[i] == 0)
 				{
 					continue;
 				}
 
-				option.obtained |= 1 << o;
-				if (option.option_id == 0)
+				auto idx = perk_count++;
+				this->perk_list[idx].perk_id = production->perk[i];
+				this->perk_list[idx].perk_level = 0;
+			}
+
+			this->life = static_cast<std::uint16_t>(production->life);
+			this->life_max = static_cast<std::uint16_t>(production->life);
+			this->spec = 1000;
+		}
+		else
+		{
+			for (auto i = 0ull; i < potential->perk.size(); i++)
+			{
+				if (potential->perk[i].id == 0)
 				{
-					option.option_id = option_slot_entry->options[o].optid;
+					continue;
+				}
+
+				auto idx = perk_count++;
+				this->perk_list[idx].perk_id = potential->perk[i].id;
+				this->perk_list[idx].perk_level = 0;
+			}
+
+			const auto life_min_f = static_cast<std::uint16_t>(potential->life_min * static_cast<float>(production->life));
+			const auto life_max_f = static_cast<std::uint16_t>(potential->life_max * static_cast<float>(production->life));
+
+			const auto spec_min = static_cast<std::uint16_t>(potential->spec_min * 1000);
+			const auto spec_max = static_cast<std::uint16_t>(potential->spec_max * 1000);
+
+			const auto life_value = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(life_min_f, life_max_f));
+			const auto spec_value = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(spec_min, spec_max));
+
+			this->life = life_value;
+			this->life_max = life_value;
+			this->spec = spec_value;
+		}
+
+		const auto& customize = production->customize;
+		if (customize != nullptr)
+		{
+			this->color = 255;
+			this->color2 = 255;
+			this->option_slot = static_cast<std::uint16_t>(customize->option_slots_min);
+
+			auto opt_idx = 0u;
+			auto opt_count = 0u;
+
+			for (auto i = 0ull; i < customize->option_slots.size(); i++)
+			{
+				auto& option_slot_entry = customize->option_slots[i];
+				if (option_slot_entry == nullptr || !option_slot_entry->not_empty)
+				{
+					continue;
+				}
+
+				auto& option = this->option_list[opt_idx++];
+				for (auto o = 0ull; o < option_slot_entry->options.size(); o++)
+				{
+					if (!option_slot_entry->options[o].obtained)
+					{
+						continue;
+					}
+
+					option.obtained |= 1 << o;
+					if (option.option_id == 0)
+					{
+						option.option_id = option_slot_entry->options[o].optid;
+					}
+				}
+
+				if (++opt_count >= this->option_slot)
+				{
+					break;
 				}
 			}
 		}
@@ -541,17 +590,33 @@ namespace database::players
 		data["spec"] = this->spec;
 		data["option_slot"] = this->option_slot;
 		data["production_id"] = this->production_id;
+		data["perk_list"] = json::array();
+		data["option_list"] = json::array();
 
+		auto opt_idx = 0u;
 		for (auto i = 0ull; i < ARRAYSIZE(this->option_list); i++)
 		{
-			data["option_list"][i]["obtained"] = this->option_list[i].obtained;
-			data["option_list"][i]["option_id"] = this->option_list[i].option_id;
+			if (this->option_list[i].option_id == 0)
+			{
+				continue;
+			}
+
+			auto& entry = data["option_list"][opt_idx++];
+			entry["obtained"] = this->option_list[i].obtained;
+			entry["option_id"] = this->option_list[i].option_id;
 		}
 
+		auto perk_idx = 0u;
 		for (auto i = 0ull; i < ARRAYSIZE(this->perk_list); i++)
 		{
-			data["perk_list"][i]["perk_id"] = this->perk_list[i].perk_id;
-			data["perk_list"][i]["perk_level"] = this->perk_list[i].perk_level;
+			if (this->perk_list[i].perk_id == 0)
+			{
+				continue;
+			}
+
+			auto& entry = data["perk_list"][perk_idx++];
+			entry["perk_id"] = this->perk_list[i].perk_id;
+			entry["perk_level"] = this->perk_list[i].perk_level;
 		}
 	}
 
