@@ -50,6 +50,7 @@ namespace emulator::ssd
 		const auto communication_gesture_info = player->get_communication_gesture_info();
 		const auto mission_record_list = player->get_mission_record_list();
 		const auto quest_record_list = player->get_quest_record_list();
+		const auto replay_info_list = player->get_replay_info_list();
 
 		user->get_inventory(*user_inventory);
 		user->get_play_record(*user_play_record);
@@ -74,6 +75,8 @@ namespace emulator::ssd
 		result["craft_board"] = json::array();
 
 		mission_info->to_json(result["current_mission_info"]);
+		mission_info->replay_mission_info.to_json(result["replay_mission_info"]);
+		replay_info_list.to_json(result["replay_info_list"]);
 
 		const auto latest_defense_mission = database::defense_missions::get_current_mission(user->current_player->get_player_id());
 		if (latest_defense_mission.has_value())
@@ -160,13 +163,6 @@ namespace emulator::ssd
 		{
 			result["recommend_bp_mission_list"][i] = 0;
 		}
-
-		result["replay_info_list"] = json::array();
-		result["replay_mission_info"]["is_replay_mission"] = 0;
-		result["replay_mission_info"]["replay_mission_difficalty"] = 0;
-		result["replay_mission_info"]["replay_mission_id"] = 0;
-		result["replay_mission_info"]["replay_mission_return_location_code"] = 0;
-		result["replay_mission_info"]["replay_mission_return_mission_code"] = 0;
 
 		inventory_resources->to_json(result["resource_list"]);
 		stackable_item_list->to_json(result["stackable_list"]);

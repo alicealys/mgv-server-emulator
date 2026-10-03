@@ -174,6 +174,18 @@ namespace database::players
 			std::uint32_t remaining_time;
 		};
 
+		struct replay_info_t
+		{
+			std::uint8_t is_replay_mission;
+			std::uint8_t replay_mission_difficalty;
+			std::uint32_t replay_mission_id;
+			std::uint32_t replay_mission_return_location_code;
+			std::uint32_t replay_mission_return_mission_code;
+
+			bool parse(json::value& data);
+			void to_json(json::value& data) const;
+		};
+
 		std::uint16_t equipment_slot; // 206,
 		std::uint32_t flag_mission_code; // 40070,
 		std::uint16_t flag_mission_sequence_number; // 1,
@@ -210,6 +222,7 @@ namespace database::players
 		std::uint16_t injury_recovery_time[32]; // 0
 		status_buffer_t status_buffer[32];
 		std::uint8_t vars[640]; // 
+		replay_info_t replay_mission_info;
 
 		void initialize();
 		bool parse(json::value& data);
@@ -615,6 +628,22 @@ namespace database::players
 		bool parse_diff(json::value& data);
 		void to_json(json::value& data) const;
 	};
+
+	struct replay_info_list_internal_t
+	{
+		struct entry_t
+		{
+			std::uint8_t difficulty;
+			std::uint8_t is_clear;
+			std::uint32_t mission_code;
+		};
+
+		std::uint8_t difficulty[26];
+		std::uint8_t is_clear[4];
+
+		bool parse_diff_single(json::value& data);
+		void to_json(json::value& data) const;
+	};
 #pragma pack(pop)
 
 	static_assert(sizeof(battle_pack_t) == 8);
@@ -623,6 +652,7 @@ namespace database::players
 
 	using mission_record_list_t = database_struct<mission_record_list_internal_t>;
 	using quest_record_list_t = database_struct<quest_record_list_internal_t>;
+	using replay_info_list_t = database_struct<replay_info_list_internal_t>;
 
 	using avatar_t = database_struct<avatar_internal_t>;
 	using gimmick_info_t = database_struct<gimmick_info_internal_t>;
@@ -768,6 +798,7 @@ namespace database::players
 		DEFINE_FIELD(story_unlock_info, sqlpp::binary);
 		DEFINE_FIELD(mission_record_list, sqlpp::binary);
 		DEFINE_FIELD(quest_record_list, sqlpp::binary);
+		DEFINE_FIELD(replay_info_list, sqlpp::binary);
 		DEFINE_FIELD(inventory_resource_list, sqlpp::binary);
 		DEFINE_FIELD(stackable_item_list, sqlpp::binary);
 		DEFINE_FIELD(battle_pack_list, sqlpp::binary);
@@ -799,6 +830,7 @@ namespace database::players
 			story_unlock_info_field_t,
 			mission_record_list_field_t,
 			quest_record_list_field_t,
+			replay_info_list_field_t,
 			inventory_resource_list_field_t,
 			stackable_item_list_field_t,
 			battle_pack_list_field_t,
@@ -831,6 +863,7 @@ namespace database::players
 			this->communication_gesture_info_.deserialize(row.communication_gesture_info.value());
 			this->mission_record_list_.deserialize(row.mission_record_list.value());
 			this->quest_record_list_.deserialize(row.quest_record_list.value());
+			this->replay_info_list_.deserialize(row.replay_info_list.value());
 		}
 
 		GET_FIELD_H(std::uint64_t, player_id);
@@ -848,6 +881,7 @@ namespace database::players
 		GET_FIELD_H(communication_gesture_info_t, communication_gesture_info);
 		GET_FIELD_H(mission_record_list_t, mission_record_list);
 		GET_FIELD_H(quest_record_list_t, quest_record_list);
+		GET_FIELD_H(replay_info_list_t, replay_info_list);
 		GET_FIELD_H(std::chrono::microseconds, creation_date);
 
 		std::string get_name() const;
@@ -881,6 +915,7 @@ namespace database::players
 		bool set_map_unlock_list_africa(map_unlock_list_t& map_unlock_list) const;
 		bool set_mission_record_list(mission_record_list_t& set_mission_record_list) const;
 		bool set_quest_record_list(quest_record_list_t& quest_record_list) const;
+		bool set_replay_info_list(replay_info_list_t& replay_info_list) const;
 
 		void get_nonstackable_item_list(nonstackable_item_list_t& nonstackable_list, const std::size_t size_add = 0ull) const;
 		void get_inventory_resource_list(inventory_resource_list_t& inventory_resource_list, const std::size_t size_add = 0ull) const;

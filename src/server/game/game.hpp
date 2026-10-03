@@ -101,9 +101,11 @@ namespace game
         std::unordered_map<std::uint32_t, std::int32_t> mission_id_map;
         std::unordered_map<std::uint32_t, std::int32_t> quest_id_map;
         std::unordered_map<std::uint32_t, std::int32_t> defense_mission_id_map;
+        std::unordered_map<std::uint32_t, std::int32_t> replay_mission_id_map;
         std::vector<std::uint32_t> mission_id_list;
         std::vector<std::uint32_t> quest_id_list;
         std::vector<std::uint32_t> defense_mission_id_list;
+        std::vector<std::uint32_t> replay_mission_id_list;
     };
 
     const mission_list_t& get_mission_list();
@@ -111,14 +113,17 @@ namespace game
     std::int32_t get_mission_index(const std::uint32_t mission_id);
     std::int32_t get_quest_index(const std::uint32_t quest_id);
     std::int32_t get_defense_mission_index(const std::uint32_t quest_id);
+    std::int32_t get_replay_mission_index(const std::uint32_t quest_id);
 
     std::uint32_t get_mission_id(const std::uint32_t quest_index);
     std::uint32_t get_quest_id(const std::uint32_t mission_index);
     std::uint32_t get_defense_mission_id(const std::uint32_t mission_index);
+    std::uint32_t get_replay_mission_id(const std::uint32_t mission_index);
 
     std::uint32_t get_mission_count();
     std::uint32_t get_quest_count();
     std::uint32_t get_defense_mission_count();
+    std::uint32_t get_replay_mission_count();
 
 	enum string_hash_t : std::uint32_t
 	{

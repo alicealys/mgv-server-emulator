@@ -88,7 +88,7 @@ List of implemeted/unimplemented server commands
 | CMD_AVATAR_LOAD | ✔️ |  |
 | CMD_MISSION_START | ✔️ |  |
 | CMD_MISSION_END | ✔️ |  |
-| CMD_MISSION_REPLAY_END | ❌ |  |
+| CMD_MISSION_REPLAY_END | ✔️ |  |
 | CMD_FLAG_MISSION_START | ✔️ |  |
 | CMD_FLAG_MISSION_END | ✔️ |  |
 | CMD_MISSION_ABORT | ➖ |  |
@@ -103,7 +103,7 @@ List of implemeted/unimplemented server commands
 | CMD_DLC_SET_FLAG | ✔️ |  |
 | CMD_DLC_GET_FLAG | ✔️ |  |
 | CMD_COMMUNICATION_GESTURE_SLOT_SAVE | ✔️ |  |
-| CMD_CHEAT_SEND | ❌ |  |
+| CMD_CHEAT_SEND | ➖ |  |
 | CMD_BASE_RESOURCE_PROVIDE | ✔️ |  |
 | CMD_BASE_RESOURCE_LOAD | ✔️ |  |
 | CMD_BASE_RESOURCE_CONSUME | ✔️ |  |

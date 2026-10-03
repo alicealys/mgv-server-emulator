@@ -40,6 +40,7 @@ create table if not exists `players`
 	defense_mission_info		varchar(64) default null,
 	communication_gesture_info	varchar(64) default null,
 	mission_record_list  		varchar(64) default null,
+	replay_info_list	  		varchar(64) default null,
 	avatar						varchar(256) default null,
 	quest_record_list  			varchar(480) default null,
 	loadout_list				blob default null,

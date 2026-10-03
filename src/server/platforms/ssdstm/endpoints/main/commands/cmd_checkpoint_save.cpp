@@ -223,6 +223,8 @@ namespace emulator::ssd
 		auto& quest_record_info_j = data["quest_record_info"];
 		auto& defense_mission_wave_result_j = data["defense_mission_wave_result"];
 		auto& defense_mission_parameter_j = data["defense_mission_parameter"];
+		auto& replay_mission_info_j = data["replay_mission_info"];
+		auto& quest_repop_count_decrement_j = data["quest_repop_count_decrement"];
 
 		result["added_crew"] = json::array();
 		result["capture_list"] = json::array();
@@ -343,12 +345,17 @@ namespace emulator::ssd
 			parse_map_unlock_list(story_unlock_info_j);
 		}
 
-		if (mission_info_j.is_object())
+		if (mission_info_j.is_object() || replay_mission_info_j.is_array())
 		{
 			const auto mission_info = std::make_unique<database::players::mission_info_t>();
 			user->current_player->get_mission_info(*mission_info);
 
-			if (!mission_info->parse(mission_info_j))
+			if (mission_info_j.is_object() && !mission_info->parse(mission_info_j))
+			{
+				return error(ERR_INVALIDARG);
+			}
+
+			if (replay_mission_info_j.size() && !mission_info->replay_mission_info.parse(replay_mission_info_j[0]))
 			{
 				return error(ERR_INVALIDARG);
 			}
@@ -356,35 +363,46 @@ namespace emulator::ssd
 			user->current_player->set_mission_info(*mission_info);
 		}
 
-		if (open_list_j.is_object())
+		if (open_list_j.is_object() || quest_repop_count_decrement_j.is_number())
 		{
-			auto& mission_code_list_j = open_list_j["mission_code_list"];
-			if (mission_code_list_j.is_array())
-			{
-				 auto mission_record_list = user->current_player->get_mission_record_list();
+			auto quest_record_list = user->current_player->get_quest_record_list();
 
-				for (auto i = 0ull; i < mission_code_list_j.size(); i++)
+			if (open_list_j.is_object())
+			{
+				auto& mission_code_list_j = open_list_j["mission_code_list"];
+				if (mission_code_list_j.is_array())
 				{
-					auto& mission_code_j = mission_code_list_j[i];
-					if (!mission_code_j.is_uint64())
+					auto mission_record_list = user->current_player->get_mission_record_list();
+
+					for (auto i = 0ull; i < mission_code_list_j.size(); i++)
 					{
-						continue;
+						auto& mission_code_j = mission_code_list_j[i];
+						if (!mission_code_j.is_uint64())
+						{
+							continue;
+						}
+
+						const auto mission_code = mission_code_j.as<std::uint16_t>();
+						mission_record_list.open_mission(mission_code);
 					}
 
-					const auto mission_code = mission_code_j.as<std::uint16_t>();
-					mission_record_list.open_mission(mission_code);
+					user->current_player->set_mission_record_list(mission_record_list);
 				}
 
-				user->current_player->set_mission_record_list(mission_record_list);
+				auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
+				if (quest_mission_code_list_j.is_array())
+				{
+					quest_record_list.parse_diff(quest_mission_code_list_j);
+				}
 			}
 
-			auto& quest_mission_code_list_j = open_list_j["quest_mission_code_list"];
-			if (quest_mission_code_list_j.is_array())
+			const auto repop_dec = quest_repop_count_decrement_j.as<std::uint8_t>();
+			for (auto i = 0ull; i < ARRAYSIZE(quest_record_list.list); i++)
 			{
-				 auto quest_record_list = user->current_player->get_quest_record_list();
-				quest_record_list.parse_diff(quest_mission_code_list_j);
-				user->current_player->set_quest_record_list(quest_record_list);
+				quest_record_list.list[i].repop_count -= std::min(quest_record_list.list[i].repop_count, repop_dec);
 			}
+
+			user->current_player->set_quest_record_list(quest_record_list);
 		}
 
 		if (quest_record_info_j.is_array())
@@ -492,8 +510,6 @@ namespace emulator::ssd
 		// TODO
 		// play_record_additional_130_checkpoint
 		// play_record_save_checkpoint
-		// replay_mission_info
-		// quest_repop_count_decrement
 
 		return result;
 	}

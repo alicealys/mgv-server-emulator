@@ -36,6 +36,7 @@ namespace database::players
 				player::table.defense_mission_info,
 				player::table.mission_record_list,
 				player::table.quest_record_list,
+				player::table.replay_info_list,
 				users::user::table.account_id
 			).from(player::table.join(users::user::table).on(users::user::table.user_id == player::table.f_user_id));
 		}
@@ -817,6 +818,20 @@ namespace database::players
 		return true;
 	}
 
+	bool mission_info_t::replay_info_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
+	void mission_info_t::replay_info_t::to_json(json::value& data) const
+	{
+		data["is_replay_mission"] = this->is_replay_mission;
+		data["replay_mission_difficalty"] = this->replay_mission_difficalty;
+		data["replay_mission_id"] = this->replay_mission_id;
+		data["replay_mission_return_location_code"] = this->replay_mission_return_location_code;
+		data["replay_mission_return_mission_code"] = this->replay_mission_return_mission_code;
+	}
+
 	void mission_info_t::to_json(json::value& data) const
 	{
 		data["equipment_slot"] = this->equipment_slot;
@@ -1088,6 +1103,7 @@ namespace database::players
 	{
 		const auto& mission_list = game::get_mission_list();
 
+		data = json::array();
 		auto count = 0u;
 		for (auto i = 0ull; i < mission_list.mission_id_list.size(); i++)
 		{
@@ -1152,6 +1168,8 @@ namespace database::players
 
 	void quest_record_list_internal_t::to_json(json::value& data) const
 	{
+		data = json::array();
+
 		auto count = 0u;
 		const auto& mission_list = game::get_mission_list();
 		for (auto i = 0ull; i < mission_list.quest_id_list.size(); i++)
@@ -1165,6 +1183,55 @@ namespace database::players
 			entry["flagset"] = this->list[i].flagset;
 			entry["mission_code"] = mission_list.quest_id_list[i];
 			entry["repop_count"] = this->list[i].repop_count;
+		}
+	}
+
+	bool replay_info_list_internal_t::parse_diff_single(json::value& data)
+	{
+		entry_t entry{};
+		if (!json::read(entry, data))
+		{
+			return false;
+		}
+
+		const auto index = game::get_replay_mission_index(entry.mission_code);
+		if (index == -1)
+		{
+			return false;
+		}
+
+		if (this->difficulty[index] < entry.difficulty)
+		{
+			this->difficulty[index] = entry.difficulty;
+		}
+
+		const auto byte_index = (index >> 3);
+
+		this->is_clear[byte_index] |= ((entry.is_clear & 1) << (index & 7));
+		return true;
+	}
+
+	void replay_info_list_internal_t::to_json(json::value& data) const
+	{
+		data = json::array();
+
+		auto count = 0u;
+		const auto& mission_list = game::get_mission_list();
+		for (auto i = 0ull; i < mission_list.replay_mission_id_list.size(); i++)
+		{
+			const auto byte_index = (i >> 3);
+			const auto mask = (1 << (i & 7));
+
+			if ((this->is_clear[byte_index] & mask) != mask)
+			{
+				continue;
+			}
+
+			auto& entry = data[count++];
+			entry["difficulty"] = this->difficulty[i];
+			entry["is_clear"] = 1;
+			entry["is_reward"] = 1;
+			entry["mission_code"] = mission_list.replay_mission_id_list[i];
 		}
 	}
 
@@ -2063,6 +2130,7 @@ namespace database::players
 	GET_FIELD_C(player, communication_gesture_info_t, communication_gesture_info);
 	GET_FIELD_C(player, mission_record_list_t, mission_record_list);
 	GET_FIELD_C(player, quest_record_list_t, quest_record_list);
+	GET_FIELD_C(player, replay_info_list_t, replay_info_list);
 	GET_FIELD_C(player, std::chrono::microseconds, creation_date);
 
 	std::uint32_t player::get_current_loadout() const
@@ -2192,6 +2260,7 @@ namespace database::players
 							 player::table.map_unlock_list_africa = null_blob,
 							 player::table.mission_record_list = "",
 							 player::table.quest_record_list = "",
+							 player::table.replay_info_list = "",
 							 player::table.mission_info = null_blob)
 								.where(player::table.player_id == player_id));
 			});
@@ -2358,6 +2427,7 @@ namespace database::players
 		DEF_STRUCT_SET(player, communication_gesture_info_t, communication_gesture_info);
 		DEF_STRUCT_SET(player, mission_record_list_t, mission_record_list);
 		DEF_STRUCT_SET(player, quest_record_list_t, quest_record_list);
+		DEF_STRUCT_SET(player, replay_info_list_t, replay_info_list);
 
 		DEF_ARRAY_GET(player, nonstackable_item_list_t, nonstackable_item_list);
 		DEF_ARRAY_GET(player, stackable_item_list_t, stackable_item_list);
@@ -2540,6 +2610,11 @@ namespace database::players
 	bool player::set_quest_record_list(quest_record_list_t& quest_record_list) const
 	{
 		RUN_IMPL(impl::set_quest_record_list, this->get_player_id(), quest_record_list);
+	}
+
+	bool player::set_replay_info_list(replay_info_list_t& replay_info_list) const
+	{
+		RUN_IMPL(impl::set_replay_info_list, this->get_player_id(), replay_info_list);
 	}
 
 	bool player::set_inventory_resource_list(inventory_resource_list_t& inventory_resource_list) const

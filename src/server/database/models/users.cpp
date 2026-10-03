@@ -96,6 +96,7 @@ namespace database::users
 						players::player::table.communication_gesture_info,
 						players::player::table.mission_record_list,
 						players::player::table.quest_record_list,
+						players::player::table.replay_info_list,
 						players::player::table.defense_mission_info
 					)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.current_player_id == players::player::table.player_id));

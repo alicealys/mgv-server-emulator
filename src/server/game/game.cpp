@@ -226,6 +226,7 @@ namespace game
 			parse_part(list["mission_id_list"], mission_list.mission_id_list, mission_list.mission_id_map);
 			parse_part(list["quest_id_list"], mission_list.quest_id_list, mission_list.quest_id_map);
 			parse_part(list["defense_mission_id_list"], mission_list.defense_mission_id_list, mission_list.defense_mission_id_map);
+			parse_part(list["replay_mission_id_list"], mission_list.replay_mission_id_list, mission_list.replay_mission_id_map);
 
 			return mission_list;
 		}
@@ -347,6 +348,18 @@ namespace game
 		return static_cast<std::int32_t>(iter->second);
 	}
 
+	std::int32_t get_replay_mission_index(const std::uint32_t mission_id)
+	{
+		const auto& list = get_mission_list();
+		const auto iter = list.replay_mission_id_map.find(mission_id);
+		if (iter == list.replay_mission_id_map.end())
+		{
+			return -1;
+		}
+
+		return static_cast<std::int32_t>(iter->second);
+	}
+
 	std::uint32_t get_mission_id(const std::uint32_t index)
 	{
 		const auto& list = get_mission_list();
@@ -380,6 +393,17 @@ namespace game
 		return list.defense_mission_id_list[index];
 	}
 
+	std::uint32_t get_replay_mission_id(const std::uint32_t index)
+	{
+		const auto& list = get_mission_list();
+		if (list.replay_mission_id_list.size() <= index)
+		{
+			return 0u;
+		}
+
+		return list.replay_mission_id_list[index];
+	}
+
 	std::uint32_t get_mission_count()
 	{
 		const auto& list = get_mission_list();
@@ -396,6 +420,12 @@ namespace game
 	{
 		const auto& list = get_mission_list();
 		return static_cast<std::uint32_t>(list.defense_mission_id_list.size());
+	}
+
+	std::uint32_t get_replay_mission_count()
+	{
+		const auto& list = get_mission_list();
+		return static_cast<std::uint32_t>(list.replay_mission_id_list.size());
 	}
 
 	std::uint8_t* get_static_key(const std::uint32_t type)
