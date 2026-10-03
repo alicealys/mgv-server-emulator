@@ -22,7 +22,7 @@ namespace emulator::ssd
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 		user->current_player->get_story_unlock_info(*story_unlock_info);
 
-		story_unlock_info->story_sequence_number = story_sequence_number_j.as<std::uint32_t>();
+		story_unlock_info->set_story_sequence_number(story_sequence_number_j.as<std::uint32_t>());
 		mission_info->parse(current_mission_info_j);
 
 		user->current_player->set_mission_info(*mission_info);

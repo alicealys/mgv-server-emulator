@@ -451,7 +451,7 @@ namespace database::shop_purchases
 		RUN_IMPL(impl::get_purchase_count, user_id, product_type);
 	}
 
-	void delete_player_data(const std::uint64_t user_id)
+	void delete_user_data(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::delete_player_data, user_id);
 	}

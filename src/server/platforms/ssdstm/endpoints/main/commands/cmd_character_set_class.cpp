@@ -2,13 +2,10 @@
 
 #include "cmd_character_set_class.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	json::value cmd_character_set_class::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		json::value result;
-		result["result"] = "ERR_NOTIMPLEMENTED";
-		return result;
+		return {};
 	}
 }

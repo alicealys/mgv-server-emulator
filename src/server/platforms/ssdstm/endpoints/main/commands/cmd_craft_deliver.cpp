@@ -73,17 +73,17 @@ namespace emulator::ssd
 		const auto base_resources = std::make_unique<database::players::base_resources_t>();
 		user->current_player->get_base_resources(*base_resources);
 
-		const auto add_value = [](std::uint16_t& dst, std::int16_t src)
+		const auto add_value = [](std::uint32_t& dst, std::int32_t src)
 		{
 			if (src < 0)
 			{
-				dst -= std::min(dst, static_cast<std::uint16_t>(src * -1));
+				dst -= std::min(dst, static_cast<std::uint32_t>(src * -1));
 			}
 			else
 			{
 				dst += std::min(
-					static_cast<std::uint16_t>(std::numeric_limits<std::uint16_t>::max() - dst),
-					static_cast<std::uint16_t>(src));
+					static_cast<std::uint32_t>(std::numeric_limits<std::uint32_t>::max() - dst),
+					static_cast<std::uint32_t>(src));
 			}
 		};
 

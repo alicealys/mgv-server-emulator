@@ -321,17 +321,17 @@ namespace database::players
 	{
 		struct base_resource_params_t
 		{
-			std::uint16_t bad_status_1_risk;
-			std::uint16_t bad_status_2_risk;
-			std::uint16_t bad_status_3_risk;
-			std::uint16_t bad_status_4_risk;
-			std::uint16_t clean_water;
-			std::uint16_t dirty_water;
-			std::uint16_t food;
-			std::uint16_t medical_supplies;
-			std::uint16_t party_item_id;
-			std::uint16_t party_item_updates;
-			std::uint16_t total_number_of_updates;
+			std::uint32_t bad_status_1_risk;
+			std::uint32_t bad_status_2_risk;
+			std::uint32_t bad_status_3_risk;
+			std::uint32_t bad_status_4_risk;
+			std::uint32_t clean_water;
+			std::uint32_t dirty_water;
+			std::uint32_t food;
+			std::uint32_t medical_supplies;
+			std::uint32_t party_item_id;
+			std::uint32_t party_item_updates;
+			std::uint32_t total_number_of_updates;
 		};
 
 		std::uint32_t animals[57];
@@ -454,6 +454,8 @@ namespace database::players
 		std::uint8_t marker_afghan[522];
 		std::uint8_t marker_africa[522];
 		tips_open_info_t tips_open_info;
+
+		void set_story_sequence_number(const std::uint32_t story_sequence_number);
 
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
@@ -900,5 +902,6 @@ namespace database::players
 	std::size_t get_player_count(const std::uint64_t user_id);
 	std::optional<player> create(const std::uint64_t user_id);
 
+	void initialize(const std::uint64_t player_id);
 	void delete_player_data(const std::uint64_t player_id);
 }

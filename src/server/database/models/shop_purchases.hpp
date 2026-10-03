@@ -211,7 +211,7 @@ namespace database::shop_purchases
 	std::unordered_map<std::uint32_t, std::size_t> get_purchase_counts(const std::uint64_t user_id);
 	std::size_t get_purchase_count(const std::uint64_t user_id, const std::uint32_t product_type);
 
-	void delete_player_data(const std::uint64_t user_id);
+	void delete_user_data(const std::uint64_t user_id);
 
 	json::value purchase_product(const users::user& user, const std::uint32_t product_type, const std::function<bool(json::value& result)>& callback);
 	json::value purchase_product(const users::user& user, const shop_product_t& product, const std::function<bool(json::value& result)>& callback);

@@ -282,6 +282,8 @@ namespace database
 
 		void deserialize(const std::string& data)
 		{
+			std::memset(this, 0, sizeof(T));
+
 			const auto deserialized = utils::cryptography::base64::decode(data);
 			if (deserialized.size() != sizeof(T))
 			{

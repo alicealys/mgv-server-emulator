@@ -1211,7 +1211,13 @@ namespace database::players
 		utils::json_utils::get_or(data["facility_new_flag"], this->facility_new_flag);
 		utils::json_utils::get_or(data["marker_map_location"], this->marker_map_location);
 		utils::json_utils::get_or(data["oxygen_supply_unlock"], this->oxygen_supply_unlock);
-		utils::json_utils::get_or(data["story_sequence_number"], this->story_sequence_number);
+
+		auto sequence = 0u;
+		utils::json_utils::get_or(data["story_sequence_number"], sequence);
+		if (sequence >= this->story_sequence_number)
+		{
+			this->story_sequence_number = sequence;
+		}
 
 		utils::json_utils::parse_base64(data["marker_africa"], this->marker_africa);
 		utils::json_utils::parse_base64(data["marker_afghan"], this->marker_afghan);
@@ -1247,6 +1253,14 @@ namespace database::players
 		else
 		{
 			data["data"] = utils::encoding::encode_base64(this->value);
+		}
+	}
+
+	void story_unlock_info_t::set_story_sequence_number(const std::uint32_t sequence)
+	{
+		if (this->story_sequence_number < sequence)
+		{
+			this->story_sequence_number = sequence;
 		}
 	}
 
@@ -2111,6 +2125,79 @@ namespace database::players
 		}
 
 		template <database_type_t Type>
+		void initialize(const std::uint64_t player_id)
+		{
+			static const auto default_inventory = []()
+			{
+				static player_inventory_t inv{};
+				inv.initialize();
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(inv));
+			}();
+
+			static const auto loadout_list = []()
+			{
+				static loadout_list_t list{};
+				for (auto i = 0u; i < max_loadout_count; i++)
+				{
+					list.list[i].initialize(static_cast<std::uint16_t>(i));
+				}
+
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(list));
+			}();
+
+			static const auto building_info_afghan = []()
+			{
+				static building_info_t building{};
+				building.load_default(0);
+				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
+			}();
+
+			static const auto defense_mission_info = []()
+			{
+				static defense_mission_info_t info{};
+				info.initialize();
+				return info.serialize();
+			}();
+
+			static const auto communication_gesture_info = []()
+			{
+				static communication_gesture_info_t info{};
+				info.initialize();
+				return info.serialize();
+			}();
+
+			const auto null_blob = sqlpp::verbatim<sqlpp::binary>("x''");
+
+			database::access<std::uint64_t>([&](database::database_t& db)
+			{
+				return db.exec<Type>(
+					sqlpp::update(player::table)
+						.set(player::table.player_inventory = default_inventory,
+							 player::table.loadout_list = loadout_list,
+							 player::table.building_info_afghan = building_info_afghan,
+							 player::table.defense_mission_info = "",
+							 player::table.communication_gesture_info = communication_gesture_info,
+							 player::table.nonstackable_item_list = null_blob,
+							 player::table.stackable_item_list = null_blob,
+							 player::table.inventory_resource_list = null_blob,
+							 player::table.battle_pack_list = null_blob,
+							 player::table.story_unlock_info = null_blob,
+							 player::table.crew_levels = "",
+							 player::table.gimmick_data_afghan = null_blob,
+							 player::table.gimmick_data_africa = null_blob,
+							 player::table.gimmick_info = "",
+							 player::table.base_resources = null_blob,
+							 player::table.avatar = "",
+							 player::table.map_unlock_list_afghan = null_blob,
+							 player::table.map_unlock_list_africa = null_blob,
+							 player::table.mission_record_list = "",
+							 player::table.quest_record_list = "",
+							 player::table.mission_info = null_blob)
+								.where(player::table.player_id == player_id));
+			});
+		}
+
+		template <database_type_t Type>
 		player create(const std::uint64_t user_id)
 		{
 			static const auto default_inventory = []()
@@ -2134,7 +2221,7 @@ namespace database::players
 			static const auto building_info_afghan = []()
 			{
 				static building_info_t building{};
-				building.load_default(1);
+				building.load_default(0);
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
 			}();
 
@@ -2508,6 +2595,11 @@ namespace database::players
 	std::optional<player> create(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::create, user_id);
+	}
+
+	void initialize(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::initialize, player_id);
 	}
 
 	void delete_player_data(const std::uint64_t player_id)
