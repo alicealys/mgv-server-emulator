@@ -161,6 +161,7 @@ namespace emulator::ssd
 			case 0: // wave success
 			case 1: // wave success + mission cleared
 			{
+				next_wave++;
 				if (this_wave == mission_settings->max_wave_count - 1)
 				{
 					mission_result = 1u;
@@ -168,7 +169,6 @@ namespace emulator::ssd
 				}
 				else
 				{
-					next_wave++;
 					mission_result = 0u;
 					next_wave_date = std::chrono::duration_cast<std::chrono::seconds>(now);
 					if (this_wave < mission_settings->interval.size())
