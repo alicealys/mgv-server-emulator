@@ -22,7 +22,7 @@ namespace database::present_box
 			0, // REWARD_COMMUNICATION_MARKER = 5,
 			0, // REWARD_NAMEPLATE = 6,
 			0, // REWARD_PRIVILEGE = 7,
-			99999, // REWARD_COIN = 8,
+			0, // REWARD_COIN = 8,
 			999999, // REWARD_ENERGY = 9,
 			0, // REWARD_BATTLE_PACK = 10,
 			0, // REWARD_FACE_PAINT = 11,

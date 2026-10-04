@@ -142,7 +142,7 @@ List of implemeted/unimplemented server commands
 | CMD_PRESENT_BOX_GET_ALL | ✔️ |  |
 | CMD_PRESENT_BOX_IS_NEW | ✔️ |  |
 | CMD_PRESENT_BOX_DELETE_NEW_FLAG | ✔️ |  |
-| CMD_GET_DAILY_REWARD | ❌ |  |
+| CMD_GET_DAILY_REWARD | ✔️ |  |
 | CMD_CHALLENGE_TASK_GET_LIST | ❌ |  |
 | CMD_CHALLENGE_TASK_DECIDE | ❌ |  |
 | CMD_CHALLENGE_TASK_PROGRESS | ❌ |  |

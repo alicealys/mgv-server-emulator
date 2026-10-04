@@ -88,6 +88,7 @@ namespace database::users
 		players::inventory_resource_list_t* resource_list;
 		players::player_inventory_t* player_inventory;
 		user_inventory_t* user_inventory;
+		std::uint64_t lang_id;
 	};
 
 	class user
@@ -106,6 +107,7 @@ namespace database::users
 		DEFINE_FIELD(nat, sqlpp::integer_unsigned);
 		DEFINE_FIELD(last_update, sqlpp::time_point);
 		DEFINE_FIELD(user_creation_date, sqlpp::time_point);
+		DEFINE_FIELD(last_daily_reward, sqlpp::time_point);
 		DEFINE_FIELD(user_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(dlc_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sv_coin, sqlpp::integer_unsigned);
@@ -125,7 +127,8 @@ namespace database::users
 			in_port_field_t, 
 			nat_field_t,
 			last_update_field_t, 
-			user_creation_date_field_t, 
+			user_creation_date_field_t,
+			last_daily_reward_field_t,
 			user_flag_field_t, 
 			dlc_flag_field_t,
 			sv_coin_field_t, 
@@ -151,7 +154,8 @@ namespace database::users
 			this->in_port_ = static_cast<std::uint16_t>(row.in_port);
 			this->nat_ = static_cast<std::uint32_t>(row.nat);
 			this->last_update_ = row.last_update.value().time_since_epoch();
-			this->creation_date_ = row.user_creation_date.value().time_since_epoch();
+			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.user_creation_date.value().time_since_epoch());
+			this->last_daily_reward_ = std::chrono::duration_cast<std::chrono::seconds>(row.last_daily_reward.value().time_since_epoch());
 			this->user_flag_ = static_cast<std::uint32_t>(row.user_flag);
 			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
 			this->sv_coin_ = static_cast<std::uint32_t>(row.sv_coin);
@@ -180,7 +184,8 @@ namespace database::users
 		GET_FIELD_H(std::uint32_t, loadout_count);
 		GET_FIELD_H(std::uint64_t, player_capacity);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
-		GET_FIELD_H(std::chrono::microseconds, creation_date);
+		GET_FIELD_H(std::chrono::seconds, creation_date);
+		GET_FIELD_H(std::chrono::seconds, last_daily_reward);
 
 		std::string get_nat() const;
 		std::uint64_t get_id() const;
@@ -197,6 +202,7 @@ namespace database::users
 
 		bool set_loadout_count(const std::uint32_t loadout_count) const;
 		bool inc_player_capacity() const;
+		bool set_daily_reward() const;
 
 		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
 

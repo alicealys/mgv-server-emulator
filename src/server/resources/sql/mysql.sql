@@ -15,6 +15,7 @@ create table if not exists `users`
 	current_player_id		bigint unsigned default null unique,
 	last_update				datetime		default null,
 	user_creation_date		datetime		default null,
+	last_daily_reward		datetime		default null,
 	user_flag				int unsigned 	default 0,
 	dlc_flag				int unsigned 	default 0,
 	sv_coin					int unsigned 	default 0,

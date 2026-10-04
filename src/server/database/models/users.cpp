@@ -81,7 +81,26 @@ namespace database::users
 		namespace exp
 		{
 			const auto select =
-				sqlpp::select(sqlpp::all_of(user::table), 
+				sqlpp::select(
+						user::table.user_id,
+						user::table.account_id,
+						user::table.session_id,
+						user::table.current_player_id,
+						user::table.password_hash,
+						user::table.crypto_key,
+						user::table.ex_ip,
+						user::table.ex_port,
+						user::table.in_ip,
+						user::table.in_port,
+						user::table.nat,
+						user::table.last_update,
+						user::table.user_creation_date,
+						user::table.last_daily_reward,
+						user::table.user_flag,
+						user::table.dlc_flag,
+						user::table.sv_coin,
+						user::table.loadout_count,
+						user::table.player_capacity,
 						players::player::table.player_id, 
 						players::player::table.f_user_id, 
 						players::player::table.player_index, 
@@ -94,8 +113,7 @@ namespace database::users
 						players::player::table.mission_record_list,
 						players::player::table.quest_record_list,
 						players::player::table.replay_info_list,
-						players::player::table.defense_mission_info
-					)
+						players::player::table.defense_mission_info)
 					.from(user::table.left_outer_join(players::player::table).on(user::table.current_player_id == players::player::table.player_id));
 		}
 
@@ -306,8 +324,8 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, sv_coin);
 	GET_FIELD_C(user, std::uint64_t, player_capacity);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
-	GET_FIELD_C(user, std::chrono::microseconds, creation_date);
-
+	GET_FIELD_C(user, std::chrono::seconds, creation_date);
+	GET_FIELD_C(user, std::chrono::seconds, last_daily_reward);
 
 	std::uint32_t user::get_loadout_count() const
 	{
@@ -793,6 +811,19 @@ namespace database::users
 			});
 		}
 
+		template <database_type_t Type>
+		bool set_daily_reward(const std::uint64_t user_id)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.last_daily_reward = std::chrono::system_clock::now())
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
+
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 
 		DEF_BINARY_SET(user, user_inventory_t, user_inventory);
@@ -836,6 +867,11 @@ namespace database::users
 	bool user::inc_player_capacity() const
 	{
 		RUN_IMPL(impl::inc_player_capacity, this->get_user_id());
+	}
+
+	bool user::set_daily_reward() const
+	{
+		RUN_IMPL(impl::set_daily_reward, this->get_user_id());
 	}
 
 	bool user::give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
@@ -1020,6 +1056,7 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_COIN:
 		{
+			database::shop_purchases::add_received_coin(this->get_user_id(), params.lang_id, reward.num);
 			return this->add_sv_coins(reward.num);
 		}
 		case game::ITEM_CATEGORY_ENERGY:
