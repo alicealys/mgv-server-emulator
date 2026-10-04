@@ -5,7 +5,6 @@ namespace auth
 	struct auth_ticket_response
 	{
 		std::string account_id;
-		std::string currency;
 		std::string password;
 	};
 

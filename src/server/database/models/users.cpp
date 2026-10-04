@@ -85,10 +85,7 @@ namespace database::users
 						players::player::table.player_id, 
 						players::player::table.f_user_id, 
 						players::player::table.player_index, 
-						players::player::table.playtime, 
-						players::player::table.point, 
 						players::player::table.nameplate,
-						players::player::table.current_loadout,
 						players::player::table.player_creation_date,
 						players::player::table.avatar,
 						players::player::table.gimmick_info,
@@ -300,7 +297,6 @@ namespace database::users
 	GET_FIELD_C(user, std::string, session_id);
 	GET_FIELD_C(user, std::string, password_hash);
 	GET_FIELD_C(user, std::string, crypto_key);
-	GET_FIELD_C(user, std::string, currency);
 	GET_FIELD_C(user, std::string, ex_ip);
 	GET_FIELD_C(user, std::string, in_ip);
 	GET_FIELD_C(user, std::uint16_t, ex_port);
@@ -537,7 +533,6 @@ namespace database::users
 				db.exec<Type>(
 					sqlpp::insert_into(user::table)
 						.set(user::table.account_id = account_id,
-							 user::table.currency = "",
 							 user::table.user_inventory = default_inventory,
 							 user::table.loadout_count = players::initial_loadout_count,
 							 user::table.player_capacity = 1,

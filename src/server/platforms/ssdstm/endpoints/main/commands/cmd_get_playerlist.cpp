@@ -34,11 +34,10 @@ namespace emulator::ssd
 			player.get_nonstackable_item_list(*nonstackable_list);
 			player.get_story_unlock_info(*story_unlock_info);
 
-			const auto current_loadout_idx = player.get_current_loadout();
-			const auto& current_loadout = loadout_list->list[current_loadout_idx];
+			const auto& current_loadout = loadout_list->list[0];
 
 			avatar.to_json(entry["avatar_info"]);
-			current_loadout.to_json(equipment_info["loadout"], current_loadout_idx);
+			current_loadout.to_json(equipment_info["loadout"], 0);
 			nonstackable_list->to_json(equipment_info["nonstackable_list"]);
 
 			for (auto o = 0ull; o < ARRAYSIZE(inventory->energy_invested); o++)
@@ -67,8 +66,8 @@ namespace emulator::ssd
 			entry["index"] = player.get_index();
 			entry["name"] = player.get_name();
 			entry["name_plate"] = player.get_nameplate();
-			entry["playtime"] = player.get_playtime();
-			entry["point"] = player.get_point();
+			entry["playtime"] = 0;
+			entry["point"] = 0;
 		}
 
 		result["player_capacity"] = user->get_player_capacity();

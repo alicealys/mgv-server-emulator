@@ -1023,10 +1023,7 @@ namespace database::players
 		DEFINE_FIELD(f_user_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(player_index, sqlpp::integer_unsigned);
 		DEFINE_FIELD(player_creation_date, sqlpp::time_point);
-		DEFINE_FIELD(point, sqlpp::integer_unsigned);
 		DEFINE_FIELD(nameplate, sqlpp::integer_unsigned);
-		DEFINE_FIELD(playtime, sqlpp::integer_unsigned);
-		DEFINE_FIELD(current_loadout, sqlpp::integer_unsigned);
 		DEFINE_FIELD(avatar, sqlpp::binary);
 		DEFINE_FIELD(mission_info, sqlpp::binary);
 		DEFINE_FIELD(loadout_list, sqlpp::binary);
@@ -1055,10 +1052,7 @@ namespace database::players
 			f_user_id_field_t, 
 			player_index_field_t,
 			player_creation_date_field_t,
-			point_field_t, 
 			nameplate_field_t, 
-			playtime_field_t,
-			current_loadout_field_t,
 			avatar_field_t, 
 			mission_info_field_t, 
 			loadout_list_field_t,
@@ -1093,10 +1087,7 @@ namespace database::players
 			this->account_id_ = row.account_id;
 			this->user_id_ = row.f_user_id;
 			this->index_ = row.player_index;
-			this->playtime_ = static_cast<std::uint32_t>(row.playtime);
 			this->nameplate_ = static_cast<std::uint32_t>(row.nameplate);
-			this->point_ = static_cast<std::uint32_t>(row.point);
-			this->current_loadout_ = static_cast<std::uint32_t>(row.current_loadout);
 			this->creation_date_ = row.player_creation_date.value().time_since_epoch();
 			this->avatar_.deserialize(row.avatar.value());
 			this->gimmick_info_.deserialize(row.gimmick_info.value());
@@ -1112,10 +1103,7 @@ namespace database::players
 		GET_FIELD_H(std::uint64_t, user_id);
 		GET_FIELD_H(std::uint64_t, account_id);
 		GET_FIELD_H(std::uint64_t, index);
-		GET_FIELD_H(std::uint32_t, playtime);
 		GET_FIELD_H(std::uint32_t, nameplate);
-		GET_FIELD_H(std::uint32_t, point);
-		GET_FIELD_H(std::uint32_t, current_loadout);
 		GET_FIELD_H(avatar_t, avatar);
 		GET_FIELD_H(gimmick_info_t, gimmick_info);
 		GET_FIELD_H(crew_levels_t, crew_levels);

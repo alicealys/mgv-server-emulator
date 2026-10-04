@@ -99,7 +99,6 @@ namespace database::users
 		DEFINE_FIELD(current_player_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(password_hash, sqlpp::text);
 		DEFINE_FIELD(crypto_key, sqlpp::text);
-		DEFINE_FIELD(currency, sqlpp::text);
 		DEFINE_FIELD(ex_ip, sqlpp::text);
 		DEFINE_FIELD(ex_port, sqlpp::integer_unsigned);
 		DEFINE_FIELD(in_ip, sqlpp::text);
@@ -120,7 +119,6 @@ namespace database::users
 			current_player_id_field_t, 
 			password_hash_field_t, 
 			crypto_key_field_t,
-			currency_field_t,
 			ex_ip_field_t, 
 			ex_port_field_t, 
 			in_ip_field_t, 
@@ -147,7 +145,6 @@ namespace database::users
 			this->current_player_id_ = row.current_player_id;
 			this->password_hash_ = row.password_hash;
 			this->crypto_key_ = row.crypto_key;
-			this->currency_ = row.currency;
 			this->ex_ip_ = row.ex_ip;
 			this->ex_port_ = static_cast<std::uint16_t>(row.ex_port);
 			this->in_ip_ = row.in_ip;
@@ -173,7 +170,6 @@ namespace database::users
 		GET_FIELD_H(std::string, session_id);
 		GET_FIELD_H(std::string, password_hash);
 		GET_FIELD_H(std::string, crypto_key);
-		GET_FIELD_H(std::string, currency);
 		GET_FIELD_H(std::string, ex_ip);
 		GET_FIELD_H(std::string, in_ip);
 		GET_FIELD_H(std::uint16_t, ex_port);

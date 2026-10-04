@@ -125,7 +125,7 @@ namespace auth
 		json::value data;
 		data["steam_ticket"] = utils::encoding::split_into_lines(auth_ticket);
 		data["steam_ticket_size"] = ticket_size;
-		data["region"] = 4;
+		data["region"] = 0;
 		data["msgid"] = "CMD_AUTH_STEAMTICKET";
 		data["rqid"] = 0;
 		data["lang"] = "en";
@@ -268,7 +268,6 @@ namespace auth
 		}
 
 		response.account_id = std::to_string(account_id);
-		response.currency = user.get_currency();
 
 		return {response};
 	}

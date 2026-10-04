@@ -24,11 +24,8 @@ namespace database::players
 				player::table.player_id, 
 				player::table.player_index, 
 				player::table.f_user_id, 
-				player::table.current_loadout,
-				player::table.playtime,
 				player::table.nameplate,
 				player::table.player_creation_date,
-				player::table.point,
 				player::table.avatar,
 				player::table.gimmick_info,
 				player::table.crew_levels,
@@ -2231,9 +2228,7 @@ namespace database::players
 	GET_FIELD_C(player, std::uint64_t, user_id);
 	GET_FIELD_C(player, std::uint64_t, account_id);
 	GET_FIELD_C(player, std::uint64_t, index);
-	GET_FIELD_C(player, std::uint32_t, playtime);
 	GET_FIELD_C(player, std::uint32_t, nameplate);
-	GET_FIELD_C(player, std::uint32_t, point);
 	GET_FIELD_C(player, avatar_t, avatar);
 	GET_FIELD_C(player, gimmick_info_t, gimmick_info);
 	GET_FIELD_C(player, crew_levels_t, crew_levels);
@@ -2243,16 +2238,6 @@ namespace database::players
 	GET_FIELD_C(player, quest_record_list_t, quest_record_list);
 	GET_FIELD_C(player, replay_info_list_t, replay_info_list);
 	GET_FIELD_C(player, std::chrono::microseconds, creation_date);
-
-	std::uint32_t player::get_current_loadout() const
-	{
-		if (this->current_loadout_ >= max_loadout_count)
-		{
-			return 0u;
-		}
-
-		return this->current_loadout_;
-	}
 
 	std::string player::get_name() const
 	{
@@ -2429,7 +2414,6 @@ namespace database::players
 							 player::table.building_info_afghan = building_info_afghan,
 							 player::table.defense_mission_info = defense_mission_info,
 							 player::table.communication_gesture_info = communication_gesture_info,
-							 player::table.current_loadout = 0,
 							 player::table.player_creation_date = std::chrono::system_clock::now()));
 			});
 
