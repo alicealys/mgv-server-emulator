@@ -1525,16 +1525,16 @@ namespace database::players
 		}
 	}
 
-	void building_info_t::load_default(const std::uint32_t map_location)
+	void building_info_t::load_default()
 	{
 		static const auto default_building = [&]()
 		{
 			static building_info_t data{};
 
 			json::value default_data = get_default_data("building_info");
-			data.parse_type(default_data[map_location]["center_info"], edge_type_center);
-			data.parse_type(default_data[map_location]["upper_edge_info"], edge_type_upper);
-			data.parse_type(default_data[map_location]["left_edge_info"], edge_type_left);
+			data.parse_type(default_data["center_info"], edge_type_center);
+			data.parse_type(default_data["upper_edge_info"], edge_type_upper);
+			data.parse_type(default_data["left_edge_info"], edge_type_left);
 
 			return &data;
 		}();
@@ -2312,7 +2312,7 @@ namespace database::players
 			static const auto building_info_afghan = []()
 			{
 				static building_info_t building{};
-				building.load_default(0);
+				building.load_default();
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
 			}();
 
@@ -2386,7 +2386,7 @@ namespace database::players
 			static const auto building_info_afghan = []()
 			{
 				static building_info_t building{};
-				building.load_default(0);
+				building.load_default();
 				return sqlpp::verbatim<sqlpp::binary>(utils::encoding::encode_binary(building));
 			}();
 

@@ -11,8 +11,6 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		static const auto default_data = utils::resources::load_json(RESOURCE_DEFAULT_DATA);
-
 		const auto mission_info = std::make_unique<database::players::mission_info_t>();
 		const auto gimmick_data_afghan = std::make_unique<database::players::gimmick_save_data_t>();
 		const auto gimmick_data_africa = std::make_unique<database::players::gimmick_save_data_t>();
@@ -62,7 +60,7 @@ namespace emulator::ssd
 
 		user_inventory->bgm_settings.to_json(result["bgm_my_list"]);
 		result["boost_list"] = json::array();
-		result["bp_mission_list"] = default_data["bp_mission_list"];
+		result["bp_mission_list"] = json::array();
 		result["cage_list"] = json::array();
 		communication_gesture_info.to_json(result["communication_gesture_slot"]);
 

@@ -766,7 +766,7 @@ namespace database::players
 		void to_json(json::value& data) const;
 		void to_json_farming(json::value& data) const;
 
-		void load_default(const std::uint32_t map_location);
+		void load_default();
 	};
 
 	struct crew_levels_internal_t
