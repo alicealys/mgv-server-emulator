@@ -21,7 +21,6 @@ create table if not exists `users`
 	loadout_count			int unsigned default 4,
 	player_capacity			bigint unsigned not null default 1,
 	user_inventory			blob			default null,
-	user_play_record		blob			default null,
 	primary key (`user_id`)
 )
 -- query:mgssd.players.create

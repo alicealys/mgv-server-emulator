@@ -2026,6 +2026,117 @@ namespace database::players
 		std::memcpy(this, default_info, sizeof(communication_gesture_info_t));
 	}
 
+	bool player_play_record_t::parse_save(json::value& first_save, json::value& additional_save)
+	{
+		if (!first_save.is_array() || !additional_save.is_array())
+		{
+			return false;
+		}
+
+		if (first_save.size() != 92 || additional_save.size() != 23)
+		{
+			return false;
+		}
+
+		json::read(this->first[play_record_index_1], first_save[1]);
+		json::read(this->first[play_record_index_2], first_save[2]);
+		json::read(this->first[play_record_index_3], first_save[3]);
+		json::read(this->first[play_record_index_4], first_save[4]);
+		json::read(this->first[play_record_index_5], first_save[5]);
+		json::read(this->first[play_record_index_6], first_save[6]);
+		json::read(this->first[play_record_index_7], first_save[7]);
+		json::read(this->first[play_record_index_8], first_save[8]);
+		json::read(this->first[play_record_index_9], first_save[9]);
+		json::read(this->first[play_record_index_10], first_save[10]);
+		json::read(this->first[play_record_index_11], first_save[11]);
+		json::read(this->first[play_record_index_12], first_save[12]);
+		json::read(this->first[play_record_index_13], first_save[13]);
+		json::read(this->first[play_record_index_14], first_save[14]);
+		json::read(this->first[play_record_index_15], first_save[15]);
+		json::read(this->first[play_record_index_16], first_save[16]);
+		json::read(this->first[play_record_index_17], first_save[17]);
+		json::read(this->first[play_record_index_18], first_save[18]);
+		json::read(this->first[play_record_index_19], first_save[19]);
+		json::read(this->first[play_record_index_20], first_save[20]);
+		json::read(this->first[play_record_index_21], first_save[21]);
+		json::read(this->first[play_record_index_22], first_save[22]);
+		json::read(this->first[play_record_index_23], first_save[23]);
+		json::read(this->first[play_record_index_24], first_save[24]);
+		json::read(this->first[play_record_index_25], first_save[25]);
+		json::read(this->first[play_record_index_26], first_save[26]);
+		json::read(this->first[play_record_index_27], first_save[27]);
+		json::read(this->first[play_record_index_28], first_save[28]);
+		json::read(this->first[play_record_index_29], first_save[29]);
+		json::read(this->first[play_record_index_30], first_save[30]);
+		json::read(this->first[play_record_index_31], first_save[31]);
+		json::read(this->first[play_record_index_32], first_save[32]);
+		json::read(this->first[play_record_index_33], first_save[33]);
+		json::read(this->first[play_record_index_34], first_save[34]);
+		json::read(this->first[play_record_index_35], first_save[35]);
+		json::read(this->first[play_record_index_36], first_save[36]);
+		json::read(this->first[play_record_index_37], first_save[37]);
+		json::read(this->first[play_record_index_38], first_save[38]);
+		json::read(this->first[play_record_index_39], first_save[39]);
+		json::read(this->first[play_record_index_40], first_save[40]);
+		json::read(this->first[play_record_index_41], first_save[41]);
+		json::read(this->first[play_record_index_42], first_save[42]);
+		json::read(this->first[play_record_index_43], first_save[43]);
+		json::read(this->first[play_record_index_44], first_save[44]);
+		json::read(this->first[play_record_index_45], first_save[45]);
+		json::read(this->first[play_record_index_46], first_save[46]);
+		json::read(this->first[play_record_index_47], first_save[47]);
+		json::read(this->first[play_record_index_48], first_save[48]);
+		json::read(this->first[play_record_index_49], first_save[49]);
+		json::read(this->first[play_record_index_50], first_save[50]);
+		json::read(this->first[play_record_index_51], first_save[51]);
+		json::read(this->first[play_record_index_52], first_save[52]);
+		json::read(this->first[play_record_index_53], first_save[53]);
+		json::read(this->first[play_record_index_54], first_save[54]);
+		json::read(this->first[play_record_index_55], first_save[55]);
+		json::read(this->first[play_record_index_56], first_save[56]);
+		json::read(this->first[play_record_index_57], first_save[57]);
+		json::read(this->first[play_record_index_58], first_save[58]);
+		json::read(this->first[play_record_index_59], first_save[59]);
+		json::read(this->first[play_record_index_60], first_save[60]);
+		json::read(this->first[play_record_index_61], first_save[61]);
+		json::read(this->first[play_record_index_62], first_save[62]);
+		json::read(this->first[play_record_index_63], first_save[63]);
+		json::read(this->first[play_record_index_64], first_save[64]);
+		json::read(this->first[play_record_index_65], first_save[65]);
+		json::read(this->first[play_record_index_66], first_save[66]);
+		json::read(this->first[play_record_index_67], first_save[67]);
+		json::read(this->first[play_record_index_68], first_save[68]);
+		json::read(this->first[play_record_index_69], first_save[69]);
+		json::read(this->first[play_record_index_70], first_save[70]);
+		json::read(this->first[play_record_index_71], first_save[71]);
+		json::read(this->first[play_record_index_72], first_save[72]);
+		json::read(this->first[play_record_index_73], first_save[73]);
+		json::read(this->first[play_record_index_74], first_save[74]);
+		json::read(this->first[play_record_index_75], first_save[75]);
+		json::read(this->first[play_record_index_76], first_save[76]);
+		json::read(this->first[play_record_index_77], first_save[77]);
+		json::read(this->first[play_record_index_78], first_save[78]);
+		json::read(this->first[play_record_index_79], first_save[79]);
+		json::read(this->first[play_record_index_80], first_save[80]);
+		json::read(this->first[play_record_index_81], first_save[81]);
+		json::read(this->first[play_record_index_82], first_save[82]);
+		json::read(this->first[play_record_index_83], first_save[83]);
+		json::read(this->first[play_record_index_84], first_save[84]);
+		json::read(this->first[play_record_index_85], first_save[85]);
+		json::read(this->first[play_record_index_86], first_save[86]);
+		json::read(this->first[play_record_index_87], first_save[87]);
+		json::read(this->first[play_record_index_88], first_save[88]);
+		json::read(this->first[play_record_index_89], first_save[89]);
+		json::read(this->first[play_record_index_90], first_save[90]);
+		json::read(this->first[play_record_index_91], first_save[91]);
+
+		json::read(this->additional[play_record_additional_index_0], additional_save[0]);
+		json::read(this->additional[play_record_additional_index_1], additional_save[1]);
+		json::read(this->additional[play_record_additional_index_2], additional_save[2]);
+		json::read(this->additional[play_record_additional_index_3], additional_save[3]);
+
+		return true;
+	}
 
 	bool craft_recipe_internal(const std::uint32_t price, const game::cost_t* cost, const std::size_t cost_count, 
 		const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)

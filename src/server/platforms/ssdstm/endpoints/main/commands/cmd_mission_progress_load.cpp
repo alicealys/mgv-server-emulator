@@ -20,7 +20,6 @@ namespace emulator::ssd
 		const auto nonstackable_list = std::make_unique<database::players::nonstackable_item_list_t>();
 		const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
-		const auto user_play_record = std::make_unique<database::users::user_play_record_t>();
 		const auto player_play_record = std::make_unique<database::players::player_play_record_t>();
 		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 		const auto inventory_resources = std::make_unique<database::players::inventory_resource_list_t>();
@@ -53,7 +52,6 @@ namespace emulator::ssd
 		const auto replay_info_list = player->get_replay_info_list();
 
 		user->get_inventory(*user_inventory);
-		user->get_play_record(*user_play_record);
 
 		auto shop_purchase_counts = database::shop_purchases::get_purchase_counts(user->get_user_id());
 
@@ -144,16 +142,35 @@ namespace emulator::ssd
 		result["order_expired_list"] = json::array{0, 0, 0, 0, 0};
 		result["order_task_list"] = json::array();
 
+		const auto players = database::players::get_player_list(user->get_user_id());
+		const auto total_play_record = std::make_unique<database::players::player_play_record_t>();
+
+		for (const auto& other_player : players)
+		{
+			const auto play_record = std::make_unique<database::players::player_play_record_t>();
+			other_player.get_play_record(*play_record);
+
+			for (auto i = 0ull; i < ARRAYSIZE(player_play_record->first); i++)
+			{
+				total_play_record->first[i] += play_record->first[i];
+			}
+
+			for (auto i = 0ull; i < ARRAYSIZE(player_play_record->additional); i++)
+			{
+				total_play_record->additional[i] += play_record->additional[i];
+			}
+		}
+
 		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->first); i++)
 		{
 			result["play_record_player"][i] = player_play_record->first[i];
-			result["play_record_user_total"][i] = user_play_record->first[i];
+			result["play_record_user_total"][i] = total_play_record->first[i];
 		}
 
 		for (auto i = 0ull; i < ARRAYSIZE(player_play_record->additional); i++)
 		{
 			result["play_record_player_additional_130"][i] = player_play_record->additional[i];
-			result["play_record_user_total_additional_130"][i] = user_play_record->additional[i];
+			result["play_record_user_total_additional_130"][i] = total_play_record->additional[i];
 		}
 
 		quest_record_list.to_json(result["quest_record_info_list"]);

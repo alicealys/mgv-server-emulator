@@ -225,6 +225,8 @@ namespace emulator::ssd
 		auto& defense_mission_parameter_j = data["defense_mission_parameter"];
 		auto& replay_mission_info_j = data["replay_mission_info"];
 		auto& quest_repop_count_decrement_j = data["quest_repop_count_decrement"];
+		auto& play_record_save_checkpoint_j = data["play_record_save_checkpoint"];
+		auto& play_record_additional_130_checkpoint_j = data["play_record_additional_130_checkpoint"];
 
 		result["added_crew"] = json::array();
 		result["capture_list"] = json::array();
@@ -507,9 +509,13 @@ namespace emulator::ssd
 			user->current_player->set_defense_mission_info(info);
 		}
 
-		// TODO
-		// play_record_additional_130_checkpoint
-		// play_record_save_checkpoint
+		if (play_record_save_checkpoint_j.is_array() && play_record_additional_130_checkpoint_j.is_array())
+		{
+			const auto play_record = std::make_unique<database::players::player_play_record_t>();
+			user->current_player->get_play_record(*play_record);
+			play_record->parse_save(play_record_save_checkpoint_j, play_record_additional_130_checkpoint_j);
+			user->current_player->set_play_record(*play_record);
+		}
 
 		return result;
 	}

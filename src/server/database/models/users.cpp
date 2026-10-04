@@ -799,10 +799,8 @@ namespace database::users
 		}
 
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
-		DEF_BINARY_GET(user, user_play_record_t, user_play_record);
 
 		DEF_BINARY_SET(user, user_inventory_t, user_inventory);
-		DEF_BINARY_SET(user, user_play_record_t, user_play_record);
 	}
 
 	void user::get_inventory(user_inventory_t& user_inventory) const
@@ -810,19 +808,9 @@ namespace database::users
 		RUN_IMPL(impl::get_user_inventory, this->get_user_id(), user_inventory);
 	}
 
-	void user::get_play_record(user_play_record_t& play_record) const
-	{
-		RUN_IMPL(impl::get_user_play_record, this->get_user_id(), play_record);
-	}
-
 	bool user::set_inventory(user_inventory_t& user_inventory) const
 	{
 		RUN_IMPL(impl::set_user_inventory, this->get_user_id(), user_inventory);
-	}
-
-	bool user::set_play_record(user_play_record_t& play_record) const
-	{
-		RUN_IMPL(impl::set_user_play_record, this->get_user_id(), play_record);
 	}
 
 	void user::set_user_flag(const std::uint32_t flag) const

@@ -20,8 +20,7 @@ create table if not exists `users`
 	sv_coin					int unsigned 	default 0,
 	loadout_count			int unsigned default 4,
 	player_capacity			bigint unsigned not null default 1,
-	user_inventory			blob			default null,
-	user_play_record		blob			default null
+	user_inventory			blob			default null
 )
 -- query:mgssd.players.create
 create table if not exists `players`

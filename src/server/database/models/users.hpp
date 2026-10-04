@@ -81,12 +81,6 @@ namespace database::users
 		void set_obtained_cassette(const std::uint32_t index);
 	};
 
-	struct user_play_record_t
-	{
-		std::uint32_t first[191];
-		std::uint32_t additional[46];
-	};
-
 	struct give_item_params_t
 	{
 		players::stackable_item_list_t* stackable_list;
@@ -119,7 +113,6 @@ namespace database::users
 		DEFINE_FIELD(loadout_count, sqlpp::integer_unsigned);
 		DEFINE_FIELD(player_capacity, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
-		DEFINE_FIELD(user_play_record, sqlpp::binary);
 		DEFINE_TABLE(users,
 			user_id_field_t, 
 			account_id_field_t, 
@@ -140,8 +133,7 @@ namespace database::users
 			sv_coin_field_t, 
 			loadout_count_field_t,
 			player_capacity_field_t,
-			user_inventory_field_t,
-			user_play_record_field_t
+			user_inventory_field_t
 		);
 
 		inline static table_t table;
@@ -198,10 +190,8 @@ namespace database::users
 		std::uint64_t get_id() const;
 
 		void get_inventory(user_inventory_t& inventory) const;
-		void get_play_record(user_play_record_t& play_record) const;
 
 		bool set_inventory(user_inventory_t& inventory) const;
-		bool set_play_record(user_play_record_t& play_record) const;
 
 		void set_user_flag(const std::uint32_t flag) const;
 		void set_dlc_flag(const std::uint32_t flag) const;
