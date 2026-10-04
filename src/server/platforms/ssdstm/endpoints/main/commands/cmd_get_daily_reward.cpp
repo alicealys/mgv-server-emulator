@@ -75,11 +75,12 @@ namespace emulator::ssd
 		}
 
 		result["next_date"] = next_date.count();
-		result["is_reward"] = is_reward;
+		result["is_reward"] = std::uint8_t(is_reward);
 
 		auto& reward_info = result["reward_info"];
 
 		reward_info["energy"] = 0;
+		reward_info["expire_date"] = 0;
 		reward_info["kub_boost_flag"] = 0;
 		reward_info["present_box_num"] = 0;
 		reward_info["battle_pack_list"] = json::array();
@@ -92,10 +93,12 @@ namespace emulator::ssd
 		auto& present_list = reward_info["present_list"];
 		present_list = json::array();
 
+		const auto text_id = 181130097427538;
+
 		if (is_reward)
 		{
 			const auto expire_date = now_s + 14 * 24h;
-			reward_info["text_id"] = 181130097427538;
+			reward_info["text_id"] = text_id;
 			reward_info["expire_date"] = expire_date.count();
 			
 			std::unordered_set<std::uint32_t> added_codes;
@@ -115,7 +118,7 @@ namespace emulator::ssd
 
 				database::present_box::add_item(user->current_player->get_player_id(), 
 					database::present_box::present_flag_new | database::present_box::present_flag_expire,
-					expire_date, item);
+					expire_date, item, text_id);
 				item.to_json(present_list[present_list.size()]);
 			}
 

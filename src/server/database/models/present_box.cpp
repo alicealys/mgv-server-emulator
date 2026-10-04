@@ -34,6 +34,7 @@ namespace database::present_box
 	GET_FIELD_C(present_box_entry, std::uint64_t, present_id);
 	GET_FIELD_C(present_box_entry, std::uint64_t, player_id);
 	GET_FIELD_C(present_box_entry, std::uint32_t, flags);
+	GET_FIELD_C(present_box_entry, std::uint64_t, text_id);
 	GET_FIELD_C(present_box_entry, std::chrono::seconds, expire_date);
 
 	const game::item_t& present_box_entry::get_reward() const
@@ -151,7 +152,7 @@ namespace database::present_box
 
 		template <database_type_t Type>
 		std::uint64_t add_item_internal(database_t& db, const std::uint64_t player_id, const std::uint32_t flags, 
-			const std::chrono::seconds expire_date, game::item_t& item, const std::size_t depth = 0u)
+			const std::chrono::seconds expire_date, game::item_t& item, const std::uint64_t text_id, const std::size_t depth = 0u)
 		{
 			if (depth > 3)
 			{
@@ -184,6 +185,7 @@ namespace database::present_box
 							present_box_entry::table.item_param3 == item.param3 &&
 							present_box_entry::table.item_param4 == item.param4 &&
 							present_box_entry::table.item_param5 == item.param5 &&
+							present_box_entry::table.text_id == text_id &&
 							present_box_entry::table.item_num < category_caps[item.category]
 						)
 				);
@@ -204,7 +206,8 @@ namespace database::present_box
 							present_box_entry::table.item_param2 = item.param2,
 							present_box_entry::table.item_param3 = item.param3,
 							present_box_entry::table.item_param4 = item.param4,
-							present_box_entry::table.item_param5 = item.param5
+							present_box_entry::table.item_param5 = item.param5,
+							present_box_entry::table.text_id = text_id
 						)
 					);
 
@@ -227,7 +230,7 @@ namespace database::present_box
 
 				if (item.num > 0)
 				{
-					return add_item_internal<Type>(db, player_id, flags, expire_date, item, depth + 1);
+					return add_item_internal<Type>(db, player_id, flags, expire_date, item, text_id, depth + 1);
 				}
 				else
 				{
@@ -247,21 +250,21 @@ namespace database::present_box
 						present_box_entry::table.item_param2 = item.param2,
 						present_box_entry::table.item_param3 = item.param3,
 						present_box_entry::table.item_param4 = item.param4,
-						present_box_entry::table.item_param5 = item.param5
+						present_box_entry::table.item_param5 = item.param5,
+						present_box_entry::table.text_id = text_id
 					)
 				);
 			}
 		}
 
 		template <database_type_t Type>
-		std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
+		std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, 
+			const game::item_t& item, const std::uint64_t text_id)
 		{
 			return database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				game::item_t add_item{item};
-				db.get_database<Type>()->start_transaction();
-				const auto result = add_item_internal<Type>(db, player_id, flags, expire_date, add_item);
-				db.get_database<Type>()->commit_transaction();
+				const auto result = add_item_internal<Type>(db, player_id, flags, expire_date, add_item, text_id);
 				delete_exceeding<Type>(player_id);
 				return result;
 			});
@@ -314,12 +317,12 @@ namespace database::present_box
 
 	void present_box_entry::to_json(json::value& data) const
 	{
-		data["expire_date"] = this->get_expire_date().count();
-		data["id"] = this->get_present_id();
-		data["is_expire"] = this->get_flags() & present_flag_expire;
-		data["is_new"] = this->get_flags() & present_flag_new;
-		data["is_purchase"] = this->get_flags() & present_flag_purchase;
-		data["text_id"] = 229691447841577;
+		data["expire_date"] = this->expire_date_.count();
+		data["id"] = this->present_id_;
+		data["is_expire"] = this->flags_ & present_flag_expire;
+		data["is_new"] = this->flags_ & present_flag_new;
+		data["is_purchase"] = this->flags_ & present_flag_purchase;
+		data["text_id"] = this->text_id_;
 		this->to_json_item(data["item"]);
 	}
 
@@ -366,9 +369,9 @@ namespace database::present_box
 		RUN_IMPL(impl::delete_all_items, player_id);
 	}
 
-	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item)
+	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item, const std::uint64_t lang_id)
 	{
-		RUN_IMPL(impl::add_item, player_id, flags, expire_date, item);
+		RUN_IMPL(impl::add_item, player_id, flags, expire_date, item, lang_id);
 	}
 
 	bool has_new_item(const std::uint64_t player_id)

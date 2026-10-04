@@ -27,6 +27,7 @@ namespace emulator::ssd
 		{
 			return error(ERR_NOT_FOUND);
 		}
+
 		database::players::stackable_item_list_t stackable_list{};
 		database::players::nonstackable_item_list_t nonstackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
@@ -45,6 +46,7 @@ namespace emulator::ssd
 		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
 		give_params.user_inventory = &user_inventory;
+		give_params.text_id = item->get_text_id();
 
 		json::value empty;
 		if (!user->give_item(item->get_reward(), give_params, empty))

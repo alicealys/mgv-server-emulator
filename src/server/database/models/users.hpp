@@ -88,7 +88,7 @@ namespace database::users
 		players::inventory_resource_list_t* resource_list;
 		players::player_inventory_t* player_inventory;
 		user_inventory_t* user_inventory;
-		std::uint64_t lang_id;
+		std::uint64_t text_id;
 	};
 
 	class user

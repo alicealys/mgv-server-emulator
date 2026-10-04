@@ -21,11 +21,6 @@ namespace emulator::ssd
 
 		const auto now = std::chrono::system_clock::now();
 
-		database::users::give_item_params_t give_params{};
-		give_params.resource_list = &resource_list;
-		give_params.stackable_list = &stackable_list;
-		give_params.player_inventory = &inventory_info;
-
 		auto count = 0u;
 		for (auto i = 0ull; i < items.size(); i++)
 		{
@@ -34,6 +29,12 @@ namespace emulator::ssd
 			{
 				continue;
 			}
+
+			database::users::give_item_params_t give_params{};
+			give_params.resource_list = &resource_list;
+			give_params.stackable_list = &stackable_list;
+			give_params.player_inventory = &inventory_info;
+			give_params.text_id = item.get_text_id();
 
 			const auto& reward = item.get_reward();
 			json::value empty;

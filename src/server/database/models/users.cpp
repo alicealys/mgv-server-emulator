@@ -1056,7 +1056,7 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_COIN:
 		{
-			database::shop_purchases::add_received_coin(this->get_user_id(), params.lang_id, reward.num);
+			database::shop_purchases::add_received_coin(this->get_user_id(), params.text_id, reward.num);
 			return this->add_sv_coins(reward.num);
 		}
 		case game::ITEM_CATEGORY_ENERGY:

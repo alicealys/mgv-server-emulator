@@ -59,7 +59,10 @@ namespace emulator::ssd
 			const auto expire_date = std::chrono::system_clock::now() + database::shop_purchases::purchase_duration;
 			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
 			const auto present_id = database::present_box::add_item(user->current_player->get_player_id(),
-				database::present_box::present_flag_new | database::present_box::present_flag_expire, expire_date_s, product->item);
+				database::present_box::present_flag_new | 
+				database::present_box::present_flag_expire | 
+				database::present_box::present_flag_purchase, 
+				expire_date_s, product->item);
 
 			if (present_id == 0ull)
 			{

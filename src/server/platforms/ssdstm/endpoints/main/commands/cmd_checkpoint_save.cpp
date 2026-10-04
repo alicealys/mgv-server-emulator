@@ -35,6 +35,7 @@ namespace emulator::ssd
 		const auto now = std::chrono::system_clock::now();
 		const auto expire_date = now + 14 * 24h;
 		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto text_id = 229691447841577;
 
 		for (auto i = rank; i <= 5; i++)
 		{
@@ -48,7 +49,7 @@ namespace emulator::ssd
 			rank_entry["recipe_list"] = json::array();
 			rank_entry["resources_list"] = json::array();
 			rank_entry["stackable_list"] = json::array();
-			rank_entry["text_id"] = 229691447841577;
+			rank_entry["text_id"] = text_id;
 			rank_entry["energy"] = 0;
 		}
 		
@@ -59,6 +60,7 @@ namespace emulator::ssd
 		give_params.stackable_list = &stackable_list;
 		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
+		give_params.text_id = text_id;
 
 		for (const auto& reward : rewards)
 		{
@@ -73,7 +75,7 @@ namespace emulator::ssd
 			if (!user->give_item(reward.param, give_params, rank_entry))
 			{
 				database::present_box::add_item(user->current_player->get_player_id(),
-					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param);
+					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param, text_id);
 				reward.param.to_json(present_list_j[present_list_j.size()]);
 			}
 		}

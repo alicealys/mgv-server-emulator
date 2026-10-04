@@ -30,6 +30,7 @@ namespace database::present_box
 		DEFINE_FIELD(item_param3, sqlpp::integer_unsigned);
 		DEFINE_FIELD(item_param4, sqlpp::integer_unsigned);
 		DEFINE_FIELD(item_param5, sqlpp::integer_unsigned);
+		DEFINE_FIELD(text_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(expire_date, sqlpp::time_point);
 		DEFINE_TABLE(present_box_entries,
 			present_id_field_t,
@@ -43,6 +44,7 @@ namespace database::present_box
 			item_param3_field_t,
 			item_param4_field_t,
 			item_param5_field_t,
+			text_id_field_t,
 			expire_date_field_t
 		);
 
@@ -62,12 +64,14 @@ namespace database::present_box
 			this->reward_.param3 = static_cast<std::uint32_t>(row.item_param3);
 			this->reward_.param4 = static_cast<std::uint32_t>(row.item_param4);
 			this->reward_.param5 = static_cast<std::uint32_t>(row.item_param5);
+			this->text_id_ = row.text_id;
 			this->expire_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.expire_date.value().time_since_epoch());
 		}
 
 		GET_FIELD_H(std::uint64_t, present_id);
 		GET_FIELD_H(std::uint64_t, player_id);
 		GET_FIELD_H(std::uint32_t, flags);
+		GET_FIELD_H(std::uint64_t, text_id);
 		GET_FIELD_H(std::chrono::seconds, expire_date);
 
 		void to_json(json::value& data) const;
@@ -86,7 +90,7 @@ namespace database::present_box
 	std::vector<present_box_entry> get_all_items(const std::uint64_t player_id);
 	std::size_t get_present_count(const std::uint64_t player_id);
 	void delete_all_items(const std::uint64_t player_id);
-	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item);
+	std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item, const std::uint64_t lang_id = 0);
 	bool has_new_item(const std::uint64_t player_id);
 	void delete_player_data(const std::uint64_t player_id);
 }

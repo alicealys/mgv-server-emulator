@@ -149,6 +149,7 @@ create table if not exists `present_box_entries`
 	item_param3			int unsigned not null default 0,
 	item_param4			int unsigned not null default 0,
 	item_param5			int unsigned not null default 0,
+	text_id				bigint unsigned not null default 0,
 	expire_date			datetime not null,
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )
