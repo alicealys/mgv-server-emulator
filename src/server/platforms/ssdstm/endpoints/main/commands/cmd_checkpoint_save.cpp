@@ -5,6 +5,7 @@
 
 #include "database/models/present_box.hpp"
 #include "database/models/crew_members.hpp"
+#include "database/models/challenge_tasks.hpp"
 
 namespace emulator::ssd
 {
@@ -518,6 +519,8 @@ namespace emulator::ssd
 			play_record->parse_save(play_record_save_checkpoint_j, play_record_additional_130_checkpoint_j);
 			user->current_player->set_play_record(*play_record);
 		}
+
+		database::challenge_tasks::send_progress_list(user->current_player->get_player_id(), data["order_progress_list"]);
 
 		return result;
 	}

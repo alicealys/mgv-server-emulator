@@ -87,6 +87,7 @@ namespace database::users
 		players::nonstackable_item_list_t* nonstackable_list;
 		players::inventory_resource_list_t* resource_list;
 		players::player_inventory_t* player_inventory;
+		players::battle_pack_list_t* battle_pack_list;
 		user_inventory_t* user_inventory;
 		std::uint64_t text_id;
 	};

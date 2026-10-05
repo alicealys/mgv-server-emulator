@@ -292,3 +292,15 @@ create table if not exists `wicked_reports`
 	report_type_05			int unsigned not null default 0,
 	report_date				datetime not null
 )
+-- query:mgssd.challenge_task_orders.create
+create table if not exists `challenge_task_orders`
+(
+	task_order_id			integer	primary key autoincrement,
+	f_player_id				bigint unsigned	not null,
+	task_id					int unsigned	not null,
+	is_complete				boolean not null default false,
+	progress				int unsigned	not null default 0,
+	expire_date				datetime not null,
+	foreign key (`f_player_id`) references `players`(`player_id`),
+	unique (`task_id`, `expire_date`)
+)

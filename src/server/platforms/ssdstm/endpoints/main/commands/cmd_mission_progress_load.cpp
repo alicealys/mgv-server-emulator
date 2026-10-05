@@ -4,6 +4,7 @@
 
 #include "database/models/defense_missions.hpp"
 #include "database/models/shop_purchases.hpp"
+#include "database/models/challenge_tasks.hpp"
 
 namespace emulator::ssd
 {
@@ -137,8 +138,8 @@ namespace emulator::ssd
 		mission_record_list.to_json(result["mission_record_info_list"]);
 		nonstackable_list->to_json(result["nonstackable_list"]);
 
-		result["order_expired_list"] = json::array{0, 0, 0, 0, 0};
-		result["order_task_list"] = json::array();
+		database::challenge_tasks::dump_order_list(user->current_player->get_player_id(), 
+			result["order_expired_list"], result["order_task_list"]);
 
 		const auto players = database::players::get_player_list(user->get_user_id());
 		const auto total_play_record = std::make_unique<database::players::player_play_record_t>();

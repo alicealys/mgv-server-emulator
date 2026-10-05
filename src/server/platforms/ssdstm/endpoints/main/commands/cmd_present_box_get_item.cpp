@@ -32,12 +32,14 @@ namespace emulator::ssd
 		database::players::nonstackable_item_list_t nonstackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
+		database::players::battle_pack_list_t battle_pack_list{};
 		database::users::user_inventory_t user_inventory{};
 
 		user->current_player->get_stackable_item_list(stackable_list);
 		user->current_player->get_nonstackable_item_list(nonstackable_list);
 		user->current_player->get_inventory_resource_list(resource_list);
 		user->current_player->get_inventory(player_inventory);
+		user->current_player->get_battle_pack_list(battle_pack_list);
 		user->get_inventory(user_inventory);
 
 		database::users::give_item_params_t give_params{};
@@ -45,6 +47,7 @@ namespace emulator::ssd
 		give_params.stackable_list = &stackable_list;
 		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
+		give_params.battle_pack_list = &battle_pack_list;
 		give_params.user_inventory = &user_inventory;
 		give_params.text_id = item->get_text_id();
 
@@ -65,6 +68,8 @@ namespace emulator::ssd
 		user->current_player->set_nonstackable_item_list(nonstackable_list);
 		user->current_player->set_inventory_resource_list(resource_list);
 		user->current_player->set_inventory(player_inventory);
+		user->current_player->set_battle_pack_list(battle_pack_list);
+		user->set_inventory(user_inventory);
 
 		database::present_box::delete_item(item->get_present_id());
 

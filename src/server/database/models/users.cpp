@@ -6,6 +6,7 @@
 #include "deployments.hpp"
 #include "crew_members.hpp"
 #include "shop_purchases.hpp"
+#include "challenge_tasks.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -1081,12 +1082,37 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_BATTLE_PACK:
 		{
-			if (params.user_inventory == nullptr)
+			if (params.battle_pack_list == nullptr)
 			{
 				return false;
 			}
 
-			params.user_inventory->set_obtained_battle_pack(reward.code);
+			const auto iter = game::parameters_table.ssd_sbm_parameters->battle_packs.find(reward.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->battle_packs.end())
+			{
+				return false;
+			}
+
+			database::players::battle_pack_t battle_pack{};
+			battle_pack.bp_index = iter->second->index;
+			battle_pack.count = static_cast<std::uint16_t>(reward.num);
+			if (!params.battle_pack_list->add_item(battle_pack))
+			{
+				return false;
+			}
+
+			if (reward_info.is_object())
+			{
+				auto& battle_pack_list_j = reward_info["battle_pack_list"];
+				battle_pack.count = static_cast<std::uint16_t>(reward.num);
+				battle_pack.to_json(battle_pack_list_j[battle_pack_list_j.size()]);
+			}
+
+			if (params.user_inventory == nullptr)
+			{
+				params.user_inventory->set_obtained_battle_pack(reward.code);
+			}
+
 			return true;
 		}
 		case game::ITEM_CATEGORY_FACE_PAINT:
@@ -1243,6 +1269,7 @@ namespace database::users
 			present_box::delete_player_data(player.get_player_id());
 			deployments::delete_player_data(player.get_player_id());
 			crew_members::delete_player_data(player.get_player_id());
+			challenge_tasks::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 
