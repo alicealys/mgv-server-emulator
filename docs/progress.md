@@ -147,7 +147,7 @@ List of implemeted/unimplemented server commands
 | CMD_CHALLENGE_TASK_DECIDE | ✔️ |  |
 | CMD_CHALLENGE_TASK_PROGRESS | ✔️ |  |
 | CMD_CHALLENGE_TASK_COMPLETE | ✔️ |  |
-| CMD_CHALLENGE_TASK_CANCEL | ❌ |  |
+| CMD_CHALLENGE_TASK_CANCEL | ✔️ |  |
 | CMD_WICKED_GET_TEXT | ✔️ |  |
 | CMD_WICKED_REPORT | ✔️ |  |
 | CMD_EVENT_SHOP_GET_POINT | ❌ |  |
