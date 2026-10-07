@@ -44,29 +44,19 @@ namespace emulator::ssd
 			}
 
 			const auto friend_user = database::users::find_from_account(id);
-			if (!friend_user.has_value() || !friend_user->current_player.has_value())
+			if (!friend_user.has_value())
 			{
 				continue;
 			}
 
-			const auto player_inventory_info = std::make_unique<database::players::player_inventory_t>();
-			const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
-			friend_user->current_player->get_inventory(*player_inventory_info);
-			friend_user->current_player->get_loadout_list(*loadout_list);
-
-			auto class_idx = loadout_list->list[0].class_info;
-			if (class_idx >= 5)
-			{
-				class_idx = 0;
-			}
-
+			const auto header = friend_user->get_loadout_header();
 			auto& result_entry = result["header_list"][idx++];
 			result_entry["account_id"]["id"] = id;
 			result_entry["account_id"]["type"] = type;
-			result_entry["current_class"] = class_idx;
-			result_entry["energy_invested_base"] = player_inventory_info->energy_invested[0];
-			result_entry["energy_invested_class"] = player_inventory_info->energy_invested[class_idx];
-			result_entry["name_plate"] = friend_user->current_player->get_nameplate();
+			result_entry["current_class"] = header.class_idx;
+			result_entry["energy_invested_base"] = header.energy_invested_base;
+			result_entry["energy_invested_class"] = header.energy_invested_class;
+			result_entry["name_plate"] = header.nameplate;
 		}
 
 		return result;

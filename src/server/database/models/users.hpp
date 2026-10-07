@@ -5,6 +5,7 @@
 
 namespace database::users
 {
+#pragma pack(push, 1)
 	struct bgm_settings_t
 	{
 		struct playlist_t
@@ -81,6 +82,15 @@ namespace database::users
 		void set_obtained_cassette(const std::uint32_t index);
 	};
 
+	struct user_loadout_header_internal_t
+	{
+		std::uint8_t class_idx;
+		std::uint16_t nameplate;
+		std::uint32_t energy_invested_base;
+		std::uint32_t energy_invested_class;
+	};
+#pragma pack(pop)
+
 	struct give_item_params_t
 	{
 		players::stackable_item_list_t* stackable_list;
@@ -91,6 +101,8 @@ namespace database::users
 		user_inventory_t* user_inventory;
 		std::uint64_t text_id;
 	};
+
+	using user_loadout_header_t = database_struct<user_loadout_header_internal_t>;
 
 	class user
 	{
@@ -117,6 +129,7 @@ namespace database::users
 		DEFINE_FIELD(event_point, sqlpp::integer_unsigned);
 		DEFINE_FIELD(event_point_total, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
+		DEFINE_FIELD(user_loadout_header, sqlpp::text);
 		DEFINE_TABLE(users,
 			user_id_field_t, 
 			account_id_field_t, 
@@ -139,7 +152,8 @@ namespace database::users
 			player_capacity_field_t,
 			event_point_field_t,
 			event_point_total_field_t,
-			user_inventory_field_t
+			user_inventory_field_t,
+			user_loadout_header_field_t
 		);
 
 		inline static table_t table;
@@ -168,6 +182,7 @@ namespace database::users
 			this->event_point_ = static_cast<std::uint32_t>(row.event_point);
 			this->event_point_total_ = static_cast<std::uint32_t>(row.event_point_total);
 			this->player_capacity_ = row.player_capacity;
+			this->loadout_header_.deserialize(row.user_loadout_header.value());
 
 			if (!row.player_id.is_null())
 			{
@@ -192,6 +207,7 @@ namespace database::users
 		GET_FIELD_H(std::uint32_t, event_point);
 		GET_FIELD_H(std::uint32_t, event_point_total);
 		GET_FIELD_H(std::uint64_t, player_capacity);
+		GET_FIELD_H(user_loadout_header_t, loadout_header);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::seconds, creation_date);
 		GET_FIELD_H(std::chrono::seconds, last_daily_reward);
@@ -202,6 +218,8 @@ namespace database::users
 		void get_inventory(user_inventory_t& inventory) const;
 
 		bool set_inventory(user_inventory_t& inventory) const;
+
+		bool set_loadout_header(user_loadout_header_t& user_loadout_header) const;
 
 		void set_user_flag(const std::uint32_t flag) const;
 		void set_dlc_flag(const std::uint32_t flag) const;

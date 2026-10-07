@@ -19,17 +19,7 @@ namespace emulator::ssd
 		auto& cell_info_j = data["cell_info"];
 		auto& farming_update_list_j = data["farming_update_list"];
 
-		if (player_inventory_j.is_object())
-		{
-			const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
-			user->current_player->get_inventory(*player_inventory);
-
-			std::uint16_t nameplate{};
-			player_inventory->parse_save(player_inventory_j, nameplate);
-
-			user->current_player->set_nameplate(nameplate);
-			user->current_player->set_inventory(*player_inventory);
-		}
+		auto header = user->get_loadout_header();
 
 		if (user_inventory_j.is_object())
 		{
@@ -64,8 +54,28 @@ namespace emulator::ssd
 				std::memcpy(&loadout_list->list[index], new_loadout.get(), sizeof(database::players::loadout_t));
 			}
 
+			header.class_idx = loadout_list->list[0].class_info;
+
 			user->current_player->set_loadout_list(*loadout_list);
 		}
+
+		if (player_inventory_j.is_object())
+		{
+			const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
+			user->current_player->get_inventory(*player_inventory);
+
+			std::uint16_t nameplate{};
+			player_inventory->parse_save(player_inventory_j, nameplate);
+
+			user->current_player->set_nameplate(nameplate);
+			user->current_player->set_inventory(*player_inventory);
+
+			header.nameplate = nameplate;
+			header.energy_invested_base = player_inventory->energy_invested[0];
+			header.energy_invested_class = player_inventory->energy_invested[header.class_idx];
+		}
+
+		user->set_loadout_header(header);
 
 		if (nonstackable_list_j.is_array())
 		{

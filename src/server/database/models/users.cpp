@@ -7,6 +7,7 @@
 #include "crew_members.hpp"
 #include "shop_purchases.hpp"
 #include "challenge_tasks.hpp"
+#include "rankings.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -104,6 +105,7 @@ namespace database::users
 						user::table.event_point,
 						user::table.event_point_total,
 						user::table.player_capacity,
+						user::table.user_loadout_header,
 						players::player::table.player_id, 
 						players::player::table.f_user_id, 
 						players::player::table.player_index, 
@@ -328,6 +330,7 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, event_point);
 	GET_FIELD_C(user, std::uint32_t, event_point_total);
 	GET_FIELD_C(user, std::uint64_t, player_capacity);
+	GET_FIELD_C(user, user_loadout_header_t, loadout_header);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::seconds, creation_date);
 	GET_FIELD_C(user, std::chrono::seconds, last_daily_reward);
@@ -568,6 +571,8 @@ namespace database::users
 			{
 				throw std::runtime_error("[database::users::insert] Insertion failed");
 			}
+
+			rankings::create_entries(found->get_user_id());
 
 			return found.value();
 		}
@@ -907,6 +912,8 @@ namespace database::users
 		DEF_BINARY_GET(user, user_inventory_t, user_inventory);
 
 		DEF_BINARY_SET(user, user_inventory_t, user_inventory);
+
+		DEF_STRUCT_SET(user, user_loadout_header_t, user_loadout_header);
 	}
 
 	void user::get_inventory(user_inventory_t& user_inventory) const
@@ -917,6 +924,11 @@ namespace database::users
 	bool user::set_inventory(user_inventory_t& user_inventory) const
 	{
 		RUN_IMPL(impl::set_user_inventory, this->get_user_id(), user_inventory);
+	}
+
+	bool user::set_loadout_header(user_loadout_header_t& user_loadout_header) const
+	{
+		RUN_IMPL(impl::set_user_loadout_header, this->get_user_id(), user_loadout_header);
 	}
 
 	void user::set_user_flag(const std::uint32_t flag) const
@@ -1385,6 +1397,7 @@ namespace database::users
 			players::delete_player_data(player.get_player_id());
 		}
 
+		rankings::delete_user_data(user->get_user_id());
 		shop_purchases::delete_user_data(user->get_user_id());
 		delete_user_data(user->get_user_id());
 

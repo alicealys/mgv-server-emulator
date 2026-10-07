@@ -139,9 +139,13 @@ namespace database::events
 		data["event_name_id"] = 326972843;
 		data["info_id"] = this->info_id;
 
+		data["reward_border_list"] = json::array();
+		data["reward_catalog_list"] = json::array();
+		data["reward_ranking_list"] = json::array();
+
 		for (auto i = 0ull; i < this->reward_border_list.size(); i++)
 		{
-			auto& entry = data["reward_ranking_list"][i];
+			auto& entry = data["reward_border_list"][i];
 			entry["border_point"] = this->reward_border_list[i].border_point;
 			this->reward_border_list[i].item_info.to_json(entry["item_info"]);
 		}
@@ -154,7 +158,6 @@ namespace database::events
 			entry["purchase_limit"] = this->reward_catalog_list[i].purchase_limit;
 			entry["purchased_num"] = 0;
 			this->reward_catalog_list[i].item_info.to_json(entry["item_info"]);
-
 		}
 
 		for (auto i = 0ull; i < this->reward_ranking_list.size(); i++)

@@ -4,6 +4,7 @@
 
 #include "database/auth.hpp"
 #include "database/models/users.hpp"
+#include "database/models/rankings.hpp"
 
 namespace emulator::ssd
 {
@@ -45,6 +46,8 @@ namespace emulator::ssd
 			result["crypto_key"] = auth_result.crypto_key;
 			result["session"] = auth_result.session_id;
 			result["user_id"] = auth_result.user_id;
+
+			database::rankings::create_entries(auth_result.user_id);
 		}
 		else
 		{
@@ -65,6 +68,8 @@ namespace emulator::ssd
 			result["crypto_key"] = user_opt->get_crypto_key();
 			result["session"] = session_key;
 			result["user_id"] = user_opt->get_id();
+
+			database::rankings::create_entries(user_opt->get_id());
 		}
 
 		return result;

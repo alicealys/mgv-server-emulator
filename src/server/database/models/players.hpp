@@ -151,7 +151,7 @@ namespace database::players
 		};
 
 		bool valid;
-		std::uint16_t class_info;
+		std::uint8_t class_info;
 		gear_info_t gear_info;
 		weapon_t main_weapon_list[3];
 		weapon_t sub_weapon_list[3];

@@ -326,3 +326,29 @@ create table if not exists `running_events`
 	end_date			datetime not null,
 	primary key (`event_id`)
 )
+-- query:mgssd.rankings.create
+create table if not exists `rankings`
+(
+	ranking_id          bigint unsigned	not null	auto_increment,
+	f_user_id	        bigint unsigned	not null,
+	ranking_type	    int unsigned	not null,
+	player_rank		    bigint unsigned	not null default 0,
+	player_rank_number	bigint unsigned	not null default 0,
+	points		        int 			not null default 0,
+	primary key (`ranking_id`),
+	foreign key (`f_user_id`) references users(`user_id`),
+	unique key `unique_player_rankings_type` (`f_user_id`, `ranking_type`)
+)
+-- query:mgssd.rankings.update_entries
+update rankings ranking
+join (
+	select
+		f_user_id,
+		ranking_type,
+		points,
+		rank() over (partition by ranking_type order by points desc) as new_rank,
+		row_number() over (partition by ranking_type order by points desc) as new_rank_number
+	from rankings
+) ranked
+on ranking.f_user_id = ranked.f_user_id AND ranking.ranking_type = ranked.ranking_type
+set ranking.player_rank = ranked.new_rank, ranking.player_rank_number = new_rank_number;

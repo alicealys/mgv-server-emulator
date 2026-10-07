@@ -8,7 +8,7 @@ namespace emulator::ssd
 		struct param_t
 		{
 			std::uint64_t event_id;
-			std::uint32_t start_rank;
+			std::uint64_t start_rank;
 			std::uint32_t num;
 		};
 
