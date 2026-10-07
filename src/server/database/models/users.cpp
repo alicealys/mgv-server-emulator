@@ -1253,8 +1253,10 @@ namespace database::users
 		return false;
 	}
 
-	bool user::has_permanent_item(const game::item_t& item, const user_inventory_t& inventory) const
+	bool user::has_permanent_item(const game::item_t& item, const user_inventory_t& inventory, bool& is_permanent) const
 	{
+		is_permanent = false;
+
 		switch (item.category)
 		{
 		case game::ITEM_CATEGORY_PRODUCTION:
@@ -1265,6 +1267,7 @@ namespace database::users
 				return false;
 			}
 
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.production_opened, iter->second->index);
 		}
 		case game::ITEM_CATEGORY_RECIPE:
@@ -1275,38 +1278,47 @@ namespace database::users
 				return false;
 			}
 
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.recipe_opened, iter->second->index);
 		}
 		case game::ITEM_CATEGORY_PRESET_RADIO:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.preset_radio_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_GESTURE:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.gesture_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_COMMUNICATION_MARKER:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.command_marker_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_NAMEPLATE:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.name_plate_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_PRIVILEGE:
 		{
+			is_permanent = true;
 			return false;
 		}
 		case game::ITEM_CATEGORY_FACE_PAINT:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.face_paint_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_CASSETTE:
 		{
+			is_permanent = true;
 			return inventory.check_obtained_generic(inventory.cassette_obtained, item.code);
 		}
 		case game::ITEM_CATEGORY_CHARACTER_SLOT:
 		{
+			is_permanent = true;
 			return this->get_player_capacity() < database::players::max_player_count;
 		}
 		case game::ITEM_CATEGORY_RESOURCE:
@@ -1314,6 +1326,7 @@ namespace database::users
 		case game::ITEM_CATEGORY_ENERGY:
 		case game::ITEM_CATEGORY_BATTLE_PACK:
 		{
+			is_permanent = false;
 			return false;
 		}
 		}

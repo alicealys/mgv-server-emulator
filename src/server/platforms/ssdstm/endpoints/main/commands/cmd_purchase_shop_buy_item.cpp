@@ -36,15 +36,19 @@ namespace emulator::ssd
 
 		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
 		user->get_inventory(*user_inventory);
-		if (user->has_permanent_item(product->item, *user_inventory))
+		auto is_permanent = false;
+		if (user->has_permanent_item(product->item, *user_inventory, is_permanent))
 		{
 			return error(ERR_OVER_CAPACITY);
 		}
 
-		const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
-		if (purchase_count > product->limit_count && product->limit_count != 0)
+		if (!is_permanent)
 		{
-			return error(ERR_OVER_CAPACITY);
+			const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
+			if (purchase_count > product->limit_count && product->limit_count != 0)
+			{
+				return error(ERR_OVER_CAPACITY);
+			}
 		}
 
 		return database::shop_purchases::purchase_product(user.value(), product.value(), [&](json::value& result)

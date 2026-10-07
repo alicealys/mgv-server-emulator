@@ -46,9 +46,28 @@ namespace emulator::ssd
 
 		if (current_event->params->enable_catalog)
 		{
+			const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
+			user->get_inventory(*user_inventory);
+
+			auto acquired_counts = database::events::get_acquired_reward_counts(current_event->get_event_id(), 
+				user->get_user_id(), database::events::reward_type_catalog);
+
 			for (auto i = 0ull; i < current_event->params->reward_catalog_list.size(); i++)
 			{
-				entry["reward_catalog_list"][i]["purchased_num"] = 0;
+				const auto& reward = current_event->params->reward_catalog_list[i];
+
+				auto& purchase_num = entry["reward_catalog_list"][i]["purchased_num"];
+				purchase_num = 0;
+
+				auto is_permanent_item = false;
+				if (user->has_permanent_item(reward.item_info, *user_inventory, is_permanent_item))
+				{
+					purchase_num = 1;
+				}
+				else if (!is_permanent_item && reward.purchase_limit != 0)
+				{
+					purchase_num = acquired_counts[reward.reward_id];
+				}
 			}
 		}
 

@@ -27,13 +27,17 @@ namespace emulator::ssd
 			entry["price"] = product.price;
 			entry["flag"] = 0; //?
 
-			if (user->has_permanent_item(product.item, *user_inventory))
+			auto& current_count = entry["current_count"];
+			current_count = 0;
+
+			auto is_permanent = false;
+			if (user->has_permanent_item(product.item, *user_inventory, is_permanent))
 			{
-				entry["current_count"] = 1;
+				current_count = 1;
 			}
-			else
+			else if (!is_permanent)
 			{
-				entry["current_count"] = product_counts[product.product_id];
+				current_count = product_counts[product.product_id];
 			}
 
 			product.item.to_json(entry["item"]);

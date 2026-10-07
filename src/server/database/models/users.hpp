@@ -248,7 +248,7 @@ namespace database::users
 		bool set_daily_reward() const;
 
 		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
-		bool has_permanent_item(const game::item_t& item, const user_inventory_t& inventory) const;
+		bool has_permanent_item(const game::item_t& item, const user_inventory_t& inventory, bool& is_permanent) const;
 
 		std::optional<players::player> create_additional_player() const;
 

@@ -185,7 +185,7 @@ namespace database::events
 		for (auto i = 0ull; i < this->reward_catalog_list.size(); i++)
 		{
 			auto& entry = data["reward_catalog_list"][i];
-			entry["catalog_id"] = this->reward_border_list[i].reward_id;
+			entry["catalog_id"] = this->reward_catalog_list[i].reward_id;
 			entry["price_point"] = this->reward_catalog_list[i].price_point;
 			entry["purchase_limit"] = this->reward_catalog_list[i].purchase_limit;
 			entry["purchased_num"] = 0;
@@ -347,7 +347,7 @@ namespace database::events
 				return result != 0ull;
 			});
 		}
-		
+
 		template <database_type_t Type>
 		std::vector<event_reward> get_acquired_rewards(const std::uint64_t event_id, const std::uint64_t user_id)
 		{
@@ -373,6 +373,56 @@ namespace database::events
 				}
 
 				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::size_t get_acquired_reward_count(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id)
+		{
+			return database::access<std::size_t>([&](database_t& db)
+				-> std::size_t
+			{
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::count(1))
+						.from(event_reward::table)
+							.where(event_reward::table.acquired && 
+								   event_reward::table.f_event_id == event_id &&
+								   event_reward::table.f_user_id == user_id &&
+								   event_reward::table.reward_type == reward_type &&
+								   event_reward::table.reward_id == reward_id)
+				);
+				
+				if (results.empty())
+				{
+					return 0ull;
+				}
+
+				return results.front().count.value();
+			});
+		}
+		
+		template <database_type_t Type>
+		std::unordered_map<std::uint64_t, std::size_t> get_acquired_reward_counts(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type)
+		{
+			return database::access<std::unordered_map<std::uint64_t, std::size_t>>([&](database_t& db)
+				-> std::unordered_map<std::uint64_t, std::size_t>
+			{
+				std::unordered_map<std::uint64_t, std::size_t> map;
+
+				auto results = db.get_database<Type>()->operator()(
+					sqlpp::select(event_reward::table.reward_id, sqlpp::count(1))
+							.from(event_reward::table)
+								.where(event_reward::table.f_user_id == user_id && 
+									   event_reward::table.f_event_id == event_id && 
+									   event_reward::table.reward_type == reward_type)
+									.group_by(event_reward::table.reward_id));
+
+				for (const auto& row : results)
+				{
+					map[row.reward_id] = row.count;
+				}
+
+				return map;
 			});
 		}
 
@@ -404,6 +454,7 @@ namespace database::events
 				return list;
 			});
 		}
+
 
 		template <database_type_t Type>
 		void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
@@ -588,6 +639,16 @@ namespace database::events
 	std::vector<event_reward> get_acquired_rewards(const std::uint64_t event_id, const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::get_acquired_rewards, event_id, user_id);
+	}
+
+	std::size_t get_acquired_reward_count(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id)
+	{
+		RUN_IMPL(impl::get_acquired_reward_count, event_id, user_id, reward_type, reward_id);
+	}
+
+	std::unordered_map<std::uint64_t, std::size_t> get_acquired_reward_counts(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type)
+	{
+		RUN_IMPL(impl::get_acquired_reward_counts, event_id, user_id, reward_type);
 	}
 
 	std::vector<event_reward> get_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)

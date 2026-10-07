@@ -10,6 +10,12 @@ namespace emulator::ssd
 	{
 		json::value result;
 
+		param_t param{};
+		if (!json::read(param, data))
+		{
+			return error(ERR_INVALIDARG);
+		}
+
 		result["is_organized"] = 0;
 		result["present_list"] = json::array();
 
@@ -26,8 +32,6 @@ namespace emulator::ssd
 
 			list[i].to_json(result["present_list"][count++]);
 		}
-
-		database::present_box::remove_new_flags(user->current_player->get_player_id());
 
 		result["present_num"] = count;
 

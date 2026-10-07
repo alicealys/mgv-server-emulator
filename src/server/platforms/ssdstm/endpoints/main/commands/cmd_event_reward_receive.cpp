@@ -87,7 +87,8 @@ namespace emulator::ssd
 					continue;
 				}
 
-				if (user->has_permanent_item(reward.item_info, *user_inventory))
+				auto is_permanent = false;
+				if (user->has_permanent_item(reward.item_info, *user_inventory, is_permanent))
 				{
 					continue;
 				}
@@ -126,7 +127,8 @@ namespace emulator::ssd
 
 				for (const auto& item : iter->item_info)
 				{
-					if (user->has_permanent_item(item, *user_inventory))
+					auto is_permanent = false;
+					if (user->has_permanent_item(item, *user_inventory, is_permanent))
 					{
 						continue;
 					}

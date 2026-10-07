@@ -157,7 +157,7 @@ List of implemeted/unimplemented server commands
 | CMD_EVENT_GET_RANKING | ✔️ |  |
 | CMD_EVENT_GET_FRIEND_RANKING | ✔️ |  |
 | CMD_EVENT_GET_AROUND_RANKING | ✔️ |  |
-| CMD_EVENT_CATALOG_REWARD_PURCHASE | ❌ |  |
+| CMD_EVENT_CATALOG_REWARD_PURCHASE | ✔️ |  |
 | CMD_EVENT_REWARD_RECEIVE | ✔️ |  |
 | CMD_EVENT_LOG_SEND | ❌ |  |
 | CMD_SEND_STATISTICS_DATA | ➖ |  |

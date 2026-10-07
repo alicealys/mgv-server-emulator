@@ -177,6 +177,8 @@ namespace database::events
 
 	bool add_reward(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id, const bool acquired);
 	std::vector<event_reward> get_acquired_rewards(const std::uint64_t event_id, const std::uint64_t user_id);
+	std::size_t get_acquired_reward_count(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id);
+	std::unordered_map<std::uint64_t, std::size_t> get_acquired_reward_counts(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type);
 
 	std::vector<event_reward> get_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id);
 	void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id);
