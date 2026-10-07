@@ -10,6 +10,8 @@
 #include "database/models/players.hpp"
 #include "database/models/users.hpp"
 
+#include "utils/tpp_client.hpp"
+
 #include <utils/io.hpp>
 #include <utils/string.hpp>
 
@@ -335,6 +337,33 @@ namespace command
 				}
 
 				console::print("deleted user %lli\n", account_id);
+			});
+
+			add("download_parameters", []()
+			{
+				for (auto i = 0ull; i < game::parameters_list.size(); i++)
+				{
+					const auto& parameter = game::parameters_list[i];
+					const auto url = std::format("https://mgssd-game.cs.konami.net/ssdstmweb/parameter/{}.param", parameter->name());
+
+					console::print("downloading parameter %s\n", url.data());
+					const auto param = utils::http::get_data(url);
+					if (!param.has_value())
+					{
+						console::error("failed to download parameter %s\n", url.data());
+						continue;
+					}
+
+					utils::cryptography::blowfish blow;
+					blow.set_key(game::get_static_key(game::key_type_tpp), game::get_static_key_len());
+					const auto decrypted = blow.decrypt_internal(param.value());
+					const auto deflated = utils::compression::zlib::decompress(decrypted);
+
+					const auto dump = json::prettify(deflated);
+					const auto path = std::format("downloads/parameters/{}.json", parameter->name());
+
+					utils::io::write_file(path, dump);
+				}
 			});
 		}
 	};

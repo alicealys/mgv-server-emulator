@@ -1290,23 +1290,23 @@
     ],
     "durabilityDamageRate": [
         {
-            "durabilityRate": 0.0,
+            "durabilityRate": 0.00,
             "damageRate": 10
         },
         {
-            "durabilityRate": 0.3,
+            "durabilityRate": 0.30,
             "damageRate": 30
         },
         {
-            "durabilityRate": 0.5,
+            "durabilityRate": 0.50,
             "damageRate": 70
         },
         {
-            "durabilityRate": 0.7,
+            "durabilityRate": 0.70,
             "damageRate": 90
         },
         {
-            "durabilityRate": 1.0,
+            "durabilityRate": 1.00,
             "damageRate": 100
         }
     ],

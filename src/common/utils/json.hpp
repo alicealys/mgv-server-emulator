@@ -63,6 +63,27 @@ namespace json
 		return result;
 	}
 
+	inline std::string dump(const value& v, const bool prettify)
+	{
+		std::string result;
+
+		if (prettify)
+		{
+			glz::ex::write<glz::opts{.prettify = true}>(v, result);
+		}
+		else
+		{
+			glz::ex::write<options>(v, result);
+		}
+
+		return result;
+	}
+
+	inline std::string prettify(const auto& data)
+	{
+		return glz::prettify_json(data);
+	}
+
 	inline value parse(const std::string& data)
 	{
 		value result;
