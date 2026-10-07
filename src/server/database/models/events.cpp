@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "events.hpp"
+#include "rankings.hpp"
 #include "../auth.hpp"
 
 #include "utils/time.hpp"
@@ -50,7 +51,38 @@ namespace database::events
 				message.type = 2;
 				event->info_id = message.info_id;
 				emulator::ssd::cmd_information_get_title::messages.emplace_back(message);
+
+				if (settings.event_type_map.contains(event->name))
+				{
+					throw std::runtime_error(std::format("[events] duplicate event type name \"{}\"", event->name));
+				}
+
 				settings.event_type_map.insert(std::make_pair(event->name, event));
+
+				const auto initialize_reward_ids = [&]<typename T>(std::vector<T>& reward_list)
+				{
+					for (auto i = 0ull; i < reward_list.size(); i++)
+					{
+						if (reward_list[i].reward_id == 0u)
+						{
+							reward_list[i].reward_id = i + 1;
+						}
+
+						const auto iter = std::ranges::find_if(reward_list.begin(), reward_list.end(), [&](T& reward)
+						{
+							return reward.reward_id == reward_list[i].reward_id && &reward != &reward_list[i];
+						});
+
+						if (iter != reward_list.end())
+						{
+							throw std::runtime_error(std::format("[events] duplicate reward id {}", reward_list[i].reward_id));
+						}
+					}
+				};
+
+				initialize_reward_ids(event->reward_border_list);
+				initialize_reward_ids(event->reward_catalog_list);
+				initialize_reward_ids(event->reward_ranking_list);
 			}
 
 			for (const auto& name : settings.event_rotation)
@@ -153,7 +185,7 @@ namespace database::events
 		for (auto i = 0ull; i < this->reward_catalog_list.size(); i++)
 		{
 			auto& entry = data["reward_catalog_list"][i];
-			entry["catalog_id"] = this->reward_catalog_list[i].catalog_id;
+			entry["catalog_id"] = this->reward_border_list[i].reward_id;
 			entry["price_point"] = this->reward_catalog_list[i].price_point;
 			entry["purchase_limit"] = this->reward_catalog_list[i].purchase_limit;
 			entry["purchased_num"] = 0;
@@ -165,7 +197,12 @@ namespace database::events
 			auto& entry = data["reward_ranking_list"][i];
 			entry["start_rank"] = this->reward_ranking_list[i].start_rank;
 			entry["end_rank"] = this->reward_ranking_list[i].end_rank;
-			this->reward_ranking_list[i].item_info.to_json(entry["item_info"]);
+
+			entry["item_info"] = json::array();
+			for (auto o = 0ull; o < this->reward_ranking_list[i].item_info.size(); o++)
+			{
+				this->reward_ranking_list[i].item_info[o].to_json(entry["item_info"][o]);
+			}
 		}
 	}
 
@@ -199,10 +236,32 @@ namespace database::events
 		return {event};
 	}
 
+	std::shared_ptr<event_params_t> get_event_params(const std::string& event_type)
+	{
+		const auto& settings = get_event_settings();
+		const auto iter = settings.event_type_map.find(event_type);
+		if (iter == settings.event_type_map.end())
+		{
+			return nullptr;
+		}
+
+		return iter->second;
+	}
+
 	GET_FIELD_C(running_event, std::uint64_t, event_id);
 	GET_FIELD_C(running_event, std::string, event_type);
+	GET_FIELD_C(running_event, std::uint32_t, event_state);
 	GET_FIELD_C(running_event, std::chrono::seconds, start_date);
 	GET_FIELD_C(running_event, std::chrono::seconds, end_date);
+
+	GET_FIELD_C(event_reward, std::uint64_t, event_reward_id);
+	GET_FIELD_C(event_reward, std::uint64_t, event_id);
+	GET_FIELD_C(event_reward, std::string, event_type);
+	GET_FIELD_C(event_reward, std::uint64_t, user_id);
+	GET_FIELD_C(event_reward, std::uint8_t, reward_type);
+	GET_FIELD_C(event_reward, std::uint64_t, reward_id);
+	GET_FIELD_C(event_reward, bool, acquired);
+	GET_FIELD_C(event_reward, std::chrono::seconds, create_date);
 
 	namespace impl
 	{
@@ -219,13 +278,21 @@ namespace database::events
 		}
 
 		template <database_type_t Type>
+		void set_event_state(database_t& db, const std::uint64_t event_id, const std::uint32_t state)
+		{
+			db.exec<Type>(
+				sqlpp::update(running_event::table)
+					.set(running_event::table.event_state = state)
+						.where(running_event::table.event_id == event_id));
+		}
+
+		template <database_type_t Type>
 		std::optional<running_event> get_current_event1(database_t& db)
 		{
 			auto results = db.exec<Type>(
 				sqlpp::select(sqlpp::all_of(running_event::table))
 					.from(running_event::table)
-						.where(running_event::table.start_date <= std::chrono::system_clock::now() &&
-							   running_event::table.end_date > std::chrono::system_clock::now()).limit(1u));
+						.where(running_event::table.event_state != static_cast<std::uint32_t>(event_state_dead)).limit(1u));
 
 
 			std::optional<running_event> event;
@@ -248,9 +315,7 @@ namespace database::events
 				auto results = db.exec<Type>(
 					sqlpp::select(sqlpp::all_of(running_event::table))
 						.from(running_event::table)
-							.where(running_event::table.start_date <= std::chrono::system_clock::now() &&
-								   running_event::table.end_date > std::chrono::system_clock::now()).limit(1u));
-
+							.where(running_event::table.event_state != static_cast<std::uint32_t>(event_state_dead)).limit(1u));
 
 				std::optional<running_event> event;
 
@@ -261,6 +326,94 @@ namespace database::events
 
 				event.emplace(results.front());
 				return event;
+			});
+		}
+
+		template <database_type_t Type>
+		bool add_reward(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id, const bool acquired)
+		{
+			return database::access<bool>([&](database_t& db)
+				-> bool
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::insert_into(event_reward::table)
+						.set(event_reward::table.f_event_id = event_id,
+							 event_reward::table.f_user_id = user_id,
+							 event_reward::table.reward_type = reward_type,
+							 event_reward::table.reward_id = reward_id,
+							 event_reward::table.acquired = acquired,
+							 event_reward::table.create_date = std::chrono::system_clock::now()
+						));
+				return result != 0ull;
+			});
+		}
+		
+		template <database_type_t Type>
+		std::vector<event_reward> get_acquired_rewards(const std::uint64_t event_id, const std::uint64_t user_id)
+		{
+			return database::access<std::vector<event_reward>>([&](database_t& db)
+				-> std::vector<event_reward>
+			{
+				const auto joined_tables = event_reward::table.join(running_event::table)
+					.on(event_reward::table.f_event_id == running_event::table.event_id);
+
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::all_of(event_reward::table), running_event::table.event_type)
+						.from(joined_tables)
+							.where(event_reward::table.f_event_id == event_id && 
+								   event_reward::table.acquired &&
+								   event_reward::table.f_user_id == user_id)
+				);
+
+				std::vector<event_reward> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::vector<event_reward> get_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
+		{
+			return database::access<std::vector<event_reward>>([&](database_t& db)
+				-> std::vector<event_reward>
+			{
+				const auto joined_tables = event_reward::table.join(running_event::table)
+					.on(event_reward::table.f_event_id == running_event::table.event_id);
+
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::all_of(event_reward::table), running_event::table.event_type)
+						.from(joined_tables)
+							.where(!event_reward::table.acquired && 
+								   event_reward::table.f_event_id != current_event_id &&
+								   event_reward::table.f_user_id == user_id)
+				);
+
+
+				std::vector<event_reward> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(event_reward::table)
+						.set(event_reward::table.acquired = true)
+							.where(event_reward::table.f_user_id == user_id && event_reward::table.f_event_id != current_event_id));
 			});
 		}
 	}
@@ -281,6 +434,11 @@ namespace database::events
 	std::optional<running_event> get_current_event(database_t& db)
 	{
 		RUN_IMPL(impl::get_current_event1, db);
+	}
+
+	void set_event_state(database_t& db, const std::uint64_t event_id, const std::uint32_t state)
+	{
+		RUN_IMPL(impl::set_event_state, db, event_id, state);
 	}
 
 	std::optional<running_event> get_current_event()
@@ -316,8 +474,32 @@ namespace database::events
 			std::chrono::system_clock::time_point(target_event->end));
 
 		console::print("[events] creating event instance for event type \"%s\"\n", target_event->params->name.data());
+	}
 
-		users::reset_event_points();
+	bool update_event_entitlements(database_t& db, const running_event& event)
+	{
+		if (!event.params->enable_ranking)
+		{
+			return false;
+		}
+
+		const auto entries = rankings::get_entries_with_state(database::rankings::ranking_type_event, ranking_state_none, 128u);
+		for (const auto& entry : entries)
+		{
+			for (const auto& reward : event.params->reward_ranking_list)
+			{
+				if (entry.get_rank() > reward.end_rank || entry.get_rank() < reward.start_rank)
+				{
+					continue;
+				}
+
+				add_reward(event.get_event_id(), entry.get_user_id(), reward_type_ranking, reward.reward_id, false);
+			}
+
+			rankings::set_ranking_state(entry.get_ranking_id(), ranking_state_ack);
+		}
+
+		return !entries.empty();
 	}
 
 	void update_event(database_t& db)
@@ -343,6 +525,79 @@ namespace database::events
 				console::print("[events] set current event: \"%s\"\n", type.data());
 			}
 		});
+
+		static std::chrono::system_clock::time_point last_ranking_update;
+		const auto now = std::chrono::system_clock::now();
+		const auto now_s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+
+		switch (current_event->get_event_state())
+		{
+		case event_state_none:
+		{
+			users::reset_event_points();
+			rankings::reset_points(rankings::ranking_type_event);
+			set_event_state(db, current_event->get_event_id(), event_state_running);
+			console::print("[events] event state changed: RUNNING\n");
+			break;
+		}
+		case event_state_running:
+		{
+			if (now_s > current_event->get_end_date())
+			{
+				set_event_state(db, current_event->get_event_id(), event_state_finished);
+				console::print("[events] event state changed: RUNNING\n");
+				break;
+			}
+
+			const auto time_left = current_event->get_end_date() - now_s;
+			if (time_left < 8h)
+			{
+				set_event_state(db, current_event->get_event_id(), event_state_finished);
+				console::print("[events] event state changed: FINISHED\n");
+				break;
+			}
+			else
+			{
+				if (current_event->params->enable_ranking && now - last_ranking_update > 10min)
+				{
+					last_ranking_update = now;
+					rankings::update_rankings(rankings::ranking_type_event);
+				}
+			}
+		}
+		case event_state_finished:
+		{
+			if (!update_event_entitlements(db, current_event.value()) && now_s >= current_event->get_end_date())
+			{
+				set_event_state(db, current_event->get_event_id(), event_state_dead);
+				console::print("[events] event state changed: DEAD\n");
+			}
+		}
+		case event_state_dead:
+		{
+			break;
+		}
+		}
+	}
+
+	bool add_reward(const std::uint64_t event_id, const std::uint64_t user_id, const std::uint8_t reward_type, const std::uint64_t reward_id, const bool acquired)
+	{
+		RUN_IMPL(impl::add_reward, event_id, user_id, reward_type, reward_id, acquired);
+	}
+
+	std::vector<event_reward> get_acquired_rewards(const std::uint64_t event_id, const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::get_acquired_rewards, event_id, user_id);
+	}
+
+	std::vector<event_reward> get_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::get_entitlements, current_event_id, user_id);
+	}
+
+	void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::clear_entitlements, current_event_id, user_id);
 	}
 
 	class table final : public table_interface
@@ -351,6 +606,7 @@ namespace database::events
 		void create(database_t& database) override
 		{
 			database.run_query("mgssd.running_events.create");
+			database.run_query("mgssd.event_rewards.create");
 
 			get_event_settings();
 		}

@@ -87,6 +87,7 @@ namespace database::present_box
 	std::optional<present_box_entry> find_item(const std::uint64_t present_id);
 	bool delete_item(const std::uint64_t present_id);
 	void remove_new_flag(const std::uint64_t present_id);
+	void remove_new_flags(const std::uint64_t player_id);
 	std::vector<present_box_entry> get_all_items(const std::uint64_t player_id);
 	std::size_t get_present_count(const std::uint64_t player_id);
 	void delete_all_items(const std::uint64_t player_id);

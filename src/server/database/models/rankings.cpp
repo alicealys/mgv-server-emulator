@@ -10,6 +10,7 @@ namespace database::rankings
 	GET_FIELD_C(ranking, std::uint64_t, ranking_id);
 	GET_FIELD_C(ranking, std::uint64_t, user_id);
 	GET_FIELD_C(ranking, std::uint8_t, ranking_type);
+	GET_FIELD_C(ranking, std::uint32_t, ranking_state);
 	GET_FIELD_C(ranking, std::uint64_t, rank);
 	GET_FIELD_C(ranking, std::uint64_t, rank_number);
 	GET_FIELD_C(ranking, std::int32_t, points);
@@ -209,6 +210,47 @@ namespace database::rankings
 		}
 		
 		template <database_type_t Type>
+		std::vector<ranking> get_entries_with_state(const std::uint8_t ranking_type, const std::uint32_t ranking_state, const std::uint32_t num)
+		{
+			return database::access<std::vector<ranking>>([&](database_t& db)
+				-> std::vector<ranking>
+			{
+				std::vector<ranking> list;
+
+				const auto joined_tables = ranking::table.join(users::user::table).on(ranking::table.f_user_id == users::user::table.user_id);
+
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::all_of(ranking::table), users::user::table.account_id, users::user::table.user_loadout_header)
+						.from(joined_tables)
+							.where(ranking::table.ranking_state == ranking_state && ranking::table.ranking_type == ranking_type)
+								.order_by(ranking::table.player_rank_number.asc())
+									.limit(num)
+					);
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row);
+				}
+
+				return list;
+			});
+		}
+		
+
+		template <database_type_t Type>
+		void set_ranking_state(const std::uint64_t ranking_id, const std::uint32_t state)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(ranking::table)
+						.set(ranking::table.ranking_state = state)
+							.where(ranking::table.ranking_id == ranking_id)
+					);
+			});
+		}
+
+		template <database_type_t Type>
 		std::size_t get_entry_count(const std::uint8_t ranking_type)
 		{
 			return database::access<std::size_t>([&](database_t& db) -> std::size_t
@@ -285,21 +327,27 @@ namespace database::rankings
 		RUN_IMPL(impl::get_entries, ranking_type, offset, num, min_rank);
 	}
 
+	std::vector<ranking> get_entries_with_state(const std::uint8_t ranking_type, const std::uint32_t ranking_state, const std::uint32_t num)
+	{
+		RUN_IMPL(impl::get_entries_with_state, ranking_type, ranking_state, num);
+	}
+
 	std::size_t get_entry_count(const std::uint8_t ranking_type)
 	{
 		RUN_IMPL(impl::get_entry_count, ranking_type);
 	}
 
-	void update_entries(database_t& db)
+	void set_ranking_state(const std::uint64_t ranking_id, const std::uint32_t ranking_state)
 	{
-		static std::chrono::system_clock::time_point last_update{};
-		const auto now = std::chrono::system_clock::now();
-		if (now - last_update < 10min)
-		{
-			return;
-		}
+		RUN_IMPL(impl::set_ranking_state, ranking_id, ranking_state);
+	}
 
-		db.run_query("mgssd.rankings.update_entries");
+	void update_rankings(const std::uint8_t ranking_type)
+	{
+		database::access([&](database_t& db)
+		{
+			db.run_query("mgssd.rankings.update_entries", ranking_type);
+		});
 	}
 
 	void delete_user_data(const std::uint64_t user_id)
@@ -317,7 +365,7 @@ namespace database::rankings
 
 		void run_tasks(database_t& database) override
 		{
-			update_entries(database);
+
 		}
 	};
 }

@@ -13,6 +13,9 @@ namespace emulator::ssd
 		auto product_counts = database::shop_purchases::get_purchase_counts(user->get_user_id());
 		const auto& products = database::shop_purchases::get_shop_item_list();
 
+		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
+		user->get_inventory(*user_inventory);
+
 		auto count = 0u;
 		const auto add_product = [&](const database::shop_purchases::shop_product_t& product)
 		{
@@ -22,9 +25,16 @@ namespace emulator::ssd
 			entry["lang_id"] = product.lang_id;
 			entry["limit_count"] = product.limit_count;
 			entry["price"] = product.price;
-
 			entry["flag"] = 0; //?
-			entry["current_count"] = product_counts[product.product_id];
+
+			if (user->has_permanent_item(product.item, *user_inventory))
+			{
+				entry["current_count"] = 1;
+			}
+			else
+			{
+				entry["current_count"] = product_counts[product.product_id];
+			}
 
 			product.item.to_json(entry["item"]);
 		};

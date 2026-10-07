@@ -864,7 +864,7 @@ namespace database::users
 			{
 				db.get_database<Type>()->operator()(
 					sqlpp::update(user::table)
-						.set(user::table.event_point = 0)
+						.set(user::table.event_point = 0, user::table.event_point_total = 0)
 							.unconditionally()
 					);
 			});
@@ -1092,7 +1092,7 @@ namespace database::users
 			
 			if (params.user_inventory != nullptr)
 			{
-				params.user_inventory->set_obtained_recipe(reward.code);
+				params.user_inventory->set_obtained_recipe(recipe_iter->second->index);
 			}
 
 			const auto should_craft = recipe_iter->second->potential != nullptr && !recipe_iter->second->production->is_stackable();
@@ -1247,6 +1247,74 @@ namespace database::users
 		case game::ITEM_CATEGORY_CHARACTER_SLOT:
 		{
 			return this->inc_player_capacity();
+		}
+		}
+
+		return false;
+	}
+
+	bool user::has_permanent_item(const game::item_t& item, const user_inventory_t& inventory) const
+	{
+		switch (item.category)
+		{
+		case game::ITEM_CATEGORY_PRODUCTION:
+		{
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(item.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end() || !iter->second->only_flag)
+			{
+				return false;
+			}
+
+			return inventory.check_obtained_generic(inventory.production_opened, iter->second->index);
+		}
+		case game::ITEM_CATEGORY_RECIPE:
+		{
+			const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(item.code);
+			if (iter == game::parameters_table.ssd_sbm_parameters->recipes.end())
+			{
+				return false;
+			}
+
+			return inventory.check_obtained_generic(inventory.recipe_opened, iter->second->index);
+		}
+		case game::ITEM_CATEGORY_PRESET_RADIO:
+		{
+			return inventory.check_obtained_generic(inventory.preset_radio_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_GESTURE:
+		{
+			return inventory.check_obtained_generic(inventory.gesture_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_COMMUNICATION_MARKER:
+		{
+			return inventory.check_obtained_generic(inventory.command_marker_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_NAMEPLATE:
+		{
+			return inventory.check_obtained_generic(inventory.name_plate_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_PRIVILEGE:
+		{
+			return false;
+		}
+		case game::ITEM_CATEGORY_FACE_PAINT:
+		{
+			return inventory.check_obtained_generic(inventory.face_paint_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_CASSETTE:
+		{
+			return inventory.check_obtained_generic(inventory.cassette_obtained, item.code);
+		}
+		case game::ITEM_CATEGORY_CHARACTER_SLOT:
+		{
+			return this->get_player_capacity() < database::players::max_player_count;
+		}
+		case game::ITEM_CATEGORY_RESOURCE:
+		case game::ITEM_CATEGORY_COIN:
+		case game::ITEM_CATEGORY_ENERGY:
+		case game::ITEM_CATEGORY_BATTLE_PACK:
+		{
+			return false;
 		}
 		}
 

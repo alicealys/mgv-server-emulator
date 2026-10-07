@@ -34,6 +34,13 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
+		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
+		user->get_inventory(*user_inventory);
+		if (user->has_permanent_item(product->item, *user_inventory))
+		{
+			return error(ERR_OVER_CAPACITY);
+		}
+
 		const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
 		if (purchase_count > product->limit_count && product->limit_count != 0)
 		{

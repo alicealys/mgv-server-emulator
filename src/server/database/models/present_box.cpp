@@ -75,7 +75,7 @@ namespace database::present_box
 				return results != 0ull;
 			});
 		}
-		
+
 		template <database_type_t Type>
 		void remove_new_flag(const std::uint64_t present_id)
 		{
@@ -85,6 +85,18 @@ namespace database::present_box
 					sqlpp::update(present_box_entry::table)
 						.set(present_box_entry::table.flags = present_box_entry::table.flags & ~static_cast<std::uint32_t>(present_flag_new))
 							.where(present_box_entry::table.present_id == present_id));
+			});
+		}
+
+		template <database_type_t Type>
+		void remove_new_flags(const std::uint64_t player_id)
+		{
+			database::access([&](database::database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(present_box_entry::table)
+					.set(present_box_entry::table.flags = present_box_entry::table.flags & ~static_cast<std::uint32_t>(present_flag_new))
+					.where(present_box_entry::table.f_player_id == player_id));
 			});
 		}
 
@@ -261,10 +273,11 @@ namespace database::present_box
 		std::uint64_t add_item(const std::uint64_t player_id, const std::uint32_t flags, const std::chrono::seconds expire_date, 
 			const game::item_t& item, const std::uint64_t text_id)
 		{
+			const auto target_flags = present_flag_new | flags;
 			return database::access<std::uint64_t>([&](database::database_t& db)
 			{
 				game::item_t add_item{item};
-				const auto result = add_item_internal<Type>(db, player_id, flags, expire_date, add_item, text_id);
+				const auto result = add_item_internal<Type>(db, player_id, target_flags, expire_date, add_item, text_id);
 				delete_exceeding<Type>(player_id);
 				return result;
 			});
@@ -352,6 +365,11 @@ namespace database::present_box
 	void remove_new_flag(const std::uint64_t present_id)
 	{
 		RUN_IMPL(impl::remove_new_flag, present_id);
+	}
+
+	void remove_new_flags(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::remove_new_flags, player_id);
 	}
 
 	std::vector<present_box_entry> get_all_items(const std::uint64_t player_id)

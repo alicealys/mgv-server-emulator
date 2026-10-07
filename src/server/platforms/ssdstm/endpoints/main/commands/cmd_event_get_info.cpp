@@ -3,6 +3,7 @@
 #include "cmd_event_get_info.hpp"
 
 #include "database/models/events.hpp"
+#include "database/models/rankings.hpp"
 
 namespace emulator::ssd
 {
@@ -30,11 +31,17 @@ namespace emulator::ssd
 
 		entry["current_event_point"] = user->get_event_point();
 		entry["total_event_point"] = user->get_event_point_total();
+		entry["disp_rank"] = 0;
+		entry["rank"] = 0;
 
 		if (current_event->params->enable_ranking)
 		{
-			entry["disp_rank"] = 0;
-			entry["rank"] = 0;
+			const auto ranking = database::rankings::get_user_entry(user->get_user_id(), database::rankings::ranking_type_event);
+			if (ranking.has_value())
+			{
+				entry["disp_rank"] = ranking->get_rank();
+				entry["rank"] = ranking->get_rank_number();
+			}
 		}
 
 		if (current_event->params->enable_catalog)

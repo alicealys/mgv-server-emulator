@@ -27,6 +27,8 @@ namespace emulator::ssd
 			list[i].to_json(result["present_list"][count++]);
 		}
 
+		database::present_box::remove_new_flags(user->current_player->get_player_id());
+
 		result["present_num"] = count;
 
 		return result;

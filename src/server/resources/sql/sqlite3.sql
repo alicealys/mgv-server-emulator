@@ -311,8 +311,22 @@ create table if not exists `running_events`
 (
 	event_id			integer	primary key autoincrement,
 	event_type			varchar(64) not null,
+	event_state			int unsigned not null default 0,
 	start_date			datetime not null,
 	end_date			datetime not null
+)
+-- query:mgssd.event_rewards.create
+create table if not exists `event_rewards`
+(
+	event_reward_id		integer	primary key autoincrement,
+	f_event_id			bigint unsigned	not null,
+	f_user_id			bigint unsigned	not null,
+	reward_type			int unsigned not null,
+	reward_id			bigint unsigned not null,
+	acquired			boolean not null,
+	create_date			datetime not null,
+	foreign key (`f_event_id`) references `running_events`(`event_id`),
+	foreign key (`f_user_id`) references `users`(`user_id`)
 )
 -- query:mgssd.rankings.create
 create table if not exists `rankings`
@@ -320,6 +334,7 @@ create table if not exists `rankings`
 	ranking_id          integer	primary key autoincrement,
 	f_user_id	        bigint unsigned	not null,
 	ranking_type	    int unsigned	not null,
+	ranking_state	    int unsigned	not null default 0,
 	player_rank		    bigint unsigned	not null default 0,
 	player_rank_number	bigint unsigned	not null default 0,
 	points		        int				not null default 0,
@@ -334,7 +349,7 @@ with ranked as (
         points,
         rank() over (partition by ranking_type order by points desc) as new_rank,
         row_number() over (partition by ranking_type order by points desc) as new_rank_number
-    from rankings
+    from rankings where ranking_type = {}
 )
 update rankings
 set player_rank = (

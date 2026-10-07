@@ -72,6 +72,19 @@ namespace database::users
 			type[byte_index] |= (1 << (index & 7));
 		}
 
+		template <typename T>
+		bool check_obtained_generic(T& type, const std::uint32_t index) const
+		{
+			if (index >= sizeof(type) * 8)
+			{
+				return false;
+			}
+
+			const auto byte_index = (index >> 3);
+			const auto mask = (1 << (index & 7));
+			return (type[byte_index] & mask) == mask;
+		}
+
 		void set_obtained_gesture(const std::uint32_t index);
 		void set_obtained_radio(const std::uint32_t index);
 		void set_obtained_marker(const std::uint32_t index);
@@ -235,6 +248,7 @@ namespace database::users
 		bool set_daily_reward() const;
 
 		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
+		bool has_permanent_item(const game::item_t& item, const user_inventory_t& inventory) const;
 
 		std::optional<players::player> create_additional_player() const;
 
