@@ -112,6 +112,7 @@ RESOURCE_INFORMATION_LIST          RCDATA "resources/data/information_list.json"
 RESOURCE_WICKED_REPORT_TYPES       RCDATA "resources/data/wicked_report_types.json"
 RESOURCE_DAILY_REWARD_SETTINGS     RCDATA "resources/data/daily_reward_settings.json"
 RESOURCE_CHALLENGE_TASK_SETTINGS   RCDATA "resources/data/challenge_task_settings.json"
+RESOURCE_EVENT_SETTINGS            RCDATA "resources/data/event_settings.json"
 
 RESOURCE_SQL_MYSQL                 RCDATA "resources/sql/mysql.sql"
 RESOURCE_SQL_SQLITE3               RCDATA "resources/sql/sqlite3.sql"

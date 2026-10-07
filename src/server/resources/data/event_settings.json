@@ -1,0 +1,3321 @@
+{
+    "event_duration": 14,
+    "event_list": [
+        {
+            "name": "ferrymen_captive",
+            "enable_border": 0,
+            "enable_catalog": 1,
+            "enable_ranking": 0,
+            "info_title": "info_event1_title",
+            "info_text": "info_event1_text",
+            "reward_border_list": [],
+            "reward_catalog_list": [
+                {
+                    "catalog_id": 7924,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 10000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7925,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 30000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7926,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 50000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7927,
+                    "item_info": {
+                        "category": 1,
+                        "code": 2251663740,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7928,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3982548442,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7929,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3687313078,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7930,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1255639681,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7931,
+                    "item_info": {
+                        "category": 2,
+                        "code": 902298253,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7932,
+                    "item_info": {
+                        "category": 2,
+                        "code": 45374204,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7933,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2033739056,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7934,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2612367286,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7935,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1554817798,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7936,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3224299368,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7937,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7938,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7939,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2957418873,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7940,
+                    "item_info": {
+                        "category": 0,
+                        "code": 277478297,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7941,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3000509335,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7942,
+                    "item_info": {
+                        "category": 0,
+                        "code": 63611898,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7943,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1652810564,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7944,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2153793929,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7945,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3439759705,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7946,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3510284803,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7947,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2775088132,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7948,
+                    "item_info": {
+                        "category": 10,
+                        "code": 757538538,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7949,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 10
+                },
+                {
+                    "catalog_id": 7950,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 40
+                },
+                {
+                    "catalog_id": 7951,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 3000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7952,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 300,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7953,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 2000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7954,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 200,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7955,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7956,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 100,
+                    "purchase_limit": 0
+                }
+            ],
+            "reward_ranking_list": []
+        },
+        {
+            "name": "ferrymen_legacy",
+            "enable_border": 1,
+            "enable_catalog": 0,
+            "enable_ranking": 0,
+            "info_title": "info_event2_title",
+            "info_text": "info_event2_text",
+            "reward_border_list": [
+                {
+                    "border_point": 50,
+                    "item_info": {
+                        "category": 6,
+                        "code": 116,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50,
+                    "item_info": {
+                        "category": 2,
+                        "code": 745548095,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3712310780,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2558081873,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50,
+                    "item_info": {
+                        "category": 2,
+                        "code": 885321758,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 100,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 300,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 500,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1500,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2775088132,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 2000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 2500,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 3000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2812175025,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 3000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3579501574,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 3000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3263160415,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 3000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1994079412,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 3500,
+                    "item_info": {
+                        "category": 10,
+                        "code": 757538538,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 4000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 4500,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 5000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 6000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3439759705,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 7000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 8000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 9000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 10000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 951550802,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 10000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 4171462643,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 10000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3566160382,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 10000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 662855342,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 12000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3510284803,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 13000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 14000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 757538538,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 15000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 2805517841,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 16000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 17000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2775088132,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 18000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3439759705,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 19000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 20000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 20000,
+                    "item_info": {
+                        "category": 6,
+                        "code": 115,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 21000,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 22000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 23000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 24000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3510284803,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 25000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2296511672,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 25000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 623559607,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 25000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1849871794,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 25000,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3438703329,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 26000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 27000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 28000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 29000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 30000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 688596447,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 35000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 40000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 45000,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 50000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 55000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 60000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 65000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 70000,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 75000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 80000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 85000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 90000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 95000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 100000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 100000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 110000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 120000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 130000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 140000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 150000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 160000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 170000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 180000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 190000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 200000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 200000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 200000,
+                    "item_info": {
+                        "category": 6,
+                        "code": 114,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 210000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 220000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 230000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 240000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 250000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 300000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 300000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 350000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 400000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 400000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 450000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 500000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 3,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 500000,
+                    "item_info": {
+                        "category": 6,
+                        "code": 113,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 550000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 600000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 600000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 650000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 700000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 700000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 750000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 800000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 800000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 850000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1994203852,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 900000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 900000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 2,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 950000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 4155218397,
+                        "num": 50,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1000000,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1100000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1200000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1300000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1400000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                },
+                {
+                    "border_point": 1500000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2052255935,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    }
+                }
+            ],
+            "reward_catalog_list": [],
+            "reward_ranking_list": []
+        },
+        {
+            "name": "encounter_1964",
+            "enable_border": 0,
+            "enable_catalog": 1,
+            "enable_ranking": 0,
+            "info_title": "info_event3_title",
+            "info_text": "info_event3_text",
+            "reward_border_list": [],
+            "reward_catalog_list": [
+                {
+                    "catalog_id": 7957,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 10000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7958,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 30000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7959,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 50000,
+                    "purchase_limit": 2
+                },
+                {
+                    "catalog_id": 7960,
+                    "item_info": {
+                        "category": 1,
+                        "code": 706592686,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 250,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7961,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1463977351,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 250,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7962,
+                    "item_info": {
+                        "category": 1,
+                        "code": 124220076,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7963,
+                    "item_info": {
+                        "category": 1,
+                        "code": 2617774311,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7964,
+                    "item_info": {
+                        "category": 1,
+                        "code": 97129820,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7965,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1281022862,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7966,
+                    "item_info": {
+                        "category": 1,
+                        "code": 493048598,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7967,
+                    "item_info": {
+                        "category": 11,
+                        "code": 38,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7968,
+                    "item_info": {
+                        "category": 11,
+                        "code": 40,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7969,
+                    "item_info": {
+                        "category": 11,
+                        "code": 39,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7970,
+                    "item_info": {
+                        "category": 11,
+                        "code": 41,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7971,
+                    "item_info": {
+                        "category": 11,
+                        "code": 35,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7972,
+                    "item_info": {
+                        "category": 11,
+                        "code": 36,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 400,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7973,
+                    "item_info": {
+                        "category": 6,
+                        "code": 3,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7974,
+                    "item_info": {
+                        "category": 6,
+                        "code": 105,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7975,
+                    "item_info": {
+                        "category": 6,
+                        "code": 104,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7976,
+                    "item_info": {
+                        "category": 6,
+                        "code": 103,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7977,
+                    "item_info": {
+                        "category": 4,
+                        "code": 45,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7978,
+                    "item_info": {
+                        "category": 4,
+                        "code": 46,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 20000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7979,
+                    "item_info": {
+                        "category": 4,
+                        "code": 47,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 20000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7980,
+                    "item_info": {
+                        "category": 12,
+                        "code": 163,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7981,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3785839918,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7982,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2948535310,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 2000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7983,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3747784687,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7984,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7985,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3
+                },
+                {
+                    "catalog_id": 7986,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2957418873,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7987,
+                    "item_info": {
+                        "category": 0,
+                        "code": 277478297,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7988,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3000509335,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7989,
+                    "item_info": {
+                        "category": 0,
+                        "code": 63611898,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7990,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1652810564,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7991,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2153793929,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4
+                },
+                {
+                    "catalog_id": 7992,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3439759705,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7993,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3510284803,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1
+                },
+                {
+                    "catalog_id": 7994,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2775088132,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7995,
+                    "item_info": {
+                        "category": 10,
+                        "code": 757538538,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7996,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 10
+                },
+                {
+                    "catalog_id": 7997,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 40
+                },
+                {
+                    "catalog_id": 7998,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 3000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 7999,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 300,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 8000,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 2000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 8001,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 200,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 8002,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0
+                },
+                {
+                    "catalog_id": 8003,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 100,
+                    "purchase_limit": 0
+                }
+            ],
+            "reward_ranking_list": []
+        },
+        {
+            "name": "unhoped",
+            "enable_border": 0,
+            "enable_catalog": 1,
+            "enable_ranking": 0,
+            "info_title": "info_event4_title",
+            "info_text": "info_event4_text",
+            "reward_border_list": [],
+            "reward_catalog_list": [
+                {
+                    "catalog_id": 8004,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 10000,
+                    "purchase_limit": 2,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8005,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 30000,
+                    "purchase_limit": 2,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8006,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3229831270,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 50000,
+                    "purchase_limit": 2,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8007,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1462870493,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8008,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1058587875,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8009,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1591595978,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8010,
+                    "item_info": {
+                        "category": 1,
+                        "code": 1545225572,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8011,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1902841784,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8012,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1758037110,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8013,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3019195134,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8014,
+                    "item_info": {
+                        "category": 2,
+                        "code": 902884105,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8015,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2260509260,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8016,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2221881319,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8017,
+                    "item_info": {
+                        "category": 2,
+                        "code": 3769029157,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8018,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1186839305,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8019,
+                    "item_info": {
+                        "category": 2,
+                        "code": 597516063,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8020,
+                    "item_info": {
+                        "category": 2,
+                        "code": 1828720339,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8021,
+                    "item_info": {
+                        "category": 2,
+                        "code": 155208289,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8022,
+                    "item_info": {
+                        "category": 2,
+                        "code": 2929912992,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 1,
+                    "purchased_num": 1
+                },
+                {
+                    "catalog_id": 8023,
+                    "item_info": {
+                        "category": 8,
+                        "code": 258578356,
+                        "num": 20,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8024,
+                    "item_info": {
+                        "category": 1,
+                        "code": 3233881017,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 3,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8025,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2957418873,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8026,
+                    "item_info": {
+                        "category": 0,
+                        "code": 277478297,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8027,
+                    "item_info": {
+                        "category": 0,
+                        "code": 3000509335,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8028,
+                    "item_info": {
+                        "category": 0,
+                        "code": 63611898,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8029,
+                    "item_info": {
+                        "category": 0,
+                        "code": 1652810564,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8030,
+                    "item_info": {
+                        "category": 0,
+                        "code": 2153793929,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 500,
+                    "purchase_limit": 4,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8031,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3439759705,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8032,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3510284803,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 1,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8033,
+                    "item_info": {
+                        "category": 10,
+                        "code": 2775088132,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8034,
+                    "item_info": {
+                        "category": 10,
+                        "code": 757538538,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8035,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1754089406,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 5000,
+                    "purchase_limit": 10,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8036,
+                    "item_info": {
+                        "category": 10,
+                        "code": 1303024834,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 40,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8037,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 3000,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8038,
+                    "item_info": {
+                        "category": 10,
+                        "code": 3234815661,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 300,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8039,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 2000,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8040,
+                    "item_info": {
+                        "category": 10,
+                        "code": 597140680,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 200,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8041,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 10,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 1000,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                },
+                {
+                    "catalog_id": 8042,
+                    "item_info": {
+                        "category": 10,
+                        "code": 4006553472,
+                        "num": 1,
+                        "param1": 0,
+                        "param2": 0,
+                        "param3": 0,
+                        "param4": 0,
+                        "param5": 0
+                    },
+                    "price_point": 100,
+                    "purchase_limit": 0,
+                    "purchased_num": 0
+                }
+            ],
+            "reward_ranking_list": []
+        }
+    ],
+    "event_rotation": ["ferrymen_captive", "ferrymen_legacy", "encounter_1964", "unhoped"]
+}

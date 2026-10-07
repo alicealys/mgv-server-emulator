@@ -13,6 +13,7 @@ namespace config
 			std::uint32_t session_heartbeat = 60;
 			std::uint32_t session_timeout = 200;
 			std::uint32_t server_version = 19;
+			std::chrono::seconds reference_time = 1519113600s;
 			bool disable_tutorial_tips = false;
 		};
 

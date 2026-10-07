@@ -8,7 +8,15 @@ namespace emulator::ssd
 	json::value cmd_event_shop_get_point::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
+
+		result["balance"] = 0;
 		result["result"] = "ERR_NOTIMPLEMENTED";
+
 		return result;
+	}
+
+	std::uint32_t cmd_event_shop_get_point::flags()
+	{
+		return CMD_NEEDS_USER;
 	}
 }

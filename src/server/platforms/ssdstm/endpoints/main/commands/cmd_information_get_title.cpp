@@ -10,7 +10,7 @@
 namespace emulator::ssd
 {
 	std::vector<cmd_information_get_title::message_t> cmd_information_get_title::messages;
-	std::unordered_map<std::string, std::function<std::string()>> cmd_information_get_title::message_vars;
+	std::unordered_map<std::string, std::function<std::string(const std::uint8_t)>> cmd_information_get_title::message_vars;
 
 
 	std::string cmd_information_get_title::format_message(const std::string& text, const std::uint8_t lang)
@@ -47,7 +47,7 @@ namespace emulator::ssd
 						const auto iter = cmd_information_get_title::message_vars.find(current_key);
 						if (iter != cmd_information_get_title::message_vars.end())
 						{
-							formatted.append(iter->second());
+							formatted.append(iter->second(lang));
 						}
 						current_key.clear();
 					}
@@ -127,10 +127,17 @@ namespace emulator::ssd
 
 	cmd_information_get_title::cmd_information_get_title()
 	{
-		this->register_message_var("online_players", static_cast<std::uint64_t(*)()>(database::users::get_online_user_count));
-		this->register_message_var("total_players", database::users::get_user_count);
+		this->register_message_var("online_players", [](const std::uint8_t)
+		{
+			return database::users::get_online_user_count();
+		});
 
-		this->register_message_var("version", []()
+		this->register_message_var("total_players", [](const std::uint8_t)
+		{
+			return database::users::get_user_count();
+		});
+
+		this->register_message_var("version", [](const std::uint8_t)
 		{
 			return VERSION;
 		});
@@ -163,6 +170,11 @@ namespace emulator::ssd
 		for (auto i = param.start; i < end; i++)
 		{
 			const auto& message = cmd_information_get_title::messages[i];
+			if (message.visible != nullptr && !message.visible(message))
+			{
+				continue;
+			}
+
 			message.to_json(result["info_list"][count++], param.lang);
 		}
 

@@ -114,6 +114,8 @@ namespace database::users
 		DEFINE_FIELD(sv_coin, sqlpp::integer_unsigned);
 		DEFINE_FIELD(loadout_count, sqlpp::integer_unsigned);
 		DEFINE_FIELD(player_capacity, sqlpp::integer_unsigned);
+		DEFINE_FIELD(event_point, sqlpp::integer_unsigned);
+		DEFINE_FIELD(event_point_total, sqlpp::integer_unsigned);
 		DEFINE_FIELD(user_inventory, sqlpp::binary);
 		DEFINE_TABLE(users,
 			user_id_field_t, 
@@ -135,6 +137,8 @@ namespace database::users
 			sv_coin_field_t, 
 			loadout_count_field_t,
 			player_capacity_field_t,
+			event_point_field_t,
+			event_point_total_field_t,
 			user_inventory_field_t
 		);
 
@@ -161,6 +165,8 @@ namespace database::users
 			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
 			this->sv_coin_ = static_cast<std::uint32_t>(row.sv_coin);
 			this->loadout_count_ = static_cast<std::uint32_t>(row.loadout_count);
+			this->event_point_ = static_cast<std::uint32_t>(row.event_point);
+			this->event_point_total_ = static_cast<std::uint32_t>(row.event_point_total);
 			this->player_capacity_ = row.player_capacity;
 
 			if (!row.player_id.is_null())
@@ -183,6 +189,8 @@ namespace database::users
 		GET_FIELD_H(std::uint32_t, dlc_flag);
 		GET_FIELD_H(std::uint32_t, sv_coin);
 		GET_FIELD_H(std::uint32_t, loadout_count);
+		GET_FIELD_H(std::uint32_t, event_point);
+		GET_FIELD_H(std::uint32_t, event_point_total);
 		GET_FIELD_H(std::uint64_t, player_capacity);
 		GET_FIELD_H(std::chrono::microseconds, last_update);
 		GET_FIELD_H(std::chrono::seconds, creation_date);
@@ -200,6 +208,9 @@ namespace database::users
 
 		bool spend_sv_coins(const std::uint32_t value) const;
 		bool add_sv_coins(const std::uint32_t value) const;
+
+		bool spend_event_points(const std::uint32_t value) const;
+		bool add_event_points(const std::uint32_t value) const;
 
 		bool set_loadout_count(const std::uint32_t loadout_count) const;
 		bool inc_player_capacity() const;
@@ -240,6 +251,10 @@ namespace database::users
 
 	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value);
 	std::uint32_t get_sv_coins(const std::uint64_t user_id);
+
+	bool add_event_points(const std::uint64_t user_id, const std::uint32_t value);
+	std::uint32_t get_event_points(const std::uint64_t user_id);
+	void reset_event_points();
 
 	bool delete_all_user_data(const std::uint64_t account_id);
 }

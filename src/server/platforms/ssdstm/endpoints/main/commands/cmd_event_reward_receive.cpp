@@ -9,18 +9,30 @@ namespace emulator::ssd
 	{
 		json::value result;
 
+		std::uint32_t type{};
+		if (!json::read(type, data["type"]))
+		{
+			return error(ERR_INVALIDARG);
+		}
+
 		// TODO
-		result["reward"]["energy"] = 0;
-		result["reward"]["kub_boost_flag"] = 0;
-		result["reward"]["present_box_num"] = 0;
-		result["reward"]["battle_pack_list"] = json::array();
-		result["reward"]["nonstackable_list"] = json::array();
-		result["reward"]["present_list"] = json::array();
-		result["reward"]["recipe_list"] = json::array();
-		result["reward"]["resources_list"] = json::array();
-		result["reward"]["stackable_list"] = json::array();
-		result["reward"]["text_id"] = 0;
+		auto& reward_info = result["reward_info"];
+		reward_info["energy"] = 0;
+		reward_info["kub_boost_flag"] = 0;
+		reward_info["present_box_num"] = 0;
+		reward_info["battle_pack_list"] = json::array();
+		reward_info["nonstackable_list"] = json::array();
+		reward_info["present_list"] = json::array();
+		reward_info["recipe_list"] = json::array();
+		reward_info["resources_list"] = json::array();
+		reward_info["stackable_list"] = json::array();
+		reward_info["text_id"] = 0;
 
 		return result;
+	}
+
+	std::uint32_t cmd_event_reward_receive::flags()
+	{
+		return CMD_NEEDS_USER;
 	}
 }

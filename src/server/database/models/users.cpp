@@ -101,6 +101,8 @@ namespace database::users
 						user::table.dlc_flag,
 						user::table.sv_coin,
 						user::table.loadout_count,
+						user::table.event_point,
+						user::table.event_point_total,
 						user::table.player_capacity,
 						players::player::table.player_id, 
 						players::player::table.f_user_id, 
@@ -323,6 +325,8 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, user_flag);
 	GET_FIELD_C(user, std::uint32_t, dlc_flag);
 	GET_FIELD_C(user, std::uint32_t, sv_coin);
+	GET_FIELD_C(user, std::uint32_t, event_point);
+	GET_FIELD_C(user, std::uint32_t, event_point_total);
 	GET_FIELD_C(user, std::uint64_t, player_capacity);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
 	GET_FIELD_C(user, std::chrono::seconds, creation_date);
@@ -785,6 +789,81 @@ namespace database::users
 				return result != 0;
 			});
 		}
+		
+		template <database_type_t Type>
+		std::uint32_t get_event_points(const std::uint64_t user_id)
+		{
+			return database::access<std::uint32_t>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::select(user::table.event_point)
+							.from(user::table)
+								.where(user::table.user_id == user_id)
+				);
+
+				if (result.empty())
+				{
+					return 0u;
+				}
+
+				return static_cast<std::uint32_t>(result.front().event_point.value());
+			});
+		}
+
+		template <database_type_t Type>
+		bool spend_event_points(const std::uint64_t user_id, const std::uint32_t value)
+		{
+			if (value == 0)
+			{
+				return true;
+			}
+
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::update(user::table)
+						.set(user::table.event_point = user::table.event_point - value)
+							.where(user::table.user_id == user_id &&
+								   user::table.event_point >= value)
+					);
+
+				return result != 0;
+			});
+		}
+
+		template <database_type_t Type>
+		bool add_event_points(const std::uint64_t user_id, const std::uint32_t value)
+		{
+			if (value == 0)
+			{
+				return true;
+			}
+
+			return database::access<bool>([&](database::database_t& db)
+			{
+				const auto result = db.get_database<Type>()->operator()(
+					sqlpp::update(user::table)
+						.set(user::table.event_point = user::table.event_point + value,
+							 user::table.event_point_total = user::table.event_point_total + value)
+							.where(user::table.user_id == user_id)
+					);
+
+				return result != 0;
+			});
+		}
+		
+		template <database_type_t Type>
+		void reset_event_points()
+		{
+			return database::access([&](database::database_t& db)
+			{
+				db.get_database<Type>()->operator()(
+					sqlpp::update(user::table)
+						.set(user::table.event_point = 0)
+							.unconditionally()
+					);
+			});
+		}
 
 		template <database_type_t Type>
 		bool set_loadout_count(const std::uint64_t user_id, const std::uint32_t loadout_count)
@@ -858,6 +937,16 @@ namespace database::users
 	bool user::add_sv_coins(const std::uint32_t value) const
 	{
 		RUN_IMPL(impl::add_sv_coins, this->get_user_id(), value);
+	}
+
+	bool user::spend_event_points(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::spend_event_points, this->get_user_id(), value);
+	}
+
+	bool user::add_event_points(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::add_event_points, this->get_user_id(), value);
 	}
 
 	bool user::set_loadout_count(const std::uint32_t loadout_count) const
@@ -978,38 +1067,46 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_RECIPE:
 		{
-			if (params.user_inventory != nullptr)
-			{
-				params.user_inventory->set_obtained_recipe(reward.code);
-			}
-
 			const auto recipe_iter = game::parameters_table.ssd_sbm_parameters->recipes.find(reward.code);
 			if (recipe_iter == game::parameters_table.ssd_sbm_parameters->recipes.end())
 			{
 				return false;
 			}
 
-			if (recipe_iter->second->production == nullptr || recipe_iter->second->production->is_stackable())
+			if (recipe_iter->second->production == nullptr)
 			{
 				return false;
 			}
-
-			database::players::nonstackable_item_t nonstackable_item{};
-			nonstackable_item.flag |= 16;
-			nonstackable_item.production_id = recipe_iter->second->id;
-
-			if (!params.nonstackable_list->add_item(nonstackable_item))
+			
+			if (params.user_inventory != nullptr)
 			{
-				return false;
+				params.user_inventory->set_obtained_recipe(reward.code);
 			}
 
-			if (reward_info.is_object())
+			const auto should_craft = recipe_iter->second->potential != nullptr && !recipe_iter->second->production->is_stackable();
+			if (should_craft)
 			{
-				auto& stackable_list_j = reward_info["nonstackable_list"];
-				nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
-			}
+				database::players::nonstackable_item_t nonstackable_item{};
+				nonstackable_item.flag |= 16;
+				nonstackable_item.production_id = recipe_iter->second->id;
 
-			return true;
+				if (!params.nonstackable_list->add_item(nonstackable_item))
+				{
+					return false;
+				}
+
+				if (reward_info.is_object())
+				{
+					auto& stackable_list_j = reward_info["nonstackable_list"];
+					nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+				}
+
+				return true;
+			}
+			else
+			{
+				return params.user_inventory;
+			}
 		}
 		case game::ITEM_CATEGORY_PRESET_RADIO:
 		{
@@ -1174,6 +1271,21 @@ namespace database::users
 	std::uint32_t get_sv_coins(const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::get_sv_coins, user_id);
+	}
+
+	bool add_event_points(const std::uint64_t user_id, const std::uint32_t value)
+	{
+		RUN_IMPL(impl::add_event_points, user_id, value);
+	}
+
+	std::uint32_t get_event_points(const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::get_event_points, user_id);
+	}
+
+	void reset_event_points()
+	{
+		RUN_IMPL(impl::reset_event_points);
 	}
 
 	std::optional<user> find(const std::uint64_t user_id)

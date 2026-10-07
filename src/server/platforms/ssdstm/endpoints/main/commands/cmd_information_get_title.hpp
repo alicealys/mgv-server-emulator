@@ -19,6 +19,7 @@ namespace emulator::ssd
 			std::uint64_t update_date;
 			std::uint64_t release_date;
 			std::uint32_t info_id;
+			bool (*visible)(const message_t& message);
 
 			std::uint64_t get_release_date() const;
 			std::uint64_t get_update_date() const;
@@ -28,7 +29,16 @@ namespace emulator::ssd
 		};
 
 		static std::vector<message_t> messages;
-		static std::unordered_map<std::string, std::function<std::string()>> message_vars;
+		static std::unordered_map<std::string, std::function<std::string(const std::uint8_t)>> message_vars;
+
+		template <typename F>
+		static void register_message_var(const std::string& name, F&& cb)
+		{
+			message_vars.insert(std::make_pair(name, [=](const std::uint8_t lang)
+			{
+				return std::format("{}", cb(lang));
+			}));
+		}
 
 	private:
 		struct param_t
@@ -39,15 +49,6 @@ namespace emulator::ssd
 			std::size_t start;
 			std::size_t num;
 		};
-		
-		template <typename F>
-		static void register_message_var(const std::string& name, F&& cb)
-		{
-			message_vars.insert(std::make_pair(name, [=]()
-			{
-				return std::format("{}", cb());
-			}));
-		}
 
 		static std::string format_message(const std::string& text, const std::uint8_t lang);
 

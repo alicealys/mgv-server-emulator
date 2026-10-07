@@ -20,6 +20,8 @@ create table if not exists `users`
 	dlc_flag				int unsigned 	default 0,
 	sv_coin					int unsigned 	default 0,
 	loadout_count			int unsigned default 4,
+	event_point				int unsigned not null default 0,
+	event_point_total		int unsigned not null default 0,
 	player_capacity			bigint unsigned not null default 1,
 	user_inventory			blob			default null,
 	primary key (`user_id`)
@@ -314,4 +316,13 @@ create table if not exists `challenge_task_orders`
 	primary key (`task_order_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`),
 	constraint unique_task_id unique (`task_id`, `expire_date`)
+)
+-- query:mgssd.running_events.create
+create table if not exists `running_events`
+(
+	event_id			bigint unsigned	not null	auto_increment,
+	event_type			varchar(64) not null,
+	start_date			datetime not null,
+	end_date			datetime not null,
+	primary key (`event_id`)
 )
