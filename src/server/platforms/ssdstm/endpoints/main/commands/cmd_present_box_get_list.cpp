@@ -20,7 +20,7 @@ namespace emulator::ssd
 		result["present_list"] = json::array();
 
 		const auto now = std::chrono::system_clock::now();
-		const auto list = database::present_box::get_all_items(user->current_player->get_player_id());
+		const auto list = database::present_box::get_all_items(user->get_user_id());
 
 		auto count = 0u;
 		for (auto i = 0ull; i < list.size(); i++)

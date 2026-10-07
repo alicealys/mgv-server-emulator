@@ -94,8 +94,8 @@ namespace emulator::ssd
 				const auto item = lottery->second();
 				if (!user->give_item(item, give_params, result_entry))
 				{
-					database::present_box::add_item(user->current_player->get_player_id(),
-						database::present_box::present_flag_new | database::present_box::present_flag_expire, expire_date_s, item);
+					database::present_box::add_item(user->get_user_id(),
+						database::present_box::present_flag_expire, expire_date_s, item);
 					item.to_json(present_list_j[present_list_j.size()]);
 					expire_date_j = expire_date_s.count();
 				}

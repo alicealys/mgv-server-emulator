@@ -65,7 +65,7 @@ namespace emulator::ssd
 		const auto expire_date = now + 14 * 24h;
 		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
 
-		const auto present_id = database::present_box::add_item(user->current_player->get_player_id(), 
+		const auto present_id = database::present_box::add_item(user->get_user_id(),
 			database::present_box::present_flag_expire, 
 			expire_date_s, iter->item_info, 964553496ull);
 

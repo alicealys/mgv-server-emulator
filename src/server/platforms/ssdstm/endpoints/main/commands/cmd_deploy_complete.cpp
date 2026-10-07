@@ -96,8 +96,8 @@ namespace emulator::ssd
 
 				if (!user.give_item(reward.item_info, give_params, reward_info))
 				{
-					database::present_box::add_item(user.current_player->get_player_id(),
-						database::present_box::present_flag_expire | database::present_box::present_flag_new,
+					database::present_box::add_item(user.get_user_id(),
+						database::present_box::present_flag_expire,
 						expire_date_s, reward.item_info);
 				}
 			}
@@ -126,7 +126,7 @@ namespace emulator::ssd
 		user.current_player->set_stackable_item_list(stackable_list);
 		user.current_player->set_inventory(player_inventory);
 
-		reward_info["present_box_num"] = database::present_box::get_present_count(user.current_player->get_player_id());
+		reward_info["present_box_num"] = database::present_box::get_present_count(user.get_user_id());
 		return true;
 	}
 

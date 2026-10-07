@@ -62,8 +62,7 @@ namespace emulator::ssd
 		{
 			if (!user->give_item(rewards[i], give_params, reward_info))
 			{
-				database::present_box::add_item(user->current_player->get_player_id(), 
-					database::present_box::present_flag_new | 
+				database::present_box::add_item(user->get_user_id(),
 					database::present_box::present_flag_expire, 
 					expire_date, rewards[i], text_id);
 				rewards[i].to_json(present_list[present_list.size()]);

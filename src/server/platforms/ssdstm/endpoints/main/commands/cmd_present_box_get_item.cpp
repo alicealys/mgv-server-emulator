@@ -23,7 +23,7 @@ namespace emulator::ssd
 		}
 
 		const auto now = std::chrono::system_clock::now();
-		if (item->get_player_id() != user->current_player->get_player_id() || item->get_expire_date() < now.time_since_epoch())
+		if (item->get_user_id() != user->get_user_id() || item->get_expire_date() < now.time_since_epoch())
 		{
 			return error(ERR_NOT_FOUND);
 		}

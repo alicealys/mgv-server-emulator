@@ -75,13 +75,13 @@ namespace emulator::ssd
 
 			if (!user->give_item(reward.param, give_params, rank_entry))
 			{
-				database::present_box::add_item(user->current_player->get_player_id(),
+				database::present_box::add_item(user->get_user_id(),
 					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param, text_id);
 				reward.param.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
 
-		const auto present_count = database::present_box::get_present_count(user->current_player->get_player_id());
+		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = rank; i <= 5; i++)
 		{
 			auto& rank_entry = result[i - rank];

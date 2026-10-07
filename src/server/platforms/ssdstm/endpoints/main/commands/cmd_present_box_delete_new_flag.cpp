@@ -24,7 +24,7 @@ namespace emulator::ssd
 				continue;
 			}
 
-			database::present_box::remove_new_flag(present_id);
+			database::present_box::remove_new_flag(user->get_user_id(), present_id);
 		}
 
 		return result;

@@ -147,7 +147,7 @@ create table if not exists `defense_mission_waves`
 create table if not exists `present_box_entries`
 (
 	present_id			bigint unsigned not null	auto_increment,
-	f_player_id			bigint unsigned	not null,
+	f_user_id			bigint unsigned	not null,
 	flags				int unsigned not null default 0,
 	item_category		int unsigned not null default 0,
 	item_code			int unsigned not null default 0,
@@ -160,7 +160,7 @@ create table if not exists `present_box_entries`
 	text_id				bigint unsigned not null default 0,
 	expire_date			datetime not null,
 	primary key (`present_id`),
-	foreign key (`f_player_id`) references `players`(`player_id`)
+	foreign key (`f_user_id`) references `users`(`user_id`)
 )
 -- query:mgssd.deployment_teams.create
 create table if not exists `deployment_teams`

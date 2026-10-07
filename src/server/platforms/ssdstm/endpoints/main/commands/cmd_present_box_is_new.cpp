@@ -10,7 +10,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto has_new = database::present_box::has_new_item(user->current_player->get_player_id());
+		const auto has_new = database::present_box::has_new_item(user->get_user_id());
 		result["is_new"] = std::uint8_t(has_new);
 
 		return result;

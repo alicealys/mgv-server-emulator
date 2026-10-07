@@ -27,7 +27,7 @@ namespace emulator::ssd
 
 		result["reward"]["energy"] = 0;
 		result["reward"]["kub_boost_flag"] = 0;
-		result["reward"]["present_box_num"] = database::present_box::get_present_count(user->current_player->get_player_id());
+		result["reward"]["present_box_num"] = database::present_box::get_present_count(user->get_user_id());
 		result["reward"]["battle_pack_list"] = json::array();
 		result["reward"]["nonstackable_list"] = json::array();
 		result["reward"]["present_list"] = json::array();

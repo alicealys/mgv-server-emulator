@@ -10,7 +10,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto items = database::present_box::get_all_items(user->current_player->get_player_id());
+		const auto items = database::present_box::get_all_items(user->get_user_id());
 		database::players::stackable_item_list_t stackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t inventory_info{};
@@ -56,7 +56,7 @@ namespace emulator::ssd
 		user->current_player->set_inventory_resource_list(resource_list);
 		user->current_player->set_inventory(inventory_info);
 
-		database::present_box::delete_all_items(user->current_player->get_player_id());
+		database::present_box::delete_all_items(user->get_user_id());
 
 		return result;
 	}

@@ -1471,13 +1471,13 @@ namespace database::users
 		for (const auto& player : players)
 		{
 			defense_missions::delete_player_data(player.get_player_id());
-			present_box::delete_player_data(player.get_player_id());
 			deployments::delete_player_data(player.get_player_id());
 			crew_members::delete_player_data(player.get_player_id());
 			challenge_tasks::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 
+		present_box::delete_user_data(user->get_user_id());
 		rankings::delete_user_data(user->get_user_id());
 		shop_purchases::delete_user_data(user->get_user_id());
 		delete_user_data(user->get_user_id());

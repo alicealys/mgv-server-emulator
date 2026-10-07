@@ -51,7 +51,7 @@ namespace emulator::ssd
 			reward_info["text_id"] = text_id;
 			reward_info["expire_date"] = expire_date_s.count();
 
-			database::present_box::add_item(user->current_player->get_player_id(),
+			database::present_box::add_item(user->get_user_id(),
 				database::present_box::present_flag_expire,
 				expire_date_s, item, text_id);
 
