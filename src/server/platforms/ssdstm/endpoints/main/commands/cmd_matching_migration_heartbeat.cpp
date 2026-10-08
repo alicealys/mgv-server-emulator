@@ -16,8 +16,14 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		result["roommember_heartbeat_data"] = json::array();
+
 		database::matching::set_member_migration_sequence(user->current_player->get_player_id(), migration_sequence);
 		const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (!room.has_value())
+		{
+			return result;
+		}
 
 		const auto members = database::matching::get_members(room->get_room_id());
 		for (auto i = 0ull; i < members.size(); i++)

@@ -45,6 +45,12 @@ namespace emulator::ssd
 		}
 
 		database::matching::remove_member(user->current_player->get_player_id());
+
+		if (current_room.has_value())
+		{
+			database::matching::check_close_room(current_room->get_room_id());
+		}
+
 		const auto member_id = database::matching::add_member(room->get_room_id(), user->current_player->get_player_id());
 		if (member_id == 0ull)
 		{

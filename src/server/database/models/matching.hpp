@@ -19,7 +19,7 @@ namespace database::matching
 		std::uint8_t region_matching_level;
 		data_t room_member_bin_attr_internal;
 		std::array<data_t, 2> room_searchable_bin_attr_external;
-		std::array<std::uint32_t, 16> room_searchable_int_attr_external;
+		std::array<std::int64_t, 16> room_searchable_int_attr_external;
 	};
 
 	struct search_param_t
@@ -30,7 +30,7 @@ namespace database::matching
 		std::uint32_t option;
 		std::uint8_t region_matching_level;
 		std::uint32_t start_index;
-		std::array<std::uint32_t, 16> int_attr_param;
+		std::array<std::int64_t, 16> int_attr_param;
 	};
 
 	struct set_data_external_param_t
@@ -41,7 +41,7 @@ namespace database::matching
 		};
 
 		std::array<data_t, 2> room_searchable_bin_attr_external;
-		std::array<std::uint32_t, 16> room_searchable_int_attr_external;
+		std::array<std::int64_t, 16> room_searchable_int_attr_external;
 		std::uint8_t region_matching_level;
 		std::uint64_t room_id;
 	};
@@ -114,22 +114,22 @@ namespace database::matching
 		DEFINE_FIELD(mission_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(status, sqlpp::integer_unsigned);
 		DEFINE_FIELD(password, sqlpp::text);
-		DEFINE_FIELD(int_attr_01, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_02, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_03, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_04, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_05, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_06, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_07, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_08, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_09, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_10, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_11, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_12, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_13, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_14, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_15, sqlpp::integer_unsigned);
-		DEFINE_FIELD(int_attr_16, sqlpp::integer_unsigned);
+		DEFINE_FIELD(int_attr_01, sqlpp::integer);
+		DEFINE_FIELD(int_attr_02, sqlpp::integer);
+		DEFINE_FIELD(int_attr_03, sqlpp::integer);
+		DEFINE_FIELD(int_attr_04, sqlpp::integer);
+		DEFINE_FIELD(int_attr_05, sqlpp::integer);
+		DEFINE_FIELD(int_attr_06, sqlpp::integer);
+		DEFINE_FIELD(int_attr_07, sqlpp::integer);
+		DEFINE_FIELD(int_attr_08, sqlpp::integer);
+		DEFINE_FIELD(int_attr_09, sqlpp::integer);
+		DEFINE_FIELD(int_attr_10, sqlpp::integer);
+		DEFINE_FIELD(int_attr_11, sqlpp::integer);
+		DEFINE_FIELD(int_attr_12, sqlpp::integer);
+		DEFINE_FIELD(int_attr_13, sqlpp::integer);
+		DEFINE_FIELD(int_attr_14, sqlpp::integer);
+		DEFINE_FIELD(int_attr_15, sqlpp::integer);
+		DEFINE_FIELD(int_attr_16, sqlpp::integer);
 		DEFINE_FIELD(bin_attr_01, sqlpp::text);
 		DEFINE_FIELD(bin_attr_02, sqlpp::text);
 		DEFINE_FIELD(create_date, sqlpp::time_point);
@@ -247,9 +247,11 @@ namespace database::matching
 	void update_room(const std::uint64_t room_id, const set_data_internal_param_t& param);
 
 	void close_room(const std::uint64_t room_id);
+	void check_close_room(const std::uint64_t room_id);
 	void close_room_from_owner(const std::uint64_t owner_id);
 	bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
 	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
+	void set_room_mission_id(const std::uint64_t room_id, const std::uint32_t mission_id);
 
 	std::size_t get_total_room_count();
 	std::size_t get_total_member_count();

@@ -74,11 +74,11 @@ List of implemeted/unimplemented server commands
 | CMD_MATCHING_GET_LOCK_SET_ROOM_OWNER | ❌ |  |
 | CMD_COOP_ITEM_USE | ❌ |  |
 | CMD_COOP_MISSION_END_CONFIRM | ❌ |  |
-| CMD_COOP_MISSION_START | ❌ |  |
-| CMD_COOP_MISSION_END | ❌ |  |
-| CMD_COOP_MISSION_RESULT | ❌ |  |
-| CMD_COOP_FLAG_SET | ❌ |  |
-| CMD_COOP_FLAG_RESET | ❌ |  |
+| CMD_COOP_MISSION_START | ✔️ |  |
+| CMD_COOP_MISSION_END | ✔️ |  |
+| CMD_COOP_MISSION_RESULT | ✔️ |  |
+| CMD_COOP_FLAG_SET | ✔️ |  |
+| CMD_COOP_FLAG_RESET | ✔️ |  |
 | CMD_COOP_LOBBY_END | ❌ |  |
 | CMD_CRAFT_ITEM | ✔️ |  |
 | CMD_GET_CRAFT_PARAM | ✔️ |  |

@@ -17,6 +17,11 @@ namespace emulator::ssd
 		}
 
 		const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (!room.has_value())
+		{
+			return error(ERR_ROOM_NOT_FOUND);
+		}
+
 		if (room->get_room_id() != room_id)
 		{
 			return error(ERR_NOT_FOUND);

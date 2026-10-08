@@ -341,13 +341,20 @@ namespace emulator::ssd
 			}
 		};
 
-		const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
-
-		if (story_unlock_info_j.is_object())
+		if ((tips_open_info_j.is_array() && tips_open_info_j.size()) || story_unlock_info_j.is_object())
 		{
+			const auto story_unlock_info = std::make_unique<database::players::story_unlock_info_t>();
 			user->current_player->get_story_unlock_info(*story_unlock_info);
+
 			story_unlock_info->parse(story_unlock_info_j);
 			parse_map_unlock_list(story_unlock_info_j);
+
+			if (tips_open_info_j.is_array() && tips_open_info_j.size())
+			{
+				story_unlock_info->tips_open_info.parse(tips_open_info_j[0]);
+			}
+
+			user->current_player->set_story_unlock_info(*story_unlock_info);
 		}
 
 		if (mission_info_j.is_object() || replay_mission_info_j.is_array())
@@ -492,13 +499,6 @@ namespace emulator::ssd
 			levels.parse(group_level_j);
 			user->current_player->set_crew_levels(levels);
 		}
-
-		if (tips_open_info_j.is_array() && tips_open_info_j.size())
-		{
-			story_unlock_info->tips_open_info.parse(tips_open_info_j[0]);
-		}
-
-		user->current_player->set_story_unlock_info(*story_unlock_info);
 
 		if (defense_mission_wave_result_j.is_array())
 		{

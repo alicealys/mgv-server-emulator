@@ -226,6 +226,7 @@ namespace database::players
 
 		void initialize();
 		bool parse(json::value& data);
+		bool parse_avatar_condition(json::value& data);
 		void to_json(json::value& data) const;
 	};
 

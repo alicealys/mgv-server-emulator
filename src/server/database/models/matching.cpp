@@ -340,6 +340,22 @@ namespace database::matching
 				);
 			});
 		}
+		
+		template <database_type_t Type>
+		void check_close_room(const std::uint64_t room_id)
+		{
+			return database::access([&](database_t& db)
+			{
+				const auto no_members = sqlpp::select(sqlpp::count(1))
+					.from(matching_member::table)
+						.where(matching_member::table.f_room_id == room_id) == 0;
+
+				db.exec<Type>(
+					sqlpp::remove_from(matching_room::table)
+						.where(matching_room::table.room_id == room_id && no_members)
+				);
+			});
+		}
 
 		template <database_type_t Type>
 		void close_room_from_owner(const std::uint64_t owner_id)
@@ -418,6 +434,19 @@ namespace database::matching
 				db.exec<Type>(
 					sqlpp::update(matching_room::table)
 						.set(matching_room::table.owner_id = owner_id)
+							.where(matching_room::table.room_id == room_id)
+				);
+			});
+		}
+		
+		template <database_type_t Type>
+		void set_room_mission_id(const std::uint64_t room_id, const std::uint64_t mission_id)
+		{
+			database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.mission_id = mission_id)
 							.where(matching_room::table.room_id == room_id)
 				);
 			});
@@ -621,6 +650,11 @@ namespace database::matching
 		RUN_IMPL(impl::update_room2, room_id, param);
 	}
 
+	void check_close_room(const std::uint64_t room_id)
+	{
+		RUN_IMPL(impl::check_close_room, room_id);
+	}
+
 	void close_room(const std::uint64_t room_id)
 	{
 		RUN_IMPL(impl::close_room, room_id);
@@ -639,6 +673,11 @@ namespace database::matching
 	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id)
 	{
 		RUN_IMPL(impl::set_room_owner, room_id, owner_id);
+	}
+
+	void set_room_mission_id(const std::uint64_t room_id, const std::uint32_t mission_id)
+	{
+		RUN_IMPL(impl::set_room_mission_id, room_id, mission_id);
 	}
 
 	std::size_t get_total_room_count()

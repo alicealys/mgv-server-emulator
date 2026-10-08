@@ -182,6 +182,19 @@ struct glz::meta<game::defense_mission_settings_t>
 	);
 };
 
+
+template <>
+struct glz::meta<game::coop_mission_info_t>
+{
+	using T = game::coop_mission_info_t;
+	static constexpr auto value = glz::object(
+		"waveCountMax", &T::max_wave_count,
+		"enemyLevel", &T::enemy_level,
+		"missionId", &T::mission_id,
+		"rankThreashold", &T::rank_threshold
+	);
+};
+
 namespace game
 {
 	// server
@@ -587,6 +600,11 @@ namespace game
 			}
 		}
 
+		return json::read(*this, data);
+	}
+
+	bool coop_mission_info_t::parse(json::value& data)
+	{
 		return json::read(*this, data);
 	}
 

@@ -21,8 +21,18 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
+		{
+			database::matching::migrate_room_owner(current_room->get_room_id(), current_room->get_owner_id());
+		}
+
 		database::matching::remove_member(user->current_player->get_player_id());
-		database::matching::close_room_from_owner(user->current_player->get_player_id());
+
+		if (current_room.has_value())
+		{
+			database::matching::check_close_room(current_room->get_room_id());
+		}
 
 		param.room_searchable_bin_attr_external[0].data = utils::encoding::decode_url_string(param.room_searchable_bin_attr_external[0].data);
 		param.room_searchable_bin_attr_external[1].data = utils::encoding::decode_url_string(param.room_searchable_bin_attr_external[1].data);

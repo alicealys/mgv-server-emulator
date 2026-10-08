@@ -11,4 +11,9 @@ namespace emulator::ssd
 		result["result"] = "ERR_NOTIMPLEMENTED";
 		return result;
 	}
+
+	std::uint32_t cmd_coop_item_use::flags()
+	{
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
+	}
 }

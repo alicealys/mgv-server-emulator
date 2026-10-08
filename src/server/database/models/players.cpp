@@ -815,6 +815,40 @@ namespace database::players
 		return true;
 	}
 
+	bool mission_info_t::parse_avatar_condition(json::value& data)
+	{
+		utils::json_utils::get_or(data["hunger"], this->hunger);
+		utils::json_utils::get_or(data["hunger_max_keep_time"], this->hunger_max_keep_time);
+		utils::json_utils::get_or(data["injury_whole"], this->injury_whole);
+		utils::json_utils::get_or(data["life"], this->life);
+		utils::json_utils::get_or(data["oxygen"], this->oxygen);
+		utils::json_utils::get_or(data["stamina"], this->stamina);
+		utils::json_utils::get_or(data["thirst"], this->thirst);
+		utils::json_utils::get_or(data["thirst_max_keep_time"], this->thirst_max_keep_time);
+		utils::json_utils::get_or(data["tiredness"], this->tiredness);
+
+		if (!utils::json_utils::parse_array(data["injury_part"], this->injury_part) ||
+			!utils::json_utils::parse_array(data["injury_recovery_time"], this->injury_recovery_time))
+		{
+			return false;
+		}
+
+		const auto status_buffer_iter = [](mission_info_t::status_buffer_t& dest, const json::value& src)
+		{
+			utils::json_utils::get_or(src, dest.buffer_type);
+			utils::json_utils::get_or(src, dest.remaining_time);
+		};
+
+		utils::json_utils::parse_array(data["status_buffer"], this->status_buffer, status_buffer_iter);
+
+		if (!utils::json_utils::parse_base64(data["vars"], this->vars))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	bool mission_info_t::replay_info_t::parse(json::value& data)
 	{
 		return json::read(*this, data);

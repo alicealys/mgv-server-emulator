@@ -22,6 +22,7 @@ namespace emulator::ssd
 		}
 
 		database::matching::remove_member(user->current_player->get_player_id());
+		database::matching::check_close_room(room->get_room_id());
 
 		return result;
 	}

@@ -2,7 +2,6 @@
 
 #include "cmd_event_log_send.hpp"
 
-// not implemented
 namespace emulator::ssd
 {
 	json::value cmd_event_log_send::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -14,8 +13,6 @@ namespace emulator::ssd
 		{
 			return error(ERR_INVALIDARG);
 		}
-
-		result["result"] = "ERR_NOTIMPLEMENTED";
 
 		return result;
 	}
