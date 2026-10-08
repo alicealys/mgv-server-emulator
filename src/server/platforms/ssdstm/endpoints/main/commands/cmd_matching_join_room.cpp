@@ -39,6 +39,11 @@ namespace emulator::ssd
 			return error(ERR_ALREADYINROOM);
 		}
 
+		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
+		{
+			database::matching::migrate_room_owner(current_room->get_room_id(), current_room->get_owner_id());
+		}
+
 		database::matching::remove_member(user->current_player->get_player_id());
 		const auto member_id = database::matching::add_member(room->get_room_id(), user->current_player->get_player_id());
 		if (member_id == 0ull)

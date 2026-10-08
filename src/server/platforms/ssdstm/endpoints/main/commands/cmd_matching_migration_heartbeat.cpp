@@ -2,13 +2,33 @@
 
 #include "cmd_matching_migration_heartbeat.hpp"
 
-// not implemented
+#include "database/models/matching.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_matching_migration_heartbeat::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
-		result["result"] = "ERR_NOTIMPLEMENTED";
+
+		std::uint32_t migration_sequence{};
+		if (!json::read(migration_sequence, data["migration_sequence"]))
+		{
+			return error(ERR_INVALIDARG);
+		}
+
+		database::matching::set_member_migration_sequence(user->current_player->get_player_id(), migration_sequence);
+		const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
+
+		const auto members = database::matching::get_members(room->get_room_id());
+		for (auto i = 0ull; i < members.size(); i++)
+		{
+			auto& member_data = result["roommember_heartbeat_data"][i];
+			member_data["player_id"] = members[i].get_player_id();
+			member_data["first_party_id"] = members[i].get_account_id();
+			member_data["past_time"] = members[i].get_past_time();
+			member_data["migration_sequence"] = members[i].get_migration_sequence();
+		}
+
 		return result;
 	}
 

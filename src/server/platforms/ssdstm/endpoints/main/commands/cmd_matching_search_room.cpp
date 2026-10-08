@@ -11,7 +11,7 @@ namespace emulator::ssd
 		json::value result;
 
 		database::matching::search_param_t param{};
-		if (!json::read(param, data) || param.max > 16u)
+		if (!json::read(param, data["search_param"]) || param.max > 16u)
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -23,6 +23,14 @@ namespace emulator::ssd
 			if (!owner_user.has_value())
 			{
 				continue;
+			}
+
+			console::debug("search room found with params: \n");
+			console::debug("\tflag_attr: %u %u\n", param.flag_attr, rooms[i].get_flag_attr());
+			console::debug("\tflag_filter: %u %u\n", param.flag_filter, rooms[i].get_flag_filter());
+			for (auto o = 0; o < 16; o++)
+			{
+				console::debug("\tint_attr[%i]: %u %u\n", o, param.int_attr_param[o], rooms[i].int_attr[o]);
 			}
 
 			const auto members = database::matching::get_members(rooms[i].get_room_id());
@@ -39,7 +47,7 @@ namespace emulator::ssd
 			entry["member_num"] = members.size();
 			entry["reserve_num"] = 0;
 			entry["flag_attr"] = rooms[i].get_flag_attr();
-			entry["enable_password"] = !password.empty();
+			entry["enable_password"] = std::uint8_t(!password.empty());
 
 			entry["room_searchable_int_attr_external"] = json::array();
 			entry["room_searchable_bin_attr_external"] = json::array();

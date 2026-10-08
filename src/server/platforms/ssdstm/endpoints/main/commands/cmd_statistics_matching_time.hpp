@@ -14,7 +14,7 @@ namespace emulator::ssd
 			std::uint32_t region_level;
 			std::uint32_t room_id;
 			std::uint32_t rtt_reject;
-			std::uint32_t search_num;
+			std::int32_t search_num;
 		};
 
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;

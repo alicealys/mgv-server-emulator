@@ -4,7 +4,7 @@
 
 namespace database::matching
 {
-	constexpr const auto max_room_members = 4u;
+	constexpr const auto max_room_members = 5u;
 
 	struct create_param_t
 	{
@@ -30,7 +30,7 @@ namespace database::matching
 		std::uint32_t option;
 		std::uint8_t region_matching_level;
 		std::uint32_t start_index;
-		std::array<std::uint32_t, 16> room_searchable_int_attr_external;
+		std::array<std::uint32_t, 16> int_attr_param;
 	};
 
 	struct set_data_external_param_t
@@ -59,10 +59,16 @@ namespace database::matching
 		DEFINE_FIELD(member_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(f_room_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(f_player_id, sqlpp::integer_unsigned);
+		DEFINE_FIELD(member_data, sqlpp::text);
+		DEFINE_FIELD(migration_sequence, sqlpp::integer_unsigned);
+		DEFINE_FIELD(create_date, sqlpp::time_point);
 		DEFINE_TABLE(matching_members,
 			member_id_field_t,
 			f_room_id_field_t,
-			f_player_id_field_t
+			f_player_id_field_t,
+			member_data_field_t,
+			migration_sequence_field_t,
+			create_date_field_t
 		);
 
 		inline static table_t table;
@@ -73,11 +79,27 @@ namespace database::matching
 			this->member_id_ = row.member_id;
 			this->room_id_ = row.f_room_id;
 			this->player_id_ = row.f_player_id;
+			this->member_data_ = row.member_data;
+			this->user_id_ = row.user_id;
+			this->account_id_ = row.account_id;
+			this->ex_ip_ = row.ex_ip.value();
+			this->ex_port_ = static_cast<std::uint16_t>(row.ex_port);
+			this->migration_sequence_ = static_cast<std::uint32_t>(row.migration_sequence);
+			this->create_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.create_date.value().time_since_epoch());
 		}
 
 		GET_FIELD_H(std::uint64_t, member_id);
 		GET_FIELD_H(std::uint64_t, room_id);
 		GET_FIELD_H(std::uint64_t, player_id);
+		GET_FIELD_H(std::uint64_t, account_id);
+		GET_FIELD_H(std::uint64_t, user_id);
+		GET_FIELD_H(std::uint16_t, ex_port);
+		GET_FIELD_H(std::uint32_t, migration_sequence);
+		GET_FIELD_H(std::string, ex_ip);
+		GET_FIELD_H(std::string, member_data);
+		GET_FIELD_H(std::chrono::seconds, create_date);
+
+		std::chrono::seconds get_past_time() const;
 	};
 
 	class matching_room
@@ -89,6 +111,9 @@ namespace database::matching
 		DEFINE_FIELD(region_matching_level, sqlpp::integer_unsigned);
 		DEFINE_FIELD(flag_attr, sqlpp::integer_unsigned);
 		DEFINE_FIELD(flag_filter, sqlpp::integer_unsigned);
+		DEFINE_FIELD(mission_id, sqlpp::integer_unsigned);
+		DEFINE_FIELD(status, sqlpp::integer_unsigned);
+		DEFINE_FIELD(password, sqlpp::text);
 		DEFINE_FIELD(int_attr_01, sqlpp::integer_unsigned);
 		DEFINE_FIELD(int_attr_02, sqlpp::integer_unsigned);
 		DEFINE_FIELD(int_attr_03, sqlpp::integer_unsigned);
@@ -105,7 +130,8 @@ namespace database::matching
 		DEFINE_FIELD(int_attr_14, sqlpp::integer_unsigned);
 		DEFINE_FIELD(int_attr_15, sqlpp::integer_unsigned);
 		DEFINE_FIELD(int_attr_16, sqlpp::integer_unsigned);
-		DEFINE_FIELD(password, sqlpp::text);
+		DEFINE_FIELD(bin_attr_01, sqlpp::text);
+		DEFINE_FIELD(bin_attr_02, sqlpp::text);
 		DEFINE_FIELD(create_date, sqlpp::time_point);
 		DEFINE_TABLE(matching_rooms,
 			room_id_field_t,
@@ -114,6 +140,9 @@ namespace database::matching
 			region_matching_level_field_t,
 			flag_attr_field_t,
 			flag_filter_field_t,
+			mission_id_field_t,
+			status_field_t,
+			password_field_t,
 			int_attr_01_field_t,
 			int_attr_02_field_t,
 			int_attr_03_field_t,
@@ -130,7 +159,8 @@ namespace database::matching
 			int_attr_14_field_t,
 			int_attr_15_field_t,
 			int_attr_16_field_t,
-			password_field_t,
+			bin_attr_01_field_t,
+			bin_attr_02_field_t,
 			create_date_field_t
 		);
 
@@ -145,6 +175,8 @@ namespace database::matching
 			this->region_matching_level_ = static_cast<std::uint8_t>(row.region_matching_level);
 			this->flag_attr_ = static_cast<std::uint8_t>(row.flag_attr);
 			this->flag_filter_ = static_cast<std::uint8_t>(row.flag_filter);
+			this->mission_id_ = static_cast<std::uint32_t>(row.mission_id);
+			this->status_ = static_cast<std::uint32_t>(row.status);
 			this->password_ = row.password;
 			this->int_attr[0] = static_cast<std::uint32_t>(row.int_attr_01);
 			this->int_attr[1] = static_cast<std::uint32_t>(row.int_attr_02);
@@ -162,6 +194,8 @@ namespace database::matching
 			this->int_attr[13] = static_cast<std::uint32_t>(row.int_attr_14);
 			this->int_attr[14] = static_cast<std::uint32_t>(row.int_attr_15);
 			this->int_attr[15] = static_cast<std::uint32_t>(row.int_attr_16);
+			this->bin_attr[0] = row.bin_attr_01.value();
+			this->bin_attr[1] = row.bin_attr_02.value();
 			this->create_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.create_date.value().time_since_epoch());
 		}
 
@@ -171,6 +205,8 @@ namespace database::matching
 		GET_FIELD_H(std::uint8_t, region_matching_level);
 		GET_FIELD_H(std::uint8_t, flag_attr);
 		GET_FIELD_H(std::uint8_t, flag_filter);
+		GET_FIELD_H(std::uint32_t, mission_id);
+		GET_FIELD_H(std::uint32_t, status);
 		GET_FIELD_H(std::string, password);
 		GET_FIELD_H(std::int32_t, int_attr_01);
 		GET_FIELD_H(std::int32_t, int_attr_02);
@@ -191,6 +227,7 @@ namespace database::matching
 		GET_FIELD_H(std::chrono::seconds, create_date);
 
 		std::array<std::uint32_t, 16> int_attr{};
+		std::array<std::string, 2> bin_attr{};
 
 	};
 
@@ -202,8 +239,18 @@ namespace database::matching
 	std::vector<matching_member> get_members(const std::uint64_t room_id);
 	void remove_member(const std::uint64_t room_id, const std::uint64_t player_id);
 	void remove_member(const std::uint64_t player_id);
-	std::uint64_t add_member(const std::uint64_t room_id, const std::uint64_t player_id);
+	std::uint64_t add_member(const std::uint64_t room_id, const std::uint64_t player_id, const std::string& data = {});
+	void set_member_data(const std::uint64_t player_id, const std::string& data);
+	void set_member_migration_sequence(const std::uint64_t player_id, const std::uint32_t migration_sequence);
 
 	void update_room(const std::uint64_t room_id, const set_data_external_param_t& param);
 	void update_room(const std::uint64_t room_id, const set_data_internal_param_t& param);
+
+	void close_room(const std::uint64_t room_id);
+	void close_room_from_owner(const std::uint64_t owner_id);
+	bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
+	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
+
+	std::size_t get_total_room_count();
+	std::size_t get_total_member_count();
 }

@@ -10,13 +10,13 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		database::matching::set_data_external_param_t param{};
-		if (!json::read(param, data["room_data"]))
+		param_t param{};
+		if (!json::read(param, data))
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto room = database::matching::get_room(param.room_id);
+		const auto room = database::matching::get_room(param.room_data.room_id);
 		if (!room.has_value())
 		{
 			return error(ERR_ROOM_NOT_FOUND);
@@ -27,13 +27,28 @@ namespace emulator::ssd
 			return error(ERR_PERMISSION_DENIED);
 		}
 
-		auto& int_attr = data["room_data"]["room_searchable_int_attr_external"];
-		if (!int_attr.is_array())
+		database::matching::set_data_external_param_t update_param{};
+		std::memcpy(update_param.room_searchable_int_attr_external.data(), room->int_attr.data(), room->int_attr.size() * sizeof(std::int32_t));
+		update_param.room_searchable_bin_attr_external[0].data = room->bin_attr[0];
+		update_param.room_searchable_bin_attr_external[1].data = room->bin_attr[1];
+
+		for (const auto& entry : param.room_data.room_searchable_int_attr_external)
 		{
-			std::memcpy(param.room_searchable_int_attr_external.data(), room->int_attr.data(), room->int_attr.size() * sizeof(std::int32_t));
+			if (entry.index < update_param.room_searchable_int_attr_external.size())
+			{
+				update_param.room_searchable_int_attr_external[entry.index] = entry.value;
+			}
 		}
 
-		database::matching::update_room(room->get_room_id(), param);
+		for (const auto& entry : param.room_data.room_searchable_bin_attr_external)
+		{
+			if (entry.index < update_param.room_searchable_bin_attr_external.size())
+			{
+				update_param.room_searchable_bin_attr_external[entry.index].data = utils::encoding::decode_url_string(entry.data);
+			}
+		}
+
+		database::matching::update_room(room->get_room_id(), update_param);
 
 		return result;
 	}

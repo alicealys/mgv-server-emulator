@@ -372,11 +372,13 @@ set ranking.player_rank = ranked.new_rank, ranking.player_rank_number = new_rank
 create table if not exists `matching_rooms`
 (
 	room_id					bigint unsigned	not null	auto_increment,
-	owner_id				bigint unsigned	not null,
+	owner_id				bigint unsigned	not null	unique,
 	max_slot				int unsigned	not null,
 	region_matching_level	int unsigned	not null,
 	flag_attr				int unsigned	not null,
 	flag_filter				int unsigned	not null,
+	mission_id				int unsigned	not null default 0,
+	status					int unsigned	not null default 0,
 	password				varchar(64)	default null,
 	int_attr_01				int unsigned not null default 0,
 	int_attr_02				int unsigned not null default 0,
@@ -394,6 +396,8 @@ create table if not exists `matching_rooms`
 	int_attr_14				int unsigned not null default 0,
 	int_attr_15				int unsigned not null default 0,
 	int_attr_16				int unsigned not null default 0,
+	bin_attr_01				varchar(512) default null,
+	bin_attr_02				varchar(512) default null,
 	create_date				datetime not null,
 	primary key (`room_id`),
 	foreign key (`owner_id`) references `players`(`player_id`)
@@ -404,6 +408,9 @@ create table if not exists `matching_members`
 	member_id			bigint unsigned	not null	auto_increment,
 	f_room_id			bigint unsigned	not null,
 	f_player_id			bigint unsigned	not null	unique,
+	migration_sequence	int unsigned	default 0,
+	member_data			varchar(256) default null,
+	create_date			datetime not null,
 	primary key (`member_id`),
 	foreign key (`f_room_id`) references `matching_rooms`(`room_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)

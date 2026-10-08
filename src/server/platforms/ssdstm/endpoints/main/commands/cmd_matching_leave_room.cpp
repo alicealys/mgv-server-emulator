@@ -10,6 +10,17 @@ namespace emulator::ssd
 	{
 		json::value result;
 
+		const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (!room.has_value())
+		{
+			return result;
+		}
+
+		if (room->get_owner_id() == user->current_player->get_player_id())
+		{
+			database::matching::migrate_room_owner(room->get_room_id(), room->get_owner_id());
+		}
+
 		database::matching::remove_member(user->current_player->get_player_id());
 
 		return result;

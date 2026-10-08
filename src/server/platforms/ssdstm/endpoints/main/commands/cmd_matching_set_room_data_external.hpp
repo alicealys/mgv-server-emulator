@@ -9,6 +9,20 @@ namespace emulator::ssd
 		{
 			struct room_data_t
 			{
+				struct int_entry_t
+				{
+					std::uint8_t index;
+					std::uint32_t value;
+				};
+
+				struct bin_entry_t
+				{
+					std::uint8_t index;
+					std::string data;
+				};
+
+				std::vector<bin_entry_t> room_searchable_bin_attr_external;
+				std::vector<int_entry_t> room_searchable_int_attr_external;
 				std::uint8_t region_matching_level;
 				std::uint64_t room_id;
 			};
