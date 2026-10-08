@@ -1,0 +1,359 @@
+#include <std_include.hpp>
+
+#include "matching.hpp"
+#include "../auth.hpp"
+
+#include <utils/cryptography.hpp>
+#include <utils/string.hpp>
+
+namespace database::matching
+{
+	GET_FIELD_C(matching_member, std::uint64_t, member_id);
+	GET_FIELD_C(matching_member, std::uint64_t, room_id);
+	GET_FIELD_C(matching_member, std::uint64_t, player_id);
+
+	GET_FIELD_C(matching_room, std::uint64_t, room_id);
+	GET_FIELD_C(matching_room, std::uint64_t, owner_id);
+	GET_FIELD_C(matching_room, std::uint8_t, max_slot);
+	GET_FIELD_C(matching_room, std::uint8_t, region_matching_level);
+	GET_FIELD_C(matching_room, std::uint8_t, flag_attr);
+	GET_FIELD_C(matching_room, std::uint8_t, flag_filter);
+	GET_FIELD_C(matching_room, std::string, password);
+	GET_FIELD_C(matching_room, std::chrono::seconds, create_date);
+
+	namespace impl
+	{
+		template <database_type_t Type>
+		std::uint64_t create_room(const std::uint64_t owner_id, const create_param_t& param)
+		{
+			return database::access<std::uint64_t>([&](database_t& db)
+			{
+				auto result = db.exec<Type>(
+					sqlpp::insert_into(matching_room::table)
+						.set(matching_room::table.owner_id = owner_id,
+							 matching_room::table.max_slot = param.max_slot,
+							 matching_room::table.region_matching_level = param.region_matching_level,
+							 matching_room::table.flag_attr = param.flag_attr,
+							 matching_room::table.int_attr_01 = param.room_searchable_int_attr_external[0],
+							 matching_room::table.int_attr_02 = param.room_searchable_int_attr_external[1],
+							 matching_room::table.int_attr_03 = param.room_searchable_int_attr_external[2],
+							 matching_room::table.int_attr_04 = param.room_searchable_int_attr_external[3],
+							 matching_room::table.int_attr_05 = param.room_searchable_int_attr_external[4],
+							 matching_room::table.int_attr_06 = param.room_searchable_int_attr_external[5],
+							 matching_room::table.int_attr_07 = param.room_searchable_int_attr_external[6],
+							 matching_room::table.int_attr_08 = param.room_searchable_int_attr_external[7],
+							 matching_room::table.int_attr_09 = param.room_searchable_int_attr_external[8],
+							 matching_room::table.int_attr_10 = param.room_searchable_int_attr_external[9],
+							 matching_room::table.int_attr_11 = param.room_searchable_int_attr_external[10],
+							 matching_room::table.int_attr_12 = param.room_searchable_int_attr_external[11],
+							 matching_room::table.int_attr_13 = param.room_searchable_int_attr_external[12],
+							 matching_room::table.int_attr_14 = param.room_searchable_int_attr_external[13],
+							 matching_room::table.int_attr_15 = param.room_searchable_int_attr_external[14],
+							 matching_room::table.int_attr_16 = param.room_searchable_int_attr_external[15],
+							 matching_room::table.create_date = std::chrono::system_clock::now()
+						));
+				return result;
+			});
+		}
+
+		template <database_type_t Type>
+		std::optional<matching_room> get_room(const std::uint64_t room_id)
+		{
+			return database::access<std::optional<matching_room>>([&](database_t& db)
+				-> std::optional<matching_room>
+			{
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::all_of(matching_room::table))
+						.from(matching_room::table)
+							.where(matching_room::table.room_id == room_id)
+				);
+
+				std::optional<matching_room> list;
+
+				if (!results.empty())
+				{
+					list.emplace(results.front());
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::optional<matching_room> get_room_from_member(const std::uint64_t player_id)
+		{
+			return database::access<std::optional<matching_room>>([&](database_t& db)
+				-> std::optional<matching_room>
+			{
+				const auto joined_tables = matching_room::table.join(matching_member::table)
+					.on(matching_room::table.room_id == matching_member::table.f_room_id);
+
+				const auto matching_member = 
+					sqlpp::select(sqlpp::all_of(matching_room::table))
+						.from(joined_tables)
+							.where(matching_member::table.f_player_id == player_id).limit(1u);
+
+				auto results = db.exec<Type>(matching_member);
+
+				std::optional<matching_room> list;
+
+				if (!results.empty())
+				{
+					list.emplace(results.front());
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::vector<matching_room> search_rooms(const std::uint64_t player_id, const search_param_t& param)
+		{
+			return database::access<std::vector<matching_room>>([&](database_t& db)
+				-> std::vector<matching_room>
+			{
+				const auto joined_tables = matching_room::table.join(matching_member::table)
+					.on(matching_room::table.room_id == matching_member::table.f_room_id);
+
+				const auto member_count_cond = 
+					sqlpp::select(sqlpp::count(1))
+						.from(matching_member::table)
+							.where(matching_member::table.f_room_id == matching_room::table.room_id) < matching_room::table.max_slot;
+				
+				const auto different_member_cond = 
+					sqlpp::select(sqlpp::count(1))
+						.from(matching_member::table)
+							.where(matching_member::table.f_player_id == player_id) == 0;
+
+				const auto search_rooms = 
+					sqlpp::select(sqlpp::all_of(matching_room::table))
+						.from(joined_tables)
+							.where(member_count_cond && different_member_cond && 
+								   matching_room::table.region_matching_level == param.region_matching_level)
+								.limit(param.max);
+
+				auto results = db.exec<Type>(search_rooms);
+
+				std::vector<matching_room> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::vector<matching_member> get_members(const std::uint64_t room_id)
+		{
+			return database::access<std::vector<matching_member>>([&](database_t& db)
+				-> std::vector<matching_member>
+			{
+				const auto joined_tables = matching_room::table.join(matching_member::table)
+					.on(matching_room::table.room_id == matching_member::table.f_room_id);
+
+				auto results = db.exec<Type>(
+					sqlpp::select(sqlpp::all_of(matching_member::table))
+						.from(joined_tables)
+							.where(matching_room::table.room_id == room_id)
+				);
+
+				std::vector<matching_member> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		void remove_member1(const std::uint64_t room_id, const std::uint64_t player_id)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::remove_from(matching_member::table)
+						.where(matching_member::table.f_room_id == room_id && matching_member::table.f_player_id == player_id)
+				);
+			});
+		}
+		
+		template <database_type_t Type>
+		void remove_member2(const std::uint64_t player_id)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::remove_from(matching_member::table)
+						.where(matching_member::table.f_player_id == player_id)
+				);
+			});
+		}
+
+		template <database_type_t Type>
+		std::uint64_t add_member(const std::uint64_t room_id, const std::uint64_t player_id)
+		{
+			return database::access<std::uint64_t>([&](database_t& db)
+			{
+				return db.exec<Type>(
+					sqlpp::insert_into(matching_member::table)
+						.set(matching_member::table.f_room_id = room_id, 
+							 matching_member::table.f_player_id = player_id)
+				);
+			});
+		}
+
+		template <database_type_t Type>
+		void update_room1(const std::uint64_t room_id, const set_data_external_param_t& param)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.region_matching_level = param.region_matching_level,
+							 matching_room::table.int_attr_01 = param.room_searchable_int_attr_external[0],
+							 matching_room::table.int_attr_02 = param.room_searchable_int_attr_external[1],
+							 matching_room::table.int_attr_03 = param.room_searchable_int_attr_external[2],
+							 matching_room::table.int_attr_04 = param.room_searchable_int_attr_external[3],
+							 matching_room::table.int_attr_05 = param.room_searchable_int_attr_external[4],
+							 matching_room::table.int_attr_06 = param.room_searchable_int_attr_external[5],
+							 matching_room::table.int_attr_07 = param.room_searchable_int_attr_external[6],
+							 matching_room::table.int_attr_08 = param.room_searchable_int_attr_external[7],
+							 matching_room::table.int_attr_09 = param.room_searchable_int_attr_external[8],
+							 matching_room::table.int_attr_10 = param.room_searchable_int_attr_external[9],
+							 matching_room::table.int_attr_11 = param.room_searchable_int_attr_external[10],
+							 matching_room::table.int_attr_12 = param.room_searchable_int_attr_external[11],
+							 matching_room::table.int_attr_13 = param.room_searchable_int_attr_external[12],
+							 matching_room::table.int_attr_14 = param.room_searchable_int_attr_external[13],
+							 matching_room::table.int_attr_15 = param.room_searchable_int_attr_external[14],
+							 matching_room::table.int_attr_16 = param.room_searchable_int_attr_external[15])
+								.where(matching_room::table.room_id == room_id)
+				);
+			});
+		}
+
+		template <database_type_t Type>
+		void update_room2(const std::uint64_t room_id, const set_data_internal_param_t& param)
+		{
+			return database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.flag_attr = param.flag_attr,
+							 matching_room::table.flag_filter = param.flag_filter)
+								.where(matching_room::table.room_id == room_id)
+				);
+			});
+		}
+
+		template <database_type_t Type>
+		void delete_empty_rooms(database_t& db)
+		{
+			if constexpr (Type == database_mysql)
+			{
+				const auto active_rooms =
+					sqlpp::select(matching_member::table.f_room_id)
+						.from(matching_member::table)
+							.unconditionally()
+								.group_by(matching_member::table.f_room_id)
+									.as(sqlpp::alias::x);
+
+				db.exec<Type>(
+					sqlpp::remove_from(matching_room::table)
+						.using_(matching_room::table.left_outer_join(active_rooms)
+							.on(matching_room::table.room_id == active_rooms.f_room_id))
+								.where(active_rooms.f_room_id.is_null() && 
+									   matching_room::table.create_date < std::chrono::system_clock::now() - 10s)
+				);
+			}
+			else
+			{
+				const auto active_rooms =
+					sqlpp::select(matching_member::table.f_room_id)
+						.from(matching_member::table)
+							.unconditionally()
+								.group_by(matching_member::table.f_room_id);
+
+				db.exec<Type>(sqlpp::remove_from(matching_room::table)
+					.where(matching_room::table.room_id.not_in(active_rooms)));
+			}
+		}
+	}
+
+	std::uint64_t create_room(const std::uint64_t owner_id, const create_param_t& param)
+	{
+		RUN_IMPL(impl::create_room, owner_id, param);
+	}
+
+	std::optional<matching_room> get_room(const std::uint64_t room_id)
+	{
+		RUN_IMPL(impl::get_room, room_id);
+	}
+
+	std::optional<matching_room> get_room_from_member(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::get_room_from_member, player_id);
+	}
+
+	std::vector<matching_room> search_rooms(const std::uint64_t player_id, const search_param_t& param)
+	{
+		RUN_IMPL(impl::search_rooms, player_id, param);
+	}
+
+	std::vector<matching_member> get_members(const std::uint64_t room_id)
+	{
+		RUN_IMPL(impl::get_members, room_id);
+	}
+
+	void delete_empty_rooms(database_t& db)
+	{
+		RUN_IMPL(impl::delete_empty_rooms, db);
+	}
+
+	void remove_member(const std::uint64_t room_id, const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::remove_member1, room_id, player_id);
+	}
+
+	void remove_member(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::remove_member2, player_id);
+	}
+
+	std::uint64_t add_member(const std::uint64_t room_id, const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::add_member, room_id, player_id);
+	}
+
+	void update_room(const std::uint64_t room_id, const set_data_external_param_t& param)
+	{
+		RUN_IMPL(impl::update_room1, room_id, param);
+	}
+
+	void update_room(const std::uint64_t room_id, const set_data_internal_param_t& param)
+	{
+		RUN_IMPL(impl::update_room2, room_id, param);
+	}
+
+	class table final : public table_interface
+	{
+	public:
+		void create(database_t& database) override
+		{
+			database.run_query("mgssd.matching_rooms.create");
+			database.run_query("mgssd.matching_members.create");
+		}
+
+		void run_tasks(database_t& database) override
+		{
+			delete_empty_rooms(database);
+		}
+	};
+}
+
+REGISTER_TABLE(database::matching::table, -1)

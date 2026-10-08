@@ -368,3 +368,43 @@ join (
 ) ranked
 on ranking.f_user_id = ranked.f_user_id AND ranking.ranking_type = ranked.ranking_type
 set ranking.player_rank = ranked.new_rank, ranking.player_rank_number = new_rank_number;
+-- query:mgssd.matching_rooms.create
+create table if not exists `matching_rooms`
+(
+	room_id					bigint unsigned	not null	auto_increment,
+	owner_id				bigint unsigned	not null,
+	max_slot				int unsigned	not null,
+	region_matching_level	int unsigned	not null,
+	flag_attr				int unsigned	not null,
+	flag_filter				int unsigned	not null,
+	password				varchar(64)	default null,
+	int_attr_01				int unsigned not null default 0,
+	int_attr_02				int unsigned not null default 0,
+	int_attr_03				int unsigned not null default 0,
+	int_attr_04				int unsigned not null default 0,
+	int_attr_05				int unsigned not null default 0,
+	int_attr_06				int unsigned not null default 0,
+	int_attr_07				int unsigned not null default 0,
+	int_attr_08				int unsigned not null default 0,
+	int_attr_09				int unsigned not null default 0,
+	int_attr_10				int unsigned not null default 0,
+	int_attr_11				int unsigned not null default 0,
+	int_attr_12				int unsigned not null default 0,
+	int_attr_13				int unsigned not null default 0,
+	int_attr_14				int unsigned not null default 0,
+	int_attr_15				int unsigned not null default 0,
+	int_attr_16				int unsigned not null default 0,
+	create_date				datetime not null,
+	primary key (`room_id`),
+	foreign key (`owner_id`) references `players`(`player_id`)
+)
+-- query:mgssd.matching_members.create
+create table if not exists `matching_members`
+(
+	member_id			bigint unsigned	not null	auto_increment,
+	f_room_id			bigint unsigned	not null,
+	f_player_id			bigint unsigned	not null	unique,
+	primary key (`member_id`),
+	foreign key (`f_room_id`) references `matching_rooms`(`room_id`),
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)

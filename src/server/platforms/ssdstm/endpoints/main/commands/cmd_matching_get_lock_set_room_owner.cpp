@@ -11,4 +11,9 @@ namespace emulator::ssd
 		result["result"] = "ERR_NOTIMPLEMENTED";
 		return result;
 	}
+
+	std::uint32_t cmd_matching_get_lock_set_room_owner::flags()
+	{
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
+	}
 }

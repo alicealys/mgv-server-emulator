@@ -504,6 +504,24 @@ namespace database::users
 				return {user(row)};
 			});
 		}
+		
+		template <database_type_t Type>
+		std::optional<user> find_from_current_player(const std::uint64_t player_id)
+		{
+			return database::access<std::optional<user>>([&](database::database_t& db)
+				-> std::optional<user>
+			{
+				auto results = db.exec<Type>(exp::select.where(user::table.current_player_id == player_id));
+
+				if (results.empty())
+				{
+					return {};
+				}
+
+				const auto& row = results.front();
+				return {user(row)};
+			});
+		}
 
 		template <database_type_t Type>
 		std::optional<user> find_from_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
@@ -1394,6 +1412,11 @@ namespace database::users
 	std::optional<user> find_from_account(const std::uint64_t account_id)
 	{
 		RUN_IMPL(impl::find_from_account, account_id);
+	}
+
+	std::optional<user> find_from_current_player(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::find_from_current_player, player_id);
 	}
 
 	std::optional<user> find_from_session_id(const std::string session_id, bool use_timeout, bool* is_expired)
