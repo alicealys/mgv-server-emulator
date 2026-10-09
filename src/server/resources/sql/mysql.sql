@@ -379,6 +379,7 @@ create table if not exists `matching_rooms`
 	flag_filter				int unsigned	not null,
 	mission_id				int unsigned	not null default 0,
 	status					int unsigned	not null default 0,
+	reserve_num				int unsigned	not null default 0,
 	password				varchar(64)	default null,
 	int_attr_01				bigint not null default 0,
 	int_attr_02				bigint not null default 0,

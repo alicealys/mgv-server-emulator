@@ -2,13 +2,21 @@
 
 #include "cmd_coop_mission_end.hpp"
 
-// not implemented
+#include "database/models/matching.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_coop_mission_end::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
-		result["result"] = "ERR_NOTIMPLEMENTED";
+
+		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
+		{
+			database::matching::set_room_mission_id(current_room->get_room_id(), 0);
+			database::matching::set_room_status(current_room->get_room_id(), database::matching::status_mission_end);
+		}
+
 		return result;
 	}
 

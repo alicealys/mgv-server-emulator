@@ -28,7 +28,7 @@ namespace emulator::ssd
 		}
 
 		database::matching::set_data_external_param_t update_param{};
-		std::memcpy(update_param.room_searchable_int_attr_external.data(), room->int_attr.data(), room->int_attr.size() * sizeof(std::int32_t));
+		std::memcpy(update_param.room_searchable_int_attr_external.data(), room->int_attr.data(), room->int_attr.size() * sizeof(std::int64_t));
 		update_param.room_searchable_bin_attr_external[0].data = room->bin_attr[0];
 		update_param.room_searchable_bin_attr_external[1].data = room->bin_attr[1];
 

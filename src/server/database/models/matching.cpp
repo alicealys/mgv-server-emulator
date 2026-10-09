@@ -135,7 +135,8 @@ namespace database::matching
 				auto not_full = 
 					sqlpp::select(sqlpp::count(1))
 						.from(matching_member::table)
-							.where(matching_member::table.f_room_id == matching_room::table.room_id) < matching_room::table.max_slot;
+							.where(matching_member::table.f_room_id == matching_room::table.room_id) 
+								+ matching_room::table.reserve_num < matching_room::table.max_slot;
 				
 				auto not_member_of = 
 					sqlpp::select(sqlpp::count(1))
@@ -161,6 +162,8 @@ namespace database::matching
 					//matching_room::table.int_attr_15 == param.int_attr_param[14] &&
 					//matching_room::table.int_attr_16 == param.int_attr_param[15]
 				;
+
+				auto status_match = matching_room::table.status == static_cast<std::uint32_t>(status_init);
 
 				auto region_match = matching_room::table.region_matching_level <= param.region_matching_level;
 
@@ -438,7 +441,7 @@ namespace database::matching
 				);
 			});
 		}
-		
+
 		template <database_type_t Type>
 		void set_room_mission_id(const std::uint64_t room_id, const std::uint64_t mission_id)
 		{
@@ -447,6 +450,32 @@ namespace database::matching
 				db.exec<Type>(
 					sqlpp::update(matching_room::table)
 						.set(matching_room::table.mission_id = mission_id)
+							.where(matching_room::table.room_id == room_id)
+				);
+			});
+		}
+
+		template <database_type_t Type>
+		void set_room_status(const std::uint64_t room_id, const std::uint64_t status)
+		{
+			database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.status = status)
+							.where(matching_room::table.room_id == room_id)
+				);
+			});
+		}
+		
+		template <database_type_t Type>
+		void set_room_reserve_num(const std::uint64_t room_id, const std::uint8_t reserve_num)
+		{
+			database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.reserve_num = reserve_num)
 							.where(matching_room::table.room_id == room_id)
 				);
 			});
@@ -678,6 +707,16 @@ namespace database::matching
 	void set_room_mission_id(const std::uint64_t room_id, const std::uint32_t mission_id)
 	{
 		RUN_IMPL(impl::set_room_mission_id, room_id, mission_id);
+	}
+
+	void set_room_status(const std::uint64_t room_id, const std::uint32_t status)
+	{
+		RUN_IMPL(impl::set_room_status, room_id, status);
+	}
+
+	void set_room_reserve_num(const std::uint64_t room_id, const std::uint8_t num)
+	{
+		RUN_IMPL(impl::set_room_reserve_num, room_id, num);
 	}
 
 	std::size_t get_total_room_count()

@@ -53,6 +53,14 @@ namespace database::matching
 		std::uint64_t room_id;
 	};
 
+	enum room_status_t : std::uint32_t
+	{
+		status_init = 0,
+		status_mission_start = 1,
+		status_mission_end_confirm = 2,
+		status_mission_end = 3,
+	};
+
 	class matching_member
 	{
 	public:
@@ -113,6 +121,7 @@ namespace database::matching
 		DEFINE_FIELD(flag_filter, sqlpp::integer_unsigned);
 		DEFINE_FIELD(mission_id, sqlpp::integer_unsigned);
 		DEFINE_FIELD(status, sqlpp::integer_unsigned);
+		DEFINE_FIELD(reserve_num, sqlpp::integer_unsigned);
 		DEFINE_FIELD(password, sqlpp::text);
 		DEFINE_FIELD(int_attr_01, sqlpp::integer);
 		DEFINE_FIELD(int_attr_02, sqlpp::integer);
@@ -142,6 +151,7 @@ namespace database::matching
 			flag_filter_field_t,
 			mission_id_field_t,
 			status_field_t,
+			reserve_num_field_t,
 			password_field_t,
 			int_attr_01_field_t,
 			int_attr_02_field_t,
@@ -177,6 +187,7 @@ namespace database::matching
 			this->flag_filter_ = static_cast<std::uint8_t>(row.flag_filter);
 			this->mission_id_ = static_cast<std::uint32_t>(row.mission_id);
 			this->status_ = static_cast<std::uint32_t>(row.status);
+			this->reserve_num_ = static_cast<std::uint8_t>(row.reserve_num);
 			this->password_ = row.password;
 			this->int_attr[0] = static_cast<std::uint32_t>(row.int_attr_01);
 			this->int_attr[1] = static_cast<std::uint32_t>(row.int_attr_02);
@@ -207,6 +218,7 @@ namespace database::matching
 		GET_FIELD_H(std::uint8_t, flag_filter);
 		GET_FIELD_H(std::uint32_t, mission_id);
 		GET_FIELD_H(std::uint32_t, status);
+		GET_FIELD_H(std::uint8_t, reserve_num);
 		GET_FIELD_H(std::string, password);
 		GET_FIELD_H(std::int32_t, int_attr_01);
 		GET_FIELD_H(std::int32_t, int_attr_02);
@@ -252,6 +264,8 @@ namespace database::matching
 	bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
 	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id);
 	void set_room_mission_id(const std::uint64_t room_id, const std::uint32_t mission_id);
+	void set_room_status(const std::uint64_t room_id, const std::uint32_t status);
+	void set_room_reserve_num(const std::uint64_t room_id, const std::uint8_t num);
 
 	std::size_t get_total_room_count();
 	std::size_t get_total_member_count();

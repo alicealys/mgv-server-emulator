@@ -28,7 +28,7 @@ namespace emulator::ssd
 			return error(ERR_ROOMTOOMANY);
 		}
 
-		// Todo?
+		database::matching::set_room_reserve_num(room->get_room_id(), param.reserve_num);
 
 		return result;
 	}

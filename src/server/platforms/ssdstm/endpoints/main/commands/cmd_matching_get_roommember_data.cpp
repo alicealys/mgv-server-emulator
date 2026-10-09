@@ -43,8 +43,8 @@ namespace emulator::ssd
 
 			member_data["player_id"] = members[i].get_player_id();
 			member_data["first_party_id"] = members[i].get_account_id();
-			member_data["display_name"] = "";
-			member_data["role"] = members[i].get_player_id() == room->get_owner_id();
+			member_data["display_name"] = std::format("{}_player01", members[i].get_account_id());
+			member_data["role"] = std::uint8_t(members[i].get_player_id() == room->get_owner_id());
 			member_data["past_time"] = members[i].get_past_time();
 		}
 

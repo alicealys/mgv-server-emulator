@@ -27,6 +27,7 @@ namespace emulator::ssd
 		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
 		{
 			database::matching::set_room_mission_id(current_room->get_room_id(), param.mission_code);
+			database::matching::set_room_status(current_room->get_room_id(), database::matching::status_mission_start);
 		}
 
 		result["score_threshold"]["mission_id"] = param.mission_code;

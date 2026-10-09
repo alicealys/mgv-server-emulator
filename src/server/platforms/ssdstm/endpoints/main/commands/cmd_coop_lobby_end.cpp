@@ -11,12 +11,6 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
-		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
-		{
-			database::matching::set_room_mission_id(current_room->get_room_id(), 0u);
-		}
-
 		cmd_inventory_save::do_save(data, user);
 
 		auto& tips_open_info_j = data["tips_open_info"];

@@ -36,7 +36,8 @@ namespace emulator::ssd
 		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
 		if (current_room.has_value() && current_room->get_room_id() == room->get_room_id())
 		{
-			return error(ERR_ALREADYINROOM);
+			//return error(ERR_ALREADYINROOM);
+			return result;
 		}
 
 		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())

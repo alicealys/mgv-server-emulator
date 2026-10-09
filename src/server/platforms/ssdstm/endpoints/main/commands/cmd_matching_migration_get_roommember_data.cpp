@@ -31,18 +31,27 @@ namespace emulator::ssd
 		for (auto i = 0ull; i < members.size(); i++)
 		{
 			auto& member_data = result["roommember_data"][i];
-			member_data["npid"]["handler"]["data"] = "";
-			member_data["npid"]["handler"]["dummy"] = json::array{0, 0, 0};
-			member_data["npid"]["handler"]["term"] = 0;
-			member_data["npid"]["opt"] = json::array{0, 0, 0, 0, 0, 0, 0, 0};
-			member_data["npid"]["reserved"] = json::array{0, 0, 0, 0, 0, 0, 0, 0};
-			member_data["xuid"] = members[i].get_account_id();
-			member_data["steamid"] = members[i].get_account_id();
-			member_data["secure_device_address"] = "NotImplement";
-			member_data["port"] = members[i].get_ex_port();
-			member_data["ip"] = members[i].get_ex_ip();
-			member_data["account_id"]["id"] = members[i].get_account_id();
-			member_data["account_id"]["type"] = 0;
+			auto& account_data = member_data["account_data"];
+
+			account_data["npid"]["handler"]["data"] = "";
+			account_data["npid"]["handler"]["dummy"] = json::array{0, 0, 0};
+			account_data["npid"]["handler"]["term"] = 0;
+			account_data["npid"]["opt"] = json::array{0, 0, 0, 0, 0, 0, 0, 0};
+			account_data["npid"]["reserved"] = json::array{0, 0, 0, 0, 0, 0, 0, 0};
+			account_data["xuid"] = members[i].get_account_id();
+			account_data["steamid"] = members[i].get_account_id();
+			account_data["secure_device_address"] = "NotImplement";
+			account_data["port"] = members[i].get_ex_port();
+			account_data["ip"] = members[i].get_ex_ip();
+			account_data["account_id"]["id"] = members[i].get_account_id();
+			account_data["account_id"]["type"] = 0;
+
+			member_data["player_id"] = members[i].get_player_id();
+			
+			member_data["first_party_id"] = members[i].get_account_id();
+			member_data["display_name"] = std::format("{}_player01", members[i].get_account_id());
+			member_data["role"] = std::uint8_t(members[i].get_player_id() == room->get_owner_id());
+			member_data["past_time"] = members[i].get_past_time();
 		}
 
 		return result;
