@@ -171,7 +171,7 @@ namespace database::matching
 					sqlpp::select(sqlpp::all_of(matching_room::table))
 						.from(matching_room::table)
 							.where(matching_room::table.owner_id != player_id && 
-								   not_member_of && not_full && region_match && param_match)
+								   not_member_of && not_full && region_match && param_match && status_match)
 								.limit(param.max);
 
 				auto results = db.exec<Type>(search_rooms);

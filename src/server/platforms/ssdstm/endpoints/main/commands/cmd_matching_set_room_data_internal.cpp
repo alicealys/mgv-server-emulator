@@ -19,12 +19,12 @@ namespace emulator::ssd
 		const auto room = database::matching::get_room(param.room_id);
 		if (!room.has_value())
 		{
-			return result; //error(ERR_ROOM_NOT_FOUND);
+			return result;
 		}
 
 		if (room->get_owner_id() != user->current_player->get_player_id())
 		{
-			return result; //error(ERR_PERMISSION_DENIED);
+			return result;
 		}
 
 		database::matching::update_room(room->get_room_id(), param);
