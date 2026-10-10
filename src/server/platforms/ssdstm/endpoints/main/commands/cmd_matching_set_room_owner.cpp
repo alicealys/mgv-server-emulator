@@ -16,18 +16,22 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
+		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
+		if (!current_room.has_value() || current_room->get_room_id() != param.room_id)
+		{
+			return error(ERR_NOT_IN_ROOM);
+		}
+
 		const auto room = database::matching::get_room_from_member(param.new_owner_player_id);
 		if (!room.has_value() || room->get_room_id() != param.room_id)
 		{
-			return result;
+			return error(ERR_NOT_IN_ROOM);
 		}
 
-		if (room->get_owner_player_id() != user->current_player->get_player_id())
+		if (!database::matching::set_new_room_owner(room->get_room_id(), user->current_player->get_player_id(), param.new_owner_player_id))
 		{
-			return result;
+			return error(ERR_PERMISSION_DENIED);
 		}
-
-		database::matching::set_room_owner(room->get_room_id(), param.new_owner_player_id);
 
 		return result;
 	}

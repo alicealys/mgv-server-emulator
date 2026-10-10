@@ -29,6 +29,7 @@ namespace database::matching
 
 	GET_FIELD_C(matching_room, std::uint64_t, room_id);
 	GET_FIELD_C(matching_room, std::uint64_t, owner_player_id);
+	GET_FIELD_C(matching_room, std::uint64_t, lock_player_id);
 	GET_FIELD_C(matching_room, std::uint64_t, coop_mission_id);
 	GET_FIELD_C(matching_room, std::uint8_t, max_slot);
 	GET_FIELD_C(matching_room, std::uint8_t, region_matching_level);
@@ -454,7 +455,7 @@ namespace database::matching
 				);
 			});
 		}
-		
+
 		template <database_type_t Type>
 		void set_room_reserve_num(const std::uint64_t room_id, const std::uint8_t reserve_num)
 		{
@@ -465,6 +466,35 @@ namespace database::matching
 						.set(matching_room::table.reserve_num = reserve_num)
 							.where(matching_room::table.room_id == room_id)
 				);
+			});
+		}
+
+		template <database_type_t Type>
+		bool acquire_room_lock(const std::uint64_t room_id, const std::uint64_t player_id)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(matching_room::table)
+						.set(matching_room::table.lock_player_id = player_id)
+							.where(matching_room::table.lock_player_id.is_null())
+				);
+				return result != 0ull;
+			});
+		}
+
+		template <database_type_t Type>
+		bool set_new_room_owner(const std::uint64_t room_id, const std::uint64_t lock_player_id, const std::uint64_t new_owner_player_id)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(matching_room::table)
+					.set(matching_room::table.lock_player_id = nullable_integer(0),
+						 matching_room::table.owner_player_id = new_owner_player_id)
+						.where(matching_room::table.lock_player_id == lock_player_id)
+				);
+				return result != 0ull;
 			});
 		}
 
@@ -727,6 +757,16 @@ namespace database::matching
 	void set_room_reserve_num(const std::uint64_t room_id, const std::uint8_t num)
 	{
 		RUN_IMPL(impl::set_room_reserve_num, room_id, num);
+	}
+
+	bool acquire_room_lock(const std::uint64_t room_id, const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::acquire_room_lock, room_id, player_id);
+	}
+
+	bool set_new_room_owner(const std::uint64_t room_id, const std::uint64_t lock_player_id, const std::uint64_t new_owner_player_id)
+	{
+		RUN_IMPL(impl::set_new_room_owner, room_id, lock_player_id, new_owner_player_id);
 	}
 
 	std::size_t get_total_room_count()

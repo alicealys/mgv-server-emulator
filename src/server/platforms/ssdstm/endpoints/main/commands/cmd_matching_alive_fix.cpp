@@ -8,11 +8,7 @@ namespace emulator::ssd
 {
 	json::value cmd_matching_alive_fix::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
-		json::value result;
-
-		[[ maybe_unused ]] const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
-
-		return result;
+		return {};
 	}
 
 	std::uint32_t cmd_matching_alive_fix::flags()

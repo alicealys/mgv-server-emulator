@@ -11,12 +11,15 @@ namespace emulator::ssd
 		json::value result;
 
 		const auto room = database::matching::get_room_from_member(user->current_player->get_player_id());
-		if (room->get_owner_player_id() == user->current_player->get_player_id())
+		if (!room.has_value())
 		{
-			return result;
+			return error(ERR_NOT_IN_ROOM);
 		}
 
-		//database::matching::set_room_owner(room->get_room_id(), user->current_player->get_player_id());
+		if (!database::matching::acquire_room_lock(room->get_room_id(), user->current_player->get_player_id()))
+		{
+			return error(ERR_ALREADY_LOCKED);
+		}
 
 		return result;
 	}

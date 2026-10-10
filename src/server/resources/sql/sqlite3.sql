@@ -369,6 +369,7 @@ create table if not exists `matching_rooms`
 (
 	room_id					integer	primary key autoincrement,
 	owner_player_id			bigint unsigned	not null	unique,
+	lock_player_id			bigint unsigned,
 	f_coop_mission_id		bigint unsigned,
 	max_slot				int unsigned	not null,
 	region_matching_level	int unsigned	not null,

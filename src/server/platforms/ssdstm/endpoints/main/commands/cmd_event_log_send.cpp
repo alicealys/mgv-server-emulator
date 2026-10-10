@@ -19,6 +19,6 @@ namespace emulator::ssd
 
 	std::uint32_t cmd_event_log_send::flags()
 	{
-		return CMD_NEEDS_USER;
+		return CMD_NEEDS_USER | CMD_NEEDS_PLAYER;
 	}
 }
