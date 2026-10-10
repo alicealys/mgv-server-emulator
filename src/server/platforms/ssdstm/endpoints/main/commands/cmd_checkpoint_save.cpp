@@ -6,6 +6,7 @@
 #include "database/models/present_box.hpp"
 #include "database/models/crew_members.hpp"
 #include "database/models/challenge_tasks.hpp"
+#include "database/models/boosts.hpp"
 
 namespace emulator::ssd
 {
@@ -33,6 +34,8 @@ namespace emulator::ssd
 			reward_list.push(reward.param);
 		}
 
+		auto& defense_mission_reward_j = result["defense_mission_reward"];
+
 		const auto now = std::chrono::system_clock::now();
 		const auto expire_date = now + 14 * 24h;
 		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
@@ -40,7 +43,7 @@ namespace emulator::ssd
 
 		for (auto i = rank; i <= 5; i++)
 		{
-			auto& rank_entry = result[i - rank];
+			auto& rank_entry = defense_mission_reward_j[i - rank];
 			rank_entry["battle_pack_list"] = json::array();
 			rank_entry["expire_date"] = expire_date_s.count();
 			rank_entry["kub_boost_flag"] = 0;
@@ -63,6 +66,12 @@ namespace emulator::ssd
 		give_params.player_inventory = &player_inventory;
 		give_params.text_id = text_id;
 
+		const auto kub_boost = database::boosts::get_boost_of_type(user->get_user_id(), database::boosts::boost_type_kub);
+		if (kub_boost.has_value())
+		{
+			result["boost_flag"] = 1;
+		}
+
 		for (const auto& reward : rewards)
 		{
 			if (reward.rank < rank)
@@ -70,21 +79,29 @@ namespace emulator::ssd
 				continue;
 			}
 
-			auto& rank_entry = result[reward.rank - rank];
+			auto& rank_entry = defense_mission_reward_j[reward.rank - rank];
 			auto& present_list_j = rank_entry["present_list"];
 
-			if (!user->give_item(reward.param, give_params, rank_entry))
+			game::item_t give_item = reward.param;
+			if (kub_boost.has_value() && give_item.category == game::ITEM_CATEGORY_ENERGY)
+			{
+				const auto multiplier = (static_cast<float>(kub_boost->get_multiplier()) / 2.f) * 0.1f;
+				give_item.num += static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
+				rank_entry["kub_boost_flag"] = 1;
+			}
+
+			if (!user->give_item(give_item, give_params, rank_entry))
 			{
 				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, reward.param, text_id);
-				reward.param.to_json(present_list_j[present_list_j.size()]);
+					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = rank; i <= 5; i++)
 		{
-			auto& rank_entry = result[i - rank];
+			auto& rank_entry = defense_mission_reward_j[i - rank];
 			rank_entry["present_box_num"] = present_count;
 		}
 
@@ -168,7 +185,7 @@ namespace emulator::ssd
 				if (this_wave == mission_settings->max_wave_count - 1)
 				{
 					mission_result = 1u;
-					this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
+					this->generate_defense_mission_rewards(result, user, reward_list, *mission_settings, rank);
 				}
 				else
 				{
@@ -187,7 +204,7 @@ namespace emulator::ssd
 				break;
 			case 3: // suspend mission
 				mission_result = 2u;
-				this->generate_defense_mission_rewards(defense_mission_reward_j, user, reward_list, *mission_settings, rank);
+				this->generate_defense_mission_rewards(result, user, reward_list, *mission_settings, rank);
 				break;
 			}
 

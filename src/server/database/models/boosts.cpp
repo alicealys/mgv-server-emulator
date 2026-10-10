@@ -41,6 +41,11 @@ namespace database::boosts
 		data["type"] = this->boost_type;
 	}
 
+	std::uint32_t boost_params_t::get_multiplier() const
+	{
+		return this->mag1 / 100;
+	}
+
 	std::chrono::seconds boost_params_t::get_time_left() const
 	{
 		const auto now = std::chrono::system_clock::now();

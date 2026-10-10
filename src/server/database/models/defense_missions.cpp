@@ -369,7 +369,7 @@ namespace database::defense_missions
 							 defense_mission::table.mission_code = mission_code, 
 							 defense_mission::table.start_date = std::chrono::system_clock::now(),
 							 defense_mission::table.end_date = std::chrono::system_clock::now(),
-							 defense_mission::table.next_wave_date = std::chrono::system_clock::now(),
+							 defense_mission::table.next_wave_date = std::chrono::system_clock::time_point(),
 							 defense_mission::table.result = 0)
 				);
 			});

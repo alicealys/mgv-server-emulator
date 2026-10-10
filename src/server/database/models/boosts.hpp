@@ -16,6 +16,7 @@ namespace database::boosts
 		std::uint32_t mag2;
 		std::chrono::seconds expire_date;
 
+		std::uint32_t get_multiplier() const;
 		std::chrono::seconds get_time_left() const;
 		void to_json(json::value& data) const;
 	};
