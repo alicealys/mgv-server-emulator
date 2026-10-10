@@ -690,6 +690,7 @@ namespace database::players
 		std::uint32_t additional[46];
 
 		bool parse_save(json::value& first_save, json::value& additional_save);
+		bool parse_coop_save(json::value& first_save, json::value& additional_save);
 	};
 
 	struct story_unlock_info_t

@@ -77,15 +77,13 @@ namespace emulator::ssd
 			user->current_player->set_mission_info(*mission_info);
 		}
 
-		//if (play_record_save_coop_checkpoint_j.is_array())
-		//{
-		//	// TODO
-		//}
-		//
-		//if (play_record_additional_130_coop_checkpoint_j.is_array())
-		//{
-		//	// TODO
-		//}
+		if (play_record_save_coop_checkpoint_j.is_array() && play_record_additional_130_coop_checkpoint_j.is_array())
+		{
+			const auto play_record = std::make_unique<database::players::player_play_record_t>();
+			user->current_player->get_play_record(*play_record);
+			play_record->parse_coop_save(play_record_save_coop_checkpoint_j, play_record_additional_130_coop_checkpoint_j);
+			user->current_player->set_play_record(*play_record);
+		}
 
 		[[ maybe_unused ]] auto& personal_reward = result["personal_reward"];
 		[[ maybe_unused ]] auto& reward = result["reward"];
@@ -117,18 +115,18 @@ namespace emulator::ssd
 		result["rank"] = rank;
 		result["reward_event_point"] = 0;
 
-		database::coop_missions::coop_mission_record_t record{};
-		record.mission_code = iter->second->mission_id;
-		record.iris_score = param.score;
-		record.personal_score = param.personal_score;
-		record.waves = param.waves;
-		record.rescue = param.rescue;
-		record.clear_rank = rank;
-
-		database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
-
 		if (param.clear_type == 0 && param.personal_score >= 150)
 		{
+			database::coop_missions::coop_mission_record_t record{};
+			record.mission_code = iter->second->mission_id;
+			record.iris_score = param.score;
+			record.personal_score = param.personal_score;
+			record.waves = param.waves;
+			record.rescue = param.rescue;
+			record.clear_rank = rank;
+
+			database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
+
 			const auto now = std::chrono::system_clock::now();
 			const auto expire_date = now + 14 * 24h;
 			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
