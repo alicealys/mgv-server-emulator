@@ -6,6 +6,7 @@
 #include "database/models/shop_purchases.hpp"
 #include "database/models/challenge_tasks.hpp"
 #include "database/models/coop_missions.hpp"
+#include "database/models/boosts.hpp"
 
 namespace emulator::ssd
 {
@@ -62,6 +63,21 @@ namespace emulator::ssd
 
 		user_inventory->bgm_settings.to_json(result["bgm_my_list"]);
 		result["boost_list"] = json::array();
+
+		{
+			auto count = 0u;
+			const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
+			for (auto i = 0ull; i < boost_list.size(); i++)
+			{
+				if (boost_list[i].duration == 0)
+				{
+					continue;
+				}
+
+				boost_list[i].to_json(result["boost_list"][count++]);
+			}
+		}
+
 		result["bp_mission_list"] = json::array();
 		result["cage_list"] = json::array();
 		communication_gesture_info.to_json(result["communication_gesture_slot"]);

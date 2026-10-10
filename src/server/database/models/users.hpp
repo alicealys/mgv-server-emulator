@@ -247,6 +247,7 @@ namespace database::users
 		bool inc_player_capacity() const;
 		bool set_daily_reward() const;
 
+		bool give_item(game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
 		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
 		bool has_permanent_item(const game::item_t& item, const user_inventory_t& inventory, bool& is_permanent) const;
 
@@ -290,4 +291,6 @@ namespace database::users
 	void reset_event_points();
 
 	bool delete_all_user_data(const std::uint64_t account_id);
+
+	void register_privilege(const std::uint32_t code, const std::function<void(const user&, game::item_t&)>& callback);
 }

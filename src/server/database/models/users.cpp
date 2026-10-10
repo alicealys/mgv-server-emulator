@@ -10,6 +10,8 @@
 #include "rankings.hpp"
 #include "matching.hpp"
 #include "coop_missions.hpp"
+#include "boosts.hpp"
+
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -135,6 +137,8 @@ namespace database::users
 			const auto& data = get_default_data();
 			return data[key];
 		}
+
+		std::unordered_map<std::uint32_t, std::function<void(const user&, game::item_t&)>> privilege_callbacks;
 	}
 
 	bool bgm_settings_t::parse(json::value& data)
@@ -996,7 +1000,7 @@ namespace database::users
 		RUN_IMPL(impl::set_daily_reward, this->get_user_id());
 	}
 
-	bool user::give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
+	bool user::give_item(game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
 	{
 		switch (reward.category)
 		{
@@ -1182,7 +1186,14 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_PRIVILEGE:
 		{
-			return false;
+			const auto iter = privilege_callbacks.find(reward.code);
+			if (iter == privilege_callbacks.end())
+			{
+				return false;
+			}
+
+			iter->second(*this, reward);
+			return true;
 		}
 		case game::ITEM_CATEGORY_COIN:
 		{
@@ -1273,6 +1284,12 @@ namespace database::users
 		return false;
 	}
 
+	bool user::give_item(const game::item_t& item, give_item_params_t& params, json::value& reward_info) const
+	{
+		game::item_t item_result = item;
+		return this->give_item(item_result, params, reward_info);
+	}
+
 	bool user::has_permanent_item(const game::item_t& item, const user_inventory_t& inventory, bool& is_permanent) const
 	{
 		is_permanent = false;
@@ -1323,7 +1340,7 @@ namespace database::users
 		}
 		case game::ITEM_CATEGORY_PRIVILEGE:
 		{
-			is_permanent = true;
+			is_permanent = false;
 			return false;
 		}
 		case game::ITEM_CATEGORY_FACE_PAINT:
@@ -1510,6 +1527,11 @@ namespace database::users
 		delete_user_data(user->get_user_id());
 
 		return true;
+	}
+
+	void register_privilege(const std::uint32_t code, const std::function<void(const user&, game::item_t&)>& callback)
+	{
+		privilege_callbacks.insert(std::make_pair(code, callback));
 	}
 
 	class table final : public table_interface

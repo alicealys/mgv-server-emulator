@@ -52,17 +52,18 @@ namespace emulator::ssd
 		give_params.text_id = item->get_text_id();
 
 		json::value empty;
-		if (!user->give_item(item->get_reward(), give_params, empty))
+		game::item_t result_item = item->get_reward();
+		if (!user->give_item(result_item, give_params, empty))
 		{
 			return error(ERR_DATABASE);
 		}
 
 		result["present"]["id"] = item->get_present_id();
-		result["present"]["param1"] = item->get_reward().param1;
-		result["present"]["param2"] = item->get_reward().param2;
-		result["present"]["param3"] = item->get_reward().param3;
-		result["present"]["param4"] = item->get_reward().param4;
-		result["present"]["param5"] = item->get_reward().param5;
+		result["present"]["param1"] = result_item.param1;
+		result["present"]["param2"] = result_item.param2;
+		result["present"]["param3"] = result_item.param3;
+		result["present"]["param4"] = result_item.param4;
+		result["present"]["param5"] = result_item.param5;
 
 		user->current_player->set_stackable_item_list(stackable_list);
 		user->current_player->set_nonstackable_item_list(nonstackable_list);

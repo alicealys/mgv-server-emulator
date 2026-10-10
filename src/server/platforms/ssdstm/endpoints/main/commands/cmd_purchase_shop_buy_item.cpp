@@ -53,19 +53,7 @@ namespace emulator::ssd
 
 		return database::shop_purchases::purchase_product(user.value(), product.value(), [&](json::value& result)
 		{
-			database::users::user_inventory_t user_inventory{};
-			user->get_inventory(user_inventory);
-
-			database::users::give_item_params_t give_params{};
-			give_params.user_inventory = &user_inventory;
-
 			result["present_id"] = 0;
-
-			json::value empty;
-			if (user->give_item(product->item, give_params, empty))
-			{
-				return user->set_inventory(user_inventory) || is_player_slot_purchase;
-			}
 
 			const auto expire_date = std::chrono::system_clock::now() + database::shop_purchases::purchase_duration;
 			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());

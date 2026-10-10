@@ -45,7 +45,7 @@ namespace emulator::ssd
 			rank_entry["expire_date"] = expire_date_s.count();
 			rank_entry["kub_boost_flag"] = 0;
 			rank_entry["nonstackable_list"] = json::array();
-			rank_entry["present_num"] = 0;
+			rank_entry["present_box_num"] = 0;
 			rank_entry["present_list"] = json::array();
 			rank_entry["recipe_list"] = json::array();
 			rank_entry["resources_list"] = json::array();
@@ -85,7 +85,7 @@ namespace emulator::ssd
 		for (auto i = rank; i <= 5; i++)
 		{
 			auto& rank_entry = result[i - rank];
-			rank_entry["present_num"] = present_count;
+			rank_entry["present_box_num"] = present_count;
 		}
 
 		if (!rewards.empty())

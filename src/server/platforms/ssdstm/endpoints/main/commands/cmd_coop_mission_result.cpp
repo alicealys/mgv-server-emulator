@@ -5,6 +5,7 @@
 
 #include "database/models/rankings.hpp"
 #include "database/models/coop_missions.hpp"
+#include "database/models/boosts.hpp"
 
 namespace emulator::ssd
 {
@@ -126,12 +127,13 @@ namespace emulator::ssd
 
 		database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
 
-		if (param.personal_score >= 150)
+		if (param.clear_type == 0 && param.personal_score >= 150)
 		{
 			const auto now = std::chrono::system_clock::now();
 			const auto expire_date = now + 14 * 24h;
 			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
 			const auto text_id = 229691447841577;
+			const auto bp_boost = database::boosts::get_boost_of_type(user->get_user_id(), database::boosts::boost_type_bp);
 
 			personal_reward["text_id"] = text_id;
 			personal_reward["expire_date"] = expire_date_s;
@@ -143,7 +145,12 @@ namespace emulator::ssd
 			const auto table_iter = this->reward_settings_.event_point_table.find(iter->second->enemy_level);
 			if (table_iter != this->reward_settings_.event_point_table.end())
 			{
-				const auto reward_event_point = table_iter->second[rank];
+				auto reward_event_point = table_iter->second[rank];
+				if (bp_boost.has_value())
+				{
+					reward_event_point *= bp_boost->mag1 / 100;
+				}
+
 				user->add_event_points(reward_event_point);
 				database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
 				result["reward_event_point"] = reward_event_point;

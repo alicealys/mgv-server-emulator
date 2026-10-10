@@ -52,8 +52,8 @@ List of implemeted/unimplemented server commands
 | CMD_PURCHASE_SHOP_GET_ITEM_LIST | ✔️ |  |
 | CMD_PURCHASE_SHOP_BUY_ITEM | ✔️ |  |
 | CMD_PURCHASE_GET_HISTORY | ✔️ |  |
-| CMD_BOOST_ADD_CONFIRM | ❌ |  |
-| CMD_BOOST_CHECK_ACTIVE | ❌ |  |
+| CMD_BOOST_ADD_CONFIRM | ✔️ |  |
+| CMD_BOOST_CHECK_ACTIVE | ✔️ |  |
 | CMD_MATCHING_CREATEJOIN_ROOM | ✔️ |  |
 | CMD_MATCHING_LEAVE_ROOM | ✔️ |  |
 | CMD_MATCHING_SEARCH_ROOM | ✔️ |  |

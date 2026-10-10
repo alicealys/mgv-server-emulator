@@ -439,3 +439,15 @@ create table if not exists `coop_mission_results`
 	primary key (`coop_mission_result_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )
+-- query:mgssd.boosts.create
+create table if not exists `boosts`
+(
+	boost_id			integer	primary key autoincrement,
+	f_user_id			bigint unsigned	not null,
+	boost_type			int unsigned	not null,
+	duration			int unsigned	not null,
+	mag1				int unsigned	not null,
+	mag2				int unsigned	not null,
+	expire_date			datetime not null,
+	foreign key (`f_user_id`) references `users`(`user_id`)
+)
