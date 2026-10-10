@@ -102,19 +102,75 @@ namespace emulator::ssd
 				}
 			}
 		}
+		
+		const auto is_deploy_crew = [&](const std::uint64_t member_id)
+		{
+			return member_id == team.get_crew_id_01() ||
+				member_id == team.get_crew_id_02() ||
+				member_id == team.get_crew_id_03() ||
+				member_id == team.get_crew_id_04();
+		};
+
+		auto& bad_status_list = deploy_result["bad_status_list"];
 
 		const auto crew_list = database::crew_members::get_all(user.current_player->get_player_id());
 		for (auto i = 0ull; i < crew_list.size(); i++)
 		{
 			deploy_result["motivation_list"][i]["unique_id"] = crew_list[i].get_member_id();
 			deploy_result["motivation_list"][i]["motivation"] = 0;
-		}
 
-		// TODO: injuries, damage items, ...
+			if (!is_deploy_crew(crew_list[i].get_member_id()))
+			{
+				continue;
+			}
+
+			const auto rand = utils::cryptography::random::get_integer(0u, 100u);
+			const auto has_injury = rand <= params.injure_rate;
+
+			if (!has_injury)
+			{
+				continue;
+			}
+
+			const auto life_percent = static_cast<float>(utils::cryptography::random::get_integer(40u, 80u)) / 100.f;
+			const auto new_life = static_cast<std::uint32_t>(static_cast<float>(crew_list[i].get_life()) * life_percent);
+
+			const auto injury_id = utils::cryptography::random::get_integer(2u, 8u);
+			const auto injury_time = utils::cryptography::random::get_integer(1000u, 5000u);
+
+			if (crew_list[i].get_injury_id_1() == 0)
+			{
+				crew_list[i].update_injury(new_life, injury_id, injury_time, 
+					crew_list[i].get_injury_id_2(), crew_list[i].get_injury_time_2());
+			}
+			else
+			{
+				crew_list[i].update_injury(new_life, crew_list[i].get_injury_id_1(), 
+					crew_list[i].get_injury_time_1(), injury_id, injury_time);
+			}
+		
+			auto& status = bad_status_list[bad_status_list.size()];
+			status["bad_status_type"] = injury_id;
+			status["recovery_time"] = injury_time;
+			status["unique_id"] = crew_list[i].get_member_id();
+		}
 
 		for (auto i = 0; i < 5; i++)
 		{
-			team.get_item(i).to_json(deploy_result["item_list"][i]);
+			database::deployments::team_item_t item = team.get_item(i);
+
+			if (item.f.id_index != 0)
+			{
+				item.f.param1 -= static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0u, item.f.param1));
+			}
+
+			if (item.f.param1 == 0)
+			{
+				item = {};
+			}
+
+			team.update_item(i, item);
+			item.to_json(deploy_result["item_list"][i]);
 		}
 
 		if (!team.deploy(end_deploy_params))
