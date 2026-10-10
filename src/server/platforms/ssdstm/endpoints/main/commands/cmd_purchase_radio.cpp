@@ -14,7 +14,7 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto product_id = 0 + id; // todo? unknown
+		const auto product_id = database::shop_purchases::product_radio_begin + id;
 		const auto product = database::shop_purchases::find_product(product_id);
 		if (!product.has_value() || product->item.category != game::ITEM_CATEGORY_PRESET_RADIO)
 		{

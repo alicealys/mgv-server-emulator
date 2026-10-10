@@ -53,8 +53,6 @@ namespace emulator::ssd
 			target_treatment_id = 0;
 			target_treatment_time = 0;
 
-			// TODO: life?
-
 			return true;
 		};
 
@@ -76,11 +74,12 @@ namespace emulator::ssd
 			auto injury_id_2 = member->get_injury_id_2();
 			auto injury_time_1 = member->get_injury_time_1();
 			auto injury_time_2 = member->get_injury_time_2();
+			auto new_life = member->get_life_max();
 
 			if (do_treatment(entry.treat_item_injury_1, injury_id_1, injury_id_2) || 
 				do_treatment(entry.treat_item_injury_2, injury_time_1, injury_time_2))
 			{
-				member->update_injury(injury_id_1, injury_id_2, injury_time_1, injury_time_2);
+				member->update_injury(new_life, injury_id_1, injury_id_2, injury_time_1, injury_time_2);
 			}
 
 			auto sickness_id_1 = member->get_sickness_id_1();
@@ -91,7 +90,7 @@ namespace emulator::ssd
 			if (do_treatment(entry.treat_item_sickness_1, sickness_id_1, sickness_time_2) || 
 				do_treatment(entry.treat_item_sickness_2, sickness_id_2, sickness_time_2))
 			{
-				member->update_sickness(sickness_id_1, sickness_id_2, sickness_time_1, sickness_time_2);
+				member->update_sickness(new_life, sickness_id_1, sickness_id_2, sickness_time_1, sickness_time_2);
 			}
 		}
 

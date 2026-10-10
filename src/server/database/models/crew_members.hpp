@@ -243,11 +243,12 @@ namespace database::crew_members
 
 		void update(const member_params_t& params) const;
 		void update_group(const std::uint32_t group_id) const;
+		void update_health_flag(const std::uint32_t health_flag) const;
 		void update_nickname(const std::string& nickname) const;
 
-		void update_injury(const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
+		void update_injury(const std::uint32_t life, const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
 			const std::uint32_t injury_time_1, const std::uint32_t injury_time_2) const;
-		void update_sickness(const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
+		void update_sickness(const std::uint32_t life, const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
 			const std::uint32_t injury_time_1, const std::uint32_t injury_time_2) const;
 
 		void add_items(const std::array<std::uint32_t, 6>& add_counts) const;

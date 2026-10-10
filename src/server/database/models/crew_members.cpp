@@ -359,6 +359,18 @@ namespace database::crew_members
 		}
 		
 		template <database_type_t Type>
+		void update_health_flag(const std::uint64_t player_id, const std::uint64_t member_id, const std::uint32_t health_flag)
+		{
+			database::access([&](database::database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(crew_member::table)
+						.set(crew_member::table.health_flag = health_flag)
+							.where(crew_member::table.member_id == member_id && crew_member::table.f_player_id == player_id));
+			});
+		}
+
+		template <database_type_t Type>
 		void update_nickname(const std::uint64_t player_id, const std::uint64_t member_id, const std::string& nickname)
 		{
 			database::access([&](database::database_t& db)
@@ -372,6 +384,7 @@ namespace database::crew_members
 		
 		template <database_type_t Type>
 		void update_sickness(const std::uint64_t player_id, const std::uint64_t member_id, 
+			const std::uint32_t life,
 			const std::uint32_t sickness_id_1, const std::uint32_t sickness_id_2,
 			const std::uint32_t sickness_time_1, const std::uint32_t sickness_time_2)
 		{
@@ -379,7 +392,8 @@ namespace database::crew_members
 			{
 				db.exec<Type>(
 					sqlpp::update(crew_member::table)
-						.set(crew_member::table.sickness_id_1 = sickness_id_1,
+						.set(crew_member::table.life = life,
+							 crew_member::table.sickness_id_1 = sickness_id_1,
 							 crew_member::table.sickness_id_2 = sickness_id_2,
 							 crew_member::table.sickness_time_1 = sickness_time_1,
 							 crew_member::table.sickness_time_2 = sickness_time_2)
@@ -389,6 +403,7 @@ namespace database::crew_members
 			
 		template <database_type_t Type>
 		void update_injury(const std::uint64_t player_id, const std::uint64_t member_id, 
+			const std::uint32_t life,
 			const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
 			const std::uint32_t injury_time_1, const std::uint32_t injury_time_2)
 		{
@@ -396,7 +411,8 @@ namespace database::crew_members
 			{
 				db.exec<Type>(
 					sqlpp::update(crew_member::table)
-						.set(crew_member::table.injury_id_1 = injury_id_1,
+						.set(crew_member::table.life = life,
+							 crew_member::table.injury_id_1 = injury_id_1,
 							 crew_member::table.injury_id_2 = injury_id_2,
 							 crew_member::table.injury_time_1 = injury_time_1,
 							 crew_member::table.injury_time_2 = injury_time_2)
@@ -465,21 +481,26 @@ namespace database::crew_members
 		RUN_IMPL(impl::update_group, this->get_player_id(), this->get_member_id(), this->get_current_group(), group_id);
 	}
 
+	void crew_member::update_health_flag(const std::uint32_t health_flag) const
+	{
+		RUN_IMPL(impl::update_health_flag, this->get_player_id(), this->get_member_id(), health_flag);
+	}
+
 	void crew_member::update_nickname(const std::string& nickname) const
 	{
 		RUN_IMPL(impl::update_nickname, this->get_player_id(), this->get_member_id(), nickname);
 	}
 
-	void crew_member::update_injury(const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
+	void crew_member::update_injury(const std::uint32_t life, const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
 		const std::uint32_t injury_time_1, const std::uint32_t injury_time_2) const
 	{
-		RUN_IMPL(impl::update_injury, this->get_player_id(), this->get_member_id(), injury_id_1, injury_id_2, injury_time_1, injury_time_2);
+		RUN_IMPL(impl::update_injury, this->get_player_id(), this->get_member_id(), life, injury_id_1, injury_id_2, injury_time_1, injury_time_2);
 	}
 
-	void crew_member::update_sickness(const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
+	void crew_member::update_sickness(const std::uint32_t life, const std::uint32_t injury_id_1, const std::uint32_t injury_id_2,
 		const std::uint32_t injury_time_1, const std::uint32_t injury_time_2) const
 	{
-		RUN_IMPL(impl::update_sickness, this->get_player_id(), this->get_member_id(), injury_id_1, injury_id_2, injury_time_1, injury_time_2);
+		RUN_IMPL(impl::update_sickness, this->get_player_id(), this->get_member_id(), life, injury_id_1, injury_id_2, injury_time_1, injury_time_2);
 	}
 
 	void crew_member::add_items(const std::array<std::uint32_t, 6>& add_counts) const

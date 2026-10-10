@@ -8,7 +8,6 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		// TODO?
 		result["in_transaction"] = 0;
 
 		return result;

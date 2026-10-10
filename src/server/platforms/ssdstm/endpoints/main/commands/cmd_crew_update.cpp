@@ -51,13 +51,12 @@ namespace emulator::ssd
 			}
 		);
 
-		// todo?
-		//do_list.template operator()<update_flag_entry_t>("update_flag_list",
-		//	[](database::players::crew_member_t& member, update_flag_entry_t& entry)
-		//	{
-		//		member.health_flag = entry.flag;
-		//	}
-		//);
+		do_list.template operator()<update_flag_entry_t>("update_flag_list",
+			[](const database::crew_members::crew_member& member, update_flag_entry_t& entry)
+			{
+				member.update_health_flag(entry.flag);
+			}
+		);
 		
 		do_list.template operator()<update_nickname_entry_t>("update_nickname_list", 
 			[](const database::crew_members::crew_member& member, update_nickname_entry_t& entry)
