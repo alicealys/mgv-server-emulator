@@ -15,7 +15,6 @@ namespace emulator::ssd
 		}
 
 		result["first_login"] = "NotImplement";
-		result["result"] = "ERR_NOTIMPLEMENTED";
 
 		return result;
 	}
