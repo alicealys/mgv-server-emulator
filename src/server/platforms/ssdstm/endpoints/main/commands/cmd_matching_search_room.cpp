@@ -19,7 +19,7 @@ namespace emulator::ssd
 		const auto rooms = database::matching::search_rooms(user->current_player->get_player_id(), param);
 		for (auto i = 0ull; i < rooms.size(); i++)
 		{
-			const auto owner_user = database::users::find_from_current_player(rooms[i].get_owner_id());
+			const auto owner_user = database::users::find_from_current_player(rooms[i].get_owner_player_id());
 			if (!owner_user.has_value())
 			{
 				continue;
@@ -42,7 +42,7 @@ namespace emulator::ssd
 			entry["room_id"] = rooms[i].get_room_id();
 			entry["max_slot"] = rooms[i].get_max_slot();
 			entry["region_matching_level"] = rooms[i].get_region_matching_level();
-			entry["owner_player_id"] = rooms[i].get_owner_id();
+			entry["owner_player_id"] = rooms[i].get_owner_player_id();
 			entry["owner_display_name"] = "";
 			entry["member_num"] = members.size();
 			entry["reserve_num"] = 0;

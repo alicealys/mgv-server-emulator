@@ -28,12 +28,12 @@ namespace database::matching
 	}
 
 	GET_FIELD_C(matching_room, std::uint64_t, room_id);
-	GET_FIELD_C(matching_room, std::uint64_t, owner_id);
+	GET_FIELD_C(matching_room, std::uint64_t, owner_player_id);
+	GET_FIELD_C(matching_room, std::uint64_t, coop_mission_id);
 	GET_FIELD_C(matching_room, std::uint8_t, max_slot);
 	GET_FIELD_C(matching_room, std::uint8_t, region_matching_level);
 	GET_FIELD_C(matching_room, std::uint8_t, flag_attr);
 	GET_FIELD_C(matching_room, std::uint8_t, flag_filter);
-	GET_FIELD_C(matching_room, std::uint32_t, mission_id);
 	GET_FIELD_C(matching_room, std::uint32_t, status);
 	GET_FIELD_C(matching_room, std::string, password);
 	GET_FIELD_C(matching_room, std::chrono::seconds, create_date);
@@ -41,13 +41,13 @@ namespace database::matching
 	namespace impl
 	{
 		template <database_type_t Type>
-		std::uint64_t create_room(const std::uint64_t owner_id, const create_param_t& param)
+		std::uint64_t create_room(const std::uint64_t owner_player_id, const create_param_t& param)
 		{
 			return database::access<std::uint64_t>([&](database_t& db)
 			{
 				auto result = db.exec<Type>(
 					sqlpp::insert_into(matching_room::table)
-						.set(matching_room::table.owner_id = owner_id,
+						.set(matching_room::table.owner_player_id = owner_player_id,
 							 matching_room::table.max_slot = param.max_slot,
 							 matching_room::table.region_matching_level = param.region_matching_level,
 							 matching_room::table.flag_attr = param.flag_attr,
@@ -144,34 +144,21 @@ namespace database::matching
 							.where(matching_member::table.f_player_id == player_id && 
 								   matching_member::table.f_room_id == matching_room::table.room_id) == 0;
 
-				auto param_match = 
-					//matching_room::table.int_attr_01 == param.int_attr_param[0] &&
-					//matching_room::table.int_attr_02 == param.int_attr_param[1] &&
-					//matching_room::table.int_attr_03 == param.int_attr_param[2] &&
-					//matching_room::table.int_attr_04 == param.int_attr_param[3] &&
-					//matching_room::table.int_attr_05 == param.int_attr_param[4] &&
-					//matching_room::table.int_attr_06 == param.int_attr_param[5] &&
-					//matching_room::table.int_attr_07 == param.int_attr_param[6] &&
-					matching_room::table.int_attr_08 == param.int_attr_param[7] &&
-					matching_room::table.int_attr_09 == param.int_attr_param[8]// &&
-					//matching_room::table.int_attr_10 == param.int_attr_param[9] &&
-					//matching_room::table.int_attr_11 == param.int_attr_param[10] &&
-					//matching_room::table.int_attr_12 == param.int_attr_param[11] &&
-					//matching_room::table.int_attr_13 == param.int_attr_param[12] &&
-					//matching_room::table.int_attr_14 == param.int_attr_param[13] &&
-					//matching_room::table.int_attr_15 == param.int_attr_param[14] &&
-					//matching_room::table.int_attr_16 == param.int_attr_param[15]
-				;
+				// flag_attr: 0x1 -> unknown
+				// flag_attr: 0x2 -> private?
+				// flag_attr: 0x4 -> unknown
+				// flag_attr: 0x8 -> unknown
+				// flag_attr: 0x10 -> matched/>1 players?
 
+				auto flag_match = matching_room::table.flag_attr == param.flag_attr; // not sure
 				auto status_match = matching_room::table.status == static_cast<std::uint32_t>(status_init);
-
 				auto region_match = matching_room::table.region_matching_level <= param.region_matching_level;
 
 				auto search_rooms = 
 					sqlpp::select(sqlpp::all_of(matching_room::table))
 						.from(matching_room::table)
-							.where(matching_room::table.owner_id != player_id && 
-								   not_member_of && not_full && region_match && param_match && status_match)
+							.where(matching_room::table.owner_player_id != player_id && 
+								   not_member_of && not_full && region_match && flag_match && status_match)
 								.limit(param.max);
 
 				auto results = db.exec<Type>(search_rooms);
@@ -361,7 +348,7 @@ namespace database::matching
 		}
 
 		template <database_type_t Type>
-		void close_room_from_owner(const std::uint64_t owner_id)
+		void close_room_from_owner(const std::uint64_t owner_player_id)
 		{
 			return database::access([&](database_t& db)
 			{
@@ -370,7 +357,7 @@ namespace database::matching
 					const auto target_room =
 						sqlpp::select(matching_room::table.room_id)
 							.from(matching_room::table)
-								.where(matching_room::table.owner_id == owner_id);
+								.where(matching_room::table.owner_player_id == owner_player_id);
 
 					const auto target_room_x = target_room.as(sqlpp::alias::x);
 
@@ -391,7 +378,7 @@ namespace database::matching
 					const auto target_room =
 						sqlpp::select(matching_room::table.room_id)
 							.from(matching_room::table)
-								.where(matching_room::table.owner_id == owner_id);
+								.where(matching_room::table.owner_player_id == owner_player_id);
 
 					db.exec<Type>(
 						sqlpp::remove_from(matching_member::table)
@@ -407,7 +394,7 @@ namespace database::matching
 		}
 
 		template <database_type_t Type>
-		bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id)
+		bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_player_id)
 		{
 			return database::access<bool>([&](database_t& db)
 			{
@@ -415,14 +402,14 @@ namespace database::matching
 					sqlpp::select(matching_member::table.f_player_id)
 						.from(matching_member::table)
 							.where(matching_member::table.f_room_id == room_id && 
-								   matching_member::table.f_player_id != owner_id)
+								   matching_member::table.f_player_id != owner_player_id)
 									.limit(1u);
 				
 				const auto result = db.exec<Type>(
 					sqlpp::update(matching_room::table)
-						.set(matching_room::table.owner_id = new_owner)
+						.set(matching_room::table.owner_player_id = new_owner)
 							.where(matching_room::table.room_id == room_id && 
-								   matching_room::table.owner_id == owner_id && new_owner.is_not_null())
+								   matching_room::table.owner_player_id == owner_player_id && new_owner.is_not_null())
 				);
 
 				return result != 0ull;
@@ -430,26 +417,26 @@ namespace database::matching
 		}
 
 		template <database_type_t Type>
-		void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id)
+		void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_player_id)
 		{
 			database::access([&](database_t& db)
 			{
 				db.exec<Type>(
 					sqlpp::update(matching_room::table)
-						.set(matching_room::table.owner_id = owner_id)
+						.set(matching_room::table.owner_player_id = owner_player_id)
 							.where(matching_room::table.room_id == room_id)
 				);
 			});
 		}
 
 		template <database_type_t Type>
-		void set_room_mission_id(const std::uint64_t room_id, const std::uint64_t mission_id)
+		void set_room_coop_mission_id(const std::uint64_t room_id, const std::uint64_t coop_mission_id)
 		{
 			database::access([&](database_t& db)
 			{
 				db.exec<Type>(
 					sqlpp::update(matching_room::table)
-						.set(matching_room::table.mission_id = mission_id)
+						.set(matching_room::table.f_coop_mission_id = coop_mission_id)
 							.where(matching_room::table.room_id == room_id)
 				);
 			});
@@ -590,23 +577,46 @@ namespace database::matching
 			auto select_owner = sqlpp::select(matching_member::table.f_player_id)
 				.from(matching_member::table)
 					.where(matching_member::table.f_room_id == matching_room::table.room_id &&
-						   matching_member::table.f_player_id == matching_room::table.owner_id);
+						   matching_member::table.f_player_id == matching_room::table.owner_player_id);
 
-			auto bad_rooms = sqlpp::select(matching_room::table.room_id, matching_room::table.owner_id)
+			auto bad_rooms = sqlpp::select(matching_room::table.room_id, matching_room::table.owner_player_id)
 				.from(matching_room::table)
 					.where(select_owner.is_null()).limit(32u);
 
 			auto result = db.exec<Type>(bad_rooms);
 			for (auto& row : result)
 			{
-				migrate_room_owner<Type>(row.room_id, row.owner_id);
+				migrate_room_owner<Type>(row.room_id, row.owner_player_id);
 			}
+		}
+
+		template <database_type_t Type>
+		void delete_player_data(const std::uint64_t player_id)
+		{
+			database::access([&](database_t& db)
+			{
+				const auto player_rooms = sqlpp::select(matching_room::table.room_id)
+					.from(matching_room::table)
+						.where(matching_room::table.owner_player_id == player_id);
+
+				db.exec<Type>(
+					sqlpp::remove_from(matching_member::table)
+						.where(matching_member::table.f_player_id == player_id));
+
+				db.exec<Type>(
+					sqlpp::remove_from(matching_member::table)
+						.where(matching_member::table.f_room_id.in(player_rooms)));
+
+				db.exec<Type>(
+					sqlpp::remove_from(matching_room::table)
+						.where(matching_room::table.owner_player_id == player_id));
+			});
 		}
 	}
 
-	std::uint64_t create_room(const std::uint64_t owner_id, const create_param_t& param)
+	std::uint64_t create_room(const std::uint64_t owner_player_id, const create_param_t& param)
 	{
-		RUN_IMPL(impl::create_room, owner_id, param);
+		RUN_IMPL(impl::create_room, owner_player_id, param);
 	}
 
 	std::optional<matching_room> get_room(const std::uint64_t room_id)
@@ -689,24 +699,24 @@ namespace database::matching
 		RUN_IMPL(impl::close_room, room_id);
 	}
 
-	void close_room_from_owner(const std::uint64_t owner_id)
+	void close_room_from_owner(const std::uint64_t owner_player_id)
 	{
-		RUN_IMPL(impl::close_room_from_owner, owner_id);
+		RUN_IMPL(impl::close_room_from_owner, owner_player_id);
 	}
 
-	bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id)
+	bool migrate_room_owner(const std::uint64_t room_id, const std::uint64_t owner_player_id)
 	{
-		RUN_IMPL(impl::migrate_room_owner, room_id, owner_id);
+		RUN_IMPL(impl::migrate_room_owner, room_id, owner_player_id);
 	}
 
-	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_id)
+	void set_room_owner(const std::uint64_t room_id, const std::uint64_t owner_player_id)
 	{
-		RUN_IMPL(impl::set_room_owner, room_id, owner_id);
+		RUN_IMPL(impl::set_room_owner, room_id, owner_player_id);
 	}
 
-	void set_room_mission_id(const std::uint64_t room_id, const std::uint32_t mission_id)
+	void set_room_coop_mission_id(const std::uint64_t room_id, const std::uint64_t mission_id)
 	{
-		RUN_IMPL(impl::set_room_mission_id, room_id, mission_id);
+		RUN_IMPL(impl::set_room_coop_mission_id, room_id, mission_id);
 	}
 
 	void set_room_status(const std::uint64_t room_id, const std::uint32_t status)
@@ -727,6 +737,11 @@ namespace database::matching
 	std::size_t get_total_member_count()
 	{
 		RUN_IMPL(impl::get_total_member_count);
+	}
+
+	void delete_player_data(const std::uint64_t player_id)
+	{
+		RUN_IMPL(impl::delete_player_data, player_id);
 	}
 
 	class table final : public table_interface
@@ -757,4 +772,4 @@ namespace database::matching
 	};
 }
 
-REGISTER_TABLE(database::matching::table, -1)
+REGISTER_TABLE(database::matching::table, 4)

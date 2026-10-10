@@ -484,7 +484,6 @@ namespace database::defense_missions
 			});
 		}
 
-		
 		template <database_type_t Type>
 		std::vector<defense_mission_record_t> get_record_list(const std::uint64_t player_id)
 		{
@@ -517,7 +516,6 @@ namespace database::defense_missions
 				return list;
 			});
 		}
-
 
 		template <database_type_t Type>
 		void delete_player_data(const std::uint64_t player_id)

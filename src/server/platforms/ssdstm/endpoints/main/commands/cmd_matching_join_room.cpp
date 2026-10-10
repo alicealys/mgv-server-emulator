@@ -39,9 +39,9 @@ namespace emulator::ssd
 			return result;
 		}
 
-		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
+		if (current_room.has_value() && current_room->get_owner_player_id() == user->current_player->get_player_id())
 		{
-			database::matching::migrate_room_owner(current_room->get_room_id(), current_room->get_owner_id());
+			database::matching::migrate_room_owner(current_room->get_room_id(), current_room->get_owner_player_id());
 		}
 
 		database::matching::remove_member(user->current_player->get_player_id());

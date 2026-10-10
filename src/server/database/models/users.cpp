@@ -8,6 +8,8 @@
 #include "shop_purchases.hpp"
 #include "challenge_tasks.hpp"
 #include "rankings.hpp"
+#include "matching.hpp"
+#include "coop_missions.hpp"
 #include "users.hpp"
 #include "variables.hpp"
 #include "../auth.hpp"
@@ -1497,6 +1499,8 @@ namespace database::users
 			deployments::delete_player_data(player.get_player_id());
 			crew_members::delete_player_data(player.get_player_id());
 			challenge_tasks::delete_player_data(player.get_player_id());
+			matching::delete_player_data(player.get_player_id());
+			coop_missions::delete_player_data(player.get_player_id());
 			players::delete_player_data(player.get_player_id());
 		}
 

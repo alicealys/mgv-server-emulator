@@ -372,12 +372,12 @@ set ranking.player_rank = ranked.new_rank, ranking.player_rank_number = new_rank
 create table if not exists `matching_rooms`
 (
 	room_id					bigint unsigned	not null	auto_increment,
-	owner_id				bigint unsigned	not null	unique,
+	owner_player_id			bigint unsigned	not null	unique,
+	f_coop_mission_id		bigint unsigned,
 	max_slot				int unsigned	not null,
 	region_matching_level	int unsigned	not null,
 	flag_attr				int unsigned	not null,
 	flag_filter				int unsigned	not null,
-	mission_id				int unsigned	not null default 0,
 	status					int unsigned	not null default 0,
 	reserve_num				int unsigned	not null default 0,
 	password				varchar(64)	default null,
@@ -401,7 +401,8 @@ create table if not exists `matching_rooms`
 	bin_attr_02				varchar(512) default null,
 	create_date				datetime not null,
 	primary key (`room_id`),
-	foreign key (`owner_id`) references `players`(`player_id`)
+	foreign key (`owner_player_id`) references `players`(`player_id`),
+	foreign key (`f_coop_mission_id`) references coop_missions(`coop_mission_id`)
 )
 -- query:mgssd.matching_members.create
 create table if not exists `matching_members`
@@ -414,5 +415,32 @@ create table if not exists `matching_members`
 	create_date			datetime not null,
 	primary key (`member_id`),
 	foreign key (`f_room_id`) references `matching_rooms`(`room_id`),
+	foreign key (`f_player_id`) references `players`(`player_id`)
+)
+-- query:mgssd.coop_missions.create
+create table if not exists `coop_missions`
+(
+	coop_mission_id		bigint unsigned	not null	auto_increment,
+	owner_player_id		bigint unsigned	not null,
+	mission_code		int unsigned	not null,
+	flag 				int unsigned	not null,
+	create_date			datetime not null,
+	primary key (`coop_mission_id`),
+	foreign key (`owner_player_id`) references `players`(`player_id`)
+)
+-- query:mgssd.coop_mission_results.create
+create table if not exists `coop_mission_results`
+(
+	coop_mission_result_id	bigint unsigned	not null	auto_increment,
+	f_player_id				bigint unsigned	not null,
+	mission_code			int unsigned	not null,
+	mission_type			int unsigned	not null,
+	clear_rank				int unsigned	not null,
+	personal_score			int unsigned	not null,
+	score					int unsigned	not null,
+	waves					int unsigned	not null,
+	rescue					int unsigned	not null,
+	create_date				datetime not null,
+	primary key (`coop_mission_result_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )

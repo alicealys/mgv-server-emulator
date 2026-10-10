@@ -28,7 +28,7 @@ namespace emulator::ssd
 		room_data["room_id"] = room->get_room_id();
 		room_data["max_slot"] = room->get_max_slot();
 
-		const auto owner_user = database::users::find_from_current_player(room->get_owner_id());
+		const auto owner_user = database::users::find_from_current_player(room->get_owner_player_id());
 		if (!owner_user.has_value())
 		{
 			return result;
@@ -49,7 +49,7 @@ namespace emulator::ssd
 
 		const auto members = database::matching::get_members(room->get_room_id());
 
-		room_data["owner_player_id"] = room->get_owner_id();
+		room_data["owner_player_id"] = room->get_owner_player_id();
 		room_data["owner_display_name"] = "";
 		room_data["member_num"] = members.size();
 		room_data["reserve_num"] = 0;
@@ -58,7 +58,7 @@ namespace emulator::ssd
 		room_data["room_searchable_int_attr_external"] = room->int_attr;
 		room_data["room_searchable_bin_attr_external"][0]["data"] = room->bin_attr[0];
 		room_data["room_searchable_bin_attr_external"][1]["data"] = room->bin_attr[1];
-		room_data["coop_mission_id"] = room->get_mission_id();
+		room_data["coop_mission_id"] = room->get_coop_mission_id();
 		room_data["status"] = room->get_status();
 
 		return result;

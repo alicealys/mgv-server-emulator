@@ -28,7 +28,7 @@ namespace emulator::ssd
 			return error(ERR_ROOM_NOT_FOUND);
 		}
 
-		if (room->get_owner_id() != user->current_player->get_player_id())
+		if (room->get_owner_player_id() != user->current_player->get_player_id())
 		{
 			return error(ERR_PERMISSION_DENIED);
 		}

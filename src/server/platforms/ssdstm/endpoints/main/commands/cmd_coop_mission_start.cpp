@@ -4,6 +4,7 @@
 #include "cmd_inventory_save.hpp"
 
 #include "database/models/matching.hpp"
+#include "database/models/coop_missions.hpp"
 
 namespace emulator::ssd
 {
@@ -24,9 +25,15 @@ namespace emulator::ssd
 		}
 
 		const auto current_room = database::matching::get_room_from_member(user->current_player->get_player_id());
-		if (current_room.has_value() && current_room->get_owner_id() == user->current_player->get_player_id())
+		if (!current_room.has_value())
 		{
-			database::matching::set_room_mission_id(current_room->get_room_id(), param.mission_code);
+			return error(ERR_DATABASE);
+		}
+
+		if (current_room->get_owner_player_id() == user->current_player->get_player_id())
+		{
+			const auto coop_mission_id = database::coop_missions::start_mission(current_room->get_owner_player_id(), iter->second->mission_id, param.flag);
+			database::matching::set_room_coop_mission_id(current_room->get_room_id(), coop_mission_id);
 			database::matching::set_room_status(current_room->get_room_id(), database::matching::status_mission_start);
 		}
 

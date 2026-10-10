@@ -22,7 +22,7 @@ namespace emulator::ssd
 			return result;
 		}
 
-		if (room->get_owner_id() != user->current_player->get_player_id())
+		if (room->get_owner_player_id() != user->current_player->get_player_id())
 		{
 			return result;
 		}

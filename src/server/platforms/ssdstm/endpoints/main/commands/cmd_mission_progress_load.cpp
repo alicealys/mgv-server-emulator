@@ -5,6 +5,7 @@
 #include "database/models/defense_missions.hpp"
 #include "database/models/shop_purchases.hpp"
 #include "database/models/challenge_tasks.hpp"
+#include "database/models/coop_missions.hpp"
 
 namespace emulator::ssd
 {
@@ -68,6 +69,21 @@ namespace emulator::ssd
 		result["coop_embedded_mission_record_info_list"] = json::array();
 		result["coop_event_mission_record_info_list"] = json::array();
 		result["coop_reward_limit_list"] = json::array();
+
+		{
+			const auto embedded_list = database::coop_missions::get_record_list(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded);
+			const auto event_list = database::coop_missions::get_record_list(user->current_player->get_player_id(), database::coop_missions::mission_type_event);
+
+			for (auto i = 0ull; i < embedded_list.size(); i++)
+			{
+				embedded_list[i].to_json(result["coop_embedded_mission_record_info_list"][i]);
+			}
+
+			for (auto i = 0ull; i < event_list.size(); i++)
+			{
+				event_list[i].to_json(result["coop_event_mission_record_info_list"][i]);
+			}
+		}
 
 		result["craft_board"] = json::array();
 

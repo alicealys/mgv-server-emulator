@@ -4,6 +4,7 @@
 #include "cmd_inventory_save.hpp"
 
 #include "database/models/rankings.hpp"
+#include "database/models/coop_missions.hpp"
 
 namespace emulator::ssd
 {
@@ -100,7 +101,7 @@ namespace emulator::ssd
 		personal_reward["text_id"] = 0;
 		personal_reward["energy"] = 0;
 
-		auto rank = 0u;
+		std::uint8_t rank = 0u;
 		for (; rank < 5u; rank++)
 		{
 			if (rank < iter->second->rank_threshold.size() && param.score >= iter->second->rank_threshold[rank])
@@ -114,6 +115,16 @@ namespace emulator::ssd
 		result["reward"] = json::array();
 		result["rank"] = rank;
 		result["reward_event_point"] = 0;
+
+		database::coop_missions::coop_mission_record_t record{};
+		record.mission_code = iter->second->mission_id;
+		record.iris_score = param.score;
+		record.personal_score = param.personal_score;
+		record.waves = param.waves;
+		record.rescue = param.rescue;
+		record.clear_rank = rank;
+
+		database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
 
 		if (param.personal_score >= 150)
 		{
