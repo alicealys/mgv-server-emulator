@@ -143,7 +143,7 @@ namespace emulator::ssd
 
 		auto& defense_mission_reward_j = result["defense_mission_reward"];
 		defense_mission_reward_j = json::array();
-
+		
 		auto& mission_settings = iter->second;
 		for (auto i = 0ull; i < wave_results.size(); i++)
 		{

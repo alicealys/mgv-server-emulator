@@ -38,7 +38,23 @@ namespace emulator::ssd
 
 			avatar.to_json(entry["avatar_info"]);
 			current_loadout.to_json(equipment_info["loadout"], 0);
-			nonstackable_list->to_json(equipment_info["nonstackable_list"]);
+
+			auto& nonstackable_list_j = equipment_info["nonstackable_list"];
+			nonstackable_list_j = json::array();
+
+			{
+				auto idx = 0u;
+				for (auto o = 0ull; o < nonstackable_list->size(); o++)
+				{
+					auto& item = nonstackable_list->operator[](o);
+					if (item.production_id == 0 || item.life == 0 || item.life_max == 0)
+					{
+						continue;
+					}
+
+					item.to_json(nonstackable_list_j[idx++]);
+				}
+			}
 
 			for (auto o = 0ull; o < ARRAYSIZE(inventory->energy_invested); o++)
 			{

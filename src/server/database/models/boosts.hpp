@@ -74,9 +74,6 @@ namespace database::boosts
 
 		void to_json(json::value& data) const;
 
-	private:
-		game::item_t item_{};
-
 	};
 
 	void add_boost(const std::uint64_t user_id, const std::uint8_t type, const std::uint32_t duration,
