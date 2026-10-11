@@ -15,6 +15,8 @@ namespace config
 			std::uint32_t server_version = 19;
 			std::chrono::seconds reference_time = 1519113600s;
 			bool disable_tutorial_tips = false;
+			bool store_client_ips = false;
+			bool allow_save_restore = true;
 		};
 
 		std::string base_url = "http://localhost:80";
@@ -32,7 +34,6 @@ namespace config
 		bool use_tmp_folder = true;
 		std::string http_client_ip_header = "";
 		bool enable_web_api = true;
-		bool allow_save_restore = true;
 		vars_t vars;
 	};
 

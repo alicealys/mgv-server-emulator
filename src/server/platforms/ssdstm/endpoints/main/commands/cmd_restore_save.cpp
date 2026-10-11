@@ -11,7 +11,7 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		static const auto allow_restore = config::get().allow_save_restore;
+		static const auto allow_restore = config::get().vars.allow_save_restore;
 		if (!allow_restore)
 		{
 			return error(ERR_PERMISSION_DENIED);

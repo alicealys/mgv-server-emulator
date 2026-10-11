@@ -8,27 +8,38 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		const auto& ex_ip_j = data["ex_ip"];
-		const auto& in_ip_j = data["in_ip"];
-		const auto& ex_port_j = data["ex_port"];
-		const auto& in_port_j = data["in_port"];
-		const auto& nat_j = data["nat"];
-
-		if (!ex_ip_j.is_string() || !in_ip_j.is_string() || !nat_j.is_string() ||
-			!ex_port_j.is_uint64() || !in_port_j.is_uint64())
+		param_t param{};
+		if (!json::read(param, data))
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto& ex_ip = ex_ip_j.get<std::string>();
-		const auto ex_port = ex_port_j.as<std::uint16_t>();
-		const auto& in_ip = in_ip_j.get<std::string>();
-		const auto in_port = in_port_j.as<std::uint16_t>();
-		const auto& nat = nat_j.get<std::string>();
+		const auto parse_ip = [](const std::string& data)
+			-> std::string
+		{
+			in_addr addr{};
+			if (inet_pton(AF_INET, data.data(), &addr) <= 0)
+			{
+				return {};
+			}
 
-		database::users::set_ip_and_port(user->get_user_id(),
-			ex_ip, ex_port, in_ip, in_port, nat
-		);
+			return std::format("{}.{}.{}.{}", 
+				addr.S_un.S_un_b.s_b1, 
+				addr.S_un.S_un_b.s_b2, 
+				addr.S_un.S_un_b.s_b3, 
+				addr.S_un.S_un_b.s_b4);
+		};
+
+		const auto& cfg = config::get();
+
+		if (cfg.vars.store_client_ips)
+		{
+			database::users::set_ip_and_port(user->get_user_id(),
+				parse_ip(param.ex_ip), param.ex_port,
+				parse_ip(param.in_ip), param.in_port,
+				param.nat
+			);
+		}
 
 		return result;
 	}

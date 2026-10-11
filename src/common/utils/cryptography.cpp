@@ -714,10 +714,9 @@ namespace utils::cryptography
 			return {};
 		}
 
-		const auto last_char = result[size - 1];
-		if (last_char <= 8)
+		if (size > 0 && result[size - 1] <= 8)
 		{
-			result.resize(size - static_cast<size_t>(last_char));
+			result.resize(size - static_cast<size_t>(result[size - 1]));
 		}
 
 		return result;

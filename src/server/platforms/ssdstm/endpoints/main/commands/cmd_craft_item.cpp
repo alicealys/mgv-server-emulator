@@ -71,6 +71,12 @@ namespace emulator::ssd
 		auto stackable_count = 0u;
 
 		database::players::nonstackable_item_t nonstackable_item{};
+
+		result["inventory_index_junk"] = 0xFFFF;
+		result["left_resources"] = json::array();
+		result["crafted_stackable_items"] = json::array();
+		nonstackable_item.to_json(result["crafted_nonstackable_item"]);
+
 		if (!iter->second->production->is_stackable())
 		{
 			assert(survival_gear == nullptr);
@@ -146,9 +152,6 @@ namespace emulator::ssd
 		user->current_player->set_stackable_item_list(*stackable_item_list);
 		user->current_player->set_inventory(*player_inventory_info);
 		user->set_inventory(*user_inventory_info);
-
-		result["inventory_index_junk"] = 0xFFFF;
-		result["left_resources"] = json::array();
 
 		return result;
 	}

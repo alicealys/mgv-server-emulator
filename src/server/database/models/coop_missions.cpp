@@ -238,6 +238,8 @@ namespace database::coop_missions
 		{
 			database.run_query("mgssd.coop_missions.create");
 			database.run_query("mgssd.coop_mission_results.create");
+
+			get_reward_settings();
 		}
 	};
 }
