@@ -23,11 +23,16 @@ namespace emulator::ssd
 				return {};
 			}
 
-			return std::format("{}.{}.{}.{}", 
-				addr.S_un.S_un_b.s_b1, 
-				addr.S_un.S_un_b.s_b2, 
-				addr.S_un.S_un_b.s_b3, 
-				addr.S_un.S_un_b.s_b4);
+			std::string buffer(0x100, 0);
+			const auto result = inet_ntop(AF_INET, &addr, buffer.data(), buffer.size());
+			if (result == nullptr)
+			{
+				return {};
+			}
+
+			buffer.resize(std::strlen(result));
+
+			return buffer;
 		};
 
 		const auto& cfg = config::get();
