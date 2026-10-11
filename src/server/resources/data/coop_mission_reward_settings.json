@@ -1,10 +1,2769 @@
 {
-    "event_point_table": {
-        "65": [3032, 2526, 1516,  758,  505,  253],
-        "50": [1819, 1091,  546,  364,  182,    0],
-        "40": [1091,  655,  327,  218,  109,    0],
-        "20": [1415,  849,  424,  283,  141,    0],
-        "10": [   0,    0,    0,    0,    0,    0],
-        "5":  [ 606,  364,  182,  121,   61,    0]
-    }
+    "min_personal_score": 150,
+    "rank_reward_pools": [
+        [
+            {
+                "category": 2,
+                "code": 1463620409,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2005136112,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2797817048,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 137342337,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1825010080,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 748946328,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 558288480,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 228617258,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1838834262,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1011739393,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 610345596,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4125799908,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3539753464,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2705646157,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1148278885,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 115163560,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2767139619,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 698785494,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3432717535,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3294332848,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1000872713,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 543601040,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 241620889,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1102060167,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1689819723,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1578551514,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2351214410,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 659186611,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 52315815,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1180024528,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1958203837,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2299673473,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1500783462,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3089308033,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2902951972,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1273898115,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2723918434,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 691787417,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1163286388,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4194801876,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2765929841,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3813979240,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2296914220,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2250482716,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4158700432,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 192952997,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1625917180,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 692347935,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2915031818,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3235748777,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3146303617,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3590103722,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2537198928,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4153063019,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3899931687,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1387964931,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1492738719,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1454621966,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 478396096,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3288330954,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1799106644,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 667861870,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 713857245,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 765326691,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 400656352,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3929766390,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3997981418,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4141072795,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3173088291,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1872456878,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2076226920,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1351619277,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3319421548,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1675211519,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2958339248,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2241922892,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2738997598,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1762976405,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4201586587,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2739820737,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 71270402,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3224937007,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3390594060,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3331587632,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 587199912,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1885460401,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1235798413,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 792059196,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3754627609,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4259118409,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3316205410,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 881348023,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1293146864,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3618940532,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2339434399,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2835265214,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 932933201,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4179357244,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2401003623,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 463552564,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3723846999,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 8894349,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2150348976,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3086057053,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3525017969,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4007886442,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3923167950,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 771038323,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1635778301,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2702695005,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2053994004,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 213411184,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 343548441,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4064564108,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3300087696,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2663201446,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2009717403,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3214647895,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 122981529,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 662496936,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3240988739,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1392509429,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2372657237,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1527817416,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 708329684,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 901486235,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 204863513,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1348794448,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3601718563,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3149101456,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1785488600,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2495381497,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 829475395,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2171800685,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 416851983,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 507576139,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1567755984,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1689683539,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2788965953,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3250359382,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 649465379,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1698176824,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2167023305,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3422380560,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3046481747,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 77177360,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1960042238,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1920483636,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4164599275,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3552900709,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2281160817,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3551973231,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 13461639,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3500286773,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2336480109,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3567662923,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2738249711,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1788603245,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 950137059,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3012590117,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2054892678,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1663625583,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 8572265,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1502189960,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1447620027,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1512696710,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2016081965,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 700582264,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2155285449,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3729672234,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1676525868,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 175922475,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 684705243,
+                "max": 1
+            }
+        ],
+        [
+            {
+                "category": 2,
+                "code": 2748625494,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4069260860,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 1801262451,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 3700260926,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1037798192,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3318605723,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1006077040,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1654378104,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3083004517,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3786110803,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2716188746,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2875830686,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4269215521,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 701730760,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 464923445,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 236561093,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3997563500,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 163874,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 378222328,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2622092139,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1375959702,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 621182067,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 435680755,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4096057154,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4084394028,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2287213901,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3063478806,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1569159809,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2043799535,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1511147076,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3064748183,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4193942746,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3703063563,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 804110527,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 342859323,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3801303691,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4037085231,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1630223087,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 2790346001,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 918521108,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3349419441,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2792246638,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1238914204,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 905781753,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2731603960,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1518826848,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 685998792,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2495651248,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3710496136,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3653465293,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1771130160,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4071345468,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3329576887,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4054911300,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 4139684190,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1747362802,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3554511358,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 1060364093,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3288874674,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1072301369,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3232901814,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3381686601,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1572961964,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1714517088,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 3615666847,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2451790245,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3400918054,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2543959073,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 422405356,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2925158046,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 514092409,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 715331753,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1565549858,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2442905367,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2042919026,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3096800046,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 432079879,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2304946000,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4172540120,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3014860529,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2150863116,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1730640501,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 1474958797,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2874065041,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1819157048,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3446588817,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2674838966,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3011717200,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2488195554,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1656532958,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3119026085,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4101377323,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2790956194,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3581711122,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1891448497,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1754909271,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3667991319,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4195294409,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 76363850,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3718150426,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2055716644,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2169742295,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 34846808,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2700018846,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 471468610,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2812429460,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 73554157,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 467754235,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3951934680,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 802113308,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3709679450,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3878610342,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2293931356,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 443049470,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 97039380,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3722501953,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3748217261,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2469421592,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2169880451,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 233706996,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3091264815,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 448254236,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2194831444,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3539356774,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4029310670,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3871176880,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3081418850,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2601181115,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 834030232,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 801990959,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3060151726,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 759152360,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 4003571413,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1345275906,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 802046648,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2774761088,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3792095121,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2649400437,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2690311579,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1480681977,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3595389286,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 2730035071,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1197454983,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 504509003,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2082171166,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1124032930,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 901457345,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2239228509,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 920266670,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 848659473,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3096679285,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3027147495,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 76262853,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 471016656,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 804143128,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1417670397,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1339847673,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2933609114,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3742047370,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1854423065,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1399974716,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1084533772,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3201342900,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1266864072,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1861748424,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 47492679,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 889417914,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1153692871,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2487567963,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1334375782,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2666042317,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 590699929,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 2717126446,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 248781883,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 508872022,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1347970656,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2584827772,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 858014084,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2190962418,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1986881984,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 179371624,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1453825865,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 947492243,
+                "max": 2
+            },
+            {
+                "category": 2,
+                "code": 429446071,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1116925407,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3988216832,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 969255616,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2421731274,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3106857602,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 3388208662,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1283795050,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2272220160,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1080947802,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2248123059,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 2950458109,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1446770419,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 1280480382,
+                "max": 1
+            },
+            {
+                "category": 2,
+                "code": 122350411,
+                "max": 1
+            }
+        ],
+        [
+            {
+                "category": 1,
+                "code": 671360119,
+                "max": 12
+            },
+            {
+                "category": 1,
+                "code": 3503301662,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 2881070920,
+                "max": 17
+            },
+            {
+                "category": 1,
+                "code": 2121126921,
+                "max": 30
+            },
+            {
+                "category": 0,
+                "code": 3527693027,
+                "max": 45
+            },
+            {
+                "category": 0,
+                "code": 402108968,
+                "max": 33
+            },
+            {
+                "category": 0,
+                "code": 2631726949,
+                "max": 10
+            },
+            {
+                "category": 0,
+                "code": 13072261,
+                "max": 7
+            },
+            {
+                "category": 0,
+                "code": 1231382387,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 1596182404,
+                "max": 24
+            },
+            {
+                "category": 0,
+                "code": 1350317253,
+                "max": 5
+            },
+            {
+                "category": 0,
+                "code": 1192574839,
+                "max": 15
+            },
+            {
+                "category": 0,
+                "code": 283272891,
+                "max": 6
+            },
+            {
+                "category": 0,
+                "code": 259257465,
+                "max": 24
+            },
+            {
+                "category": 0,
+                "code": 1962214906,
+                "max": 5
+            },
+            {
+                "category": 0,
+                "code": 726981477,
+                "max": 9
+            },
+            {
+                "category": 0,
+                "code": 393671195,
+                "max": 3
+            },
+            {
+                "category": 0,
+                "code": 1777572575,
+                "max": 14
+            },
+            {
+                "category": 0,
+                "code": 2010483284,
+                "max": 5
+            },
+            {
+                "category": 0,
+                "code": 4257614424,
+                "max": 4
+            },
+            {
+                "category": 0,
+                "code": 1034106141,
+                "max": 5
+            },
+            {
+                "category": 0,
+                "code": 3354936979,
+                "max": 25
+            },
+            {
+                "category": 0,
+                "code": 3273887015,
+                "max": 15
+            },
+            {
+                "category": 0,
+                "code": 4106849156,
+                "max": 24
+            },
+            {
+                "category": 0,
+                "code": 1489721477,
+                "max": 24
+            },
+            {
+                "category": 0,
+                "code": 3992212357,
+                "max": 9
+            },
+            {
+                "category": 0,
+                "code": 4149835431,
+                "max": 33
+            },
+            {
+                "category": 0,
+                "code": 3601360897,
+                "max": 15
+            },
+            {
+                "category": 0,
+                "code": 633586682,
+                "max": 25
+            },
+            {
+                "category": 1,
+                "code": 3635415264,
+                "max": 30
+            },
+            {
+                "category": 1,
+                "code": 2352339834,
+                "max": 30
+            },
+            {
+                "category": 1,
+                "code": 3836415089,
+                "max": 18
+            },
+            {
+                "category": 1,
+                "code": 1724456570,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 2786243012,
+                "max": 30
+            },
+            {
+                "category": 1,
+                "code": 1400514302,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 3857959936,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 2958515880,
+                "max": 30
+            },
+            {
+                "category": 1,
+                "code": 2973462150,
+                "max": 4
+            },
+            {
+                "category": 1,
+                "code": 3180354380,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 1363309315,
+                "max": 18
+            },
+            {
+                "category": 1,
+                "code": 1575912764,
+                "max": 40
+            },
+            {
+                "category": 1,
+                "code": 669622028,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 2531631588,
+                "max": 4
+            },
+            {
+                "category": 1,
+                "code": 3206783950,
+                "max": 30
+            },
+            {
+                "category": 1,
+                "code": 1716797920,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 112008005,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 2125906237,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 4076724647,
+                "max": 12
+            },
+            {
+                "category": 1,
+                "code": 1733672628,
+                "max": 12
+            },
+            {
+                "category": 1,
+                "code": 1113320356,
+                "max": 6
+            },
+            {
+                "category": 1,
+                "code": 265310723,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 4226715042,
+                "max": 18
+            },
+            {
+                "category": 1,
+                "code": 2841384743,
+                "max": 20
+            },
+            {
+                "category": 1,
+                "code": 756726861,
+                "max": 30
+            }
+        ],
+        [
+            {
+                "category": 0,
+                "code": 1560447688,
+                "max": 108
+            },
+            {
+                "category": 0,
+                "code": 1489721477,
+                "max": 80
+            },
+            {
+                "category": 0,
+                "code": 2631726949,
+                "max": 57
+            },
+            {
+                "category": 0,
+                "code": 3809301646,
+                "max": 107
+            },
+            {
+                "category": 0,
+                "code": 1192574839,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 4257614424,
+                "max": 48
+            },
+            {
+                "category": 0,
+                "code": 259257465,
+                "max": 80
+            },
+            {
+                "category": 0,
+                "code": 1034106141,
+                "max": 3
+            },
+            {
+                "category": 0,
+                "code": 1128130151,
+                "max": 125
+            },
+            {
+                "category": 0,
+                "code": 4149835431,
+                "max": 6
+            },
+            {
+                "category": 0,
+                "code": 2047256367,
+                "max": 18
+            },
+            {
+                "category": 0,
+                "code": 1777572575,
+                "max": 168
+            },
+            {
+                "category": 0,
+                "code": 393671195,
+                "max": 57
+            },
+            {
+                "category": 0,
+                "code": 1962214906,
+                "max": 73
+            },
+            {
+                "category": 0,
+                "code": 1231382387,
+                "max": 58
+            },
+            {
+                "category": 0,
+                "code": 726981477,
+                "max": 90
+            },
+            {
+                "category": 0,
+                "code": 3992212357,
+                "max": 113
+            },
+            {
+                "category": 0,
+                "code": 2010483284,
+                "max": 13
+            },
+            {
+                "category": 0,
+                "code": 1350317253,
+                "max": 17
+            },
+            {
+                "category": 0,
+                "code": 1548824161,
+                "max": 12
+            },
+            {
+                "category": 0,
+                "code": 283272891,
+                "max": 19
+            },
+            {
+                "category": 0,
+                "code": 1267357055,
+                "max": 8
+            },
+            {
+                "category": 0,
+                "code": 2365311381,
+                "max": 132
+            },
+            {
+                "category": 0,
+                "code": 4106849156,
+                "max": 8
+            },
+            {
+                "category": 0,
+                "code": 633586682,
+                "max": 79
+            },
+            {
+                "category": 0,
+                "code": 402108968,
+                "max": 31
+            },
+            {
+                "category": 0,
+                "code": 13072261,
+                "max": 18
+            }
+        ],
+        [
+            {
+                "category": 1,
+                "code": 1926046022,
+                "max": 27
+            },
+            {
+                "category": 1,
+                "code": 3107395265,
+                "max": 12
+            },
+            {
+                "category": 1,
+                "code": 1573235120,
+                "max": 12
+            },
+            {
+                "category": 1,
+                "code": 4125851173,
+                "max": 9
+            },
+            {
+                "category": 1,
+                "code": 721006517,
+                "max": 9
+            },
+            {
+                "category": 1,
+                "code": 2966374417,
+                "max": 9
+            },
+            {
+                "category": 0,
+                "code": 3601360897,
+                "max": 30
+            },
+            {
+                "category": 0,
+                "code": 2617753389,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 633586682,
+                "max": 50
+            },
+            {
+                "category": 0,
+                "code": 259257465,
+                "max": 62
+            },
+            {
+                "category": 0,
+                "code": 4035726156,
+                "max": 36
+            },
+            {
+                "category": 0,
+                "code": 1350317253,
+                "max": 66
+            },
+            {
+                "category": 0,
+                "code": 1596182404,
+                "max": 230
+            },
+            {
+                "category": 0,
+                "code": 3527693027,
+                "max": 48
+            },
+            {
+                "category": 0,
+                "code": 1192574839,
+                "max": 93
+            },
+            {
+                "category": 0,
+                "code": 2711878789,
+                "max": 310
+            },
+            {
+                "category": 0,
+                "code": 4106849156,
+                "max": 155
+            },
+            {
+                "category": 0,
+                "code": 2706393556,
+                "max": 45
+            },
+            {
+                "category": 0,
+                "code": 2099024312,
+                "max": 111
+            },
+            {
+                "category": 0,
+                "code": 2047256367,
+                "max": 42
+            },
+            {
+                "category": 0,
+                "code": 402108968,
+                "max": 183
+            },
+            {
+                "category": 0,
+                "code": 312712163,
+                "max": 54
+            },
+            {
+                "category": 0,
+                "code": 21362465,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 2010483284,
+                "max": 75
+            },
+            {
+                "category": 0,
+                "code": 1267357055,
+                "max": 93
+            },
+            {
+                "category": 1,
+                "code": 1026397086,
+                "max": 15
+            },
+            {
+                "category": 0,
+                "code": 3178541737,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 550007210,
+                "max": 300
+            },
+            {
+                "category": 0,
+                "code": 3045540317,
+                "max": 45
+            },
+            {
+                "category": 0,
+                "code": 2096500705,
+                "max": 54
+            },
+            {
+                "category": 0,
+                "code": 478869482,
+                "max": 36
+            },
+            {
+                "category": 0,
+                "code": 3641293300,
+                "max": 18
+            },
+            {
+                "category": 0,
+                "code": 3273887015,
+                "max": 54
+            },
+            {
+                "category": 0,
+                "code": 1548824161,
+                "max": 30
+            },
+            {
+                "category": 0,
+                "code": 1034106141,
+                "max": 12
+            },
+            {
+                "category": 0,
+                "code": 3354936979,
+                "max": 111
+            },
+            {
+                "category": 0,
+                "code": 4149835431,
+                "max": 124
+            },
+            {
+                "category": 0,
+                "code": 172637158,
+                "max": 111
+            },
+            {
+                "category": 0,
+                "code": 1418333441,
+                "max": 48
+            },
+            {
+                "category": 0,
+                "code": 3134623080,
+                "max": 27
+            },
+            {
+                "category": 0,
+                "code": 3191301819,
+                "max": 100
+            },
+            {
+                "category": 1,
+                "code": 3926983143,
+                "max": 9
+            },
+            {
+                "category": 0,
+                "code": 1009227634,
+                "max": 12
+            },
+            {
+                "category": 0,
+                "code": 1000133156,
+                "max": 48
+            },
+            {
+                "category": 0,
+                "code": 2654678634,
+                "max": 72
+            },
+            {
+                "category": 1,
+                "code": 2439803927,
+                "max": 9
+            },
+            {
+                "category": 1,
+                "code": 3886982432,
+                "max": 9
+            },
+            {
+                "category": 0,
+                "code": 1489721477,
+                "max": 54
+            },
+            {
+                "category": 0,
+                "code": 1074404550,
+                "max": 168
+            }
+        ],
+        []
+    ],
+    "levels": [
+        {
+            "enemy_level": 65,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 3032,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 2526,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 1516,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 758,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 505,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 253,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        },
+        {
+            "enemy_level": 50,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 1819,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 1091,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 546,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 364,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 182,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        },
+        {
+            "enemy_level": 40,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 1091,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 655,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 327,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 218,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 109,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        },
+        {
+            "enemy_level": 20,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 1415,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 849,
+                    "min_rewards": 1,
+                    "max_rewards": 10
+                },
+                {
+                    "energy": 0,
+                    "event_points": 424,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 283,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 141,
+                    "min_rewards": 20,
+                    "max_rewards": 30
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        },
+        {
+            "enemy_level": 10,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 606,
+                    "min_rewards": 1,
+                    "max_rewards": 5
+                },
+                {
+                    "energy": 0,
+                    "event_points": 364,
+                    "min_rewards": 1,
+                    "max_rewards": 5
+                },
+                {
+                    "energy": 0,
+                    "event_points": 182,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 121,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 61,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        },
+        {
+            "enemy_level": 5,
+            "rank_rewards": [
+                {
+                    "energy": 0,
+                    "event_points": 606,
+                    "min_rewards": 1,
+                    "max_rewards": 5
+                },
+                {
+                    "energy": 0,
+                    "event_points": 364,
+                    "min_rewards": 1,
+                    "max_rewards": 5
+                },
+                {
+                    "energy": 0,
+                    "event_points": 182,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 121,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 61,
+                    "min_rewards": 10,
+                    "max_rewards": 20
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                }
+            ]
+        }
+    ]
 }

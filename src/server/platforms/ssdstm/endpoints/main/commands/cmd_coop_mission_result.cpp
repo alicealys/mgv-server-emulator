@@ -6,27 +6,10 @@
 #include "database/models/rankings.hpp"
 #include "database/models/coop_missions.hpp"
 #include "database/models/boosts.hpp"
+#include "database/models/present_box.hpp"
 
 namespace emulator::ssd
 {
-	cmd_coop_mission_result::cmd_coop_mission_result()
-	{
-		auto data = utils::resources::load_json(RESOURCE_COOP_MISSION_REWARD_SETTINGS);
-		auto& event_point_table_j = data["event_point_table"];
-
-		for (auto& [k, v] : event_point_table_j.get_object())
-		{
-			const auto difficulty = std::atoi(k.data());
-			reward_settings_t::point_table_entry_t entry{};
-			if (!json::read(entry, v))
-			{
-				continue;
-			}
-
-			this->reward_settings_.event_point_table.insert(std::make_pair(static_cast<std::uint32_t>(difficulty), entry));
-		}
-	}
-
 	json::value cmd_coop_mission_result::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		json::value result;
@@ -85,20 +68,27 @@ namespace emulator::ssd
 			user->current_player->set_play_record(*play_record);
 		}
 
-		[[ maybe_unused ]] auto& personal_reward = result["personal_reward"];
-		[[ maybe_unused ]] auto& reward = result["reward"];
+		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
 
-		personal_reward["battle_pack_list"] = json::array();
-		personal_reward["expire_date"] = 0;
-		personal_reward["kub_boost_flag"] = 0;
-		personal_reward["nonstackable_list"] = json::array();
-		personal_reward["present_box_num"] = 0;
-		personal_reward["present_list"] = json::array();
-		personal_reward["recipe_list"] = json::array();
-		personal_reward["resources_list"] = json::array();
-		personal_reward["stackable_list"] = json::array();
-		personal_reward["text_id"] = 0;
-		personal_reward["energy"] = 0;
+		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
+		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
+
+		const auto has_boost = bp_boost.duration != 0 || kub_boost.duration != 0;
+
+		[[ maybe_unused ]] auto& personal_reward_j = result["personal_reward"];
+		[[ maybe_unused ]] auto& mission_rewards_j = result["reward"];
+
+		personal_reward_j["battle_pack_list"] = json::array();
+		personal_reward_j["expire_date"] = 0;
+		personal_reward_j["kub_boost_flag"] = std::uint8_t(kub_boost.duration != 0);
+		personal_reward_j["nonstackable_list"] = json::array();
+		personal_reward_j["present_box_num"] = 0;
+		personal_reward_j["present_list"] = json::array();
+		personal_reward_j["recipe_list"] = json::array();
+		personal_reward_j["resources_list"] = json::array();
+		personal_reward_j["stackable_list"] = json::array();
+		personal_reward_j["text_id"] = 0;
+		personal_reward_j["energy"] = 0;
 
 		std::uint8_t rank = 0u;
 		for (; rank < 5u; rank++)
@@ -113,46 +103,140 @@ namespace emulator::ssd
 		result["limit_result"]["mission_code"] = param.mission_id;
 		result["reward"] = json::array();
 		result["rank"] = rank;
+		result["boost_flag"] = has_boost & 1;
 		result["reward_event_point"] = 0;
 
-		if (param.clear_type == 0 && param.personal_score >= 150)
+		const auto& reward_settings = database::coop_missions::get_reward_settings();
+		if (param.clear_type != 0 && param.personal_score < reward_settings.min_personal_score)
 		{
-			database::coop_missions::coop_mission_record_t record{};
-			record.mission_code = iter->second->mission_id;
-			record.iris_score = param.score;
-			record.personal_score = param.personal_score;
-			record.waves = param.waves;
-			record.rescue = param.rescue;
-			record.clear_rank = rank;
+			return result;
+		}
 
-			database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
+		database::coop_missions::coop_mission_record_t record{};
+		record.mission_code = iter->second->mission_id;
+		record.iris_score = param.score;
+		record.personal_score = param.personal_score;
+		record.waves = param.waves;
+		record.rescue = param.rescue;
+		record.clear_rank = rank;
 
-			const auto now = std::chrono::system_clock::now();
-			const auto expire_date = now + 14 * 24h;
-			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-			const auto text_id = 229691447841577;
-			const auto bp_boost = database::boosts::get_boost_of_type(user->get_user_id(), database::boosts::boost_type_bp);
+		database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
 
-			personal_reward["text_id"] = text_id;
-			personal_reward["expire_date"] = expire_date_s;
+		const auto now = std::chrono::system_clock::now();
+		const auto expire_date = now + 14 * 24h;
+		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto text_id = 229691447841577;
 
-			// todo: give reward
-			// personal_reward ...
-			// reward ...
+		personal_reward_j["text_id"] = text_id;
+		personal_reward_j["expire_date"] = expire_date_s;
 
-			const auto table_iter = this->reward_settings_.event_point_table.find(iter->second->enemy_level);
-			if (table_iter != this->reward_settings_.event_point_table.end())
+		// personal_reward ...
+
+		std::uint32_t reward_event_point{};
+		database::players::stackable_item_list_t stackable_list{};
+		database::players::inventory_resource_list_t resource_list{};
+		database::players::player_inventory_t player_inventory{};
+
+		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
+		if (!rewards.empty())
+		{
+			user->current_player->get_stackable_item_list(stackable_list);
+			user->current_player->get_inventory_resource_list(resource_list);
+			user->current_player->get_inventory(player_inventory);
+		}
+
+		for (auto i = rank; i < 5; i++)
+		{
+			auto& rank_entry = mission_rewards_j[i - rank];
+			rank_entry["battle_pack_list"] = json::array();
+			rank_entry["expire_date"] = expire_date_s.count();
+			rank_entry["kub_boost_flag"] = 0;
+			rank_entry["nonstackable_list"] = json::array();
+			rank_entry["present_box_num"] = 0;
+			rank_entry["present_list"] = json::array();
+			rank_entry["recipe_list"] = json::array();
+			rank_entry["resources_list"] = json::array();
+			rank_entry["stackable_list"] = json::array();
+			rank_entry["text_id"] = text_id;
+			rank_entry["energy"] = 0;
+
+			if (kub_boost.duration)
 			{
-				auto reward_event_point = table_iter->second[rank];
-				if (bp_boost.has_value())
+				switch (i)
 				{
-					reward_event_point *= bp_boost->mag1 / 100;
+				case 0:
+					rank_entry["kub_boost_flag"] = 3;
+					break;
+				case 1:
+					rank_entry["kub_boost_flag"] = 7;
+					break;
+				case 2:
+					rank_entry["kub_boost_flag"] = 11;
+					break;
+				case 3:
+					rank_entry["kub_boost_flag"] = 15;
+					break;
+				case 4:
+					rank_entry["kub_boost_flag"] = 19;
+					break;
 				}
-
-				user->add_event_points(reward_event_point);
-				database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
-				result["reward_event_point"] = reward_event_point;
 			}
+		}
+
+		database::users::give_item_params_t give_params{};
+		give_params.resource_list = &resource_list;
+		give_params.stackable_list = &stackable_list;
+		give_params.player_inventory = &player_inventory;
+		give_params.text_id = text_id;
+
+		for (const auto& reward : rewards)
+		{
+			if (reward.rank < rank)
+			{
+				continue;
+			}
+
+			auto& rank_entry = mission_rewards_j[reward.rank - rank];
+			auto& present_list_j = rank_entry["present_list"];
+
+			game::item_t give_item = reward.item;
+			// todo
+			//if (kub_boost.duration && give_item.category == game::ITEM_CATEGORY_ENERGY)
+			//{
+			//	const auto multiplier = (static_cast<float>(kub_boost.get_multiplier()) / 2.f) * 0.1f;
+			//	give_item.num += static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
+			//	rank_entry["kub_boost_flag"] = 1;
+			//}
+
+			if (!user->give_item(give_item, give_params, rank_entry))
+			{
+				database::present_box::add_item(user->get_user_id(),
+					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				give_item.to_json(present_list_j[present_list_j.size()]);
+			}
+		}
+
+		if (bp_boost.duration != 0)
+		{
+			reward_event_point *= bp_boost.get_multiplier();
+		}
+
+		user->add_event_points(reward_event_point);
+		database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
+		result["reward_event_point"] = reward_event_point;
+
+		const auto present_count = database::present_box::get_present_count(user->get_user_id());
+		for (auto i = rank; i < 5; i++)
+		{
+			auto& rank_entry = mission_rewards_j[i - rank];
+			rank_entry["present_box_num"] = present_count;
+		}
+
+		if (!rewards.empty())
+		{
+			user->current_player->set_inventory_resource_list(resource_list);
+			user->current_player->set_stackable_item_list(stackable_list);
+			user->current_player->set_inventory(player_inventory);
 		}
 
 		return result;

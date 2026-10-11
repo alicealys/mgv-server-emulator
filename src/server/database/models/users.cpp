@@ -1122,6 +1122,11 @@ namespace database::users
 			const auto should_craft = recipe_iter->second->potential != nullptr && !recipe_iter->second->production->is_stackable();
 			if (should_craft)
 			{
+				if (params.nonstackable_list == nullptr)
+				{
+					return false;
+				}
+
 				database::players::nonstackable_item_t nonstackable_item{};
 				nonstackable_item.flag |= 16;
 				nonstackable_item.production_id = recipe_iter->second->id;
@@ -1141,7 +1146,7 @@ namespace database::users
 			}
 			else
 			{
-				return params.user_inventory;
+				return params.user_inventory != nullptr;
 			}
 		}
 		case game::ITEM_CATEGORY_PRESET_RADIO:

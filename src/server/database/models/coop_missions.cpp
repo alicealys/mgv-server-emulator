@@ -10,6 +10,93 @@
 
 namespace database::coop_missions
 {
+	namespace
+	{
+		reward_settings_t load_reward_settings()
+		{
+			reward_settings_t settings{};
+
+			auto data = utils::resources::load_json(RESOURCE_COOP_MISSION_REWARD_SETTINGS);
+			if (!json::read(settings, data))
+			{
+				throw std::runtime_error("[coop missions] failed to parse reward settings");
+			}
+
+			return settings;
+		}
+	}
+
+	const reward_settings_t& get_reward_settings()
+	{
+		static const auto settings = load_reward_settings();
+		return settings;
+	}
+
+	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points)
+	{
+		std::vector<reward_info_t> list;
+
+		const auto& settings = get_reward_settings();
+
+		const reward_settings_t::level_t* reward_level = nullptr;
+		for (auto& level : settings.levels)
+		{
+			if (enemy_level >= level.enemy_level)
+			{
+				reward_level = &level;
+				break;
+			}
+		}
+
+		if (reward_level == nullptr)
+		{
+			return list;
+		}
+
+		for (std::size_t i = rank; i < reward_level->rank_rewards.size(); i++)
+		{
+			auto& reward = reward_level->rank_rewards[i];
+			if (reward.energy != 0)
+			{
+				reward_info_t info{};
+				info.rank = static_cast<std::uint8_t>(i);
+				info.item.category = game::ITEM_CATEGORY_ENERGY;
+				info.item.num = reward.energy;
+				list.emplace_back(info);
+			}
+
+			if (i == rank)
+			{
+				event_points = reward.event_points;
+			}
+
+			const auto reward_count = utils::cryptography::random::get_integer(reward.min_rewards, reward.max_rewards);
+			if (i > settings.rank_reward_pools.size())
+			{
+				break;
+			}
+
+			const auto& pool = settings.rank_reward_pools[i];
+			for (auto o = 0u; o < reward_count; o++)
+			{
+				const auto idx = utils::cryptography::random::get_integer() % pool.size();
+				const auto& item = pool[idx];
+				const auto num = item.max <= 1
+					? 1
+					: utils::cryptography::random::get_integer(1u, item.max);
+
+				reward_info_t info{};
+				info.rank = static_cast<std::uint8_t>(i);
+				info.item.category = item.category;
+				info.item.code = item.code;
+				info.item.num = num;
+				list.emplace_back(info);
+			}
+		}
+
+		return list;
+	}
+
 	void coop_mission_record_t::to_json(json::value& data) const
 	{
 		data["clear_rank"] = this->clear_rank;

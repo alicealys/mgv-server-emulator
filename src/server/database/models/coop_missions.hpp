@@ -26,6 +26,43 @@ namespace database::coop_missions
 		mission_type_event = 2,
 	};
 
+	struct reward_settings_t
+	{
+		struct reward_t
+		{
+			std::uint8_t category;
+			std::uint32_t code;
+			std::uint32_t max;
+		};
+
+		struct rank_reward_t
+		{
+			std::uint32_t energy;
+			std::uint32_t event_points;
+			std::uint32_t min_rewards;
+			std::uint32_t max_rewards;
+		};
+
+		struct level_t
+		{
+			std::uint32_t enemy_level;
+			std::vector<rank_reward_t> rank_rewards;
+		};
+
+		std::uint32_t min_personal_score;
+		std::vector<std::vector<reward_t>> rank_reward_pools;
+		std::vector<level_t> levels;
+	};
+
+	struct reward_info_t
+	{
+		std::uint8_t rank;
+		game::item_t item;
+	};
+
+	const reward_settings_t& get_reward_settings();
+	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points);
+
 	class coop_mission_result
 	{
 	public:

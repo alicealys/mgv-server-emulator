@@ -20,19 +20,8 @@ namespace emulator::ssd
 			std::uint8_t waves;
 		};
 
-		struct reward_settings_t
-		{
-			using point_table_entry_t = std::array<std::uint32_t, 6>;
-
-			std::unordered_map<std::uint32_t, point_table_entry_t> event_point_table;
-		};
-
-		cmd_coop_mission_result();
 		json::value execute(json::value& data, const std::optional<database::users::user>& user) override;
 		std::uint32_t flags() override;
-
-	private:
-		reward_settings_t reward_settings_{};
 
 	};
 }
