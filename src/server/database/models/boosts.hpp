@@ -15,6 +15,7 @@ namespace database::boosts
 		std::uint32_t mag1;
 		std::uint32_t mag2;
 		std::chrono::seconds expire_date;
+		bool valid;
 
 		std::uint32_t get_multiplier() const;
 		std::chrono::seconds get_time_left() const;

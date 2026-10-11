@@ -69,7 +69,7 @@ namespace emulator::ssd
 			const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
 			for (auto i = 0ull; i < boost_list.size(); i++)
 			{
-				if (boost_list[i].duration == 0)
+				if (!boost_list[i].valid)
 				{
 					continue;
 				}

@@ -1109,18 +1109,7 @@ namespace database::users
 				return false;
 			}
 
-			if (recipe_iter->second->production == nullptr)
-			{
-				return false;
-			}
-			
-			if (params.user_inventory != nullptr)
-			{
-				params.user_inventory->set_obtained_recipe(recipe_iter->second->index);
-			}
-
-			const auto should_craft = recipe_iter->second->potential != nullptr && !recipe_iter->second->production->is_stackable();
-			if (should_craft)
+			if (recipe_iter->second->junk)
 			{
 				if (params.nonstackable_list == nullptr)
 				{
@@ -1146,7 +1135,13 @@ namespace database::users
 			}
 			else
 			{
-				return params.user_inventory != nullptr;
+				if (params.user_inventory == nullptr)
+				{
+					return false;
+				}
+
+				params.user_inventory->set_obtained_recipe(recipe_iter->second->index);
+				return true;
 			}
 		}
 		case game::ITEM_CATEGORY_PRESET_RADIO:

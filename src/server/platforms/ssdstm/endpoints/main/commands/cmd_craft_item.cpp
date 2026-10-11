@@ -102,7 +102,7 @@ namespace emulator::ssd
 		{
 			database::players::stackable_item_t stackable_item{};
 			stackable_item.production_index = iter->second->production->index;
-			stackable_item.flag = 1;
+			stackable_item.flag = 0;
 			stackable_item.count = count;
 
 			if (!stackable_item_list->add_item(stackable_item))

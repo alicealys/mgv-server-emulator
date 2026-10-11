@@ -1268,6 +1268,8 @@ namespace database::players
 
 	void map_unlock_list_t::to_json(json::value& data) const
 	{
+		data = json::array();
+
 		auto count = 0u;
 		for (auto i = 0ull; i < sizeof(this->map) * 8; i++)
 		{

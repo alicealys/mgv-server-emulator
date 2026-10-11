@@ -106,6 +106,7 @@ namespace database::boosts
 					entry.duration = static_cast<std::uint32_t>(row.duration);
 					entry.mag1 = static_cast<std::uint32_t>(row.mag1);
 					entry.mag2 = static_cast<std::uint32_t>(row.mag2);
+					entry.valid = true;
 					entry.expire_date = std::chrono::duration_cast<std::chrono::seconds>(row.expire_date.value().time_since_epoch());
 				}
 
@@ -142,6 +143,7 @@ namespace database::boosts
 					params.duration = static_cast<std::uint32_t>(row.duration);
 					params.mag1 = static_cast<std::uint32_t>(row.mag1);
 					params.mag2 = static_cast<std::uint32_t>(row.mag2);
+					params.valid = true;
 					params.expire_date = std::chrono::duration_cast<std::chrono::seconds>(row.expire_date.value().time_since_epoch());
 
 					list.emplace(params);

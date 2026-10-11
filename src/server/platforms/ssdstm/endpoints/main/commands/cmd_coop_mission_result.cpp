@@ -73,14 +73,14 @@ namespace emulator::ssd
 		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
 		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
 
-		const auto has_boost = bp_boost.duration != 0 || kub_boost.duration != 0;
+		const auto has_boost = bp_boost.valid || kub_boost.valid;
 
 		[[ maybe_unused ]] auto& personal_reward_j = result["personal_reward"];
 		[[ maybe_unused ]] auto& mission_rewards_j = result["reward"];
 
 		personal_reward_j["battle_pack_list"] = json::array();
 		personal_reward_j["expire_date"] = 0;
-		personal_reward_j["kub_boost_flag"] = std::uint8_t(kub_boost.duration != 0);
+		personal_reward_j["kub_boost_flag"] = std::uint8_t(kub_boost.valid);
 		personal_reward_j["nonstackable_list"] = json::array();
 		personal_reward_j["present_box_num"] = 0;
 		personal_reward_j["present_list"] = json::array();
@@ -216,7 +216,7 @@ namespace emulator::ssd
 			}
 		}
 
-		if (bp_boost.duration != 0)
+		if (bp_boost.valid)
 		{
 			reward_event_point *= bp_boost.get_multiplier();
 		}
