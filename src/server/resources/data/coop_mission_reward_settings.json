@@ -1,5 +1,82 @@
 {
     "min_personal_score": 150,
+    "personal_reward_pools": [
+        {
+            "score": 6000,
+            "energy": 0,
+            "min_rewards": 1,
+            "max_rewards": 1,
+            "rewards": [
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 757538538,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 2775088132,
+                    "max": 5
+                }
+            ]
+        },
+        {
+            "score": 4000,
+            "energy": 0,
+            "min_rewards": 1,
+            "max_rewards": 1,
+            "rewards": [
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 757538538,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 2775088132,
+                    "max": 5
+                }
+            ]
+        },
+        {
+            "score": 2000,
+            "energy": 0,
+            "min_rewards": 1,
+            "max_rewards": 1,
+            "rewards": [
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 757538538,
+                    "max": 5
+                },
+                {
+                    "category": 10,
+                    "code": 2775088132,
+                    "max": 5
+                }
+            ]
+        },
+        {
+            "score": 0,
+            "energy": 0,
+            "count": 0,
+            "rewards": []
+        }
+    ],
     "rank_reward_pools": [
         [
             {

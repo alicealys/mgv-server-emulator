@@ -49,8 +49,18 @@ namespace database::coop_missions
 			std::vector<rank_reward_t> rank_rewards;
 		};
 
+		struct personal_reward_pool_t
+		{
+			std::uint32_t energy;
+			std::uint32_t score;
+			std::uint32_t min_rewards;
+			std::uint32_t max_rewards;
+			std::vector<reward_t> rewards;
+		};
+
 		std::uint32_t min_personal_score;
 		std::vector<std::vector<reward_t>> rank_reward_pools;
+		std::vector<personal_reward_pool_t> personal_reward_pools;
 		std::vector<level_t> levels;
 	};
 
@@ -61,6 +71,7 @@ namespace database::coop_missions
 	};
 
 	const reward_settings_t& get_reward_settings();
+	std::vector<reward_info_t> generate_personal_rewards(const std::uint32_t personal_score);
 	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points);
 
 	class coop_mission_result

@@ -75,8 +75,8 @@ namespace emulator::ssd
 
 		const auto has_boost = bp_boost.valid || kub_boost.valid;
 
-		[[ maybe_unused ]] auto& personal_reward_j = result["personal_reward"];
-		[[ maybe_unused ]] auto& mission_rewards_j = result["reward"];
+		auto& personal_reward_j = result["personal_reward"];
+		auto& mission_rewards_j = result["reward"];
 
 		personal_reward_j["battle_pack_list"] = json::array();
 		personal_reward_j["expire_date"] = 0;
@@ -91,7 +91,7 @@ namespace emulator::ssd
 		personal_reward_j["energy"] = 0;
 
 		std::uint8_t rank = 0u;
-		for (; rank < 5u; rank++)
+		for (; rank <= 5u; rank++)
 		{
 			if (rank < iter->second->rank_threshold.size() && param.score >= iter->second->rank_threshold[rank])
 			{
@@ -130,15 +130,16 @@ namespace emulator::ssd
 		personal_reward_j["text_id"] = text_id;
 		personal_reward_j["expire_date"] = expire_date_s;
 
-		// personal_reward ...
-
 		std::uint32_t reward_event_point{};
+
+		const auto personal_rewards = database::coop_missions::generate_personal_rewards(param.personal_score);
+		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
+
 		database::players::stackable_item_list_t stackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
 
-		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
-		if (!rewards.empty())
+		if (!personal_rewards.empty() || !rewards.empty())
 		{
 			user->current_player->get_stackable_item_list(stackable_list);
 			user->current_player->get_inventory_resource_list(resource_list);
@@ -189,6 +190,25 @@ namespace emulator::ssd
 		give_params.player_inventory = &player_inventory;
 		give_params.text_id = text_id;
 
+		for (auto& reward : personal_rewards)
+		{
+			game::item_t give_item = reward.item;
+			if (kub_boost.duration && give_item.category == game::ITEM_CATEGORY_ENERGY)
+			{
+				const auto multiplier = (static_cast<float>(kub_boost.get_multiplier()) / 2.f) * 0.1f;
+				give_item.num += static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
+				personal_reward_j["kub_boost_flag"] = 1;
+			}
+
+			if (!user->give_item(give_item, give_params, personal_reward_j))
+			{
+				auto& present_list_j = personal_reward_j["present_list"];
+				database::present_box::add_item(user->get_user_id(),
+					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				give_item.to_json(present_list_j[present_list_j.size()]);
+			}
+		}
+
 		for (const auto& reward : rewards)
 		{
 			if (reward.rank < rank)
@@ -232,7 +252,7 @@ namespace emulator::ssd
 			rank_entry["present_box_num"] = present_count;
 		}
 
-		if (!rewards.empty())
+		if (!personal_rewards.empty() || !rewards.empty())
 		{
 			user->current_player->set_inventory_resource_list(resource_list);
 			user->current_player->set_stackable_item_list(stackable_list);

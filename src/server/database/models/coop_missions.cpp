@@ -32,6 +32,47 @@ namespace database::coop_missions
 		return settings;
 	}
 
+	std::vector<reward_info_t> generate_personal_rewards(const std::uint32_t personal_score)
+	{
+		std::vector<reward_info_t> list;
+
+		const auto& settings = get_reward_settings();
+
+		for (const auto& pool : settings.personal_reward_pools)
+		{
+			if (personal_score < pool.score)
+			{
+				continue;
+			}
+
+			if (pool.energy != 0)
+			{
+				reward_info_t info{};
+				info.item.category = game::ITEM_CATEGORY_ENERGY;
+				info.item.num = pool.energy;
+				list.emplace_back(info);
+			}
+
+			const auto reward_count = utils::cryptography::random::get_integer(pool.min_rewards, pool.max_rewards);
+			for (auto o = 0u; o < reward_count; o++)
+			{
+				const auto idx = utils::cryptography::random::get_integer() % pool.rewards.size();
+				const auto& item = pool.rewards[idx];
+				const auto num = item.max <= 1
+					? 1
+					: utils::cryptography::random::get_integer(1u, item.max);
+
+				reward_info_t info{};
+				info.item.category = item.category;
+				info.item.code = item.code;
+				info.item.num = num;
+				list.emplace_back(info);
+			}
+		}
+
+		return list;
+	}
+
 	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points)
 	{
 		std::vector<reward_info_t> list;
