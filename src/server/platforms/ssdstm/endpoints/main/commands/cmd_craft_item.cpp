@@ -84,7 +84,7 @@ namespace emulator::ssd
 			if (!nonstackable_item_list->can_add_production(iter->second->production,
 				user->get_max_weapon_storage(), user->get_max_gear_storage()))
 			{
-				return false;
+				return error(ERR_OVER_CAPACITY);
 			}
 
 			if (inventory_index_junk != 0xFFFF)

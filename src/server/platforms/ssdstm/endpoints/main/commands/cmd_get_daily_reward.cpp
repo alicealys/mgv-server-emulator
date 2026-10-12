@@ -95,6 +95,8 @@ namespace emulator::ssd
 
 		const auto text_id = 181130097427538;
 
+		std::vector<game::item_t> presents;
+
 		if (is_reward)
 		{
 			const auto expire_date = now_s + 14 * 24h;
@@ -115,12 +117,13 @@ namespace emulator::ssd
 				}
 
 				added_codes.insert(item.code);
-
-				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire,
-					expire_date, item, text_id);
+				presents.emplace_back(item);
 				item.to_json(present_list[present_list.size()]);
 			}
+
+			database::present_box::add_items(user->get_user_id(),
+				database::present_box::present_flag_expire,
+				expire_date, presents, text_id);
 
 			user->set_daily_reward();
 		}

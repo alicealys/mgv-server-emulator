@@ -195,6 +195,8 @@ namespace emulator::ssd
 		give_params.battle_pack_list = &battle_pack_list;
 		give_params.text_id = text_id;
 
+		std::vector<game::item_t> presents;
+
 		for (auto& reward : personal_rewards)
 		{
 			game::item_t give_item = reward.item;
@@ -207,8 +209,7 @@ namespace emulator::ssd
 			if (!user->give_item(give_item, give_params, personal_reward_j))
 			{
 				auto& present_list_j = personal_reward_j["present_list"];
-				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				presents.emplace_back(give_item);
 				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
@@ -234,8 +235,7 @@ namespace emulator::ssd
 
 			if (!user->give_item(give_item, give_params, rank_entry))
 			{
-				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				presents.emplace_back(give_item);
 				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
@@ -248,6 +248,9 @@ namespace emulator::ssd
 		user->add_event_points(reward_event_point);
 		database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
 		result["reward_event_point"] = reward_event_point;
+
+		database::present_box::add_items(user->get_user_id(),
+			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = rank; i < rank_count; i++)

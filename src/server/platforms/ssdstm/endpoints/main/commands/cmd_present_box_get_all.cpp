@@ -27,6 +27,7 @@ namespace emulator::ssd
 		user->get_inventory(user_inventory);
 
 		const auto now = std::chrono::system_clock::now();
+		std::vector<std::uint64_t> delete_present_ids;
 
 		auto count = 0u;
 		for (auto i = 0ull; i < items.size(); i++)
@@ -61,9 +62,11 @@ namespace emulator::ssd
 			entry_j["param3"] = reward.param3;
 			entry_j["param4"] = reward.param4;
 			entry_j["param5"] = reward.param5;
-			database::present_box::delete_item(item.get_present_id());
+
+			delete_present_ids.emplace_back(item.get_present_id());
 		}
 
+		database::present_box::delete_items(delete_present_ids);
 		user->current_player->set_stackable_item_list(stackable_list);
 		user->current_player->set_nonstackable_item_list(nonstackable_list);
 		user->current_player->set_inventory_resource_list(resource_list);

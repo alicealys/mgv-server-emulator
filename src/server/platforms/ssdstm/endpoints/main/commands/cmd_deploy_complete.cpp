@@ -38,6 +38,7 @@ namespace emulator::ssd
 		const auto now = std::chrono::system_clock::now();
 		const auto expire_date = now + 14 * 24h;
 		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto text_id = 229691447841577;
 
 		auto& reward_info = deploy_result["reward_info"];
 		reward_info["battle_pack_list"] = json::array();
@@ -49,7 +50,9 @@ namespace emulator::ssd
 		reward_info["resources_list"] = json::array();
 		reward_info["stackable_list"] = json::array();
 		reward_info["text_id"] = 0;
-		reward_info["energy"] = 0;
+		reward_info["energy"] = text_id;
+
+		auto& present_list_j = reward_info["present_list"];
 
 		deploy_result["bad_status_list"] = json::array();
 		deploy_result["motivation_list"] = json::array();
@@ -62,6 +65,8 @@ namespace emulator::ssd
 		user.current_player->get_inventory_resource_list(resource_list);
 		user.current_player->get_stackable_item_list(stackable_list);
 		user.current_player->get_inventory(player_inventory);
+
+		std::vector<game::item_t> presents;
 
 		const auto& params = team.get_params();
 
@@ -85,6 +90,7 @@ namespace emulator::ssd
 			give_params.resource_list = &resource_list;
 			give_params.stackable_list = &stackable_list;
 			give_params.player_inventory = &player_inventory;
+			give_params.text_id = text_id;
 
 			for (auto i = 0ull; i < iter->second.reward_list.size(); i++)
 			{
@@ -96,9 +102,8 @@ namespace emulator::ssd
 
 				if (!user.give_item(reward.item_info, give_params, reward_info))
 				{
-					database::present_box::add_item(user.get_user_id(),
-						database::present_box::present_flag_expire,
-						expire_date_s, reward.item_info);
+					presents.emplace_back(reward.item_info);
+					reward.item_info.to_json(present_list_j[present_list_j.size()]);
 				}
 			}
 		}
@@ -181,6 +186,9 @@ namespace emulator::ssd
 		user.current_player->set_inventory_resource_list(resource_list);
 		user.current_player->set_stackable_item_list(stackable_list);
 		user.current_player->set_inventory(player_inventory);
+
+		database::present_box::add_items(user.get_user_id(),
+			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
 
 		reward_info["present_box_num"] = database::present_box::get_present_count(user.get_user_id());
 		return true;

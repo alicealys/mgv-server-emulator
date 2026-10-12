@@ -66,6 +66,8 @@ namespace emulator::ssd
 		give_params.player_inventory = &player_inventory;
 		give_params.text_id = text_id;
 
+		std::vector<game::item_t> presents;
+
 		const auto kub_boost = database::boosts::get_boost_of_type(user->get_user_id(), database::boosts::boost_type_kub);
 		if (kub_boost.has_value())
 		{
@@ -92,11 +94,13 @@ namespace emulator::ssd
 
 			if (!user->give_item(give_item, give_params, rank_entry))
 			{
-				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire | database::present_box::present_flag_new, expire_date_s, give_item, text_id);
+				presents.emplace_back(give_item);
 				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
+
+		database::present_box::add_items(user->get_user_id(),
+			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = rank; i <= 5; i++)

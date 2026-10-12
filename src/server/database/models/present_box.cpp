@@ -120,7 +120,7 @@ namespace database::present_box
 				return list;
 			});
 		}
-		
+
 		template <database_type_t Type>
 		void delete_all_items(const std::uint64_t user_id)
 		{
@@ -131,7 +131,18 @@ namespace database::present_box
 						.where(present_box_entry::table.f_user_id == user_id));
 			});
 		}
-		
+
+		template <database_type_t Type>
+		void delete_items(const std::vector<std::uint64_t>& present_ids)
+		{
+			database::access([&](database::database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::remove_from(present_box_entry::table)
+						.where(present_box_entry::table.present_id.in(sqlpp::value_list(present_ids))));
+			});
+		}
+
 		template <database_type_t Type>
 		void delete_exceeding(const std::uint64_t user_id)
 		{
@@ -253,8 +264,59 @@ namespace database::present_box
 			{
 				return db.exec<Type>(sqlpp::insert_into(present_box_entry::table)
 					.set(present_box_entry::table.f_user_id = user_id,
-						present_box_entry::table.flags = flags,
-						present_box_entry::table.expire_date = std::chrono::system_clock::time_point(expire_date),
+						 present_box_entry::table.flags = flags,
+						 present_box_entry::table.expire_date = std::chrono::system_clock::time_point(expire_date),
+						 present_box_entry::table.item_num = item.num,
+						 present_box_entry::table.item_category = item.category,
+						 present_box_entry::table.item_code = item.code,
+						 present_box_entry::table.item_param1 = item.param1,
+						 present_box_entry::table.item_param2 = item.param2,
+						 present_box_entry::table.item_param3 = item.param3,
+						 present_box_entry::table.item_param4 = item.param4,
+						 present_box_entry::table.item_param5 = item.param5,
+						 present_box_entry::table.text_id = text_id
+					)
+				);
+			}
+		}
+
+		template <database_type_t Type>
+		void add_items(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date,
+			const std::vector<game::item_t>& items, const std::uint64_t text_id)
+		{
+			if (items.empty())
+			{
+				return;
+			}
+
+			const auto target_flags = present_flag_new | flags;
+			return database::access([&](database::database_t& db)
+			{
+				auto insert_query = sqlpp::insert_into(present_box_entry::table)
+					.columns(
+						present_box_entry::table.f_user_id,
+						present_box_entry::table.flags,
+						present_box_entry::table.expire_date,
+						present_box_entry::table.item_num,
+						present_box_entry::table.item_category,
+						present_box_entry::table.item_code,
+						present_box_entry::table.item_param1,
+						present_box_entry::table.item_param2,
+						present_box_entry::table.item_param3,
+						present_box_entry::table.item_param4,
+						present_box_entry::table.item_param5,
+						present_box_entry::table.text_id
+					);
+
+				const auto time = std::chrono::system_clock::time_point(expire_date);
+				const auto date_value = std::chrono::time_point_cast<std::chrono::microseconds>(time);
+
+				for (auto& item : items)
+				{
+					insert_query.values.add(
+						present_box_entry::table.f_user_id = user_id,
+						present_box_entry::table.flags = target_flags,
+						present_box_entry::table.expire_date = date_value,
 						present_box_entry::table.item_num = item.num,
 						present_box_entry::table.item_category = item.category,
 						present_box_entry::table.item_code = item.code,
@@ -264,13 +326,16 @@ namespace database::present_box
 						present_box_entry::table.item_param4 = item.param4,
 						present_box_entry::table.item_param5 = item.param5,
 						present_box_entry::table.text_id = text_id
-					)
-				);
-			}
+					);
+				}
+
+				db.exec<Type>(insert_query);
+				delete_exceeding<Type>(user_id);
+			});
 		}
 
 		template <database_type_t Type>
-		std::uint64_t add_item(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date, 
+		std::uint64_t add_item(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date,
 			const game::item_t& item, const std::uint64_t text_id)
 		{
 			const auto target_flags = present_flag_new | flags;
@@ -387,9 +452,19 @@ namespace database::present_box
 		RUN_IMPL(impl::delete_all_items, user_id);
 	}
 
+	void delete_items(const std::vector<std::uint64_t>& present_ids)
+	{
+		RUN_IMPL(impl::delete_items, present_ids);
+	}
+
 	std::uint64_t add_item(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item, const std::uint64_t lang_id)
 	{
 		RUN_IMPL(impl::add_item, user_id, flags, expire_date, item, lang_id);
+	}
+
+	void add_items(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const std::vector<game::item_t>& items, const std::uint64_t lang_id)
+	{
+		RUN_IMPL(impl::add_items, user_id, flags, expire_date, items, lang_id);
 	}
 
 	bool has_new_item(const std::uint64_t user_id)

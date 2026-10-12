@@ -46,6 +46,8 @@ namespace emulator::ssd
 		give_params.player_inventory = &player_inventory;
 		give_params.user_inventory = &user_inventory;
 
+		std::vector<game::item_t> presents;
+
 		for (auto i = 0ull; i < list_j.size(); i++)
 		{
 			entry_t entry{};
@@ -94,13 +96,15 @@ namespace emulator::ssd
 				const auto item = lottery->second();
 				if (!user->give_item(item, give_params, result_entry))
 				{
-					database::present_box::add_item(user->get_user_id(),
-						database::present_box::present_flag_expire, expire_date_s, item);
+					presents.emplace_back(item);
 					item.to_json(present_list_j[present_list_j.size()]);
 					expire_date_j = expire_date_s.count();
 				}
 			}
 		}
+
+		database::present_box::add_items(user->get_user_id(),
+			database::present_box::present_flag_expire, expire_date_s, presents);
 
 		user->current_player->set_battle_pack_list(inventory_battle_packs);
 		user->current_player->set_stackable_item_list(stackable_list);

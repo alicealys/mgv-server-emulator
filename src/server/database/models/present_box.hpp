@@ -85,13 +85,21 @@ namespace database::present_box
 	};
 
 	std::optional<present_box_entry> find_item(const std::uint64_t present_id);
-	bool delete_item(const std::uint64_t present_id);
+	std::vector<present_box_entry> get_all_items(const std::uint64_t user_id);
+
 	void remove_new_flag(const std::uint64_t user_id, const std::uint64_t present_id);
 	void remove_new_flags(const std::uint64_t user_id);
-	std::vector<present_box_entry> get_all_items(const std::uint64_t user_id);
+
 	std::size_t get_present_count(const std::uint64_t user_id);
+
+	bool delete_item(const std::uint64_t present_id);
 	void delete_all_items(const std::uint64_t user_id);
+	void delete_items(const std::vector<std::uint64_t>& present_ids);
+	
 	std::uint64_t add_item(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const game::item_t& item, const std::uint64_t lang_id = 0);
+	void add_items(const std::uint64_t user_id, const std::uint32_t flags, const std::chrono::seconds expire_date, const std::vector<game::item_t>& items, const std::uint64_t lang_id = 0);
+	
 	bool has_new_item(const std::uint64_t user_id);
+	
 	void delete_user_data(const std::uint64_t user_id);
 }

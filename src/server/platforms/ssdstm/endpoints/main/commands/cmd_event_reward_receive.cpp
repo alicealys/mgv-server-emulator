@@ -46,15 +46,14 @@ namespace emulator::ssd
 			return result;
 		}
 
+		std::vector<game::item_t> presents;
+
 		const auto add_reward = [&](const game::item_t& item, const std::uint64_t text_id)
 		{
 			reward_info["text_id"] = text_id;
 			reward_info["expire_date"] = expire_date_s.count();
 
-			database::present_box::add_item(user->get_user_id(),
-				database::present_box::present_flag_expire,
-				expire_date_s, item, text_id);
-
+			presents.emplace_back(item);
 			item.to_json(present_list[present_list.size()]);
 		};
 
@@ -68,6 +67,8 @@ namespace emulator::ssd
 			}
 
 			const auto acquired_rewards = database::events::get_acquired_rewards(current_event->get_event_id(), user->get_user_id());
+			const auto text_id = 1898634391ull;
+
 			const auto got_reward = [&](const std::uint8_t type, const std::uint64_t reward_id)
 			{
 				const auto iter_cb = [&](const database::events::event_reward& reward)
@@ -93,14 +94,20 @@ namespace emulator::ssd
 					continue;
 				}
 
-				add_reward(reward.item_info, 1898634391ull);
+				add_reward(reward.item_info, text_id);
 				database::events::add_reward(current_event->get_event_id(), user->get_user_id(),
 					database::events::reward_type_border, reward.reward_id, true);
 			}
+
+			database::present_box::add_items(user->get_user_id(),
+				database::present_box::present_flag_expire,
+				expire_date_s, presents, text_id);
 		}
 		case 1:
 		{
 			const auto entitlements = database::events::get_entitlements(current_event->get_event_id(), user->get_user_id());
+			const auto text_id = 1306356998ull;
+
 			for (const auto& entitlement : entitlements)
 			{
 				const auto event_params = database::events::get_event_params(entitlement.get_event_type());
@@ -133,9 +140,13 @@ namespace emulator::ssd
 						continue;
 					}
 
-					add_reward(item, 1306356998ull);
+					add_reward(item, text_id);
 				}
 			}
+
+			database::present_box::add_items(user->get_user_id(),
+				database::present_box::present_flag_expire,
+				expire_date_s, presents, text_id);
 
 			database::events::clear_entitlements(current_event->get_event_id(), user->get_user_id());
 		}
