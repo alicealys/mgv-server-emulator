@@ -574,11 +574,6 @@ namespace database::deployments
 
 			get_deployments_mission_list();
 			get_deployments_mission_map();
-
-			if (get_team_count(3) < 1)
-			{
-				create_team(3);
-			}
 		}
 	};
 }
