@@ -43,7 +43,7 @@ namespace database::boosts
 
 	std::uint32_t boost_params_t::get_multiplier() const
 	{
-		return this->mag1 / 100;
+		return std::max(100u, this->mag1) / 100;
 	}
 
 	std::chrono::seconds boost_params_t::get_time_left() const

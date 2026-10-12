@@ -45,6 +45,7 @@ namespace database::coop_missions
 
 		struct level_t
 		{
+			bool has_rank6;
 			std::uint32_t enemy_level;
 			std::vector<rank_reward_t> rank_rewards;
 		};
@@ -59,7 +60,8 @@ namespace database::coop_missions
 		};
 
 		std::uint32_t min_personal_score;
-		std::vector<std::vector<reward_t>> rank_reward_pools;
+		std::vector<std::vector<reward_t>> rank6_reward_pools;
+		std::vector<std::vector<reward_t>> rank5_reward_pools;
 		std::vector<personal_reward_pool_t> personal_reward_pools;
 		std::vector<level_t> levels;
 	};

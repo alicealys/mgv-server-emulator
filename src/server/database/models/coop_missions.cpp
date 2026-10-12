@@ -112,12 +112,16 @@ namespace database::coop_missions
 			}
 
 			const auto reward_count = utils::cryptography::random::get_integer(reward.min_rewards, reward.max_rewards);
-			if (i > settings.rank_reward_pools.size())
+			const auto& pools = reward_level->has_rank6
+				? settings.rank6_reward_pools
+				: settings.rank5_reward_pools;
+
+			if (i > pools.size())
 			{
 				break;
 			}
 
-			const auto& pool = settings.rank_reward_pools[i];
+			const auto& pool = pools[i];
 			for (auto o = 0u; o < reward_count; o++)
 			{
 				const auto idx = utils::cryptography::random::get_integer() % pool.size();
