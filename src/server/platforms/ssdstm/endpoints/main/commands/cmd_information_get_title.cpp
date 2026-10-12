@@ -12,7 +12,6 @@ namespace emulator::ssd
 	std::vector<cmd_information_get_title::message_t> cmd_information_get_title::messages;
 	std::unordered_map<std::string, std::function<std::string(const std::uint8_t)>> cmd_information_get_title::message_vars;
 
-
 	std::string cmd_information_get_title::format_message(const std::string& text, const std::uint8_t lang)
 	{
 		// maybe use fmt for this
@@ -149,6 +148,16 @@ namespace emulator::ssd
 			if (!json::read(message, list[i]))
 			{
 				continue;
+			}
+
+			const auto iter = std::ranges::find_if(this->messages.begin(), this->messages.end(), [&](const message_t& other)
+			{
+				return message.info_id == other.info_id;
+			});
+
+			if (iter != this->messages.end())
+			{
+				throw std::runtime_error(std::format("[information list] duplicate info_id {}", message.info_id));
 			}
 
 			this->messages.emplace_back(message);
