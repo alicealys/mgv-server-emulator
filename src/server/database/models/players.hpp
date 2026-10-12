@@ -74,6 +74,8 @@ namespace database::players
 		void initialize(const std::shared_ptr<game::production_t>& production, const std::shared_ptr<game::potential_t>& potential);
 		bool parse(json::value& data);
 		void to_json(json::value& data) const;
+
+		std::shared_ptr<game::production_t> get_production() const;
 	};
 
 	struct stackable_item_t
@@ -927,10 +929,15 @@ namespace database::players
 			return value.production_id == 0;
 		}
 
+		std::uint32_t get_weapon_count() const;
+		std::uint32_t get_gear_count() const;
+
 		bool parse_life_diff(json::value& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
 		nonstackable_item_t* find_at_index(const std::uint16_t inventory_index);
 		bool add_item(nonstackable_item_t& item);
+
+		bool can_add_production(const std::shared_ptr<game::production_t>& prod, const std::uint32_t max_weaps, const std::uint32_t max_gear) const;
 
 	};
 

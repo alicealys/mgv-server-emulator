@@ -55,7 +55,7 @@ namespace emulator::ssd
 		game::item_t result_item = item->get_reward();
 		if (!user->give_item(result_item, give_params, empty))
 		{
-			return error(ERR_DATABASE);
+			return error(ERR_OVER_CAPACITY);
 		}
 
 		result["present"]["id"] = item->get_present_id();

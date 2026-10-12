@@ -66,7 +66,7 @@ namespace emulator::ssd
 			return error(ERR_RESOURCE_SHORTAGE);
 		}
 
-		const auto survival_gear = iter->second->production->get_survival_gear();
+		const auto& survival_gear = iter->second->production->survival_gear;
 
 		auto stackable_count = 0u;
 
@@ -80,6 +80,12 @@ namespace emulator::ssd
 		if (!iter->second->production->is_stackable())
 		{
 			assert(survival_gear == nullptr);
+
+			if (!nonstackable_item_list->can_add_production(iter->second->production,
+				user->get_max_weapon_storage(), user->get_max_gear_storage()))
+			{
+				return false;
+			}
 
 			if (inventory_index_junk != 0xFFFF)
 			{

@@ -138,6 +138,9 @@ namespace database::users
 		DEFINE_FIELD(dlc_flag, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sv_coin, sqlpp::integer_unsigned);
 		DEFINE_FIELD(loadout_count, sqlpp::integer_unsigned);
+		DEFINE_FIELD(team_count, sqlpp::integer_unsigned);
+		DEFINE_FIELD(additional_storage_01, sqlpp::integer_unsigned);
+		DEFINE_FIELD(additional_storage_02, sqlpp::integer_unsigned);
 		DEFINE_FIELD(player_capacity, sqlpp::integer_unsigned);
 		DEFINE_FIELD(event_point, sqlpp::integer_unsigned);
 		DEFINE_FIELD(event_point_total, sqlpp::integer_unsigned);
@@ -162,6 +165,9 @@ namespace database::users
 			dlc_flag_field_t,
 			sv_coin_field_t, 
 			loadout_count_field_t,
+			team_count_field_t,
+			additional_storage_01_field_t,
+			additional_storage_02_field_t,
 			player_capacity_field_t,
 			event_point_field_t,
 			event_point_total_field_t,
@@ -192,6 +198,9 @@ namespace database::users
 			this->dlc_flag_ = static_cast<std::uint32_t>(row.dlc_flag);
 			this->sv_coin_ = static_cast<std::uint32_t>(row.sv_coin);
 			this->loadout_count_ = static_cast<std::uint32_t>(row.loadout_count);
+			this->team_count_ = static_cast<std::uint32_t>(row.team_count);
+			this->additional_storage_01_ = static_cast<std::uint32_t>(row.additional_storage_01);
+			this->additional_storage_02_ = static_cast<std::uint32_t>(row.additional_storage_02);
 			this->event_point_ = static_cast<std::uint32_t>(row.event_point);
 			this->event_point_total_ = static_cast<std::uint32_t>(row.event_point_total);
 			this->player_capacity_ = row.player_capacity;
@@ -217,6 +226,9 @@ namespace database::users
 		GET_FIELD_H(std::uint32_t, dlc_flag);
 		GET_FIELD_H(std::uint32_t, sv_coin);
 		GET_FIELD_H(std::uint32_t, loadout_count);
+		GET_FIELD_H(std::uint32_t, team_count);
+		GET_FIELD_H(std::uint32_t, additional_storage_01);
+		GET_FIELD_H(std::uint32_t, additional_storage_02);
 		GET_FIELD_H(std::uint32_t, event_point);
 		GET_FIELD_H(std::uint32_t, event_point_total);
 		GET_FIELD_H(std::uint64_t, player_capacity);
@@ -244,6 +256,9 @@ namespace database::users
 		bool add_event_points(const std::uint32_t value) const;
 
 		bool set_loadout_count(const std::uint32_t loadout_count) const;
+		bool set_team_count(const std::uint32_t value) const;
+		bool set_additional_storage_01(const std::uint32_t value) const;
+		bool set_additional_storage_02(const std::uint32_t value) const;
 		bool inc_player_capacity() const;
 		bool set_daily_reward() const;
 
@@ -254,6 +269,9 @@ namespace database::users
 		std::optional<players::player> create_additional_player() const;
 
 		std::optional<players::player> current_player;
+
+		std::uint32_t get_max_weapon_storage() const;
+		std::uint32_t get_max_gear_storage() const;
 
 	private:
 		std::uint32_t nat_{};

@@ -544,6 +544,27 @@ namespace database::players
 		}
 	}
 
+	std::shared_ptr<game::production_t> nonstackable_item_t::get_production() const
+	{
+		{
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(this->production_id);
+			if (iter != game::parameters_table.ssd_sbm_parameters->productions.end())
+			{
+				return iter->second;
+			}
+		}
+
+		{
+			const auto iter = game::parameters_table.ssd_sbm_parameters->recipes.find(this->production_id);
+			if (iter != game::parameters_table.ssd_sbm_parameters->recipes.end())
+			{
+				return iter->second->production;
+			}
+		}
+		
+		return nullptr;
+	}
+
 	bool nonstackable_item_t::parse(json::value& data)
 	{
 		std::memset(this, 0, sizeof(nonstackable_item_t));
@@ -1656,6 +1677,65 @@ namespace database::players
 		}
 
 		return this->try_add_item(item);
+	}
+
+	std::uint32_t nonstackable_item_list_t::get_weapon_count() const
+	{
+		auto count = 0u;
+		for (auto& item : *this)
+		{
+			if (item.production_id == 0)
+			{
+				continue;
+			}
+
+			const auto production = item.get_production();
+			if (production == nullptr)
+			{
+				continue;
+			}
+
+			count += production->equip != nullptr;
+		}
+
+		return count;
+	}
+
+	std::uint32_t nonstackable_item_list_t::get_gear_count() const
+	{
+		auto count = 0u;
+		for (auto& item : *this)
+		{
+			if (item.production_id == 0)
+			{
+				continue;
+			}
+
+			const auto production = item.get_production();
+			if (production == nullptr)
+			{
+				continue;
+			}
+
+			count += production->accessory != nullptr;
+		}
+
+		return count;
+	}
+
+	bool nonstackable_item_list_t::can_add_production(const std::shared_ptr<game::production_t>& prod,
+		const std::uint32_t max_weaps, const std::uint32_t max_gear) const
+	{
+		if (prod->accessory != nullptr && this->get_gear_count() >= max_gear)
+		{
+			return false;
+		}
+		else if (prod->equip != nullptr && this->get_weapon_count() >= max_weaps)
+		{
+			return false;
+		}
+
+		return !this->is_full();
 	}
 
 	bool inventory_resource_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const

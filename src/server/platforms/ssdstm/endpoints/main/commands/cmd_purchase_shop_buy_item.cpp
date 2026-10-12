@@ -23,10 +23,10 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
-		const auto player_count = static_cast<std::uint32_t>(database::players::get_player_count(user->get_user_id()));
-		const auto player_slot_product_type = database::shop_purchases::product_additional_slot_avatar + player_count;
+		const auto player_capacity = user->get_player_capacity();
+		const auto player_slot_product_type = database::shop_purchases::product_additional_slot_avatar + player_capacity;
 		const auto is_player_slot_purchase = product->product_id == player_slot_product_type && 
-			product->item.category == game::ITEM_CATEGORY_CHARACTER_SLOT && product->item.param1 == player_count + 1;
+			product->item.category == game::ITEM_CATEGORY_CHARACTER_SLOT && product->item.param1 == player_capacity + 1;
 
 		const auto item = database::shop_purchases::find_item(id);
 		if (!item.has_value() && !is_player_slot_purchase)
@@ -42,34 +42,45 @@ namespace emulator::ssd
 			return error(ERR_OVER_CAPACITY);
 		}
 
-		if (!is_permanent)
+		if (!is_permanent && product->limit_count != 0)
 		{
 			const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
-			if (purchase_count > product->limit_count && product->limit_count != 0)
+			if (purchase_count > product->limit_count)
 			{
 				return error(ERR_OVER_CAPACITY);
 			}
 		}
 
+		database::users::give_item_params_t give_params{};
+
 		return database::shop_purchases::purchase_product(user.value(), product.value(), [&](json::value& result)
 		{
 			result["present_id"] = 0;
 
-			const auto expire_date = std::chrono::system_clock::now() + database::shop_purchases::purchase_duration;
-			const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-			const auto present_id = database::present_box::add_item(user->get_user_id(),
-				database::present_box::present_flag_expire | 
-				database::present_box::present_flag_purchase, 
-				expire_date_s, product->item);
-
-			if (present_id == 0ull)
+			if (is_player_slot_purchase)
 			{
-				user->add_sv_coins(product->price);
-				result["result"] = game::error_map[ERR_DATABASE];
-				return false;
+				json::value empty;
+				return user->give_item(product->item, give_params, empty);
+			}
+			else
+			{
+				const auto expire_date = std::chrono::system_clock::now() + database::shop_purchases::purchase_duration;
+				const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+				const auto present_id = database::present_box::add_item(user->get_user_id(),
+					database::present_box::present_flag_expire |
+					database::present_box::present_flag_purchase,
+					expire_date_s, product->item);
+
+				if (present_id == 0ull)
+				{
+					user->add_sv_coins(product->price);
+					result["result"] = game::error_map[ERR_DATABASE];
+					return false;
+				}
+
+				result["present_id"] = present_id;
 			}
 
-			result["present_id"] = present_id;
 			return true;
 		});
 	}

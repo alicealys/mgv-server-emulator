@@ -34,8 +34,7 @@ namespace emulator::ssd
 		const auto first_player = database::players::find_by_index(user->get_user_id(), 0ull);
 		if (first_player.has_value())
 		{
-			const auto team_count = database::deployments::get_team_count(first_player->get_player_id());
-			for (auto i = 0ull; i < team_count; i++)
+			for (auto i = 0ull; i < user->get_team_count(); i++)
 			{
 				database::deployments::create_team(first_player->get_player_id());
 			}

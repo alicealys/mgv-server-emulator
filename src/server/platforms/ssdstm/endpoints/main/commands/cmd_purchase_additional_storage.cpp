@@ -17,17 +17,20 @@ namespace emulator::ssd
 		}
 
 		auto product_type = 0u;
+		auto count = 0u;
+
 		switch (additional_storage_type)
 		{
 		case 0:
 			product_type = database::shop_purchases::product_increase_storage_limit_weapons;
+			count = user->get_additional_storage_01();
 			break;
 		case 1:
 			product_type = database::shop_purchases::product_increase_storage_limit_gear;
+			count = user->get_additional_storage_02();
 			break;
 		}
 
-		const auto count = database::shop_purchases::get_purchase_count(user->get_user_id(), product_type);
 		if (count >= 3)
 		{
 			return error(ERR_OVER_CAPACITY);
@@ -36,7 +39,16 @@ namespace emulator::ssd
 		return database::shop_purchases::purchase_product(user.value(), product_type, [&](json::value& result)
 		{
 			result["additional_storage_type"] = additional_storage_type;
-			return true;
+
+			switch (additional_storage_type)
+			{
+			case 0:
+				return user->set_additional_storage_01(count + 1);
+			case 1:
+				return user->set_additional_storage_02(count + 1);
+			}
+
+			return false;
 		});
 	}
 

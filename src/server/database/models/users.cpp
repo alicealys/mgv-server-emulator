@@ -106,6 +106,9 @@ namespace database::users
 						user::table.dlc_flag,
 						user::table.sv_coin,
 						user::table.loadout_count,
+						user::table.team_count,
+						user::table.additional_storage_01,
+						user::table.additional_storage_02,
 						user::table.event_point,
 						user::table.event_point_total,
 						user::table.player_capacity,
@@ -335,6 +338,8 @@ namespace database::users
 	GET_FIELD_C(user, std::uint32_t, sv_coin);
 	GET_FIELD_C(user, std::uint32_t, event_point);
 	GET_FIELD_C(user, std::uint32_t, event_point_total);
+	GET_FIELD_C(user, std::uint32_t, additional_storage_01);
+	GET_FIELD_C(user, std::uint32_t, additional_storage_02);
 	GET_FIELD_C(user, std::uint64_t, player_capacity);
 	GET_FIELD_C(user, user_loadout_header_t, loadout_header);
 	GET_FIELD_C(user, std::chrono::microseconds, last_update);
@@ -349,6 +354,21 @@ namespace database::users
 		}
 
 		return this->loadout_count_;
+	}
+
+	std::uint32_t user::get_team_count() const
+	{
+		return std::clamp(this->team_count_, deployments::min_team_count, deployments::max_team_count);
+	}
+
+	std::uint32_t user::get_max_weapon_storage() const
+	{
+		return this->additional_storage_01_ * 50u + 100u;
+	}
+
+	std::uint32_t user::get_max_gear_storage() const
+	{
+		return this->additional_storage_02_ * 50u + 100u;
 	}
 
 	bool user_inventory_t::parse_save(json::value& data)
@@ -586,6 +606,7 @@ namespace database::users
 							 user::table.user_inventory = default_inventory,
 							 user::table.loadout_count = players::initial_loadout_count,
 							 user::table.player_capacity = 1,
+							 user::table.team_count = deployments::min_team_count,
 							 user::table.last_update = std::chrono::system_clock::now(),
 							 user::table.user_creation_date = std::chrono::system_clock::now()));
 			});
@@ -906,7 +927,46 @@ namespace database::users
 				return result != 0ull;
 			});
 		}
+
+		template <database_type_t Type>
+		bool set_team_count(const std::uint64_t user_id, const std::uint32_t team_count)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.team_count = team_count)
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
+
+		template <database_type_t Type>
+		bool set_additional_storage_01(const std::uint64_t user_id, const std::uint32_t additional_storage_01)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.additional_storage_01 = additional_storage_01)
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
 		
+		template <database_type_t Type>
+		bool set_additional_storage_02(const std::uint64_t user_id, const std::uint32_t additional_storage_02)
+		{
+			return database::access<bool>([&](database_t& db)
+			{
+				const auto result = db.exec<Type>(
+					sqlpp::update(user::table)
+						.set(user::table.additional_storage_02 = additional_storage_02)
+							.where(user::table.user_id == user_id));
+				return result != 0ull;
+			});
+		}
+
 		template <database_type_t Type>
 		bool inc_player_capacity(const std::uint64_t user_id)
 		{
@@ -988,6 +1048,21 @@ namespace database::users
 	bool user::set_loadout_count(const std::uint32_t loadout_count) const
 	{
 		RUN_IMPL(impl::set_loadout_count, this->get_user_id(), loadout_count);
+	}
+
+	bool user::set_team_count(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::set_team_count, this->get_user_id(), value);
+	}
+
+	bool user::set_additional_storage_01(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::set_additional_storage_01, this->get_user_id(), value);
+	}
+
+	bool user::set_additional_storage_02(const std::uint32_t value) const
+	{
+		RUN_IMPL(impl::set_additional_storage_02, this->get_user_id(), value);
 	}
 
 	bool user::inc_player_capacity() const
@@ -1087,6 +1162,12 @@ namespace database::users
 				database::players::nonstackable_item_t nonstackable_item{};
 				nonstackable_item.initialize(iter->second, nullptr);
 
+				if (!params.nonstackable_list->can_add_production(iter->second,
+					this->get_max_weapon_storage(), this->get_max_gear_storage()))
+				{
+					return false;
+				}
+
 				if (!params.nonstackable_list->add_item(nonstackable_item))
 				{
 					return false;
@@ -1120,6 +1201,12 @@ namespace database::users
 				nonstackable_item.flag |= 16;
 				nonstackable_item.production_id = recipe_iter->second->id;
 
+				if (!params.nonstackable_list->can_add_production(recipe_iter->second->production, 
+					this->get_max_weapon_storage(), this->get_max_gear_storage()))
+				{
+					return false;
+				}
+
 				if (!params.nonstackable_list->add_item(nonstackable_item))
 				{
 					return false;
@@ -1138,6 +1225,12 @@ namespace database::users
 				if (params.user_inventory == nullptr)
 				{
 					return false;
+				}
+
+				if (reward_info.is_object())
+				{
+					auto& recipe_list_j = reward_info["recipe_list"];
+					recipe_list_j[recipe_list_j.size()] = recipe_iter->second->id;
 				}
 
 				params.user_inventory->set_obtained_recipe(recipe_iter->second->index);
@@ -1356,7 +1449,7 @@ namespace database::users
 		case game::ITEM_CATEGORY_CHARACTER_SLOT:
 		{
 			is_permanent = true;
-			return this->get_player_capacity() < database::players::max_player_count;
+			return this->get_player_capacity() >= database::players::max_player_count;
 		}
 		case game::ITEM_CATEGORY_RESOURCE:
 		case game::ITEM_CATEGORY_COIN:
@@ -1384,8 +1477,7 @@ namespace database::users
 			return player;
 		}
 
-		const auto team_count = database::deployments::get_team_count(this->current_player->get_player_id());
-		for (auto i = 1ull; i < team_count; i++)
+		for (auto i = 1ull; i < this->get_team_count(); i++)
 		{
 			database::deployments::create_team(player->get_player_id());
 		}

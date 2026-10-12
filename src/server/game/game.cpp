@@ -511,39 +511,6 @@ namespace game
 		return this->countable && !this->only_flag;
 	}
 
-	std::shared_ptr<survival_gear_t> production_t::get_survival_gear()
-	{
-		const auto iter = parameters_table.ssd_sbm_parameters->survival_gears.find(this->related_id);
-		if (iter == parameters_table.ssd_sbm_parameters->survival_gears.end())
-		{
-			return nullptr;
-		}
-
-		return iter->second;
-	}
-
-	std::shared_ptr<equip_t> production_t::get_equip()
-	{
-		const auto iter = parameters_table.ssd_equip_parameters->equips.find(this->related_id);
-		if (iter == parameters_table.ssd_equip_parameters->equips.end())
-		{
-			return nullptr;
-		}
-
-		return iter->second;
-	}
-
-	std::shared_ptr<accessory_t> production_t::get_accessory()
-	{
-		const auto iter = parameters_table.ssd_sbm_parameters->accessories.find(this->related_id);
-		if (iter == parameters_table.ssd_sbm_parameters->accessories.end())
-		{
-			return nullptr;
-		}
-
-		return iter->second;
-	}
-
 	bool recipe_t::parse(json::value& data)
 	{
 		return json::read(*this, data);

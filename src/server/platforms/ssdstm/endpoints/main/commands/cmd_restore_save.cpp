@@ -87,7 +87,7 @@ namespace emulator::ssd
 			}
 		}
 
-		const auto team_count = database::deployments::get_team_count(user->current_player->get_player_id());
+		const auto team_count = user->get_team_count();
 		database::deployments::delete_player_data(user->current_player->get_player_id());
 		for (auto i = 0ull; i < team_count; i++)
 		{

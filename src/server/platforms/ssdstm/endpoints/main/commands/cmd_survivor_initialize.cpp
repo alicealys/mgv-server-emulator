@@ -24,14 +24,12 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
-		const auto team_count = database::deployments::get_team_count(player->get_player_id());
-
 		database::players::initialize(player->get_player_id());
 		database::defense_missions::delete_player_data(player->get_player_id());
 		database::deployments::delete_player_data(player->get_player_id());
 		database::crew_members::delete_player_data(player->get_player_id());
 
-		for (auto i = 0ull; i < team_count; i++)
+		for (auto i = 0ull; i < user->get_team_count(); i++)
 		{
 			database::deployments::create_team(player->get_player_id());
 		}

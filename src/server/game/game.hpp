@@ -6187,9 +6187,6 @@ namespace game
 	{
 		bool parse(json::value& data);
         bool is_stackable() const;
-        std::shared_ptr<survival_gear_t> get_survival_gear();
-        std::shared_ptr<equip_t> get_equip();
-        std::shared_ptr<accessory_t> get_accessory();
 
 		std::uint32_t id;
 		std::uint32_t index;
@@ -6238,6 +6235,9 @@ namespace game
 		std::array<std::uint32_t, 3> perk;
 		std::string id_str;
         std::shared_ptr<customize_t> customize;
+        std::shared_ptr<survival_gear_t> survival_gear;
+        std::shared_ptr<accessory_t> accessory;
+        std::shared_ptr<equip_t> equip;
 	};
 
 	struct recipe_t

@@ -54,10 +54,8 @@ namespace emulator::ssd
 
 		user->get_inventory(*user_inventory);
 
-		auto shop_purchase_counts = database::shop_purchases::get_purchase_counts(user->get_user_id());
-
-		result["additional_storage_info"]["count"][0] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_weapons];
-		result["additional_storage_info"]["count"][1] = shop_purchase_counts[database::shop_purchases::product_increase_storage_limit_gear];
+		result["additional_storage_info"]["count"][0] = user->get_additional_storage_01();
+		result["additional_storage_info"]["count"][1] = user->get_additional_storage_02();
 
 		battle_pack_list->to_json(result["battle_pack_list"]);
 

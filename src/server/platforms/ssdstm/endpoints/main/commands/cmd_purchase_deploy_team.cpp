@@ -10,34 +10,27 @@ namespace emulator::ssd
 	json::value cmd_purchase_deploy_team::execute(json::value& data, const std::optional<database::users::user>& user)
 	{
 		const auto players = database::players::get_player_list(user->get_user_id());
-		const auto team_count = database::deployments::get_team_count(user->current_player->get_player_id());
-
+		const auto team_count = user->get_team_count();
 		if (team_count >= database::deployments::max_team_count)
 		{
 			return error(ERR_OVER_CAPACITY);
 		}
 
+		const auto new_team_count = team_count + 1;
 		const auto product_type = database::shop_purchases::product_additional_slot_exploration;
 		return database::shop_purchases::purchase_product(user.value(), product_type, [&](json::value& result)
 		{
 			for (auto i = 0ull; i < players.size(); i++)
 			{
 				const auto other_team_count = database::deployments::get_team_count(players[i].get_player_id());
-				if (other_team_count > team_count)
+				for (auto o = other_team_count; o < new_team_count; o++)
 				{
-					continue;
-				}
-
-				const auto team_id = database::deployments::create_team(players[i].get_player_id());
-				const auto result_team = database::deployments::find_team(team_id);
-				if (!result_team.has_value())
-				{
-					return false;
+					database::deployments::create_team(players[i].get_player_id());
 				}
 			}
 
 			result["index"] = team_count;
-			return true;
+			return user->set_team_count(new_team_count);
 		});
 	}
 

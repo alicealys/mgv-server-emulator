@@ -48,11 +48,11 @@ namespace emulator::ssd
 			add_product(products[i]);
 		}
 
-		const auto player_count = database::players::get_player_count(user->get_user_id());
-		if (player_count < database::players::max_player_count)
+		const auto player_capacity = user->get_player_capacity();
+		if (player_capacity < database::players::max_player_count)
 		{
 			auto product_type = database::shop_purchases::product_additional_slot_avatar;
-			switch (player_count)
+			switch (player_capacity)
 			{
 			case 1:
 				product_type = database::shop_purchases::product_additional_slot_avatar_1;

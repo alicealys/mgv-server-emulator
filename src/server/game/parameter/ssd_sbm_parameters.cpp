@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "ssd_sbm_parameters.hpp"
+#include "../parameters.hpp"
 
 namespace game::parameters
 {
@@ -190,6 +191,30 @@ namespace game::parameters
 				else
 				{
 					prod->customize = iter->second;
+				}
+			}
+
+			{
+				const auto iter = game::parameters_table.ssd_equip_parameters->equips.find(prod->related_id);
+				if (iter != parameters_table.ssd_equip_parameters->equips.end())
+				{
+					prod->equip = iter->second;
+				}
+			}
+
+			{
+				const auto iter = this->accessories.find(prod->related_id);
+				if (iter != this->accessories.end())
+				{
+					prod->accessory = iter->second;
+				}
+			}
+
+			{
+				const auto iter = this->survival_gears.find(prod->related_id);
+				if (iter != this->survival_gears.end())
+				{
+					prod->survival_gear = iter->second;
 				}
 			}
 
