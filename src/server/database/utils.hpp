@@ -33,6 +33,7 @@ namespace database
 			this->resize(capped_size);
 			const auto copy_size = std::min(data.size(), capped_size * sizeof(T));
 			std::memcpy(this->data(), data.data(), copy_size);
+			this->initialize();
 			return true;
 		}
 
@@ -92,6 +93,11 @@ namespace database
 			std::vector<T>::emplace_back(v);
 			return true;
 		}
+		
+		virtual void initialize()
+		{
+		}
+
 	};
 
 

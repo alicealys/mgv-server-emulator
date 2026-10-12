@@ -1173,6 +1173,15 @@ namespace database::users
 					return false;
 				}
 
+				if (iter->second->equip)
+				{
+					params.nonstackable_list->inc_weapon_count(1u);
+				}
+				else if (iter->second->accessory)
+				{
+					params.nonstackable_list->inc_gear_count(1u);
+				}
+
 				if (reward_info.is_object())
 				{
 					auto& stackable_list_j = reward_info["nonstackable_list"];
@@ -1210,6 +1219,15 @@ namespace database::users
 				if (!params.nonstackable_list->add_item(nonstackable_item))
 				{
 					return false;
+				}
+
+				if (recipe_iter->second->production->equip)
+				{
+					params.nonstackable_list->inc_weapon_count(1u);
+				}
+				else if (recipe_iter->second->production->accessory)
+				{
+					params.nonstackable_list->inc_gear_count(1u);
 				}
 
 				if (reward_info.is_object())

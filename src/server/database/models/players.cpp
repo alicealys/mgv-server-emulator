@@ -1681,61 +1681,64 @@ namespace database::players
 
 	std::uint32_t nonstackable_item_list_t::get_weapon_count() const
 	{
-		auto count = 0u;
-		for (auto& item : *this)
-		{
-			if (item.production_id == 0)
-			{
-				continue;
-			}
-
-			const auto production = item.get_production();
-			if (production == nullptr)
-			{
-				continue;
-			}
-
-			count += production->equip != nullptr;
-		}
-
-		return count;
+		return this->weapon_count_;
 	}
 
 	std::uint32_t nonstackable_item_list_t::get_gear_count() const
 	{
-		auto count = 0u;
-		for (auto& item : *this)
-		{
-			if (item.production_id == 0)
-			{
-				continue;
-			}
+		return this->gear_count_;
+	}
 
-			const auto production = item.get_production();
-			if (production == nullptr)
-			{
-				continue;
-			}
+	void nonstackable_item_list_t::inc_weapon_count(const std::uint16_t add)
+	{
+		this->weapon_count_ += add;
+	}
 
-			count += production->accessory != nullptr;
-		}
-
-		return count;
+	void nonstackable_item_list_t::inc_gear_count(const std::uint16_t add)
+	{
+		this->gear_count_ += add;
 	}
 
 	bool nonstackable_item_list_t::can_add_production(const std::shared_ptr<game::production_t>& prod,
 		const std::uint32_t max_weaps, const std::uint32_t max_gear) const
 	{
-		if (prod->accessory != nullptr && this->get_gear_count() >= max_gear)
+		if (prod->type == game::PRD_TYPE_Accessory && this->gear_count_ >= max_gear)
 		{
 			return false;
 		}
-		else if (prod->equip != nullptr && this->get_weapon_count() >= max_weaps)
+		else if (prod->type == game::PRD_TYPE_Weapon && this->weapon_count_ >= max_weaps)
 		{
 			return false;
 		}
 
 		return !this->is_full();
+	}
+
+	void nonstackable_item_list_t::initialize()
+	{
+		for (auto& item : *this)
+		{
+			if (item.production_id == 0)
+			{
+				continue;
+			}
+
+			const auto production = item.get_production();
+			if (production == nullptr)
+			{
+				continue;
+			}
+
+			switch (production->type)
+			{
+			case game::PRD_TYPE_Accessory:
+				++this->gear_count_;
+				break;
+			case game::PRD_TYPE_Weapon:
+				++this->weapon_count_;
+				break;
+			}
+		}
 	}
 
 	bool inventory_resource_list_t::find_free_index(const std::uint8_t inventory_type, std::uint16_t& index, std::uint16_t& obtain_order) const

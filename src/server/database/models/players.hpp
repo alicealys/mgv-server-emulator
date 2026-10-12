@@ -929,8 +929,13 @@ namespace database::players
 			return value.production_id == 0;
 		}
 
+		void initialize() override;
+
 		std::uint32_t get_weapon_count() const;
 		std::uint32_t get_gear_count() const;
+
+		void inc_weapon_count(const std::uint16_t add);
+		void inc_gear_count(const std::uint16_t add);
 
 		bool parse_life_diff(json::value& data);
 		bool find_free_index(std::uint16_t& index, std::uint32_t& obtain_order);
@@ -938,6 +943,10 @@ namespace database::players
 		bool add_item(nonstackable_item_t& item);
 
 		bool can_add_production(const std::shared_ptr<game::production_t>& prod, const std::uint32_t max_weaps, const std::uint32_t max_gear) const;
+
+	private:
+		std::uint16_t weapon_count_{};
+		std::uint16_t gear_count_{};
 
 	};
 
