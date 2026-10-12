@@ -9,6 +9,7 @@ create table if not exists `users`
 	currency				varchar(32)		default null,
 	ex_ip					varchar(15)		default null,
 	in_ip					varchar(15)		default null,
+	user_loadout_header		varchar(64)		default null,
 	ex_port					int unsigned	default 0,
 	in_port					int unsigned	default 0,
 	nat						int unsigned	default 0,
