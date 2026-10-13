@@ -213,7 +213,7 @@ namespace emulator::ssd
 		for (auto i = param.start; i < end; i++)
 		{
 			const auto& message = cmd_information_get_title::messages[i];
-			if (message.visible != nullptr && !message.visible(message))
+			if ((message.visible != nullptr && !message.visible(message)) || (static_cast<bool>(param.is_note) != message.is_note))
 			{
 				continue;
 			}

@@ -15,6 +15,7 @@ namespace emulator::ssd
 			std::string text;
 			std::string url;
 			bool important;
+			bool is_note;
 			std::uint8_t type;
 			std::uint64_t update_date;
 			std::uint64_t release_date;
