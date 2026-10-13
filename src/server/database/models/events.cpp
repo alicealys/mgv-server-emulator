@@ -32,10 +32,11 @@ namespace database::events
 		std::uint64_t get_message_date(const emulator::ssd::cmd_information_get_title::message_t& message)
 		{
 			return cached_event.access<std::uint64_t>([&](std::optional<running_event>& event)
+				-> std::uint64_t
 			{
 				if (!event.has_value() || event->params->info_id != message.info_id)
 				{
-					return 0ull;
+					return 0u;
 				}
 
 				return static_cast<std::uint64_t>(event->get_start_date().count());

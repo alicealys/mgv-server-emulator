@@ -151,7 +151,7 @@ namespace emulator::ssd
 
 		if (message.get_update_date == nullptr)
 		{
-			message.get_update_date = get_release_date;
+			message.get_update_date = get_update_date;
 		}
 
 		cmd_information_get_title::messages.emplace_back(message);
