@@ -3,6 +3,7 @@
 #include "status.hpp"
 #include "database/auth.hpp"
 #include "database/models/players.hpp"
+#include "database/models/events.hpp"
 #include "server.hpp"
 
 #include <utils/http.hpp>
@@ -22,6 +23,19 @@ namespace emulator
 		result["online_player_count"] = database::users::get_online_user_count();
 		result["total_player_count"] = database::users::get_user_count();
 		result["version"] = VERSION;
+
+		database::events::cached_event.access([&](const std::optional<database::events::running_event>& event)
+		{
+			if (!event.has_value())
+			{
+				result["event"] = json::null();
+				return;
+			}
+
+			result["event"]["start_date"] = event->get_start_date().count();
+			result["event"]["end_date"] = event->get_start_date().count();
+			result["event"]["type"] = event->get_event_type();
+		});
 
 		return result;
 	}
