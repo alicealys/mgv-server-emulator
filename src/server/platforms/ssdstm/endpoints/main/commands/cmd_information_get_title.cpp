@@ -9,6 +9,34 @@
 
 namespace emulator::ssd
 {
+	namespace
+	{
+		std::uint64_t get_release_date(const cmd_information_get_title::message_t& message)
+		{
+			if (message.release_date == 0)
+			{
+				return std::time(nullptr);
+			}
+			else
+			{
+				return message.release_date;
+			}
+		}
+
+		std::uint64_t get_update_date(const cmd_information_get_title::message_t& message)
+		{
+			if (message.update_date == 0)
+			{
+				return std::time(nullptr);
+			}
+			else
+			{
+				return message.update_date;
+			}
+		}
+
+	}
+
 	std::vector<cmd_information_get_title::message_t> cmd_information_get_title::messages;
 	std::unordered_map<std::string, std::function<std::string(const std::uint8_t)>> cmd_information_get_title::message_vars;
 
@@ -78,30 +106,6 @@ namespace emulator::ssd
 		
 		return formatted;
 	}
-	
-	std::uint64_t cmd_information_get_title::message_t::get_release_date() const
-	{
-		if (this->release_date == 0)
-		{
-			return std::time(nullptr);
-		}
-		else
-		{
-			return this->release_date;
-		}
-	}
-
-	std::uint64_t cmd_information_get_title::message_t::get_update_date() const
-	{
-		if (this->update_date == 0)
-		{
-			return std::time(nullptr);
-		}
-		else
-		{
-			return this->update_date;
-		}
-	}
 
 	std::string cmd_information_get_title::message_t::format_title(const std::uint8_t lang) const
 	{
@@ -120,8 +124,48 @@ namespace emulator::ssd
 		data["personal"] = 0;
 		data["type"] = this->type;
 		data["info_id"] = this->info_id;
-		data["update_date"] = this->get_update_date();
-		data["release_date"] = this->get_release_date();
+		data["update_date"] = this->get_update_date(*this);
+		data["release_date"] = this->get_release_date(*this);
+	}
+
+	void cmd_information_get_title::register_message(message_t& message)
+	{
+		const auto iter = std::ranges::find_if(
+			cmd_information_get_title::messages.begin(), 
+			cmd_information_get_title::messages.end(), 
+			[&](const message_t& other)
+			{
+				return message.info_id == other.info_id;
+			}
+		);
+
+		if (iter != cmd_information_get_title::messages.end())
+		{
+			throw std::runtime_error(std::format("[information list] duplicate info_id {}", message.info_id));
+		}
+
+		if (message.get_release_date == nullptr)
+		{
+			message.get_release_date = get_release_date;
+		}
+
+		if (message.get_update_date == nullptr)
+		{
+			message.get_update_date = get_release_date;
+		}
+
+		cmd_information_get_title::messages.emplace_back(message);
+		std::sort(cmd_information_get_title::messages.begin(), cmd_information_get_title::messages.end(), 
+			[](const message_t& a, const message_t& b)
+			{
+				if (a.priority == b.priority)
+				{
+					return a.get_update_date(a) > b.get_update_date(b);
+				}
+
+				return a.priority < b.priority;
+			}
+		);
 	}
 
 	cmd_information_get_title::cmd_information_get_title()
@@ -150,17 +194,7 @@ namespace emulator::ssd
 				continue;
 			}
 
-			const auto iter = std::ranges::find_if(this->messages.begin(), this->messages.end(), [&](const message_t& other)
-			{
-				return message.info_id == other.info_id;
-			});
-
-			if (iter != this->messages.end())
-			{
-				throw std::runtime_error(std::format("[information list] duplicate info_id {}", message.info_id));
-			}
-
-			this->messages.emplace_back(message);
+			this->register_message(message);
 		}
 	}
 

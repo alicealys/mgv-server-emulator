@@ -29,6 +29,19 @@ namespace database::events
 			});
 		}
 
+		std::uint64_t get_message_date(const emulator::ssd::cmd_information_get_title::message_t& message)
+		{
+			return cached_event.access<std::uint64_t>([&](std::optional<running_event>& event)
+			{
+				if (!event.has_value() || event->params->info_id != message.info_id)
+				{
+					return 0ull;
+				}
+
+				return static_cast<std::uint64_t>(event->get_start_date().count());
+			});
+		}
+
 		event_settings_t load_event_settings()
 		{
 			auto data = utils::resources::load_json(RESOURCE_EVENT_SETTINGS);
@@ -48,9 +61,12 @@ namespace database::events
 				message.text = event->info_text;
 				message.info_id = info_id_begin++;
 				message.visible = info_message_visible_cb;
+				message.get_release_date = get_message_date;
+				message.get_update_date = get_message_date;
 				message.type = 2;
+				message.priority = 0;
 				event->info_id = message.info_id;
-				emulator::ssd::cmd_information_get_title::messages.emplace_back(message);
+				emulator::ssd::cmd_information_get_title::register_message(message);
 
 				if (settings.event_type_map.contains(event->name))
 				{

@@ -19,10 +19,12 @@ namespace emulator::ssd
 			std::uint64_t update_date;
 			std::uint64_t release_date;
 			std::uint32_t info_id;
-			bool (*visible)(const message_t& message);
+			std::int32_t priority;
 
-			std::uint64_t get_release_date() const;
-			std::uint64_t get_update_date() const;
+			bool (*visible)(const message_t& message);
+			std::uint64_t (*get_release_date)(const message_t& message);
+			std::uint64_t (*get_update_date)(const message_t& message);
+
 			std::string format_text(const std::uint8_t lang) const;
 			std::string format_title(const std::uint8_t lang) const;
 			void to_json(json::value& data, const std::uint8_t lang) const;
@@ -30,6 +32,8 @@ namespace emulator::ssd
 
 		static std::vector<message_t> messages;
 		static std::unordered_map<std::string, std::function<std::string(const std::uint8_t)>> message_vars;
+
+		static void register_message(message_t& message);
 
 		template <typename F>
 		static void register_message_var(const std::string& name, F&& cb)

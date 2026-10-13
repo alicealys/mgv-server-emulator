@@ -29,7 +29,7 @@ namespace emulator::ssd
 		{
 			const auto& msg = cmd_information_get_title::messages[i];
 			auto& entry = result["info_list"][count++];
-			entry["date"] = msg.get_update_date();
+			entry["date"] = msg.get_release_date(msg);
 			entry["info_id"] = msg.info_id;
 			entry["important"] = msg.important != 0u ? "TRUE" : "FALSE";
 			entry["mes_subject"] = msg.format_title(lang);
