@@ -308,7 +308,7 @@ create table if not exists `challenge_task_orders`
 	progress				int unsigned	not null default 0,
 	expire_date				datetime not null,
 	foreign key (`f_player_id`) references `players`(`player_id`),
-	unique (`task_id`, `expire_date`)
+	unique (`f_player_id`, `task_id`, `expire_date`)
 )
 -- query:mgssd.running_events.create
 create table if not exists `running_events`
