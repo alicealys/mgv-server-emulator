@@ -18,7 +18,14 @@ namespace emulator
 		const auto is_valid = steam_openid::verify_user(params, steam_id);
 		if (is_valid)
 		{
-			result["result"] = database::users::delete_all_user_data(steam_id);
+			try
+			{
+				result["result"] = database::users::delete_all_user_data(steam_id);
+			}
+			catch (...)
+			{
+				result["result"] = false;
+			}
 		}
 
 		return result;

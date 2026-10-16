@@ -33,7 +33,7 @@ namespace emulator
 			}
 
 			result["event"]["start_date"] = event->get_start_date().count();
-			result["event"]["end_date"] = event->get_start_date().count();
+			result["event"]["end_date"] = event->get_end_date().count();
 			result["event"]["type"] = event->get_event_type();
 		});
 
