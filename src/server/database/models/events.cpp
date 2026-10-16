@@ -472,7 +472,6 @@ namespace database::events
 			});
 		}
 
-
 		template <database_type_t Type>
 		void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
 		{
@@ -482,6 +481,17 @@ namespace database::events
 					sqlpp::update(event_reward::table)
 						.set(event_reward::table.acquired = true)
 							.where(event_reward::table.f_user_id == user_id && event_reward::table.f_event_id != current_event_id));
+			});
+		}
+
+		template <database_type_t Type>
+		void delete_user_data(const std::uint64_t user_id)
+		{
+			database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::remove_from(event_reward::table)
+						.where(event_reward::table.f_user_id == user_id));
 			});
 		}
 	}
@@ -676,6 +686,11 @@ namespace database::events
 	void clear_entitlements(const std::uint64_t current_event_id, const std::uint64_t user_id)
 	{
 		RUN_IMPL(impl::clear_entitlements, current_event_id, user_id);
+	}
+
+	void delete_user_data(const std::uint64_t user_id)
+	{
+		RUN_IMPL(impl::delete_user_data, user_id);
 	}
 
 	class table final : public table_interface

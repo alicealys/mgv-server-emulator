@@ -11,6 +11,7 @@
 #include "matching.hpp"
 #include "coop_missions.hpp"
 #include "boosts.hpp"
+#include "events.hpp"
 
 #include "users.hpp"
 #include "variables.hpp"
@@ -1631,8 +1632,10 @@ namespace database::users
 			players::delete_player_data(player.get_player_id());
 		}
 
-		present_box::delete_user_data(user->get_user_id());
+		boosts::delete_user_data(user->get_user_id());
+		events::delete_user_data(user->get_user_id());
 		rankings::delete_user_data(user->get_user_id());
+		present_box::delete_user_data(user->get_user_id());
 		shop_purchases::delete_user_data(user->get_user_id());
 		delete_user_data(user->get_user_id());
 

@@ -186,4 +186,6 @@ namespace database::events
 	extern utils::concurrency::container<std::optional<running_event>> cached_event;
 
 	std::optional<running_event> get_current_event();
+
+	void delete_user_data(const std::uint64_t user_id);
 }
