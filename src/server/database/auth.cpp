@@ -105,6 +105,13 @@ namespace auth
 
 			return {iter->second};
 		}
+
+		bool check_steam_id(const std::uint64_t id)
+		{
+			game::steam_id steam_id{.bits = id};
+			return steam_id.raw.account_type == 1 && steam_id.raw.universe == 1 &&
+				steam_id.raw.account_instance == 1 && steam_id.raw.account_id != 0;
+		}
 	}
 
 	void initialize_lists()
@@ -178,6 +185,11 @@ namespace auth
 
 		const auto data_ptr = reinterpret_cast<size_t>(data.data());
 		const auto account_id = *reinterpret_cast<std::uint64_t*>(data_ptr + 12);
+		if (!check_steam_id(account_id))
+		{
+			return {};
+		}
+
 		return {account_id};
 	}
 
