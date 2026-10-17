@@ -80,7 +80,7 @@ namespace utils
 
                 this_data = std::uint8_t((next_byte << (8 - this_bit)) | (this_data >> this_bit));
 
-                const std::uint8_t out_byte = (~mask & (this_data << bit_pos) | temp_byte);
+                const std::uint8_t out_byte = (((~mask) & (this_data << bit_pos)) | temp_byte);
                 bytes[byte_pos] = out_byte;
 
                 this->current_bit_ += this_write;
@@ -116,7 +116,7 @@ namespace utils
                 else
                 {
                     output_bytes[cur_out] = uint8_t(
-                        (0xFF >> (8 - min_bit)) & (bytes[cur_byte] << (8 - remain)) | (this_byte >> remain));
+                        ((0xFF >> (8 - min_bit)) & (bytes[cur_byte] << (8 - remain))) | (this_byte >> remain));
                 }
 
                 cur_out++;
