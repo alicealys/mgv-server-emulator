@@ -102,7 +102,7 @@ namespace game::parameters
 		auto& engine = utils::cryptography::random::get_engine();
 		std::discrete_distribution<> dist(iter->second->ratios.begin(), iter->second->ratios.end());
 
-		const auto idx = dist(engine);
+		const auto idx = static_cast<std::size_t>(dist(engine));
 		if (idx >= iter->second->values.size())
 		{
 			return 0u;
@@ -122,7 +122,7 @@ namespace game::parameters
 		auto& engine = utils::cryptography::random::get_engine();
 		std::discrete_distribution<> dist(iter->second->ratios.begin(), iter->second->ratios.end());
 
-		const auto idx = dist(engine);
+		const auto idx = static_cast<std::size_t>(dist(engine));
 		if (idx >= iter->second->values.size())
 		{
 			return 0u;
