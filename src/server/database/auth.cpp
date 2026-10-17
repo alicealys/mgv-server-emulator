@@ -12,6 +12,7 @@
 #include "utils/tpp_client.hpp"
 #include "utils/encoding.hpp"
 #include "utils/config.hpp"
+#include "utils/steam_ticket.hpp"
 
 #include <utils/string.hpp>
 #include <utils/cryptography.hpp>
@@ -178,19 +179,20 @@ namespace auth
 	std::optional<std::uint64_t> verify_ticket_offline(const std::string& auth_ticket, const size_t ticket_size)
 	{
 		const auto data = utils::cryptography::base64::decode(auth_ticket);
-		if (data.size() < 20)
+
+		utils::steam::auth_ticket ticket{};
+		if (!ticket.parse(data))
 		{
 			return {};
 		}
 
-		const auto data_ptr = reinterpret_cast<size_t>(data.data());
-		const auto account_id = *reinterpret_cast<std::uint64_t*>(data_ptr + 12);
-		if (!check_steam_id(account_id))
+		if (ticket.ownership.app_id != 543900u || ticket.is_expired() || !ticket.is_valid() || 
+			!check_steam_id(ticket.ownership.steam_id))
 		{
 			return {};
 		}
 
-		return {account_id};
+		return {ticket.ownership.steam_id};
 	}
 
 	std::optional<std::uint64_t> verify_ticket_custom(const std::string& auth_ticket, const size_t ticket_size)
