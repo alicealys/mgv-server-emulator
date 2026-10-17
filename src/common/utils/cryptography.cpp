@@ -626,7 +626,8 @@ namespace utils::cryptography
 
 	uint32_t random::get_integer(const std::uint32_t min, const std::uint32_t max)
 	{
-		const auto range = max - min + 1;
+		const auto adjust_max = std::max(min, max);
+		const auto range = adjust_max - min + 1;
 		const auto value = random::get_integer();
 		return value % range + min;
 	}

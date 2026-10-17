@@ -115,6 +115,21 @@ namespace database::crew_members
 		DEFINE_FIELD(sickness_id_2, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sickness_time_1, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sickness_time_2, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_accessory, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_animal, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_gadget, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_defense_unit, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_base_defense, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_develop, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_expedition, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_food, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_medical, sqlpp::integer_unsigned);
+		DEFINE_FIELD(ability_plant, sqlpp::integer_unsigned);
+		DEFINE_FIELD(resistance_food_shortage, sqlpp::integer_unsigned);
+		DEFINE_FIELD(resistance_sleepless, sqlpp::integer_unsigned);
+		DEFINE_FIELD(resistance_water_shortage, sqlpp::integer_unsigned);
+		DEFINE_FIELD(first_name_index, sqlpp::integer_unsigned);
+		DEFINE_FIELD(last_name_index, sqlpp::integer_unsigned);
 		DEFINE_FIELD(nickname, sqlpp::text);
 		DEFINE_FIELD(motivation_history, sqlpp::text);
 		DEFINE_FIELD(creation_date, sqlpp::time_point);
@@ -152,6 +167,21 @@ namespace database::crew_members
 			sickness_id_2_field_t,
 			sickness_time_1_field_t,
 			sickness_time_2_field_t,
+			ability_accessory_field_t,
+			ability_animal_field_t,
+			ability_gadget_field_t,
+			ability_defense_unit_field_t,
+			ability_base_defense_field_t,
+			ability_develop_field_t,
+			ability_expedition_field_t,
+			ability_food_field_t,
+			ability_medical_field_t,
+			ability_plant_field_t,
+			resistance_food_shortage_field_t,
+			resistance_sleepless_field_t,
+			resistance_water_shortage_field_t,
+			first_name_index_field_t,
+			last_name_index_field_t,
 			nickname_field_t,
 			motivation_history_field_t,
 			creation_date_field_t
@@ -196,6 +226,21 @@ namespace database::crew_members
 			this->sickness_id_2_ = static_cast<std::uint32_t>(row.sickness_id_2);
 			this->sickness_time_1_ = static_cast<std::uint32_t>(row.sickness_time_1);
 			this->sickness_time_2_ = static_cast<std::uint32_t>(row.sickness_time_2);
+			this->ability_accessory_ = static_cast<std::uint32_t>(row.ability_accessory);
+			this->ability_animal_ = static_cast<std::uint32_t>(row.ability_animal);
+			this->ability_gadget_ = static_cast<std::uint32_t>(row.ability_gadget);
+			this->ability_defense_unit_ = static_cast<std::uint32_t>(row.ability_defense_unit);
+			this->ability_base_defense_ = static_cast<std::uint32_t>(row.ability_base_defense);
+			this->ability_develop_ = static_cast<std::uint32_t>(row.ability_develop);
+			this->ability_expedition_ = static_cast<std::uint32_t>(row.ability_expedition);
+			this->ability_food_ = static_cast<std::uint32_t>(row.ability_food);
+			this->ability_medical_ = static_cast<std::uint32_t>(row.ability_medical);
+			this->ability_plant_ = static_cast<std::uint32_t>(row.ability_plant);
+			this->resistance_food_shortage_ = static_cast<std::uint32_t>(row.resistance_food_shortage);
+			this->resistance_sleepless_ = static_cast<std::uint32_t>(row.resistance_sleepless);
+			this->resistance_water_shortage_ = static_cast<std::uint32_t>(row.resistance_water_shortage);
+			this->first_name_index_ = static_cast<std::uint32_t>(row.first_name_index);
+			this->last_name_index_ = static_cast<std::uint32_t>(row.last_name_index);
 
 			this->nickname_ = row.nickname;
 			this->motivation_history_.deserialize(row.motivation_history.value());
@@ -236,6 +281,21 @@ namespace database::crew_members
 		GET_FIELD_H(std::uint32_t, sickness_id_2);
 		GET_FIELD_H(std::uint32_t, sickness_time_1);
 		GET_FIELD_H(std::uint32_t, sickness_time_2);
+		GET_FIELD_H(std::uint32_t, ability_accessory);
+		GET_FIELD_H(std::uint32_t, ability_animal);
+		GET_FIELD_H(std::uint32_t, ability_gadget);
+		GET_FIELD_H(std::uint32_t, ability_defense_unit);
+		GET_FIELD_H(std::uint32_t, ability_base_defense);
+		GET_FIELD_H(std::uint32_t, ability_develop);
+		GET_FIELD_H(std::uint32_t, ability_expedition);
+		GET_FIELD_H(std::uint32_t, ability_food);
+		GET_FIELD_H(std::uint32_t, ability_medical);
+		GET_FIELD_H(std::uint32_t, ability_plant);
+		GET_FIELD_H(std::uint32_t, resistance_food_shortage);
+		GET_FIELD_H(std::uint32_t, resistance_sleepless);
+		GET_FIELD_H(std::uint32_t, resistance_water_shortage);
+		GET_FIELD_H(std::uint32_t, first_name_index);
+		GET_FIELD_H(std::uint32_t, last_name_index);
 		GET_FIELD_H(std::string, nickname);
 		GET_FIELD_H(std::chrono::seconds, creation_date);
 

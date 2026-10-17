@@ -61,7 +61,7 @@ namespace emulator::ssd
 		do_list.template operator()<update_nickname_entry_t>("update_nickname_list", 
 			[](const database::crew_members::crew_member& member, update_nickname_entry_t& entry)
 			{
-				member.update_nickname(entry.name);
+				member.update_nickname(entry.nickname);
 			}
 		);
 

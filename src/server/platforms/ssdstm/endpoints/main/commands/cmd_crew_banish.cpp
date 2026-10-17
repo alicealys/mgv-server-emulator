@@ -2,6 +2,7 @@
 
 #include "cmd_crew_banish.hpp"
 
+#include "database/models/deployments.hpp"
 #include "database/models/crew_members.hpp"
 
 namespace emulator::ssd
@@ -24,6 +25,7 @@ namespace emulator::ssd
 				continue;
 			}
 
+			database::deployments::remove_crew_id(user->current_player->get_player_id(), unique_id);
 			database::crew_members::remove(user->current_player->get_player_id(), unique_id);
 		}
 

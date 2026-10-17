@@ -5979,6 +5979,25 @@ namespace game
         TREASURE_BOX_UnCommon_Weapon = 0xF245C7F4,
         TREASURE_POINT = 0x2971E5BF,
         WORMHOLE_POINT = 0x5EF3AF5B,
+
+        DEVELOP = 0x5CCF2F50,
+        FOOD = 0x2D2CE34E,
+        MEDIC = 0xE2B8AF9D,
+        FARM = 0x368E77AF,
+        BASE_DEFENSE = 0xE9D7FB0C,
+        COMBAT_DEPLOY = 0xFE8330D1,
+        THIRST_RESIST = 0xCF8FD29E,
+        HUNGER_RESIST = 0xAE4A57B,
+        INJURY_RESIST = 0xF15FF69E,
+        SICK_RESIST = 0x8BE6D82E,
+        SLEEPLACK_RESIST = 0x905F9F26,
+        LIFE = 0xBFDE5514,
+        GROUP_DEVELOP = 0xB9AC69A2,
+        GROUP_FOOD = 0x172C57FB,
+        GROUP_MEDIC = 0x1167A51D,
+        GROUP_FARM = 0x9F49D381,
+        GROUP_BASE_DEFENSE = 0x67C56623,
+        GROUP_COMBAT_DEPLOY = 0xB63577D2,
 	};
 
     enum item_category_t
@@ -6311,9 +6330,74 @@ namespace game
         std::uint32_t index;
     };
 
-	struct crew_member_type_t
+    struct crew_set_table_t
+    {
+        bool parse(json::value& data, const std::string& key);
+
+        struct entry_t
+        {
+            std::uint32_t value;
+            std::uint32_t ratio;
+        };
+
+        std::uint32_t id;
+        std::vector<entry_t> entries;
+        std::vector<std::uint32_t> values;
+        std::vector<std::uint32_t> ratios;
+    };
+
+    struct crew_skill_t
+    {
+        bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t level;
+        std::uint32_t id;
+        std::uint32_t low;
+        std::uint32_t high;
+    };
+
+	struct crew_type_t
 	{
 		bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t id;
+        std::int32_t face;
+        std::int32_t race;
+        std::int32_t sex;
+        std::int32_t body;
+        std::uint32_t develop_low;
+        std::uint32_t develop_high;
+        std::uint32_t food_low;
+        std::uint32_t food_high;
+        std::uint32_t medic_low;
+        std::uint32_t medic_high;
+        std::uint32_t farm_low;
+        std::uint32_t farm_high;
+        std::uint32_t base_defense_low;
+        std::uint32_t base_defense_high;
+        std::uint32_t combat_deploy_low;
+        std::uint32_t combat_deploy_high;
+        std::uint32_t thirst_resist_low;
+        std::uint32_t thirst_resist_high;
+        std::uint32_t hunger_resist_low;
+        std::uint32_t hunger_resist_high;
+        std::uint32_t injury_resist_low;
+        std::uint32_t injury_resist_high;
+        std::uint32_t sick_resist_low;
+        std::uint32_t sick_resist_high;
+        std::uint32_t sleeplack_resist_low;
+        std::uint32_t sleeplack_resist_high;
+        std::uint32_t life_low;
+        std::uint32_t life_high;
+        std::uint32_t job_table;
+        std::uint32_t skill_table;
+	};
+
+    struct crew_unique_type_t
+    {
+        bool parse(json::value& data);
 
         std::uint16_t face;
         std::uint16_t race;
@@ -6332,10 +6416,10 @@ namespace game
         std::uint16_t sleeplack_resist;
         std::uint16_t life;
         std::uint16_t job_table;
-		std::uint16_t skill_table;
-		std::uint32_t id;
-		std::string id_str;
-	};
+        std::uint16_t skill_table;
+        std::uint32_t id;
+        std::string id_str;
+    };
 
 	struct defense_mission_settings_t
 	{
@@ -6378,4 +6462,7 @@ namespace game
 	bool is_event_obtained_res(const std::uint32_t resource_id, std::uint8_t* obtained, bool* result);
 
     std::uint32_t calc_time_reduction_cost(const std::uint32_t time_left);
+
+    std::uint32_t rank_hash_to_value(const std::uint32_t hash);
+    std::uint32_t rank_value_to_hash(const std::uint32_t hash);
 }

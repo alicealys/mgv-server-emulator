@@ -43,6 +43,21 @@ namespace database::crew_members
 	GET_FIELD_C(crew_member, std::uint32_t, sickness_id_2);
 	GET_FIELD_C(crew_member, std::uint32_t, sickness_time_1);
 	GET_FIELD_C(crew_member, std::uint32_t, sickness_time_2);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_accessory);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_animal);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_gadget);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_defense_unit);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_base_defense);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_develop);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_expedition);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_food);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_medical);
+	GET_FIELD_C(crew_member, std::uint32_t, ability_plant);
+	GET_FIELD_C(crew_member, std::uint32_t, resistance_food_shortage);
+	GET_FIELD_C(crew_member, std::uint32_t, resistance_sleepless);
+	GET_FIELD_C(crew_member, std::uint32_t, resistance_water_shortage);
+	GET_FIELD_C(crew_member, std::uint32_t, first_name_index);
+	GET_FIELD_C(crew_member, std::uint32_t, last_name_index);
 	GET_FIELD_C(crew_member, std::string, nickname);
 	GET_FIELD_C(crew_member, std::chrono::seconds, creation_date);
 
@@ -148,6 +163,11 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["map_location"], this->map_location);
 		utils::json_utils::get_or(data["voice_type"], this->voice_type);
 
+		utils::json_utils::get_or(data["face_id"], this->face_id);
+		utils::json_utils::get_or(data["body_id"], this->body_id);
+		utils::json_utils::get_or(data["race_id"], this->race_id);
+		utils::json_utils::get_or(data["sex_id"], this->sex_id);
+
 		if (this->map_location > 1)
 		{
 			return false;
@@ -163,33 +183,115 @@ namespace database::crew_members
 
 		if (crew_type_code != 0u)
 		{
-			this->unique_index = crew_type_code;
+			const auto iter = game::parameters_table.ssd_crew_generator_table->type_table.find(crew_type_code);
+			if (iter == game::parameters_table.ssd_crew_generator_table->type_table.end())
+			{
+				return false;
+			}
+
+			this->first_name_index = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0, 20u));
+			this->last_name_index = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0, 20u));
+
+			const auto roll_skill_value = [&](const std::uint32_t rank_low_h, const std::uint32_t rank_high_h, const std::uint32_t type)
+				-> std::uint16_t
+			{
+				const auto rank_low = game::rank_hash_to_value(rank_low_h);
+				const auto rank_high = game::rank_hash_to_value(rank_high_h);
+				const auto rank = utils::cryptography::random::get_integer(rank_high, rank_low);
+				const auto rank_h = game::rank_value_to_hash(rank);
+
+				const auto skill = game::parameters_table.ssd_crew_generator_table->find_skill(type, rank_h);
+				if (skill == nullptr)
+				{
+					return 0u;
+				}
+
+				if (skill->low >= skill->high)
+				{
+					return static_cast<std::uint16_t>(skill->low);
+				}
+
+				return static_cast<std::uint16_t>(utils::cryptography::random::get_integer(skill->low, skill->high));
+			};
+
+			auto& crew_type = *iter->second;
+
+			this->ability_accessory = 0;
+			this->ability_animal = 0;
+			this->ability_defense_unit = 0;
+			this->ability_gadget = 0;
+
+			this->ability_base_defense = roll_skill_value(crew_type.base_defense_low, crew_type.base_defense_high, game::BASE_DEFENSE);
+			this->ability_develop = roll_skill_value(crew_type.develop_low, crew_type.develop_high, game::DEVELOP);
+			this->ability_expedition = roll_skill_value(crew_type.combat_deploy_low, crew_type.combat_deploy_high, game::COMBAT_DEPLOY);
+			this->ability_food = roll_skill_value(crew_type.food_low, crew_type.food_high, game::FOOD);
+			this->ability_medical = roll_skill_value(crew_type.medic_low, crew_type.medic_high, game::MEDIC);
+			this->ability_plant = roll_skill_value(crew_type.farm_low, crew_type.farm_high, game::FARM);
+
+			this->resistance_food_shortage = roll_skill_value(crew_type.hunger_resist_low, crew_type.hunger_resist_high, game::HUNGER_RESIST);
+			this->resistance_sleepless = roll_skill_value(crew_type.sleeplack_resist_low, crew_type.sleeplack_resist_high, game::SLEEPLACK_RESIST);
+			this->resistance_water_shortage = roll_skill_value(crew_type.thirst_resist_low, crew_type.thirst_resist_high, game::THIRST_RESIST);
+
+			const auto init_life = roll_skill_value(crew_type.life_low, crew_type.life_high, game::LIFE);
+			this->life = init_life;
+			this->max_life = init_life;
+
+			this->skill = static_cast<std::uint16_t>(game::parameters_table.ssd_crew_generator_table->roll_skill(crew_type.skill_table));
+			const auto job_type_idx = game::parameters_table.ssd_crew_generator_table->roll_job(crew_type.job_table);
+
+			auto job_type = 0u;
+			switch (job_type_idx)
+			{
+			case 0:
+				job_type = game::GROUP_DEVELOP;
+				break;
+			case 1:
+				job_type = game::GROUP_FOOD;
+				break;
+			case 2:
+				job_type = game::GROUP_MEDIC;
+				break;
+			case 3:
+				job_type = game::GROUP_FARM;
+				break;
+			case 4:
+				job_type = game::GROUP_BASE_DEFENSE;
+				break;
+			case 5:
+				job_type = game::GROUP_COMBAT_DEPLOY;
+				break;
+			}
+
+			if (job_type != 0u)
+			{
+				const auto base_rank = game::rank_value_to_hash(6);
+				this->previous_job = roll_skill_value(base_rank, base_rank, job_type);
+			}
 		}
-		else if (unique_type_code != 0u)
+		else if (unique_type_code != 0u || unique_index1 != 0u)
 		{
-			this->unique_index = unique_type_code;
-		}
-		else if (unique_index1 != 0u)
-		{
-			this->unique_index = unique_index1;
+			this->unique_index = unique_type_code != 0u 
+				? unique_type_code 
+				: unique_index1;
+
+			const auto iter = game::parameters_table.ssd_crew_generator_table->unique_table.find(this->unique_index);
+			if (iter == game::parameters_table.ssd_crew_generator_table->unique_table.end())
+			{
+				return false;
+			}
+
+			this->life = iter->second->life;
+			this->max_life = iter->second->life;
+			this->face_id = iter->second->face;
+			this->body_id = iter->second->body;
+			this->sex_id = iter->second->sex;
+			this->race_id = iter->second->race;
 		}
 		else
 		{
 			return false;
 		}
 
-		const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(this->unique_index);
-		if (iter == game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
-		{
-			return false;
-		}
-
-		this->life = iter->second->life;
-		this->max_life = iter->second->life;
-		this->face_id = iter->second->face;
-		this->body_id = iter->second->body;
-		this->sex_id = iter->second->sex;
-		this->race_id = iter->second->race;
 		this->sanity = 1000;
 		this->previous_group = 1;
 		this->current_group = 1;
@@ -247,6 +349,21 @@ namespace database::crew_members
 							 crew_member::table.sickness_id_2 = params.sickness_id_2,
 							 crew_member::table.sickness_time_1 = params.sickness_time_1,
 							 crew_member::table.sickness_time_2 = params.sickness_time_2,
+							 crew_member::table.ability_accessory = params.ability_accessory,
+							 crew_member::table.ability_animal = params.ability_animal,
+							 crew_member::table.ability_gadget = params.ability_gadget,
+							 crew_member::table.ability_defense_unit = params.ability_defense_unit,
+							 crew_member::table.ability_base_defense = params.ability_base_defense,
+							 crew_member::table.ability_develop = params.ability_develop,
+							 crew_member::table.ability_expedition = params.ability_expedition,
+							 crew_member::table.ability_food = params.ability_food,
+							 crew_member::table.ability_medical = params.ability_medical,
+							 crew_member::table.ability_plant = params.ability_plant,
+							 crew_member::table.resistance_food_shortage = params.resistance_food_shortage,
+							 crew_member::table.resistance_sleepless = params.resistance_sleepless,
+							 crew_member::table.resistance_water_shortage = params.resistance_water_shortage,
+							 crew_member::table.first_name_index = params.first_name_index,
+							 crew_member::table.last_name_index = params.last_name_index,
 							 crew_member::table.nickname = params.nickname,
 							 crew_member::table.motivation_history = params.motivation_history.serialize(),
 							 crew_member::table.creation_date = std::chrono::system_clock::now()
@@ -541,8 +658,8 @@ namespace database::crew_members
 		data["sex_id"] = this->sex_id_;
 		data["voice_type"] = this->voice_type_;
 
-		const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(this->member_type_);
-		if (iter != game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
+		const auto iter = game::parameters_table.ssd_crew_generator_table->unique_table.find(this->member_type_);
+		if (iter != game::parameters_table.ssd_crew_generator_table->unique_table.end())
 		{
 			data["ability_accessory"] = 0;
 			data["ability_animal"] = 0;
@@ -558,24 +675,28 @@ namespace database::crew_members
 			data["resistance_sleepless"] = iter->second->sleeplack_resist;
 			data["resistance_water_shortage"] = iter->second->thirst_resist;
 			data["initial_max_life"] = iter->second->life;
+			data["first_name_index"] = 0;
+			data["last_name_index"] = 0;
 		}
 		else
 		{
-			data["ability_accessory"] = 0;
-			data["ability_animal"] = 0;
-			data["ability_gadget"] = 0;
-			data["ability_defense_unit"] = 0;
-			data["ability_base_defense"] = 0;
-			data["ability_develop"] = 0;
-			data["ability_expedition"] = 0;
-			data["ability_food"] = 0;
-			data["ability_medical"] = 0;
-			data["ability_plant"] = 0;
-			data["initial_max_life"] = 0;
+			data["ability_accessory"] = this->ability_accessory_;
+			data["ability_animal"] = this->ability_animal_;
+			data["ability_gadget"] = this->ability_gadget_;
+			data["ability_defense_unit"] = this->ability_defense_unit_;
+			data["ability_base_defense"] = this->ability_base_defense_;
+			data["ability_develop"] = this->ability_develop_;
+			data["ability_expedition"] = this->ability_expedition_;
+			data["ability_food"] = this->ability_food_;
+			data["ability_medical"] = this->ability_medical_;
+			data["ability_plant"] = this->ability_plant_;
+			data["resistance_food_shortage"] = this->resistance_food_shortage_;
+			data["resistance_sleepless"] = this->resistance_sleepless_;
+			data["resistance_water_shortage"] = this->resistance_water_shortage_;
+			data["initial_max_life"] = this->life_max_;
+			data["first_name_index"] = this->first_name_index_;
+			data["last_name_index"] = this->last_name_index_;
 		}
-
-		data["first_name_index"] = 0;
-		data["last_name_index"] = 0;
 
 		data["nickname"] = this->nickname_;
 

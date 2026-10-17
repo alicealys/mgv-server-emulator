@@ -118,10 +118,13 @@ namespace emulator::ssd
 						continue;
 					}
 
-					const auto iter = game::parameters_table.ssd_crew_generator_table->crew_member_types.find(new_member_params.unique_index);
-					if (iter == game::parameters_table.ssd_crew_generator_table->crew_member_types.end())
+					if (new_member_params.unique_index != 0)
 					{
-						continue;
+						const auto iter = game::parameters_table.ssd_crew_generator_table->unique_table.find(new_member_params.unique_index);
+						if (iter == game::parameters_table.ssd_crew_generator_table->unique_table.end())
+						{
+							continue;
+						}
 					}
 
 					database::crew_members::create(user->current_player->get_player_id(), new_member_params);

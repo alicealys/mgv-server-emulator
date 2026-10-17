@@ -417,6 +417,33 @@ namespace database::deployments
 		}
 
 		template <database_type_t Type>
+		void remove_crew_id(const std::uint64_t player_id, const std::uint64_t crew_id)
+		{
+			database::access([&](database_t& db)
+			{
+				db.exec<Type>(
+					sqlpp::update(deployment_team::table)
+						.set(deployment_team::table.crew_id_01 = nullable_integer(0))
+							.where(deployment_team::table.crew_id_01 == crew_id));
+
+				db.exec<Type>(
+					sqlpp::update(deployment_team::table)
+						.set(deployment_team::table.crew_id_02 = nullable_integer(0))
+							.where(deployment_team::table.crew_id_02 == crew_id));
+
+				db.exec<Type>(
+					sqlpp::update(deployment_team::table)
+						.set(deployment_team::table.crew_id_03 = nullable_integer(0))
+							.where(deployment_team::table.crew_id_03 == crew_id));
+
+				db.exec<Type>(
+					sqlpp::update(deployment_team::table)
+						.set(deployment_team::table.crew_id_04 = nullable_integer(0))
+							.where(deployment_team::table.crew_id_04 == crew_id));
+			});
+		}
+
+		template <database_type_t Type>
 		void delete_player_data(const std::uint64_t player_id)
 		{
 			database::access([&](database_t& db)
@@ -553,6 +580,11 @@ namespace database::deployments
 	std::size_t get_team_count(const std::uint64_t player_id)
 	{
 		RUN_IMPL(impl::get_team_count, player_id);
+	}
+
+	void remove_crew_id(const std::uint64_t player_id, const std::uint64_t crew_id)
+	{
+		RUN_IMPL(impl::remove_crew_id, player_id, crew_id);
 	}
 
 	void delete_player_data(const std::uint64_t player_id)

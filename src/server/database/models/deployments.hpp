@@ -250,5 +250,7 @@ namespace database::deployments
 		const std::string& name, const std::uint32_t status, const std::uint32_t survive);
 	void update_team_params_by_index(const std::uint64_t player_id, const std::uint64_t team_index, const team_params_t& params);
 
+	void remove_crew_id(const std::uint64_t player_id, const std::uint64_t crew_id);
+
 	void delete_player_data(const std::uint64_t player_id);
 }

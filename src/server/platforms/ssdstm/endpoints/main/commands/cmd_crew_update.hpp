@@ -13,7 +13,7 @@ namespace emulator::ssd
 
 		struct update_nickname_entry_t
 		{
-			std::string name;
+			std::string nickname;
 			std::uint64_t unique_id;
 		};
 

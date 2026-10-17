@@ -127,9 +127,49 @@ struct glz::meta<game::production_t>
 };
 
 template <>
-struct glz::meta<game::crew_member_type_t>
+struct glz::meta<game::crew_type_t>
 {
-	using T = game::crew_member_type_t;
+	using T = game::crew_type_t;
+	static constexpr auto value = glz::object(
+		"id_str", &T::id_str,
+		"id", &T::id,
+		"face", &T::face,
+		"race", &T::race,
+		"sex", &T::sex,
+		"body", &T::body,
+		"DEVELOP.low", &T::develop_low,
+		"DEVELOP.high", &T::develop_high,
+		"FOOD.low", &T::food_low,
+		"FOOD.high", &T::food_high,
+		"MEDIC.low", &T::medic_low,
+		"MEDIC.high", &T::medic_high,
+		"FARM.low", &T::farm_low,
+		"FARM.high", &T::farm_high,
+		"BASE_DEFENSE.low", &T::base_defense_low,
+		"BASE_DEFENSE.high", &T::base_defense_high,
+		"COMBAT_DEPLOY.low", &T::combat_deploy_low,
+		"COMBAT_DEPLOY.high", &T::combat_deploy_high,
+		"THIRST_RESIST.low", &T::thirst_resist_low,
+		"THIRST_RESIST.high", &T::thirst_resist_high,
+		"HUNGER_RESIST.low", &T::hunger_resist_low,
+		"HUNGER_RESIST.high", &T::hunger_resist_high,
+		"INJURY_RESIST.low", &T::injury_resist_low,
+		"INJURY_RESIST.high", &T::injury_resist_high,
+		"SICK_RESIST.low", &T::sick_resist_low,
+		"SICK_RESIST.high", &T::sick_resist_high,
+		"SLEEPLACK_RESIST.low", &T::sleeplack_resist_low,
+		"SLEEPLACK_RESIST.high", &T::sleeplack_resist_high,
+		"LIFE.low", &T::life_low,
+		"LIFE.high", &T::life_high,
+		"job_table", &T::job_table,
+		"skill_table", &T::skill_table
+	);
+};
+
+template <>
+struct glz::meta<game::crew_unique_type_t>
+{
+	using T = game::crew_unique_type_t;
 	static constexpr auto modify = glz::object(
 		"DEVELOP", &T::develop,
 		"FOOD", &T::food,
@@ -550,8 +590,43 @@ namespace game
 	{
 		return json::read(*this, data);
 	}
- 
-	bool crew_member_type_t::parse(json::value& data)
+
+	bool crew_set_table_t::parse(json::value& data, const std::string& key)
+	{
+		this->id = data["id"].as<std::uint32_t>();
+
+		for (auto i = 0ull; i < 10; i++)
+		{
+			const auto ratio_k = std::format("ratio{}", i + 1);
+			const auto value_k = std::format("{}{}", key, i + 1);
+
+			crew_set_table_t::entry_t entry{};
+
+			entry.ratio = data[ratio_k].as<std::uint32_t>();
+			entry.value = data[value_k].as<std::uint32_t>();
+
+			if (entry.ratio != 0 || entry.value != 0)
+			{
+				this->entries.emplace_back(entry);
+				this->values.emplace_back(entry.value);
+				this->ratios.emplace_back(entry.ratio);
+			}
+		}
+
+		return true;
+	}
+
+	bool crew_skill_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
+	bool crew_type_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
+	bool crew_unique_type_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
 	}
@@ -595,5 +670,47 @@ namespace game
 	std::uint32_t calc_time_reduction_cost(const std::uint32_t time_left)
 	{
 		return static_cast<std::uint32_t>(std::roundf(static_cast<float>(time_left) * 0.00133f + 5.f)); // todo
+	}
+
+	std::uint32_t rank_hash_to_value(const std::uint32_t hash)
+	{
+		switch (hash)
+		{
+		case 0x3EFB41DC: // "S"
+			return 1;
+		case 0x8D6B1987: // "A"
+			return 2;
+		case 0x0B6CEF41: // "B"
+			return 3;
+		case 0x4AF41426: // "C"
+			return 4;
+		case 0x5CC6B17E: // "D"
+			return 5;
+		case 0xB9FC4076: // "E"
+			return 6;
+		default:
+			return 7;
+		}
+	}
+
+	std::uint32_t rank_value_to_hash(const std::uint32_t hash)
+	{
+		switch (hash)
+		{
+		case 1: // "S"
+			return 0x3EFB41DC;
+		case 2: // "A"
+			return 0x8D6B1987;
+		case 3: // "B"
+			return 0x0B6CEF41;
+		case 4: // "C"
+			return 0x4AF41426;
+		case 5: // "D"
+			return 0x5CC6B17E;
+		case 6: // "E"
+			return 0xB9FC4076;
+		default:
+			return 0xB9FC4076;
+		}
 	}
 }
