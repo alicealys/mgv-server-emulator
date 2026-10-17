@@ -56,7 +56,9 @@ namespace utils::steam
 			buffer.set_byte(0);
 		}
 
+		const auto ownership_ticket_offset = buffer.total() / 8;
 		const auto ownership_ticket_length = buffer.read_bytes(4);
+
 		if (ownership_ticket_length > buffer.bytes_left() || (ownership_ticket_length < 46))
 		{
 			return false;
@@ -96,15 +98,33 @@ namespace utils::steam
 		if (buffer.bytes_left() >= signature_size)
 		{
 			const auto offset = buffer.total() / 8;
-			this->ownership.signature = buffer.get_buffer().substr(offset, signature_size);
+			const auto signature = buffer.get_buffer().substr(offset, signature_size);
+			const auto ticket_data = buffer.get_buffer().substr(ownership_ticket_offset, ownership_ticket_length);
+			this->valid_signature_ = this->verify_signature(ticket_data, signature);
 		}
 
 		return true;
 	}
 
+	bool auth_ticket::verify_signature(const std::string& ticket, const std::string& signature)
+	{
+		if (signature.empty())
+		{
+			return false;
+		}
+
+		static const auto steam_pub_key = utils::cryptography::base64::decode(
+			"MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDf7BrWLBBmLBc1OhSwfFkRf53T"
+			"2Ct64+AVzRkeRuh7h3SiGEYxqQMUeYKO6UWiSRKpI2hzic9pobFhRr3Bvr/WARvY"
+			"gdTckPv+T1JzZsuVcNfFjrocejN1oWI0Rrtgt4Bo+hOneoo3S57G9F1fOpn5nsQ6"
+			"6WOiu4gZKODnFMBCiQIBEQ==");
+
+		return utils::cryptography::rsa::verify(ticket, signature, steam_pub_key);
+	}
+
 	bool auth_ticket::is_valid()
 	{
-		return !this->ownership.signature.empty(); // validate signature?
+		return this->valid_signature_;
 	}
 
 	bool auth_ticket::is_expired()

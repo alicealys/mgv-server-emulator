@@ -45,8 +45,12 @@ namespace utils::steam
 			std::vector<std::uint32_t> licenses;
 			std::vector<std::uint32_t> dlc_app_ids;
 			std::uint16_t unk1;
-			std::string signature;
 		} ownership{};
+
+	private:
+		bool verify_signature(const std::string& ticket, const std::string& signature);
+
+		bool valid_signature_{};
 
 	};
 }
