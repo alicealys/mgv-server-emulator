@@ -58,6 +58,23 @@ namespace game::parameters
 		return resource->id;
 	}
 
+	std::shared_ptr<recipe_t> ssd_sbm_parameters::get_production_recipe(const std::uint32_t production_index) const
+	{
+		const auto id = get_production_id(production_index);
+		if (id == 0)
+		{
+			return nullptr;
+		}
+
+		const auto iter = this->production_recipes.find(id);
+		if (iter == this->production_recipes.end())
+		{
+			return nullptr;
+		}
+
+		return iter->second;
+	}
+
 	bool ssd_sbm_parameters::parse(json::value& data)
 	{
 		for (auto i = 0ull; i < data["customize_option"].size(); i++)
@@ -172,6 +189,72 @@ namespace game::parameters
 			this->potentials[potential->id] = potential;
 		}
 
+		for (auto i = 0ull; i < data["building"].size(); i++)
+		{
+			auto building = std::make_shared<building_t>();
+			if (!building->parse(data["building"][i]))
+			{
+				console::warning("invalid building at index %lli\n", i);
+				continue;
+			}
+
+			this->buildings[building->id] = building;
+		}
+
+		for (auto i = 0ull; i < data["cassette"].size(); i++)
+		{
+			auto cassette = std::make_shared<cassette_t>();
+			if (!cassette->parse(data["cassette"][i]))
+			{
+				console::warning("invalid cassette at index %lli\n", i);
+				continue;
+			}
+
+			this->cassettes[cassette->id] = cassette;
+			if (cassette->index >= this->cassettes_list.size())
+			{
+				this->cassettes_list.resize(cassette->index + 1ull);
+			}
+
+			this->cassettes_list[cassette->index] = cassette;
+		}
+
+		for (auto i = 0ull; i < data["gradeup_spec"].size(); i++)
+		{
+			gradeup_spec_t spec{};
+			spec.parse(data["gradeup_spec"][i]);
+			this->gradeup_spec[spec.rarity] = spec;
+		}
+
+		for (auto i = 0ull; i < data["battle_pack"].size(); i++)
+		{
+			auto res = std::make_shared<battle_pack_t>();
+			if (!res->parse(data["battle_pack"][i]))
+			{
+				console::warning("invalid battle_pack at index %lli\n", i);
+				continue;
+			}
+
+			this->battle_packs[res->id] = res;
+			if (res->index >= this->battle_pack_list.size())
+			{
+				this->battle_pack_list.resize(res->index + 1ull);
+			}
+
+			this->battle_pack_list[res->index] = res;
+		}
+
+		for (auto i = 0ull; i < data["survival"].size(); i++)
+		{
+			auto survival_gear = std::make_shared<survival_gear_t>();
+			if (!survival_gear->parse(data["survival"][i]))
+			{
+				console::warning("invalid survival at index %lli\n", i);
+			}
+
+			this->survival_gears[survival_gear->id] = survival_gear;
+		}
+
 		for (auto i = 0ull; i < data["production"].size(); i++)
 		{
 			auto prod = std::make_shared<production_t>();
@@ -194,27 +277,65 @@ namespace game::parameters
 				}
 			}
 
+			if (prod->related_id != 0u)
 			{
-				const auto iter = game::parameters_table.ssd_equip_parameters->equips.find(prod->related_id);
-				if (iter != parameters_table.ssd_equip_parameters->equips.end())
+				switch (prod->type)
 				{
-					prod->equip = iter->second;
-				}
-			}
+				case PRD_TYPE_Building:
+				{
+					const auto iter = this->buildings.find(prod->related_id);
+					if (iter != this->buildings.end())
+					{
+						prod->building = iter->second;
+					}
+					else
+					{
+						console::warning("production %s of type PRD_TYPE_Building, has invalid related id %lli\n", prod->id_str.data(), prod->related_id);
+					}
 
-			{
-				const auto iter = this->accessories.find(prod->related_id);
-				if (iter != this->accessories.end())
-				{
-					prod->accessory = iter->second;
+					break;
 				}
-			}
-
-			{
-				const auto iter = this->survival_gears.find(prod->related_id);
-				if (iter != this->survival_gears.end())
+				case PRD_TYPE_Accessory:
 				{
-					prod->survival_gear = iter->second;
+					const auto iter = this->accessories.find(prod->related_id);
+					if (iter != this->accessories.end())
+					{
+						prod->accessory = iter->second;
+					}
+					else
+					{
+						console::warning("production %s of type PRD_TYPE_Accessory, has invalid related id %lli\n", prod->id_str.data(), prod->related_id);
+					}
+
+					break;
+				}
+				case PRD_TYPE_Weapon:
+				{
+					const auto iter = game::parameters_table.ssd_equip_parameters->equips.find(prod->related_id);
+					if (iter != parameters_table.ssd_equip_parameters->equips.end())
+					{
+						prod->equip = iter->second;
+					}
+					else
+					{
+						console::warning("production %s of type PRD_TYPE_Weapon, has invalid related id %lli\n", prod->id_str.data(), prod->related_id);
+					}
+					break;
+				}
+				case PRD_TYPE_Survival:
+				{
+					const auto iter = this->survival_gears.find(prod->related_id);
+					if (iter != this->survival_gears.end())
+					{
+						prod->survival_gear = iter->second;
+					}
+					else
+					{
+						console::warning("production %s of type PRD_TYPE_Survival, has invalid related id %lli\n", prod->id_str.data(), prod->related_id);
+					}
+
+					break;
+				}
 				}
 			}
 
@@ -270,58 +391,24 @@ namespace game::parameters
 			this->recipes_list[recipe->index] = recipe;
 		}
 
-		for (auto i = 0ull; i < data["cassette"].size(); i++)
+		for (auto& prod : this->productions_list)
 		{
-			auto cassette = std::make_shared<cassette_t>();
-			if (!cassette->parse(data["cassette"][i]))
+			if (prod == nullptr)
 			{
-				console::warning("invalid cassette at index %lli\n", i);
 				continue;
 			}
 
-			this->cassettes[cassette->id] = cassette;
-			if (cassette->index >= this->cassettes_list.size())
+			const auto recipe_iter = std::ranges::find_if(
+				this->recipes_list.begin(), this->recipes_list.end(), [&](const std::shared_ptr<recipe_t>& recipe)
+				{
+					return recipe != nullptr && recipe->production == prod;
+				}
+			);
+
+			if (recipe_iter != this->recipes_list.end())
 			{
-				this->cassettes_list.resize(cassette->index + 1ull);
+				this->production_recipes[prod->id] = *recipe_iter;
 			}
-
-			this->cassettes_list[cassette->index] = cassette;
-		}
-
-		for (auto i = 0ull; i < data["gradeup_spec"].size(); i++)
-		{
-			gradeup_spec_t spec{};
-			spec.parse(data["gradeup_spec"][i]);
-			this->gradeup_spec[spec.rarity] = spec;
-		}
-
-		for (auto i = 0ull; i < data["battle_pack"].size(); i++)
-		{
-			auto res = std::make_shared<battle_pack_t>();
-			if (!res->parse(data["battle_pack"][i]))
-			{
-				console::warning("invalid battle_pack at index %lli\n", i);
-				continue;
-			}
-
-			this->battle_packs[res->id] = res;
-			if (res->index >= this->battle_pack_list.size())
-			{
-				this->battle_pack_list.resize(res->index + 1ull);
-			}
-
-			this->battle_pack_list[res->index] = res;
-		}
-
-		for (auto i = 0ull; i < data["survival"].size(); i++)
-		{
-			auto survival_gear = std::make_shared<survival_gear_t>();
-			if (!survival_gear->parse(data["survival"][i]))
-			{
-				console::warning("invalid survival at index %lli\n", i);
-			}
-
-			this->survival_gears[survival_gear->id] = survival_gear;
 		}
 
 		return true;

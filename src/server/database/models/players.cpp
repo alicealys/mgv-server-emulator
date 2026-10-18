@@ -1386,6 +1386,36 @@ namespace database::players
 		}
 	}
 
+	bool building_info_t::cell_edge_t::is_valid(const std::uint32_t type) const
+	{
+		if (this->production_index == 0 || this->life == 0)
+		{
+			return false;
+		}
+
+		if (this->production_index >= game::parameters_table.ssd_sbm_parameters->productions_list.size())
+		{
+			return false;
+		}
+
+		const auto& production = game::parameters_table.ssd_sbm_parameters->productions_list[this->production_index];
+		if (production == nullptr || production->building == nullptr)
+		{
+			return false;
+		}
+
+		switch (type)
+		{
+		case edge_type_center:
+			return !production->building->edge;
+		case edge_type_left:
+		case edge_type_upper:
+			return production->building->edge;
+		}
+
+		return false;
+	}
+
 	bool building_info_t::cell_edge_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
 	{
 		if (type == edge_type_center)
@@ -1407,7 +1437,7 @@ namespace database::players
 			return false;
 		}
 
-		return true;
+		return this->is_valid(type);
 	}
 
 	void building_info_t::cell_edge_t::to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const
@@ -1549,14 +1579,15 @@ namespace database::players
 			for (auto col = 0u; col < building_grid_size; col++)
 			{
 				auto& cell = this->cells[row][col];
-				const auto do_edge = [&](json::value& edge, const std::uint32_t type)
+				const auto do_edge = [&](json::value& data, const std::uint32_t type)
 				{
-					if (cell.edges[type].life == 0)
+					auto& edge = cell.edges[type];
+					if (edge.life == 0 || !edge.is_valid(type))
 					{
 						return;
 					}
 
-					cell.edges[type].to_json(edge[edge.size()], row, col, type);
+					edge.to_json(data[data.size()], row, col, type);
 				};
 
 				do_edge(data["center_info"], edge_type_center);
@@ -2358,15 +2389,23 @@ namespace database::players
 		return true;
 	}
 
-	bool craft_recipe_internal(const std::uint32_t price, const game::cost_t* cost, const std::size_t cost_count, 
-		const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	bool craft_recipe_internal(
+		const std::uint32_t price, 
+		const game::cost_t* cost, const std::size_t cost_count, 
+		const std::uint32_t amount, 
+		inventory_resource_list_t& resource_list, 
+		stackable_item_list_t& stackable_item_list, 
+		player_inventory_t& inventory_info,
+		const float cost_scale)
 	{
-		if (price * amount > inventory_info.energy)
+		const auto energy_cost = std::max(1u, static_cast<std::uint32_t>(std::ceilf(static_cast<float>(price * amount) * cost_scale)));
+
+		if (energy_cost > inventory_info.energy)
 		{
 			return false;
 		}
 
-		inventory_info.energy -= price * amount;
+		inventory_info.energy -= energy_cost;
 
 		for (auto i = 0ull; i < cost_count; i++)
 		{
@@ -2381,7 +2420,7 @@ namespace database::players
 				continue;
 			}
 
-			auto cost_value = cost[i].count * amount;
+			auto cost_value = std::max(1u, static_cast<std::uint32_t>(std::ceilf(static_cast<float>(cost[i].count * amount) * cost_scale)));
 			switch (cost[i].type)
 			{
 			case game::COST_TYPE_Resource:
@@ -2437,14 +2476,72 @@ namespace database::players
 		return true;
 	}
 
-	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	void uncraft_recipe_internal(const std::uint32_t price, const game::cost_t* cost, const std::size_t cost_count,
+		const float scale, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
 	{
-		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info);
+		inventory_info.energy += static_cast<std::uint32_t>(static_cast<float>(price) * scale);
+
+		for (auto i = 0ull; i < cost_count; i++)
+		{
+			if (cost[i].id == 0)
+			{
+				continue;
+			}
+
+			auto found = false;
+			if (game::is_event_obtained_res(cost[i].id, inventory_info.event_obtained, &found) && found)
+			{
+				continue;
+			}
+
+			auto cost_value = static_cast<std::uint32_t>(static_cast<float>(cost[i].count) * scale);
+			switch (cost[i].type)
+			{
+			case game::COST_TYPE_Resource:
+			{
+				const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(cost[i].id);
+				if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+				{
+					continue;
+				}
+
+				inventory_resource_t resource{};
+				resource.count = cost_value;
+				resource.resource_index = iter->second->index;
+				resource_list.add_resource(resource);
+				break;
+			}
+			case game::COST_TYPE_Production:
+			{
+				const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(cost[i].id);
+				if (iter == game::parameters_table.ssd_sbm_parameters->productions.end() || !iter->second->is_stackable())
+				{
+					continue;
+				}
+
+				stackable_item_t item{};
+				item.count = cost_value;
+				item.production_index = iter->second->index;
+				stackable_item_list.add_item(item);
+				break;
+			}
+			}
+		}
+	}
+
+	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info, const float scale)
+	{
+		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info, scale);
 	}
 
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
 	{
-		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info);
+		return craft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), amount, resource_list, stackable_item_list, inventory_info, 1.f);
+	}
+
+	void uncraft_recipe(const game::recipe_t& recipe, const float scale, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info)
+	{
+		return uncraft_recipe_internal(recipe.price, recipe.cost, ARRAYSIZE(recipe.cost), scale, resource_list, stackable_item_list, inventory_info);
 	}
 
 	GET_FIELD_C(player, std::uint64_t, player_id);

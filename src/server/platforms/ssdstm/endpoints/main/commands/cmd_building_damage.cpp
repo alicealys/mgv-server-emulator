@@ -9,15 +9,7 @@ namespace emulator::ssd
 		json::value result;
 
 		auto& cell_info = data["cell_info"];
-		auto& map_location_j = data["map_location"];
-
-		if (!cell_info.is_object() || !map_location_j.is_uint64())
-		{
-			return error(ERR_INVALIDARG);
-		}
-
-		const auto map_location = map_location_j.as<std::uint32_t>();
-		if (map_location > 1)
+		if (!cell_info.is_object())
 		{
 			return error(ERR_INVALIDARG);
 		}

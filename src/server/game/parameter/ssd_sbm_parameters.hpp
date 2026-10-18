@@ -14,6 +14,8 @@ namespace game::parameters
 		std::uint32_t get_production_id(const std::uint32_t production_index) const;
 		std::uint32_t get_battle_pack_id(const std::uint32_t production_index) const;
 
+		std::shared_ptr<recipe_t> get_production_recipe(const std::uint32_t production_index) const;
+
 		std::unordered_map<std::uint32_t, std::shared_ptr<resource_t>> resources;
 		std::unordered_map<std::uint32_t, std::shared_ptr<production_t>> productions;
 		std::unordered_map<std::uint32_t, std::shared_ptr<recipe_t>> recipes;
@@ -25,6 +27,8 @@ namespace game::parameters
 		std::unordered_map<std::uint32_t, std::shared_ptr<customize_t>> customize;
 		std::unordered_map<std::uint32_t, std::shared_ptr<cassette_t>> cassettes;
 		std::unordered_map<std::uint32_t, std::shared_ptr<potential_t>> potentials;
+		std::unordered_map<std::uint32_t, std::shared_ptr<building_t>> buildings;
+		std::unordered_map<std::uint32_t, std::shared_ptr<recipe_t>> production_recipes;
 		std::array<gradeup_spec_t, 255> gradeup_spec;
 		std::vector<std::shared_ptr<production_t>> productions_list;
 		std::vector<std::shared_ptr<recipe_t>> recipes_list;

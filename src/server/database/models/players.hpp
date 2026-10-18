@@ -742,6 +742,7 @@ namespace database::players
 			std::uint32_t completion_remaining_time;
 			std::uint32_t recovery_time;
 
+			bool is_valid(const std::uint32_t type) const;
 			bool parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
 			void to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
 		};
@@ -1031,8 +1032,10 @@ namespace database::players
 
 	};
 
-	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
+	bool craft_recipe(const game::recipe_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info, const float scale = 1.f);
 	bool craft_recipe(const game::customize_option_t& recipe, const std::uint32_t amount, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
+	
+	void uncraft_recipe(const game::recipe_t& recipe, const float scale, inventory_resource_list_t& resource_list, stackable_item_list_t& stackable_item_list, player_inventory_t& inventory_info);
 
 	class player
 	{

@@ -8,22 +8,20 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		auto& map_location_j = data["map_location"];
 		auto& current_life_obj_j = data["current_life"];
 		auto& edge_type_j = data["edge_type"];
 		auto& production_id_j = data["production_id"];
 
-		if (!map_location_j.is_uint64() || !current_life_obj_j.is_object() ||
+		if (!current_life_obj_j.is_object() ||
 			!edge_type_j.is_uint64() || !production_id_j.is_uint64())
 		{
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto map_location = map_location_j.as<std::uint32_t>();
 		const auto edge_type = edge_type_j.as<std::uint32_t>();
 		const auto production_id = production_id_j.as<std::uint16_t>();
 
-		if (map_location > 1 || edge_type >= database::players::edge_type_count)
+		if (edge_type >= database::players::edge_type_count)
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -43,12 +41,40 @@ namespace emulator::ssd
 		const auto current_life = current_life_j.as<std::uint16_t>();
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
-		user->current_player->get_building_info(*building_info);
 
-		building_info->cells[row][col].edges[edge_type].life = current_life;
-		building_info->cells[row][col].edges[edge_type].production_index = production_id;
+		database::players::inventory_resource_list_t resource_list;
+		database::players::stackable_item_list_t stackable_list;
+		database::players::player_inventory_t inventory{};
+
+		user->current_player->get_building_info(*building_info);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_inventory(inventory);
+
+		auto& edge = building_info->cells[row][col].edges[edge_type];
+		if (!edge.is_valid(edge_type) || edge.production_index != production_id || current_life > edge.max_life)
+		{
+			return error(ERR_DATABASE);
+		}
+
+		const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
+		if (recipe == nullptr)
+		{
+			return error(ERR_DATABASE);
+		}
+
+		const auto scalar = (1.f - (static_cast<float>(current_life) / static_cast<float>(edge.max_life))) * 0.5f;
+		if (!database::players::craft_recipe(*recipe, 1, resource_list, stackable_list, inventory, scalar))
+		{
+			return error(ERR_BUILDING_MATERIAL_SHORTAGE);
+		}
+
+		edge.life = edge.max_life;
 
 		user->current_player->set_building_info(*building_info);
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_inventory(inventory);
 
 		return result;
 	}

@@ -8,23 +8,15 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		auto& map_location_j = data["map_location"];
 		auto& departure_coordinate_j = data["departure_coordinate"];
 		auto& departure_edge_type_j = data["departure_edge_type"];
 		auto& destination_coordinate_j = data["destination_coordinate"];
 		auto& destination_edge_type_j = data["destination_edge_type"];
 		auto& destination_rotation_j = data["destination_rotation"];
 
-		if (!map_location_j.is_uint64() ||
-			!departure_coordinate_j.is_object() || !departure_edge_type_j.is_uint64() || 
+		if (!departure_coordinate_j.is_object() || !departure_edge_type_j.is_uint64() || 
 			!destination_coordinate_j.is_object() || !destination_edge_type_j.is_uint64() ||
 			!destination_rotation_j.is_uint64())
-		{
-			return error(ERR_INVALIDARG);
-		}
-
-		const auto map_location = map_location_j.as<std::uint32_t>();
-		if (map_location > 1)
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -78,6 +70,11 @@ namespace emulator::ssd
 		std::memset(&src_edge, 0, sizeof(database::players::building_info_t::cell_edge_t));
 
 		dst_edge.rotation = destination_rotation;
+
+		if (!dst_edge.is_valid(destination_edge_type))
+		{
+			return error(ERR_DATABASE);
+		}
 
 		user->current_player->set_building_info(*building_info);
 

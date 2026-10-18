@@ -8,25 +8,22 @@ namespace emulator::ssd
 	{
 		json::value result;
 
-		auto& map_location_j = data["map_location"];
-		if (!map_location_j.is_uint64())
-		{
-			return error(ERR_INVALIDARG);
-		}
-
-		const auto map_location = map_location_j.as<std::uint32_t>();
-		if (map_location > 1)
-		{
-			return error(ERR_INVALIDARG);
-		}
-
 		const auto building_info = std::make_unique<database::players::building_info_t>();
+
+		database::players::inventory_resource_list_t resource_list;
+		database::players::stackable_item_list_t stackable_list;
+		database::players::player_inventory_t inventory{};
+
+		user->current_player->get_building_info(*building_info);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_inventory(inventory);
 
 		const auto do_list = [&](json::value& data, const std::uint32_t type)
 		{
 			if (!data.is_array())
 			{
-				return;
+				return true;
 			}
 
 			for (auto i = 0ull; i < data.size(); i++)
@@ -37,24 +34,48 @@ namespace emulator::ssd
 
 				if (!column_j.is_uint64() || !row_j.is_uint64() || !current_life_j.is_uint64())
 				{
-					continue;
+					return false;
 				}
 
 				const auto col = column_j.as<std::uint32_t>();
 				const auto row = row_j.as<std::uint32_t>();
 				const auto current_life = current_life_j.as<std::uint16_t>();
 
-				building_info->cells[row][col].edges[type].life = current_life;
+				auto& edge = building_info->cells[row][col].edges[type];
+				if (!edge.is_valid(type) || current_life > edge.max_life)
+				{
+					return false;
+				}
+
+				const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
+				if (recipe == nullptr)
+				{
+					return false;
+				}
+
+				const auto scalar = (1.f - (static_cast<float>(current_life) / static_cast<float>(edge.max_life))) * 0.5f;
+				if (!database::players::craft_recipe(*recipe, 1, resource_list, stackable_list, inventory, scalar))
+				{
+					return false;
+				}
+
+				edge.life = edge.max_life;
 			}
+
+			return true;
 		};
 
-		user->current_player->get_building_info(*building_info);
-
-		do_list(data["center_life_list"], database::players::edge_type_upper);
-		do_list(data["upper_life_list"], database::players::edge_type_upper);
-		do_list(data["left_life_list"], database::players::edge_type_left);
+		if (!do_list(data["center_life_list"], database::players::edge_type_center) ||
+			!do_list(data["upper_life_list"], database::players::edge_type_upper) ||
+			!do_list(data["left_life_list"], database::players::edge_type_left))
+		{
+			return error(ERR_DATABASE);
+		}
 
 		user->current_player->set_building_info(*building_info);
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_inventory(inventory);
 
 		return result;
 	}

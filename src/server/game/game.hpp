@@ -6216,6 +6216,78 @@ namespace game
         std::array<perk_t, 5> perk;
     };
 
+    struct building_t
+    {
+        bool parse(json::value& data);
+
+        std::string id_str;
+        std::uint32_t id;
+        std::uint32_t type;
+        std::uint32_t spec;
+        std::uint32_t map_icon;
+        std::array<std::uint32_t, 4> craft_categories;
+        std::uint32_t fill;
+        bool edge;
+        std::uint32_t gimmick_id;
+        bool origin;
+        bool load;
+        bool basis;
+        bool ridable_roof;
+        bool spiky_body;
+        bool spiky_head;
+        bool spiky_floor;
+        bool auto_;
+        bool no_stopper;
+        bool muteki;
+        bool switch_;
+        bool turn;
+        bool fake;
+        bool friendly_fire;
+        bool chain;
+        bool temp_enclosure;
+        bool around_access;
+        bool flag_type;
+        bool aim_head;
+        float rain;
+        float sound_area;
+        std::uint32_t attack_id;
+        std::uint32_t base_attack_id;
+        std::uint32_t blast_attack_id;
+        std::array<std::uint32_t, 3> buffs;
+        std::uint32_t max_count;
+        std::uint32_t block;
+        std::uint32_t cost;
+        std::uint32_t panel_limit_angle;
+        float panel_offset_y;
+        float panel_offset_z;
+        std::uint32_t bullet_count;
+        std::uint32_t aim_angle;
+        std::uint32_t shoot_range;
+        std::uint32_t attack_radius;
+        std::uint32_t shoot_interval;
+        std::uint32_t shoot_max_beat_count;
+        std::uint32_t shoot_cooldown_time;
+        std::uint32_t defense_value;
+        std::uint32_t defense_level;
+        std::uint32_t damage_rate;
+        std::uint32_t stamina;
+        std::uint32_t stamina_defense;
+        std::uint32_t attack_damage;
+        std::uint32_t max_unit_oount;
+        std::uint32_t life_time;
+        std::uint32_t auto_reset_time;
+        std::uint32_t damage_sound_id;
+        std::uint32_t break_sound_id;
+        std::uint32_t break_sound_id_sub;
+        std::uint32_t break_sound_id_sub2;
+        std::uint32_t idle_sound_id;
+        std::uint32_t idle_stop_sound_id;
+        std::uint64_t spark_effect;
+        std::uint64_t break_effect;
+        std::uint32_t asset_id;
+        std::array<std::uint32_t, 8> resources;
+    };
+
 	struct production_t
 	{
 		bool parse(json::value& data);
@@ -6271,6 +6343,8 @@ namespace game
         std::shared_ptr<survival_gear_t> survival_gear;
         std::shared_ptr<accessory_t> accessory;
         std::shared_ptr<equip_t> equip;
+        std::shared_ptr<building_t> building;
+        std::shared_ptr<building_t> recipe;
 	};
 
 	struct recipe_t

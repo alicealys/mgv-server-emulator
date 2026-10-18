@@ -11,6 +11,14 @@ namespace emulator::ssd
 		const auto building_info = std::make_unique<database::players::building_info_t>();
 		user->current_player->get_building_info(*building_info);
 
+		database::players::inventory_resource_list_t resource_list;
+		database::players::stackable_item_list_t stackable_list;
+		database::players::player_inventory_t inventory{};
+
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_inventory(inventory);
+
 		const auto do_list = [&](json::value& data, const std::uint32_t type)
 		{
 			if (!data.is_array())
@@ -34,18 +42,24 @@ namespace emulator::ssd
 				const auto current_life = current_life_j.as<std::uint16_t>();
 
 				auto& edge = building_info->cells[row][col].edges[type];
-				if (edge.production_index == 0)
+				if (!edge.is_valid(type))
 				{
 					return false;
 				}
 
-				if (current_life == 0)
-				{
-					std::memset(&edge, 0, sizeof(database::players::building_info_t::cell_edge_t));
-				}
-				else
+				if (current_life != 0)
 				{
 					edge.life = current_life;
+					continue;
+				}
+
+				const auto production_index = edge.production_index;
+				std::memset(&edge, 0, sizeof(database::players::building_info_t::cell_edge_t));
+
+				const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(production_index);
+				if (recipe != nullptr)
+				{
+					database::players::uncraft_recipe(*recipe, 0.5f, resource_list, stackable_list, inventory);
 				}
 			}
 
@@ -71,6 +85,10 @@ namespace emulator::ssd
 		building_info->parse_farming(data["farming_update_list"]);
 
 		user->current_player->set_building_info(*building_info);
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_inventory(inventory);
+
 
 		return result;
 	}

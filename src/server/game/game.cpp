@@ -73,6 +73,80 @@ struct glz::meta<game::recipe_t>
 };
 
 template <>
+struct glz::meta<game::building_t>
+{
+	using T = game::building_t;
+	static constexpr auto value = glz::object(
+		"id_str", &T::id_str,
+		"id", &T::id,
+		"type", &T::type,
+		"spec", &T::spec,
+		"mapIcon", &T::map_icon,
+		"craftCategories", &T::craft_categories,
+		"fill", &T::fill,
+		"edge", &T::edge,
+		"gimmickId", &T::gimmick_id,
+		"origin", &T::origin,
+		"load", &T::load,
+		"basis", &T::basis,
+		"ridableRoof", &T::ridable_roof,
+		"spikyBody", &T::spiky_body,
+		"spikyHead", &T::spiky_head,
+		"spikyFloor", &T::spiky_floor,
+		"auto", &T::auto_,
+		"noStopper", &T::no_stopper,
+		"muteki", &T::muteki,
+		"switch", &T::switch_,
+		"turn", &T::turn,
+		"fake", &T::fake,
+		"friendlyFire", &T::friendly_fire,
+		"chain", &T::chain,
+		"tempEnclosure", &T::temp_enclosure,
+		"aroundAccess", &T::around_access,
+		"flagType", &T::flag_type,
+		"aimHead", &T::aim_head,
+		"rain", &T::rain,
+		"soundArea", &T::sound_area,
+		"attackId", &T::attack_id,
+		"baseAttackId", &T::base_attack_id,
+		"blastAttackId", &T::blast_attack_id,
+		"buffs", &T::buffs,
+		"maxCount", &T::max_count,
+		"block", &T::block,
+		"cost", &T::cost,
+		"panelLimitAngle", &T::panel_limit_angle,
+		"panelOffsetY", &T::panel_offset_y,
+		"panelOffsetZ", &T::panel_offset_z,
+		"bulletCount", &T::bullet_count,
+		"aimAngle", &T::aim_angle,
+		"shootRange", &T::shoot_range,
+		"attackRadius", &T::attack_radius,
+		"shootInterval", &T::shoot_interval,
+		"shootMaxBeatCount", &T::shoot_max_beat_count,
+		"shootCoolDownTime", &T::shoot_cooldown_time,
+		"defenseValue", &T::defense_value,
+		"defenseLevel", &T::defense_level,
+		"damageRate", &T::damage_rate,
+		"stamina", &T::stamina,
+		"staminaDefense", &T::stamina_defense,
+		"attackDamage", &T::attack_damage,
+		"maxUnitCount", &T::max_unit_oount,
+		"lifeTime", &T::life_time,
+		"autoResetTime", &T::auto_reset_time,
+		"damageSoundId", &T::damage_sound_id,
+		"breakSoundId", &T::break_sound_id,
+		"breakSoundIdSub", &T::break_sound_id_sub,
+		"breakSoundIdSub2", &T::break_sound_id_sub2,
+		"idleSoundId", &T::idle_sound_id,
+		"idleStopSoundId", &T::idle_stop_sound_id,
+		"sparkEffect", &T::spark_effect,
+		"breakEffect", &T::break_effect,
+		"assetId", &T::asset_id,
+		"resources", &T::resources
+	);
+};
+
+template <>
 struct glz::meta<game::production_t>
 {
 	using T = game::production_t;
@@ -577,6 +651,11 @@ namespace game
 	}
 
 	bool gradeup_spec_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
+	bool building_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
 	}
