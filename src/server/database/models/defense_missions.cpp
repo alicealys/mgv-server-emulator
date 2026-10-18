@@ -374,6 +374,26 @@ namespace database::defense_missions
 				);
 			});
 		}
+		
+		template <database_type_t Type>
+		std::uint64_t add_record(const std::uint64_t player_id, const defense_mission_record_t& record)
+		{
+			return database::access<std::uint64_t>([&](database::database_t& db)
+			{
+				return db.exec<Type>(
+					sqlpp::insert_into(defense_mission::table)
+						.set(defense_mission::table.f_player_id = player_id, 
+							 defense_mission::table.mission_code = record.mission_code,
+							 defense_mission::table.total_score = record.iris_score,
+							 defense_mission::table.clear_rank = record.clear_rank,
+							 defense_mission::table.current_wave = record.waves,
+							 defense_mission::table.result = 1,
+							 defense_mission::table.start_date = std::chrono::system_clock::now(),
+							 defense_mission::table.end_date = std::chrono::system_clock::now(),
+							 defense_mission::table.next_wave_date = std::chrono::system_clock::time_point())
+				);
+			});
+		}
 
 		template <database_type_t Type>
 		std::vector<defense_mission> get_history(const std::uint64_t player_id, const std::uint32_t limit)
@@ -608,6 +628,11 @@ namespace database::defense_missions
 	std::uint64_t create_mission(const std::uint64_t player_id, const std::uint16_t mission_code)
 	{
 		RUN_IMPL(impl::create_mission, player_id, mission_code);
+	}
+
+	std::uint64_t add_record(const std::uint64_t player_id, const defense_mission_record_t& record)
+	{
+		RUN_IMPL(impl::add_record, player_id, record);
 	}
 
 	std::uint64_t add_wave(const std::uint64_t defense_mission_id, wave_result_t& result, wave_params_t& params,

@@ -305,6 +305,7 @@ namespace database::defense_missions
 	std::vector<defense_mission_wave> get_waves(const std::uint64_t defense_mission_id);
 	defense_mission find_or_create(const std::uint64_t player_id, const std::uint16_t mission_code, const std::uint32_t max_wave);
 	std::uint64_t create_mission(const std::uint64_t player_id, const std::uint16_t mission_code);
+	std::uint64_t add_record(const std::uint64_t player_id, const defense_mission_record_t& record);
 
 	std::uint64_t add_wave(const std::uint64_t defense_mission_id, 
 		wave_result_t& result,

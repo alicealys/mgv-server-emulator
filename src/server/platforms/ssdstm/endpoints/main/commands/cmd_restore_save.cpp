@@ -4,6 +4,8 @@
 
 #include "database/models/crew_members.hpp"
 #include "database/models/deployments.hpp"
+#include "database/models/defense_missions.hpp"
+#include "database/models/coop_missions.hpp"
 
 namespace emulator::ssd
 {
@@ -143,13 +145,15 @@ namespace emulator::ssd
 			auto& load_out_list_j = mission_progress_j["load_out_list"];
 			auto& mission_record_info_list_j = mission_progress_j["mission_record_info_list"];
 			auto& quest_record_info_list_j = mission_progress_j["quest_record_info_list"];
+			auto& defense_mission_record_info_list_j = mission_progress_j["defense_mission_record_info_list"];
+			auto& coop_embedded_mission_record_info_list_j = mission_progress_j["coop_embedded_mission_record_info_list"];
+			auto& defense_mission_status_j = mission_progress_j["defense_mission_status"];
 			auto& nonstackable_list_j = mission_progress_j["nonstackable_list"];
 			auto& battle_pack_list_j = mission_progress_j["battle_pack_list"];
 			auto& resource_list_j = mission_progress_j["resource_list"];
 			auto& stackable_list_j = mission_progress_j["stackable_list"];
 			auto& story_unlock_info_j = mission_progress_j["story_unlock_info"];
 			auto& user_flag_j = mission_progress_j["user_flag"];
-			auto& defense_mission_status_j = mission_progress_j["defense_mission_status"];
 			auto& defense_mission_parameter_j = mission_progress_j["defense_mission_parameter"];
 			auto& communication_gesture_slot_j = mission_progress_j["communication_gesture_slot"];
 
@@ -235,6 +239,49 @@ namespace emulator::ssd
 				if (quest_record_list.parse_diff(quest_record_info_list_j))
 				{
 					user->current_player->set_quest_record_list(quest_record_list);
+				}
+			}
+
+			if (defense_mission_record_info_list_j.is_array())
+			{
+				database::defense_missions::delete_player_data(user->current_player->get_player_id());
+				for (auto i = 0ull; i < defense_mission_record_info_list_j.size(); i++)
+				{
+					database::defense_missions::defense_mission_record_t record{};
+					if (!json::read(record, defense_mission_record_info_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto iter = game::parameters_table.ssd_base_defense_settings->mission_settings.find(record.mission_code);
+					if (iter == game::parameters_table.ssd_base_defense_settings->mission_settings.end())
+					{
+						continue;
+					}
+
+					database::defense_missions::add_record(user->current_player->get_player_id(), record);
+				}
+			}
+
+			if (coop_embedded_mission_record_info_list_j.is_array())
+			{
+				database::coop_missions::delete_player_data(user->current_player->get_player_id());
+				for (auto i = 0ull; i < coop_embedded_mission_record_info_list_j.size(); i++)
+				{
+					database::coop_missions::coop_mission_record_t record{};
+					if (!json::read(record, coop_embedded_mission_record_info_list_j[i]))
+					{
+						continue;
+					}
+
+					const auto iter = game::parameters_table.ssd_ui_coop_mission_info->coop_missions.find(record.mission_code);
+					if (iter == game::parameters_table.ssd_ui_coop_mission_info->coop_missions.end())
+					{
+						continue;
+					}
+
+					database::coop_missions::add_result(user->current_player->get_player_id(), 
+						database::coop_missions::mission_type_embedded, record);
 				}
 			}
 
