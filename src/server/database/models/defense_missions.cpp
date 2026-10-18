@@ -4,6 +4,7 @@
 
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
+#include "utils/random.hpp"
 
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
@@ -222,7 +223,7 @@ namespace database::defense_missions
 			for (auto o = 0ull; o < reward_pool.reward_pool[i].count; o++)
 			{
 				const auto& reward_list = reward_pool.reward_pool[i].rewards;
-				const auto rand = utils::cryptography::random::get_integer() % reward_list.size();
+				const auto rand = utils::random::index(reward_list);
 				const auto& reward = reward_list[rand];
 
 				reward_info_t reward_info{};
@@ -233,8 +234,7 @@ namespace database::defense_missions
 				if (reward.max < 50 && reward.max > 5)
 				{
 					constexpr const auto min_percent = 80; // should it be 100?
-					const auto percent = static_cast<float>(utils::cryptography::random::get_integer() %
-						(100 - min_percent) + min_percent) / 100.f;
+					const auto percent = static_cast<float>(utils::random::get_integer(min_percent, 100u)) / 100.f;
 					num = static_cast<std::uint32_t>(static_cast<float>(reward.max) * percent);
 				}
 
@@ -265,7 +265,7 @@ namespace database::defense_missions
 			}
 		}
 
-		std::shuffle(rewards.begin(), rewards.end(), utils::cryptography::random::get_engine());
+		std::shuffle(rewards.begin(), rewards.end(), utils::random::get_engine());
 
 		return rewards;
 	}

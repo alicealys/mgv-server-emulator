@@ -3,20 +3,22 @@
 #include "battle_packs.hpp"
 #include "game/parameters.hpp"
 
+#include "utils/random.hpp"
+
 #include <utils/cryptography.hpp>
 
 namespace game
 {
 	namespace
 	{
-		std::uint32_t rand_index(const std::vector<std::uint32_t>& pool)
+		std::size_t rand_index(const std::vector<std::uint32_t>& pool)
 		{
 			if (pool.size() == 0)
 			{
 				throw std::runtime_error("[battle packs] item pool empty");
 			}
 
-			return utils::cryptography::random::get_integer(0, static_cast<std::uint32_t>(pool.size() - 1));
+			return utils::random::index(pool);
 		}
 
 		std::vector<std::uint32_t> list_resources(const std::uint32_t rarity, bool (*filter)(const game::resource_t&))
@@ -42,14 +44,16 @@ namespace game
 		{
 			const auto& recipes_list = game::parameters_table.ssd_sbm_parameters->recipes_list;
 
-			std::vector<std::uint32_t> result{};
+			std::vector<std::uint32_t> result;
+			std::unordered_set<std::uint32_t> productions;
 
 			for (auto i = 0ull; i < recipes_list.size(); i++)
 			{
 				const auto& prod = recipes_list[i];
 
-				if (prod != nullptr && filter(*prod))
+				if (prod != nullptr && filter(*prod) && !productions.contains(prod->production->id))
 				{
+					productions.insert(prod->production->id);
 					result.emplace_back(prod->production->id);
 				}
 			}
@@ -61,15 +65,16 @@ namespace game
 		{
 			const auto& recipes_list = game::parameters_table.ssd_sbm_parameters->recipes_list;
 
-			std::vector<std::uint32_t> result{};
+			std::vector<std::uint32_t> result;
+			std::unordered_set<std::uint32_t> productions;
 
 			for (auto i = 0ull; i < recipes_list.size(); i++)
 			{
-				const auto& prod = recipes_list[i];
-
-				if (prod != nullptr && filter(*prod))
+				const auto& recipe = recipes_list[i];
+				if (recipe != nullptr && filter(*recipe) && !productions.contains(recipe->production_id))
 				{
-					result.emplace_back(prod->id);
+					productions.insert(recipe->production_id);
+					result.emplace_back(recipe->id);
 				}
 			}
 
@@ -97,7 +102,7 @@ namespace game
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RESOURCE;
-			item.num = utils::cryptography::random::get_integer(0, 10);
+			item.num = utils::random::get_integer(0, 10);
 
 			const auto idx = rand_index(pool);
 			item.code = pool[idx];
@@ -178,7 +183,7 @@ namespace game
 			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
 				return recipe.production != nullptr && recipe.production->type == PRD_TYPE_Accessory &&
-					recipe.production->rarity == Rarity;
+					recipe.production->rarity == Rarity && recipe.junk;
 			});
 
 			game::item_t item{};
@@ -277,7 +282,7 @@ namespace game
 		{
 			static const auto pool = list_recipes([](const game::recipe_t& recipe)
 			{
-				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Accessory || recipe.production->rarity != 4)
+				if (recipe.production == nullptr || recipe.production->type != PRD_TYPE_Accessory || recipe.production->rarity != 4 || !recipe.junk)
 				{
 					return false;
 				}

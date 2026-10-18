@@ -5,6 +5,8 @@
 #include "database/models/deployments.hpp"
 #include "database/models/shop_purchases.hpp"
 
+#include "utils/random.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_deploy_load_team::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -38,7 +40,7 @@ namespace emulator::ssd
 			if (team.get_info_status() == database::deployments::team_status_deploy_progress &&
 				now.time_since_epoch() >= team.get_complete_date())
 			{
-				const auto rand = utils::cryptography::random::get_integer(0u, 100u);
+				const auto rand = utils::random::get_integer(0u, 100u);
 				const auto is_win = rand <= team.get_params().success_rate;
 				const auto status = is_win 
 					? database::deployments::team_status_deploy_success 

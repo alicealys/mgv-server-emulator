@@ -4,6 +4,7 @@
 
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
+#include "utils/random.hpp"
 
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
@@ -189,15 +190,15 @@ namespace database::crew_members
 				return false;
 			}
 
-			this->first_name_index = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0, 20u));
-			this->last_name_index = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0, 20u));
+			this->first_name_index = static_cast<std::uint16_t>(utils::random::get_integer(0, 20u));
+			this->last_name_index = static_cast<std::uint16_t>(utils::random::get_integer(0, 20u));
 
 			const auto roll_skill_value = [&](const std::uint32_t rank_low_h, const std::uint32_t rank_high_h, const std::uint32_t type)
 				-> std::uint16_t
 			{
 				const auto rank_low = game::rank_hash_to_value(rank_low_h);
 				const auto rank_high = game::rank_hash_to_value(rank_high_h);
-				const auto rank = utils::cryptography::random::get_integer(rank_high, rank_low);
+				const auto rank = utils::random::get_integer(rank_high, rank_low);
 				const auto rank_h = game::rank_value_to_hash(rank);
 
 				const auto skill = game::parameters_table.ssd_crew_generator_table->find_skill(type, rank_h);
@@ -211,7 +212,7 @@ namespace database::crew_members
 					return static_cast<std::uint16_t>(skill->low);
 				}
 
-				return static_cast<std::uint16_t>(utils::cryptography::random::get_integer(skill->low, skill->high));
+				return static_cast<std::uint16_t>(utils::random::get_integer(skill->low, skill->high));
 			};
 
 			auto& crew_type = *iter->second;

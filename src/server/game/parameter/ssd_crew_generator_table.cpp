@@ -2,7 +2,7 @@
 
 #include "ssd_crew_generator_table.hpp"
 
-#include <utils/cryptography.hpp>
+#include "utils/random.hpp"
 
 namespace game::parameters
 {
@@ -99,7 +99,7 @@ namespace game::parameters
 			return 0u;
 		}
 
-		auto& engine = utils::cryptography::random::get_engine();
+		auto& engine = utils::random::get_engine();
 		std::discrete_distribution<> dist(iter->second->ratios.begin(), iter->second->ratios.end());
 
 		const auto idx = static_cast<std::size_t>(dist(engine));
@@ -119,7 +119,7 @@ namespace game::parameters
 			return 0u;
 		}
 
-		auto& engine = utils::cryptography::random::get_engine();
+		auto& engine = utils::random::get_engine();
 		std::discrete_distribution<> dist(iter->second->ratios.begin(), iter->second->ratios.end());
 
 		const auto idx = static_cast<std::size_t>(dist(engine));

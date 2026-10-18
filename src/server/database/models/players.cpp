@@ -10,6 +10,7 @@
 
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
+#include "utils/random.hpp"
 
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
@@ -495,8 +496,8 @@ namespace database::players
 			const auto spec_min = static_cast<std::uint16_t>(potential->spec_min * 1000);
 			const auto spec_max = static_cast<std::uint16_t>(potential->spec_max * 1000);
 
-			const auto life_value = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(life_min_f, life_max_f));
-			const auto spec_value = static_cast<std::uint16_t>(utils::cryptography::random::get_integer(spec_min, spec_max));
+			const auto life_value = static_cast<std::uint16_t>(utils::random::get_integer(life_min_f, life_max_f));
+			const auto spec_value = static_cast<std::uint16_t>(utils::random::get_integer(spec_min, spec_max));
 
 			this->life = life_value;
 			this->life_max = life_value;

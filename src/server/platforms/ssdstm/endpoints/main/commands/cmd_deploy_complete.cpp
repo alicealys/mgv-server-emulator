@@ -5,6 +5,8 @@
 #include "database/models/present_box.hpp"
 #include "database/models/crew_members.hpp"
 
+#include "utils/random.hpp"
+
 namespace emulator::ssd
 {
 	bool cmd_deploy_complete::complete_mission(const database::users::user& user, const database::deployments::deployment_team& team, const bool is_forced, json::value& result)
@@ -75,8 +77,7 @@ namespace emulator::ssd
 		{
 			if (team.get_info_status() == database::deployments::team_status_deploy_progress)
 			{
-				const auto rand = utils::cryptography::random::get_integer(0u, 100u);
-				is_win = rand <= params.success_rate;
+				is_win = utils::random::chance(params.success_rate);
 			}
 			else
 			{
@@ -129,19 +130,17 @@ namespace emulator::ssd
 				continue;
 			}
 
-			const auto rand = utils::cryptography::random::get_integer(0u, 100u);
-			const auto has_injury = rand <= params.injure_rate;
-
+			const auto has_injury = utils::random::chance(params.injure_rate);
 			if (!has_injury)
 			{
 				continue;
 			}
 
-			const auto life_percent = static_cast<float>(utils::cryptography::random::get_integer(40u, 80u)) / 100.f;
+			const auto life_percent = static_cast<float>(utils::random::get_integer(40u, 80u)) / 100.f;
 			const auto new_life = static_cast<std::uint32_t>(static_cast<float>(crew_list[i].get_life()) * life_percent);
 
-			const auto injury_id = utils::cryptography::random::get_integer(2u, 8u);
-			const auto injury_time = utils::cryptography::random::get_integer(1000u, 5000u);
+			const auto injury_id = utils::random::get_integer(2u, 8u);
+			const auto injury_time = utils::random::get_integer(1000u, 5000u);
 
 			if (crew_list[i].get_injury_id_1() == 0)
 			{
@@ -166,7 +165,7 @@ namespace emulator::ssd
 
 			if (item.f.id_index != 0)
 			{
-				item.f.param1 -= static_cast<std::uint16_t>(utils::cryptography::random::get_integer(0u, item.f.param1));
+				item.f.param1 -= static_cast<std::uint16_t>(utils::random::get_integer(0u, item.f.param1));
 			}
 
 			if (item.f.param1 == 0)

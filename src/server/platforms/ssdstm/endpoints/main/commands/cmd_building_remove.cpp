@@ -48,6 +48,8 @@ namespace emulator::ssd
 					edge.life = current_life;
 				}
 			}
+
+			return true;
 		};
 
 		if (!do_list(data["center_life_list"], database::players::edge_type_center) ||

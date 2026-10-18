@@ -4,14 +4,16 @@
 
 #include "database/models/present_box.hpp"
 
+#include "utils/random.hpp"
+
 namespace emulator::ssd
 {
 	game::item_t cmd_get_daily_reward::daily_reward_settings_t::pool_t::roll() const
 	{
-		const auto reward_idx = utils::cryptography::random::get_integer64() % this->rewards.size();
+		const auto reward_idx = utils::random::index(this->rewards);
 		const auto& reward = this->rewards[reward_idx];
-		const auto code_idx = utils::cryptography::random::get_integer64() % reward.codes.size();
-		const auto num_idx = utils::cryptography::random::get_integer64() % reward.nums.size();
+		const auto code_idx = utils::random::index(reward.codes);
+		const auto num_idx = utils::random::index(reward.nums);
 
 		game::item_t item{};
 		item.category = reward.category;
@@ -105,13 +107,14 @@ namespace emulator::ssd
 			
 			std::unordered_set<std::uint32_t> added_codes;
 
-			const auto reward_count = utils::cryptography::random::get_integer64(this->settings_.reward_min, this->settings_.reward_max);
+			const auto reward_count = utils::random::get_integer(this->settings_.reward_min, this->settings_.reward_max);
 			for (auto i = 0ull; i < reward_count; i++)
 			{
 				const auto& pool = this->rewards_[i];
 				auto item = pool->roll();
-
-				while (item.code != 0 && added_codes.contains(item.code))
+				
+				auto attempts = 8;
+				while (item.code != 0 && added_codes.contains(item.code) && --attempts > 0)
 				{
 					item = pool->roll();
 				}

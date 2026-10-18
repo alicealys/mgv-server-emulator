@@ -4,6 +4,7 @@
 
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
+#include "utils/random.hpp"
 
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
@@ -68,14 +69,14 @@ namespace database::coop_missions
 				list.emplace_back(info);
 			}
 
-			const auto reward_count = utils::cryptography::random::get_integer(pool.min_rewards, pool.max_rewards);
+			const auto reward_count = utils::random::get_integer(pool.min_rewards, pool.max_rewards);
 			for (auto o = 0u; o < reward_count; o++)
 			{
-				const auto idx = utils::cryptography::random::get_integer() % pool.rewards.size();
+				const auto idx = utils::random::index(pool.rewards);
 				const auto& item = pool.rewards[idx];
 				const auto num = item.max <= 1
 					? 1
-					: utils::cryptography::random::get_integer(1u, item.max);
+					: utils::random::get_integer(1u, item.max);
 
 				reward_info_t info{};
 				info.item.category = item.category;
@@ -126,7 +127,7 @@ namespace database::coop_missions
 				event_points = reward.event_points;
 			}
 
-			const auto reward_count = utils::cryptography::random::get_integer(reward.min_rewards, reward.max_rewards);
+			const auto reward_count = utils::random::get_integer(reward.min_rewards, reward.max_rewards);
 			const auto& pools = reward_level->has_rank6
 				? settings.rank6_reward_pools
 				: settings.rank5_reward_pools;
@@ -139,11 +140,11 @@ namespace database::coop_missions
 			const auto& pool = pools[i];
 			for (auto o = 0u; o < reward_count; o++)
 			{
-				const auto idx = utils::cryptography::random::get_integer() % pool.size();
+				const auto idx = utils::random::index(pool);
 				const auto& item = pool[idx];
 				const auto num = item.max <= 1
 					? 1
-					: utils::cryptography::random::get_integer(1u, item.max);
+					: utils::random::get_integer(1u, item.max);
 
 				reward_info_t info{};
 				info.rank = static_cast<std::uint8_t>(i);
