@@ -1,82 +1,5 @@
 {
     "min_personal_score": 150,
-    "personal_reward_pools": [
-        {
-            "score": 6000,
-            "energy": 0,
-            "min_rewards": 1,
-            "max_rewards": 1,
-            "rewards": [
-                {
-                    "category": 10,
-                    "code": 3234815661,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 757538538,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 2775088132,
-                    "max": 5
-                }
-            ]
-        },
-        {
-            "score": 4000,
-            "energy": 0,
-            "min_rewards": 1,
-            "max_rewards": 1,
-            "rewards": [
-                {
-                    "category": 10,
-                    "code": 3234815661,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 757538538,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 2775088132,
-                    "max": 5
-                }
-            ]
-        },
-        {
-            "score": 2000,
-            "energy": 0,
-            "min_rewards": 1,
-            "max_rewards": 1,
-            "rewards": [
-                {
-                    "category": 10,
-                    "code": 3234815661,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 757538538,
-                    "max": 5
-                },
-                {
-                    "category": 10,
-                    "code": 2775088132,
-                    "max": 5
-                }
-            ]
-        },
-        {
-            "score": 0,
-            "energy": 0,
-            "count": 0,
-            "rewards": []
-        }
-    ],
     "rank6_reward_pools": [
         [
             {
@@ -5988,7 +5911,7 @@
                     "max_rewards": 30
                 },
                 {
-                    "energy": 159900,
+                    "energy": 174900,
                     "event_points": 758,
                     "min_rewards": 20,
                     "max_rewards": 30
@@ -6004,6 +5927,83 @@
                     "event_points": 253,
                     "min_rewards": 0,
                     "max_rewards": 0
+                }
+            ],
+            "personal_reward_pools": [
+                {
+                    "score": 6000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 4000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 2000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "energy": 0,
+                    "count": 0,
+                    "rewards": []
                 }
             ]
         },
@@ -6047,6 +6047,83 @@
                     "min_rewards": 0,
                     "max_rewards": 0
                 }
+            ],
+            "personal_reward_pools": [
+                {
+                    "score": 6000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 4000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 2000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "energy": 0,
+                    "count": 0,
+                    "rewards": []
+                }
             ]
         },
         {
@@ -6088,6 +6165,83 @@
                     "event_points": 0,
                     "min_rewards": 0,
                     "max_rewards": 0
+                }
+            ],
+            "personal_reward_pools": [
+                {
+                    "score": 6000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 4000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 2000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "energy": 0,
+                    "count": 0,
+                    "rewards": []
                 }
             ]
         },
@@ -6131,6 +6285,83 @@
                     "min_rewards": 0,
                     "max_rewards": 0
                 }
+            ],
+            "personal_reward_pools": [
+                {
+                    "score": 6000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 4000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 2000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "energy": 0,
+                    "count": 0,
+                    "rewards": []
+                }
             ]
         },
         {
@@ -6138,34 +6369,34 @@
             "enemy_level": 10,
             "rank_rewards": [
                 {
-                    "energy": 15840,
-                    "event_points": 606,
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 0,
+                    "max_rewards": 0
+                },
+                {
+                    "energy": 0,
+                    "event_points": 0,
                     "min_rewards": 1,
-                    "max_rewards": 5
+                    "max_rewards": 1
                 },
                 {
-                    "energy": 11310,
-                    "event_points": 364,
+                    "energy": 0,
+                    "event_points": 0,
                     "min_rewards": 1,
-                    "max_rewards": 5
+                    "max_rewards": 1
                 },
                 {
-                    "energy": 209050,
-                    "event_points": 182,
-                    "min_rewards": 10,
-                    "max_rewards": 20
-                },
-                {
-                    "energy": 205430,
-                    "event_points": 121,
-                    "min_rewards": 10,
-                    "max_rewards": 20
-                },
-                {
-                    "energy": 203620,
-                    "event_points": 61,
-                    "min_rewards": 10,
-                    "max_rewards": 20
+                    "energy": 0,
+                    "event_points": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1
                 },
                 {
                     "energy": 0,
@@ -6173,7 +6404,8 @@
                     "min_rewards": 0,
                     "max_rewards": 0
                 }
-            ]
+            ],
+            "personal_reward_pools": []
         },
         {
             "has_rank6": false,
@@ -6192,19 +6424,19 @@
                     "max_rewards": 5
                 },
                 {
-                    "energy": 209050,
+                    "energy": 14050,
                     "event_points": 182,
                     "min_rewards": 10,
                     "max_rewards": 20
                 },
                 {
-                    "energy": 205430,
+                    "energy": 5430,
                     "event_points": 121,
                     "min_rewards": 10,
                     "max_rewards": 20
                 },
                 {
-                    "energy": 203620,
+                    "energy": 3620,
                     "event_points": 61,
                     "min_rewards": 10,
                     "max_rewards": 20
@@ -6214,6 +6446,54 @@
                     "event_points": 0,
                     "min_rewards": 0,
                     "max_rewards": 0
+                }
+            ],
+            "personal_reward_pools": [
+                {
+                    "score": 1000,
+                    "energy": 0,
+                    "min_rewards": 1,
+                    "max_rewards": 1,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
+                },
+                {
+                    "score": 500,
+                    "energy": 0,
+                    "min_rewards": 2,
+                    "max_rewards": 2,
+                    "rewards": [
+                        {
+                            "category": 10,
+                            "code": 3234815661,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 757538538,
+                            "max": 5
+                        },
+                        {
+                            "category": 10,
+                            "code": 2775088132,
+                            "max": 5
+                        }
+                    ]
                 }
             ]
         }

@@ -7,6 +7,7 @@
 #include "database/models/coop_missions.hpp"
 #include "database/models/boosts.hpp"
 #include "database/models/present_box.hpp"
+#include "database/models/challenge_tasks.hpp"
 
 namespace emulator::ssd
 {
@@ -68,6 +69,8 @@ namespace emulator::ssd
 			user->current_player->set_play_record(*play_record);
 		}
 
+		database::challenge_tasks::send_progress_list(user->current_player->get_player_id(), data["order_progress_list"]);
+
 		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
 
 		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
@@ -107,8 +110,37 @@ namespace emulator::ssd
 			}
 		}
 
-		result["limit_result"]["limit_result"] = json::array();
 		result["limit_result"]["mission_code"] = param.mission_id;
+
+		auto& limit_result = result["limit_result"]["limit_result"];
+		limit_result = json::array();
+
+		for (auto i = 0u; i < rank_count; i++)
+		{
+			limit_result[i]["count"] = 1;
+			limit_result[i]["max"] = 1;
+			limit_result[i]["index"] = i + 1;
+			limit_result[i]["rank"] = 0;
+
+			if (i < rank)
+			{
+				continue;
+			}
+
+			if (rank_count == 6 && rank == 0)
+			{
+				limit_result[i]["rank"] = 10;
+			}
+			else if (rank_count == 6)
+			{
+				limit_result[i]["rank"] = std::min(std::uint8_t(5u), rank) - 1;
+			}
+			else if (rank_count <= 5)
+			{
+				limit_result[i]["rank"] = i;
+			}
+		}
+
 		result["reward"] = json::array();
 
 		if (rank_count <= 5)
@@ -156,7 +188,7 @@ namespace emulator::ssd
 
 		std::uint32_t reward_event_point{};
 
-		const auto personal_rewards = database::coop_missions::generate_personal_rewards(param.personal_score);
+		const auto personal_rewards = database::coop_missions::generate_personal_rewards(iter->second->enemy_level, param.personal_score);
 		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
 
 		database::players::stackable_item_list_t stackable_list{};

@@ -32,13 +32,28 @@ namespace database::coop_missions
 		return settings;
 	}
 
-	std::vector<reward_info_t> generate_personal_rewards(const std::uint32_t personal_score)
+	std::vector<reward_info_t> generate_personal_rewards(const std::uint32_t enemy_level, const std::uint32_t personal_score)
 	{
 		std::vector<reward_info_t> list;
 
 		const auto& settings = get_reward_settings();
 
-		for (const auto& pool : settings.personal_reward_pools)
+		const reward_settings_t::level_t* reward_level = nullptr;
+		for (auto& level : settings.levels)
+		{
+			if (enemy_level >= level.enemy_level)
+			{
+				reward_level = &level;
+				break;
+			}
+		}
+
+		if (reward_level == nullptr)
+		{
+			return list;
+		}
+
+		for (const auto& pool : reward_level->personal_reward_pools)
 		{
 			if (personal_score < pool.score)
 			{

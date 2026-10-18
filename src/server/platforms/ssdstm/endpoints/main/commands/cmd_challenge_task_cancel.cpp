@@ -22,7 +22,7 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
-		if (order->complete() || !order->cancel())
+		if (order->get_is_complete() || !order->cancel())
 		{
 			return error(ERR_DATABASE);
 		}
