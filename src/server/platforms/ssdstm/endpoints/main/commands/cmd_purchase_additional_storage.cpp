@@ -13,7 +13,7 @@ namespace emulator::ssd
 		std::uint8_t additional_storage_type{};
 		if (!json::read(additional_storage_type, data["additional_storage_type"]) || additional_storage_type >= 2)
 		{
-			return error(ERR_INVALIDARG);
+			return error(ERR_PURCHASE_LIMIT);
 		}
 
 		auto product_type = 0u;

@@ -39,7 +39,7 @@ namespace emulator::ssd
 		auto is_permanent = false;
 		if (user->has_permanent_item(product->item, *user_inventory, is_permanent))
 		{
-			return error(ERR_OVER_CAPACITY);
+			return error(ERR_PURCHASE_LIMIT);
 		}
 
 		if (!is_permanent && product->limit_count != 0)
@@ -47,7 +47,7 @@ namespace emulator::ssd
 			const auto purchase_count = database::shop_purchases::get_purchase_count(user->get_user_id(), product->product_id);
 			if (purchase_count > product->limit_count)
 			{
-				return error(ERR_OVER_CAPACITY);
+				return error(ERR_PURCHASE_LIMIT);
 			}
 		}
 

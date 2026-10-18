@@ -14,7 +14,7 @@ namespace emulator::ssd
 		const auto player_count = static_cast<std::uint32_t>(database::players::get_player_count(user->get_user_id()));
 		if (player_count >= database::players::max_player_count)
 		{
-			return error(ERR_OVER_CAPACITY);
+			return error(ERR_PURCHASE_LIMIT);
 		}
 
 		const auto product_type = database::shop_purchases::product_additional_slot_avatar + player_count;

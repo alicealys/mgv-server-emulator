@@ -11,7 +11,7 @@ namespace emulator::ssd
 		const auto loadout_count = user->get_loadout_count();
 		if (loadout_count >= database::players::max_loadout_count)
 		{
-			return error(ERR_OVER_CAPACITY);
+			return error(ERR_PURCHASE_LIMIT);
 		}
 
 		const auto product_type = database::shop_purchases::product_additional_slot_loadout;

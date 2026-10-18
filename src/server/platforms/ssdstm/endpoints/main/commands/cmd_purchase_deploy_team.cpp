@@ -13,7 +13,7 @@ namespace emulator::ssd
 		const auto team_count = user->get_team_count();
 		if (team_count >= database::deployments::max_team_count)
 		{
-			return error(ERR_OVER_CAPACITY);
+			return error(ERR_PURCHASE_LIMIT);
 		}
 
 		const auto new_team_count = team_count + 1;
