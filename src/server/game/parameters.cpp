@@ -53,12 +53,13 @@ namespace game
 		const auto data = utils::resources::load(resource_id.value());
 
 		auto json = json::parse(data);
-		this->data_dump_ = json::dump(json);
 
 		if (!this->parse(json))
 		{
 			throw std::runtime_error(std::format("failed to parse game parameter file {}.json", name));
 		}
+		
+		this->data_dump_ = json::dump(json);
 
 		utils::cryptography::blowfish blow;
 		blow.set_key(game::get_static_key(game::key_type_tpp), game::get_static_key_len());

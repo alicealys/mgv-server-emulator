@@ -14515,240 +14515,244 @@
     ],
     "missionBuffSettings": [
         {
-            "missionCode": 22015,
-            "missionBuffName": 182812270
-        },
-        {
-            "missionCode": 22015,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 22211,
-            "missionBuffName": 2840676985
-        },
-        {
-            "missionCode": 22211,
-            "missionBuffName": 2348094818
-        },
-        {
-            "missionCode": 22619,
+            "missionCode": 22611,
             "missionBuffName": 2009659256
         },
         {
-            "missionCode": 22619,
-            "missionBuffName": 3825298265
-        },
-        {
-            "missionCode": 22016,
-            "missionBuffName": 455490445
-        },
-        {
-            "missionCode": 22016,
-            "missionBuffName": 1432336462
-        },
-        {
-            "missionCode": 22719,
-            "missionBuffName": 2794488577
-        },
-        {
-            "missionCode": 22719,
-            "missionBuffName": 2723114875
-        },
-        {
-            "missionCode": 22212,
-            "missionBuffName": 3196174315
-        },
-        {
-            "missionCode": 22212,
+            "missionCode": 22611,
             "missionBuffName": 3187824899
         },
         {
-            "missionCode": 22017,
-            "missionBuffName": 1175895097
-        },
-        {
-            "missionCode": 22017,
-            "missionBuffName": 2360120093
-        },
-        {
-            "missionCode": 23110,
-            "missionBuffName": 3635593360
-        },
-        {
-            "missionCode": 23110,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 23110,
-            "missionBuffName": 1432336462
-        },
-        {
-            "missionCode": 22025,
-            "missionBuffName": 182812270
-        },
-        {
-            "missionCode": 22025,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 22221,
-            "missionBuffName": 2840676985
-        },
-        {
-            "missionCode": 22221,
-            "missionBuffName": 2348094818
-        },
-        {
-            "missionCode": 22629,
-            "missionBuffName": 2009659256
-        },
-        {
-            "missionCode": 22629,
-            "missionBuffName": 3825298265
-        },
-        {
-            "missionCode": 22026,
-            "missionBuffName": 455490445
-        },
-        {
-            "missionCode": 22026,
-            "missionBuffName": 1432336462
-        },
-        {
-            "missionCode": 22729,
+            "missionCode": 22215,
             "missionBuffName": 2794488577
         },
         {
-            "missionCode": 22729,
-            "missionBuffName": 2723114875
+            "missionCode": 22215,
+            "missionBuffName": 4049423135
         },
         {
-            "missionCode": 22222,
+            "missionCode": 22114,
             "missionBuffName": 3196174315
         },
         {
-            "missionCode": 22222,
-            "missionBuffName": 3187824899
+            "missionCode": 22114,
+            "missionBuffName": 3117252325
         },
         {
-            "missionCode": 22027,
-            "missionBuffName": 1175895097
+            "missionCode": 22612,
+            "missionBuffName": 455490445
         },
         {
-            "missionCode": 22027,
-            "missionBuffName": 2360120093
+            "missionCode": 22612,
+            "missionBuffName": 2723114875
         },
         {
-            "missionCode": 23120,
-            "missionBuffName": 3635593360
-        },
-        {
-            "missionCode": 23120,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 23120,
-            "missionBuffName": 1432336462
-        },
-        {
-            "missionCode": 22035,
-            "missionBuffName": 182812270
-        },
-        {
-            "missionCode": 22035,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 22035,
-            "missionBuffName": 1291497080
-        },
-        {
-            "missionCode": 22231,
+            "missionCode": 22018,
             "missionBuffName": 2840676985
         },
         {
-            "missionCode": 22231,
+            "missionCode": 22018,
+            "missionBuffName": 1432336462
+        },
+        {
+            "missionCode": 22115,
+            "missionBuffName": 455490445
+        },
+        {
+            "missionCode": 22115,
             "missionBuffName": 2348094818
         },
         {
-            "missionCode": 22231,
-            "missionBuffName": 1291497080
+            "missionCode": 22216,
+            "missionBuffName": 182812270
         },
         {
-            "missionCode": 22639,
+            "missionCode": 22216,
+            "missionBuffName": 2723114875
+        },
+        {
+            "missionCode": 22621,
             "missionBuffName": 2009659256
         },
         {
-            "missionCode": 22639,
-            "missionBuffName": 3825298265
+            "missionCode": 22621,
+            "missionBuffName": 3187824899
         },
         {
-            "missionCode": 22639,
+            "missionCode": 22225,
+            "missionBuffName": 2794488577
+        },
+        {
+            "missionCode": 22225,
+            "missionBuffName": 4049423135
+        },
+        {
+            "missionCode": 22124,
+            "missionBuffName": 3196174315
+        },
+        {
+            "missionCode": 22124,
+            "missionBuffName": 3117252325
+        },
+        {
+            "missionCode": 22622,
+            "missionBuffName": 455490445
+        },
+        {
+            "missionCode": 22622,
+            "missionBuffName": 2723114875
+        },
+        {
+            "missionCode": 22028,
+            "missionBuffName": 2840676985
+        },
+        {
+            "missionCode": 22028,
+            "missionBuffName": 1432336462
+        },
+        {
+            "missionCode": 22125,
+            "missionBuffName": 455490445
+        },
+        {
+            "missionCode": 22125,
+            "missionBuffName": 2348094818
+        },
+        {
+            "missionCode": 22226,
+            "missionBuffName": 182812270
+        },
+        {
+            "missionCode": 22226,
+            "missionBuffName": 2723114875
+        },
+        {
+            "missionCode": 22631,
+            "missionBuffName": 2009659256
+        },
+        {
+            "missionCode": 22631,
+            "missionBuffName": 3187824899
+        },
+        {
+            "missionCode": 22631,
+            "missionBuffName": 2608882990
+        },
+        {
+            "missionCode": 22235,
+            "missionBuffName": 2794488577
+        },
+        {
+            "missionCode": 22235,
+            "missionBuffName": 4049423135
+        },
+        {
+            "missionCode": 22235,
+            "missionBuffName": 1291497080
+        },
+        {
+            "missionCode": 22134,
+            "missionBuffName": 3196174315
+        },
+        {
+            "missionCode": 22134,
+            "missionBuffName": 3117252325
+        },
+        {
+            "missionCode": 22134,
             "missionBuffName": 115262094
         },
         {
-            "missionCode": 22036,
+            "missionCode": 22632,
             "missionBuffName": 455490445
         },
         {
-            "missionCode": 22036,
-            "missionBuffName": 1432336462
-        },
-        {
-            "missionCode": 22036,
-            "missionBuffName": 2608882990
-        },
-        {
-            "missionCode": 22739,
-            "missionBuffName": 2794488577
-        },
-        {
-            "missionCode": 22739,
+            "missionCode": 22632,
             "missionBuffName": 2723114875
         },
         {
-            "missionCode": 22739,
+            "missionCode": 22632,
             "missionBuffName": 1291497080
         },
         {
-            "missionCode": 22232,
-            "missionBuffName": 3196174315
+            "missionCode": 22038,
+            "missionBuffName": 2840676985
         },
         {
-            "missionCode": 22232,
-            "missionBuffName": 3187824899
-        },
-        {
-            "missionCode": 22232,
-            "missionBuffName": 115262094
-        },
-        {
-            "missionCode": 22037,
-            "missionBuffName": 1175895097
-        },
-        {
-            "missionCode": 22037,
-            "missionBuffName": 2360120093
-        },
-        {
-            "missionCode": 22037,
-            "missionBuffName": 2608882990
-        },
-        {
-            "missionCode": 23130,
-            "missionBuffName": 3635593360
-        },
-        {
-            "missionCode": 23130,
-            "missionBuffName": 300163089
-        },
-        {
-            "missionCode": 23130,
+            "missionCode": 22038,
             "missionBuffName": 1432336462
         },
         {
-            "missionCode": 23130,
+            "missionCode": 22038,
             "missionBuffName": 2608882990
+        },
+        {
+            "missionCode": 22135,
+            "missionBuffName": 455490445
+        },
+        {
+            "missionCode": 22135,
+            "missionBuffName": 2348094818
+        },
+        {
+            "missionCode": 22135,
+            "missionBuffName": 1291497080
+        },
+        {
+            "missionCode": 22236,
+            "missionBuffName": 182812270
+        },
+        {
+            "missionCode": 22236,
+            "missionBuffName": 2723114875
+        },
+        {
+            "missionCode": 22236,
+            "missionBuffName": 115262094
+        },
+        {
+            "missionCode": 24010,
+            "missionBuffName": 2997532983
+        },
+        {
+            "missionCode": 24010,
+            "missionBuffName": 2840676985
+        },
+        {
+            "missionCode": 24010,
+            "missionBuffName": 2794488577
+        },
+        {
+            "missionCode": 24020,
+            "missionBuffName": 2997532983
+        },
+        {
+            "missionCode": 24020,
+            "missionBuffName": 2840676985
+        },
+        {
+            "missionCode": 24020,
+            "missionBuffName": 2794488577
+        },
+        {
+            "missionCode": 24030,
+            "missionBuffName": 2997532983
+        },
+        {
+            "missionCode": 24030,
+            "missionBuffName": 2840676985
+        },
+        {
+            "missionCode": 24030,
+            "missionBuffName": 2794488577
+        },
+        {
+            "missionCode": 24030,
+            "missionBuffName": 3771731722
+        },
+        {
+            "missionCode": 24030,
+            "missionBuffName": 3589663039
         }
     ]
 }

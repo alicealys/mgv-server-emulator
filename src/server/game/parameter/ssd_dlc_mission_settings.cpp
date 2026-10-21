@@ -11,6 +11,8 @@ namespace game::parameters
 
 	bool ssd_dlc_mission_settings::parse(json::value& data)
 	{
+		data["mission"] = json::value(); // TODO: generate this list and handle daily/weekly/event coop missions
+
 		return true;
 	}
 }
