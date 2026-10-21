@@ -169,8 +169,8 @@ namespace database::events
 
 	bool event_params_t::has_mission(const std::uint32_t mission_code) const
 	{
-		const auto iter = std::ranges::find(this->mission_list.begin(), this->mission_list.end(), mission_code);
-		return iter != this->mission_list.end();
+		const auto iter = std::ranges::find(this->bp_mission_list.begin(), this->bp_mission_list.end(), mission_code);
+		return iter != this->bp_mission_list.end();
 	}
 
 	void event_params_t::to_json(json::value& data) const

@@ -85,7 +85,7 @@ namespace emulator::ssd
 				return;
 			}
 
-			result["bp_mission_list"] = event->params->mission_list;
+			result["bp_mission_list"] = event->params->bp_mission_list;
 		});
 
 		result["cage_list"] = json::array();

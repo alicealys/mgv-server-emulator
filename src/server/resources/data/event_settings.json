@@ -8,12 +8,7 @@
             "enable_ranking": 0,
             "info_title": "info_event1_title",
             "info_text": "info_event1_text",
-            "mission_list": [
-                20115,
-                20125,
-                20725,
-                24135,
-                24735,
+            "bp_mission_list": [
                 20115,
                 20125,
                 20725,
@@ -494,7 +489,7 @@
             "enable_ranking": 0,
             "info_title": "info_event2_title",
             "info_text": "info_event2_text",
-            "mission_list": [
+            "bp_mission_list": [
                 20010,
                 20020,
                 20110,
@@ -2135,7 +2130,7 @@
             "enable_ranking": 0,
             "info_title": "info_event3_title",
             "info_text": "info_event3_text",
-            "mission_list": [
+            "bp_mission_list": [
                 22004,
                 22005,
                 22006,
@@ -2968,7 +2963,7 @@
             "enable_ranking": 0,
             "info_title": "info_event4_title",
             "info_text": "info_event4_text",
-            "mission_list": [
+            "bp_mission_list": [
                 20010,
                 20020,
                 20110,
@@ -3751,7 +3746,7 @@
             "enable_ranking": 0,
             "info_title": "info_event5_title",
             "info_text": "info_event5_text",
-            "mission_list": [
+            "bp_mission_list": [
                 51010,
                 51510,
                 52010,

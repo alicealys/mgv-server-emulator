@@ -72,6 +72,13 @@ namespace database::coop_missions
 		game::item_t item;
 	};
 
+	enum mission_event_type_t : std::uint32_t
+	{
+		event_type_daily = 0x84E6C318,
+		event_type_weekly = 0x2267C621,
+		event_type_event = 0x8A0ADF9C,
+	};
+
 	const reward_settings_t& get_reward_settings();
 	std::vector<reward_info_t> generate_personal_rewards(const std::uint32_t enemy_level, const std::uint32_t personal_score);
 	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points);

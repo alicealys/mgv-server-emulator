@@ -177,7 +177,11 @@ namespace emulator::ssd
 		record.rescue = param.rescue;
 		record.clear_rank = rank;
 
-		database::coop_missions::add_result(user->current_player->get_player_id(), database::coop_missions::mission_type_embedded, record);
+		auto record_type = param.event_flag & 1 
+			? database::coop_missions::mission_type_event
+			: database::coop_missions::mission_type_embedded;
+
+		database::coop_missions::add_result(user->current_player->get_player_id(), record_type, record);
 
 		const auto now = std::chrono::system_clock::now();
 		const auto expire_date = now + 14 * 24h;
