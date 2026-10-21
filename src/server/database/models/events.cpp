@@ -266,6 +266,35 @@ namespace database::events
 		return iter->second;
 	}
 
+	std::uint8_t get_season_flag()
+	{
+		std::uint8_t flag{};
+
+		const auto now = std::chrono::system_clock::now();
+		std::chrono::year_month_day ymd{std::chrono::floor<std::chrono::days>(now)};
+
+		const auto m = ymd.month();
+		const auto d = ymd.day().operator unsigned int();
+
+		if (m == std::chrono::October && d > 20)
+		{
+			flag |= season_flag_halloween;
+		}
+
+		if (m == std::chrono::December && d <= 26)
+		{
+			flag |= season_flag_christmas;
+		}
+
+		if ((m == std::chrono::December && d >= 30) ||
+			(m == std::chrono::January && d <= 3))
+		{
+			flag |= (season_flag_new_years_eve | season_flag_new_years_day);
+		}
+
+		return flag;
+	}
+
 	GET_FIELD_C(running_event, std::uint64_t, event_id);
 	GET_FIELD_C(running_event, std::string, event_type);
 	GET_FIELD_C(running_event, std::uint32_t, event_state);

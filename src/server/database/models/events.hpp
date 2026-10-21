@@ -39,6 +39,14 @@ namespace database::events
 		reward_type_count = 4
 	};
 
+	enum season_flag_t : std::uint8_t
+	{
+		season_flag_halloween = 1,
+		season_flag_christmas = 2,
+		season_flag_new_years_eve = 4,
+		season_flag_new_years_day = 8,
+	};
+
 	struct event_params_t
 	{
 		std::string name;
@@ -76,8 +84,8 @@ namespace database::events
 
 	const event_settings_t& get_event_settings();
 	std::optional<running_event_info_t> get_target_event();
-	void get_event_range(std::chrono::seconds& start, std::chrono::seconds& end);
 	std::shared_ptr<event_params_t> get_event_params(const std::string& event_type);
+	std::uint8_t get_season_flag();
 
 	enum event_state_t
 	{

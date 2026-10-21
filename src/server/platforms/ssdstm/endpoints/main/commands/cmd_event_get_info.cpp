@@ -12,7 +12,7 @@ namespace emulator::ssd
 		json::value result;
 
 		result["event_list"] = json::array();
-		result["season_flag"] = 0;
+		result["season_flag"] = database::events::get_season_flag();
 
 		const auto current_event = database::events::get_current_event();
 		if (!current_event.has_value())
