@@ -7,6 +7,7 @@
 #include "database/models/challenge_tasks.hpp"
 #include "database/models/coop_missions.hpp"
 #include "database/models/boosts.hpp"
+#include "database/models/events.hpp"
 
 namespace emulator::ssd
 {
@@ -77,6 +78,16 @@ namespace emulator::ssd
 		}
 
 		result["bp_mission_list"] = json::array();
+		database::events::cached_event.access([&](const std::optional<database::events::running_event>& event)
+		{
+			if (!event.has_value())
+			{
+				return;
+			}
+
+			result["bp_mission_list"] = event->params->mission_list;
+		});
+
 		result["cage_list"] = json::array();
 		communication_gesture_info.to_json(result["communication_gesture_slot"]);
 

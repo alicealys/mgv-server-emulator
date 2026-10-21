@@ -5,15 +5,21 @@
 
 namespace utils::time
 {
-	void get_section(const std::chrono::seconds& duration, std::chrono::seconds& start, std::chrono::seconds& end)
+	void get_section(const std::chrono::seconds& duration, std::chrono::seconds& start, std::chrono::seconds& end, std::size_t& index)
 	{
 		const auto ref_time = config::get().vars.reference_time;
 		const auto now = std::chrono::system_clock::now();
 		const auto diff = std::chrono::duration_cast<std::chrono::seconds>((now - ref_time).time_since_epoch());
-		const auto time = diff / duration;
+		index = diff / duration;
 
-		start = ref_time + time * duration;
+		start = ref_time + index * duration;
 		end = start + duration;
+	}
+
+	void get_section(const std::chrono::seconds& duration, std::chrono::seconds& start, std::chrono::seconds& end)
+	{
+		std::size_t index{};
+		get_section(duration, start, end, index);
 	}
 
 	std::size_t get_day()

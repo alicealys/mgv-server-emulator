@@ -1,2376 +1,3257 @@
 [
     {
         "mission_code": 50500,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 1,
                 "energy": 400000,
+                "event_points": 0,
+                "max_rewards": 1,
+                "min_rewards": 1,
                 "recipe_list": [],
                 "rewards": [
                     {
-                        "id": 277478297,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1652810564,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 63611898,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2153793929,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 3000509335,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2957418873,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 1,
+                        "min_count": 1
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 300000,
-                "recipe_list": [],
+                "event_points": 0,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 4155218397,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 100,
+                        "min_count": 100
                     },
                     {
-                        "id": 1994203852,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 100,
+                        "min_count": 100
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 200000,
-                "recipe_list": [],
+                "event_points": 0,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 1128130151,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 2365311381,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 1962214906,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3992212357,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 283272891,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 393671195,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 4257614424,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 726981477,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3809301646,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 13072261,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2631726949,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 1231382387,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1560447688,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1777572575,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 18,
+                        "min_count": 9
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 100000,
-                "recipe_list": [],
+                "event_points": 0,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 1192574839,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 2706393556,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 4149835431,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 1489721477,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1009227634,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2617753389,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3354936979,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1034106141,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 312712163,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3641293300,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3527693027,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 4035726156,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 550007210,
-                        "max": 48,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 48,
+                        "min_count": 24
                     },
                     {
-                        "id": 1418333441,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 633586682,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 3134623080,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1548824161,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 2711878789,
-                        "max": 40,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 40,
+                        "min_count": 20
                     },
                     {
-                        "id": 2010483284,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 172637158,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 21362465,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 259257465,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 12,
+                        "min_count": 6
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 0,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3107395265,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 478869482,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2047256367,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 3273887015,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3926983143,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3178541737,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1074404550,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 2966374417,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3601360897,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3045540317,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 2439803927,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2099024312,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 402108968,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 721006517,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1573235120,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2654678634,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1596182404,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 1000133156,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2096500705,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 4106849156,
-                        "max": 14,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 14,
+                        "min_count": 7
                     },
                     {
-                        "id": 3191301819,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 1350317253,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3886982432,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1026397086,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1267357055,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 4125851173,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 2,
+                        "min_count": 2
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 0,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]
     },
     {
         "mission_code": 51010,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 2,
                 "energy": 400000,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 1652810564,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 277478297,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2153793929,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 63611898,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3000509335,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2957418873,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 2,
+                        "min_count": 2
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 300000,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 4155218397,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 100,
+                        "min_count": 100
                     },
                     {
-                        "id": 1994203852,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 100,
+                        "min_count": 100
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 200000,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 4257614424,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1128130151,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 3809301646,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 393671195,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2631726949,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3992212357,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1777572575,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1962214906,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 13072261,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1560447688,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 283272891,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1231382387,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2365311381,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 726981477,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 12,
+                        "min_count": 6
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 100000,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3354936979,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3641293300,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1192574839,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 312712163,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2711878789,
-                        "max": 40,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 40,
+                        "min_count": 20
                     },
                     {
-                        "id": 2706393556,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 1548824161,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 2617753389,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1489721477,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 550007210,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 3134623080,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1418333441,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 2010483284,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 172637158,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 4035726156,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 21362465,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1034106141,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 633586682,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 4149835431,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 3527693027,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 259257465,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1009227634,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 2,
+                        "min_count": 2
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 402108968,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1596182404,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 2047256367,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 1573235120,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2096500705,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2966374417,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 3886982432,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3273887015,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2439803927,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1000133156,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 3926983143,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 478869482,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 4106849156,
-                        "max": 7,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 7,
+                        "min_count": 3
                     },
                     {
-                        "id": 721006517,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1074404550,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 3191301819,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 2099024312,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 4125851173,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1026397086,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3045540317,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 1267357055,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 2654678634,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3601360897,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1350317253,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3178541737,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3107395265,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 1,
+                        "min_count": 1
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1100,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]
     },
     {
         "mission_code": 51510,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 2,
                 "energy": 400000,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 3000509335,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2957418873,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1652810564,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 277478297,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 63611898,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2153793929,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 1,
+                        "min_count": 1
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 300000,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 1994203852,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 100,
+                        "min_count": 100
                     },
                     {
-                        "id": 4155218397,
-                        "max": 100,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 100,
+                        "min_count": 100
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 200000,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 13072261,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2631726949,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1962214906,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1128130151,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 393671195,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 4257614424,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 726981477,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3809301646,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 3992212357,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2365311381,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 1777572575,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1560447688,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1231382387,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 283272891,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 1,
+                        "min_count": 1
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 100000,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 2617753389,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 4149835431,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 3641293300,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 259257465,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3134623080,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1034106141,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2010483284,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 21362465,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1418333441,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 3527693027,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 3354936979,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2711878789,
-                        "max": 40,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 40,
+                        "min_count": 20
                     },
                     {
-                        "id": 312712163,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1192574839,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1548824161,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 633586682,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 172637158,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 4035726156,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 550007210,
-                        "max": 48,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 48,
+                        "min_count": 24
                     },
                     {
-                        "id": 2706393556,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 1489721477,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1009227634,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 1,
+                        "min_count": 1
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3926983143,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 3107395265,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1074404550,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1573235120,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 402108968,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3045540317,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 4125851173,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1267357055,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 1026397086,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1000133156,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 3273887015,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2439803927,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2096500705,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 4106849156,
-                        "max": 7,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 7,
+                        "min_count": 3
                     },
                     {
-                        "id": 3178541737,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 478869482,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2047256367,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 2966374417,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 3191301819,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 3601360897,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1596182404,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 2654678634,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 721006517,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 3886982432,
-                        "max": 1,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2099024312,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1350317253,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 3,
+                        "min_count": 3
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1210,
+                "max_rewards": 0,
+                "min_rewards": 0,
+                "rewards": []
+            }
+        ]
+    },
+    {
+        "mission_code": 52010,
+        "rank_rewards": [
+            {
+                "energy": 800000,
+                "event_points": 1104,
+                "max_rewards": 3,
+                "min_rewards": 3,
+                "rewards": [
+                    {
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 3,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 3,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 3,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 3,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 3,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 2,
+                        "min_count": 2
+                    }
+                ]
+            },
+            {
+                "energy": 600000,
+                "event_points": 1104,
+                "max_rewards": 2,
+                "min_rewards": 2,
+                "rewards": [
+                    {
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 200,
+                        "min_count": 200
+                    },
+                    {
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 200,
+                        "min_count": 200
+                    }
+                ]
+            },
+            {
+                "energy": 400000,
+                "event_points": 1104,
+                "max_rewards": 3,
+                "min_rewards": 3,
+                "rewards": [
+                    {
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 20,
+                        "min_count": 10
+                    },
+                    {
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 20,
+                        "min_count": 10
+                    },
+                    {
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 26,
+                        "min_count": 13
+                    },
+                    {
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 26,
+                        "min_count": 13
+                    },
+                    {
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 5,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 15,
+                        "min_count": 7
+                    },
+                    {
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 16,
+                        "min_count": 8
+                    },
+                    {
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 5,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 1,
+                        "min_count": 1
+                    }
+                ]
+            },
+            {
+                "energy": 200000,
+                "event_points": 1104,
+                "max_rewards": 3,
+                "min_rewards": 3,
+                "rewards": [
+                    {
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 5,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 12,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 6,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 8,
+                        "min_count": 4
+                    },
+                    {
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 40,
+                        "min_count": 20
+                    },
+                    {
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 16,
+                        "min_count": 8
+                    },
+                    {
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 13,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 16,
+                        "min_count": 8
+                    },
+                    {
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 80,
+                        "min_count": 80
+                    },
+                    {
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 33,
+                        "min_count": 16
+                    },
+                    {
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 1,
+                        "min_count": 1
+                    },
+                    {
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 8,
+                        "min_count": 4
+                    },
+                    {
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 20,
+                        "min_count": 10
+                    },
+                    {
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 6,
+                        "min_count": 3
+                    },
+                    {
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 1,
+                        "min_count": 1
+                    }
+                ]
+            },
+            {
+                "energy": 0,
+                "event_points": 1104,
+                "max_rewards": 3,
+                "min_rewards": 3,
+                "rewards": [
+                    {
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 12,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 30,
+                        "min_count": 15
+                    },
+                    {
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 8,
+                        "min_count": 4
+                    },
+                    {
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 12,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 5,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 20,
+                        "min_count": 10
+                    },
+                    {
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 4,
+                        "min_count": 4
+                    },
+                    {
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 2,
+                        "min_count": 2
+                    },
+                    {
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 20,
+                        "min_count": 10
+                    },
+                    {
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 16,
+                        "min_count": 8
+                    },
+                    {
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 12,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 13,
+                        "min_count": 6
+                    },
+                    {
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 10,
+                        "min_count": 5
+                    },
+                    {
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 2,
+                        "min_count": 2
+                    }
+                ]
+            },
+            {
+                "energy": 0,
+                "event_points": 1104,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]
     },
     {
         "mission_code": 52510,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 4,
                 "energy": 800000,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 4,
+                "min_rewards": 4,
                 "rewards": [
                     {
-                        "id": 277478297,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2153793929,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3000509335,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 2957418873,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1652810564,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 63611898,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 3,
+                        "min_count": 3
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 600000,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 1994203852,
-                        "max": 200,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 200,
+                        "min_count": 200
                     },
                     {
-                        "id": 4155218397,
-                        "max": 200,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 200,
+                        "min_count": 200
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 400000,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3992212357,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 4257614424,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 1231382387,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 3809301646,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 1128130151,
-                        "max": 26,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 26,
+                        "min_count": 13
                     },
                     {
-                        "id": 1560447688,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 1962214906,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 2365311381,
-                        "max": 26,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 26,
+                        "min_count": 13
                     },
                     {
-                        "id": 393671195,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 283272891,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 2631726949,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 1777572575,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 726981477,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 13072261,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 2,
+                        "min_count": 2
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 200000,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 259257465,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 172637158,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 1548824161,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 3134623080,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 2010483284,
-                        "max": 13,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 13,
+                        "min_count": 6
                     },
                     {
-                        "id": 2706393556,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 1489721477,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 2711878789,
-                        "max": 33,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 33,
+                        "min_count": 16
                     },
                     {
-                        "id": 3354936979,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 1418333441,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1009227634,
-                        "max": 1,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 1,
+                        "min_count": 1
                     },
                     {
-                        "id": 1034106141,
-                        "max": 2,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 21362465,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 2617753389,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 3641293300,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 4149835431,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 3527693027,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 1192574839,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 312712163,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 4035726156,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 550007210,
-                        "max": 40,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 40,
+                        "min_count": 20
                     },
                     {
-                        "id": 633586682,
-                        "max": 13,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 13,
+                        "min_count": 6
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3178541737,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 478869482,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2047256367,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3886982432,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1000133156,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1350317253,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 4125851173,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2439803927,
-                        "max": 4,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2099024312,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 3191301819,
-                        "max": 26,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 26,
+                        "min_count": 13
                     },
                     {
-                        "id": 402108968,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 3045540317,
-                        "max": 8,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 8,
+                        "min_count": 4
                     },
                     {
-                        "id": 3273887015,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 2654678634,
-                        "max": 20,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 20,
+                        "min_count": 10
                     },
                     {
-                        "id": 721006517,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3107395265,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 2966374417,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 3926983143,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1596182404,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 3601360897,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 1267357055,
-                        "max": 16,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 16,
+                        "min_count": 8
                     },
                     {
-                        "id": 2096500705,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 10,
+                        "min_count": 5
                     },
                     {
-                        "id": 1026397086,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 2,
+                        "min_count": 2
                     },
                     {
-                        "id": 1074404550,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 4106849156,
-                        "max": 22,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 22,
+                        "min_count": 11
                     },
                     {
-                        "id": 1573235120,
-                        "max": 2,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 2,
+                        "min_count": 2
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1196,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]
     },
     {
         "mission_code": 53010,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 6,
                 "energy": 1200000,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 6,
+                "min_rewards": 6,
                 "rewards": [
                     {
-                        "id": 2957418873,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 63611898,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 1652810564,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3000509335,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 277478297,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2153793929,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 6,
+                        "min_count": 3
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 900000,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 1994203852,
-                        "max": 300,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 300,
+                        "min_count": 300
                     },
                     {
-                        "id": 4155218397,
-                        "max": 300,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 300,
+                        "min_count": 300
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 600000,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 3992212357,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 1560447688,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 3809301646,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 1962214906,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 1777572575,
-                        "max": 56,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 56,
+                        "min_count": 56
                     },
                     {
-                        "id": 13072261,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2365311381,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 726981477,
-                        "max": 54,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 54,
+                        "min_count": 54
                     },
                     {
-                        "id": 1231382387,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 1128130151,
-                        "max": 25,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 25,
+                        "min_count": 12
                     },
                     {
-                        "id": 4257614424,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 2631726949,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 283272891,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 393671195,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 18,
+                        "min_count": 9
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 300000,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 1418333441,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 633586682,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 259257465,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 4149835431,
-                        "max": 31,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 31,
+                        "min_count": 15
                     },
                     {
-                        "id": 1009227634,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 550007210,
-                        "max": 75,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 75,
+                        "min_count": 75
                     },
                     {
-                        "id": 1489721477,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 312712163,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 3354936979,
-                        "max": 74,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 74,
+                        "min_count": 74
                     },
                     {
-                        "id": 4035726156,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 1034106141,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2711878789,
-                        "max": 124,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 124,
+                        "min_count": 124
                     },
                     {
-                        "id": 2010483284,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 21362465,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 3527693027,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 3641293300,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2706393556,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 2617753389,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1192574839,
-                        "max": 56,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 56,
+                        "min_count": 56
                     },
                     {
-                        "id": 172637158,
-                        "max": 74,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 74,
+                        "min_count": 74
                     },
                     {
-                        "id": 3134623080,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 1548824161,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 15,
+                        "min_count": 7
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 2439803927,
-                        "max": 6,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3178541737,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 2096500705,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1074404550,
-                        "max": 56,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 56,
+                        "min_count": 56
                     },
                     {
-                        "id": 1000133156,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 4106849156,
-                        "max": 42,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 42,
+                        "min_count": 21
                     },
                     {
-                        "id": 1596182404,
-                        "max": 112,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 112,
+                        "min_count": 112
                     },
                     {
-                        "id": 1350317253,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 3886982432,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 402108968,
-                        "max": 112,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 112,
+                        "min_count": 112
                     },
                     {
-                        "id": 1573235120,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 2099024312,
-                        "max": 74,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 74,
+                        "min_count": 74
                     },
                     {
-                        "id": 3045540317,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 3191301819,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 2966374417,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1267357055,
-                        "max": 62,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 62,
+                        "min_count": 62
                     },
                     {
-                        "id": 478869482,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 2047256367,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3601360897,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3107395265,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 721006517,
-                        "max": 6,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1026397086,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3273887015,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 4125851173,
-                        "max": 6,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2654678634,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3926983143,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 3,
+                        "min_count": 3
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1260,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]
     },
     {
         "mission_code": 53510,
-        "reward_pool": [
+        "rank_rewards": [
             {
-                "count": 6,
                 "energy": 1200000,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 6,
+                "min_rewards": 6,
                 "rewards": [
                     {
-                        "id": 277478297,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 277478297,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 2153793929,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2153793929,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 1652810564,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1652810564,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 63611898,
-                        "max": 5,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 63611898,
+                        "max_count": 5,
+                        "min_count": 5
                     },
                     {
-                        "id": 2957418873,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2957418873,
+                        "max_count": 4,
+                        "min_count": 4
                     },
                     {
-                        "id": 3000509335,
-                        "max": 4,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3000509335,
+                        "max_count": 4,
+                        "min_count": 4
                     }
                 ]
             },
             {
-                "count": 2,
                 "energy": 900000,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 2,
+                "min_rewards": 2,
                 "rewards": [
                     {
-                        "id": 1994203852,
-                        "max": 300,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1994203852,
+                        "max_count": 300,
+                        "min_count": 300
                     },
                     {
-                        "id": 4155218397,
-                        "max": 300,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4155218397,
+                        "max_count": 300,
+                        "min_count": 300
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 600000,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 1128130151,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1128130151,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 1231382387,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1231382387,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3809301646,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3809301646,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 2631726949,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2631726949,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 1777572575,
-                        "max": 28,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1777572575,
+                        "max_count": 28,
+                        "min_count": 14
                     },
                     {
-                        "id": 726981477,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 726981477,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 2365311381,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2365311381,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 4257614424,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4257614424,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 283272891,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 283272891,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 1560447688,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1560447688,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 393671195,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 393671195,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 13072261,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 13072261,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3992212357,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3992212357,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 1962214906,
-                        "max": 10,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1962214906,
+                        "max_count": 10,
+                        "min_count": 5
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 300000,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 2711878789,
-                        "max": 62,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2711878789,
+                        "max_count": 62,
+                        "min_count": 62
                     },
                     {
-                        "id": 1489721477,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1489721477,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 2617753389,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2617753389,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1192574839,
-                        "max": 56,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1192574839,
+                        "max_count": 56,
+                        "min_count": 56
                     },
                     {
-                        "id": 4149835431,
-                        "max": 62,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4149835431,
+                        "max_count": 62,
+                        "min_count": 62
                     },
                     {
-                        "id": 1418333441,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1418333441,
+                        "max_count": 24,
+                        "min_count": 12
                     },
                     {
-                        "id": 259257465,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 259257465,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 172637158,
-                        "max": 37,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 172637158,
+                        "max_count": 37,
+                        "min_count": 18
                     },
                     {
-                        "id": 1548824161,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1548824161,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 633586682,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 633586682,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 3641293300,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3641293300,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 550007210,
-                        "max": 150,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 550007210,
+                        "max_count": 150,
+                        "min_count": 150
                     },
                     {
-                        "id": 3527693027,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3527693027,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 1009227634,
-                        "max": 3,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1009227634,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3134623080,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3134623080,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 3354936979,
-                        "max": 37,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3354936979,
+                        "max_count": 37,
+                        "min_count": 18
                     },
                     {
-                        "id": 2706393556,
-                        "max": 30,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2706393556,
+                        "max_count": 30,
+                        "min_count": 15
                     },
                     {
-                        "id": 312712163,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 312712163,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 2010483284,
-                        "max": 25,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2010483284,
+                        "max_count": 25,
+                        "min_count": 12
                     },
                     {
-                        "id": 21362465,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 21362465,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 1034106141,
-                        "max": 6,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1034106141,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 4035726156,
-                        "max": 24,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4035726156,
+                        "max_count": 24,
+                        "min_count": 12
                     }
                 ]
             },
             {
-                "count": 3,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 3,
+                "min_rewards": 3,
                 "rewards": [
                     {
-                        "id": 4125851173,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 4125851173,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 3178541737,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3178541737,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 2654678634,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2654678634,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 1026397086,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1026397086,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1000133156,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1000133156,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 3045540317,
-                        "max": 15,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3045540317,
+                        "max_count": 15,
+                        "min_count": 7
                     },
                     {
-                        "id": 721006517,
-                        "max": 6,
-                        "type": "item"
+                        "category": 1,
+                        "code": 721006517,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 3191301819,
-                        "max": 50,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3191301819,
+                        "max_count": 50,
+                        "min_count": 50
                     },
                     {
-                        "id": 1267357055,
-                        "max": 31,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1267357055,
+                        "max_count": 31,
+                        "min_count": 15
                     },
                     {
-                        "id": 2099024312,
-                        "max": 74,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2099024312,
+                        "max_count": 74,
+                        "min_count": 74
                     },
                     {
-                        "id": 3886982432,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3886982432,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1074404550,
-                        "max": 112,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1074404550,
+                        "max_count": 112,
+                        "min_count": 112
                     },
                     {
-                        "id": 3601360897,
-                        "max": 9,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3601360897,
+                        "max_count": 9,
+                        "min_count": 4
                     },
                     {
-                        "id": 3273887015,
-                        "max": 36,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 3273887015,
+                        "max_count": 36,
+                        "min_count": 18
                     },
                     {
-                        "id": 3107395265,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3107395265,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 2047256367,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2047256367,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 1596182404,
-                        "max": 112,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1596182404,
+                        "max_count": 112,
+                        "min_count": 112
                     },
                     {
-                        "id": 478869482,
-                        "max": 12,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 478869482,
+                        "max_count": 12,
+                        "min_count": 6
                     },
                     {
-                        "id": 4106849156,
-                        "max": 21,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 4106849156,
+                        "max_count": 21,
+                        "min_count": 10
                     },
                     {
-                        "id": 1350317253,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 1350317253,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 402108968,
-                        "max": 56,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 402108968,
+                        "max_count": 56,
+                        "min_count": 56
                     },
                     {
-                        "id": 2966374417,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2966374417,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 2096500705,
-                        "max": 18,
-                        "type": "resource"
+                        "category": 0,
+                        "code": 2096500705,
+                        "max_count": 18,
+                        "min_count": 9
                     },
                     {
-                        "id": 3926983143,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 3926983143,
+                        "max_count": 3,
+                        "min_count": 3
                     },
                     {
-                        "id": 1573235120,
-                        "max": 6,
-                        "type": "item"
+                        "category": 1,
+                        "code": 1573235120,
+                        "max_count": 6,
+                        "min_count": 3
                     },
                     {
-                        "id": 2439803927,
-                        "max": 3,
-                        "type": "item"
+                        "category": 1,
+                        "code": 2439803927,
+                        "max_count": 3,
+                        "min_count": 3
                     }
                 ]
             },
             {
-                "count": 0,
                 "energy": 0,
-                "recipe_list": [],
+                "event_points": 1350,
+                "max_rewards": 0,
+                "min_rewards": 0,
                 "rewards": []
             }
         ]

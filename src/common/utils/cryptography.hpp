@@ -131,8 +131,6 @@ namespace utils::cryptography
 		std::string get_challenge();
 		void get_data(void* data, size_t size);
 		std::string get_data(const size_t size);
-
-		std::default_random_engine& get_engine();
 	}
 
 	const std::uint32_t initial_p[18] =

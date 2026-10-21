@@ -167,6 +167,12 @@ namespace database::events
 		}
 	}
 
+	bool event_params_t::has_mission(const std::uint32_t mission_code) const
+	{
+		const auto iter = std::ranges::find(this->mission_list.begin(), this->mission_list.end(), mission_code);
+		return iter != this->mission_list.end();
+	}
+
 	void event_params_t::to_json(json::value& data) const
 	{
 		data["current_event_point"] = 0;
@@ -229,12 +235,6 @@ namespace database::events
 		return settings;
 	}
 
-	void get_event_range(std::chrono::seconds& start, std::chrono::seconds& end)
-	{
-		const auto& settings = get_event_settings();
-		utils::time::get_section(settings.event_duration * 24h, start, end);
-	}
-
 	std::optional<running_event_info_t> get_target_event()
 	{
 		const auto& settings = get_event_settings();
@@ -245,10 +245,11 @@ namespace database::events
 
 		running_event_info_t event{};
 
-		const auto event_number = utils::time::get_day() / settings.event_duration;
-		const auto event_index = event_number % settings.event_rotation_linked.size();
+		std::size_t section_number{};
+		utils::time::get_section(settings.event_duration * 24h, event.start, event.end, section_number);
+
+		const auto event_index = section_number % settings.event_rotation_linked.size();
 		event.params = settings.event_rotation_linked[event_index];
-		get_event_range(event.start, event.end);
 
 		return {event};
 	}
@@ -623,7 +624,7 @@ namespace database::events
 			if (now_s > current_event->get_end_date())
 			{
 				set_event_state(db, current_event->get_event_id(), event_state_finished);
-				console::print("[events] event state changed: RUNNING\n");
+				console::print("[events] event state changed: FINISHED\n");
 				break;
 			}
 

@@ -5,6 +5,7 @@ namespace utils::time
 {
 	std::chrono::seconds get_week_begin();
 	std::chrono::seconds get_day_begin();
+	void get_section(const std::chrono::seconds& duration, std::chrono::seconds& start, std::chrono::seconds& end, std::size_t& index);
 	void get_section(const std::chrono::seconds& duration, std::chrono::seconds& start, std::chrono::seconds& end);
 
 	std::size_t get_day();

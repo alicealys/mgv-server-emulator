@@ -49,10 +49,12 @@ namespace database::events
 		std::uint32_t info_id;
 		std::string info_title;
 		std::string info_text;
+		std::vector<std::uint32_t> mission_list;
 		std::vector<event_border_reward_t> reward_border_list;
 		std::vector<event_catalog_reward_t> reward_catalog_list;
 		std::vector<event_ranking_reward_t> reward_ranking_list;
 
+		bool has_mission(const std::uint32_t mission_code) const;
 		void to_json(json::value& data) const;
 	};
 

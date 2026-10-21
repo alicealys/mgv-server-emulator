@@ -21,36 +21,13 @@ struct glz::meta<database::defense_missions::injury_crew_t>
 	);
 };
 
-template <>
-struct glz::meta<database::defense_missions::reward_pool_t::reward_t>
-{
-	using T = database::defense_missions::reward_pool_t::reward_t;
-	static constexpr auto value = glz::object(
-		"id", &T::id,
-		"max", &T::max,
-		"type", &T::type
-	);
-};
-
-template <>
-struct glz::meta<database::defense_missions::reward_pool_t::rank_t>
-{
-	using T = database::defense_missions::reward_pool_t::rank_t;
-	static constexpr auto value = glz::object(
-		"count", &T::count,
-		"energy", &T::energy,
-		"recipe_list", &T::recipe_list,
-		"rewards", &T::rewards
-	);
-};
-
 namespace database::defense_missions
 {
 	namespace
 	{
 		std::unordered_map<std::uint32_t, reward_pool_t> load_reward_pools()
 		{
-			const auto data = utils::resources::load_json(RESOURCE_BASE_DEFENSE_REWARD_POOLS);
+			auto data = utils::resources::load_json(RESOURCE_BASE_DEFENSE_REWARD_POOLS);
 
 			std::unordered_map<std::uint32_t, reward_pool_t> map;
 			for (auto i = 0ull; i < data.size(); i++)
@@ -62,43 +39,11 @@ namespace database::defense_missions
 					throw std::runtime_error("failed to parse reward pool list (mission_code)");
 				}
 
-				for (auto o = 0ull; o < pool.reward_pool.size(); o++)
+				for (auto o = 0ull; o < pool.rank_rewards.size(); o++)
 				{
-					if (!json::read(pool.reward_pool[o], data[i]["reward_pool"][o]))
+					if (!json::read(pool.rank_rewards[o], data[i]["rank_rewards"][o]))
 					{
-						throw std::runtime_error("failed to parse reward pool list (reward_pool)");
-					}
-
-					for (auto& reward : pool.reward_pool[o].rewards)
-					{
-						if (reward.type == "resource")
-						{
-							const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(reward.id);
-							if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
-							{
-								console::warning("[defense missions] reward has invalid resource id %lli\n", reward.id);
-								reward.reward_type = reward_type_invalid;
-							}
-							else
-							{
-								reward.reward_type = reward_type_resource;
-								reward.resource = iter->second;
-							}
-						}
-						else if (reward.type == "item")
-						{
-							const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(reward.id);
-							if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
-							{
-								console::warning("[defense missions] reward has invalid item id %lli\n", reward.id);
-								reward.reward_type = reward_type_invalid;
-							}
-							else
-							{
-								reward.reward_type = reward_type_item;
-								reward.item = iter->second;
-							}
-						}
+						throw std::runtime_error("failed to parse reward pool list (rank_rewards)");
 					}
 				}
 
@@ -192,7 +137,7 @@ namespace database::defense_missions
 		return 5u;
 	}
 
-	std::vector<reward_info_t> generate_rewards(const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
+	std::vector<reward_info_t> generate_rewards(const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank, std::uint32_t& event_points)
 	{
 		std::vector<reward_info_t> rewards;
 
@@ -203,63 +148,39 @@ namespace database::defense_missions
 			return rewards;
 		}
 
-		// category
-		// 0: resource
-		// 1: stackable item
-		// 9: energy
-
 		const auto& reward_pool = iter->second;
-		for (auto i = rank; i < reward_pool.reward_pool.size(); i++)
+		for (auto i = rank; i < reward_pool.rank_rewards.size(); i++)
 		{
-			if (reward_pool.reward_pool[i].energy > 0)
+			auto& rank_reward = reward_pool.rank_rewards[i];
+
+			if (i == rank)
+			{
+				event_points = rank_reward.event_points;
+			}
+
+			if (rank_reward.energy > 0)
 			{
 				reward_info_t reward_info{};
 				reward_info.rank = i;
 				reward_info.param.category = 9;
-				reward_info.param.num = reward_pool.reward_pool[i].energy;
+				reward_info.param.num = rank_reward.energy;
 				rewards.emplace_back(reward_info);
 			}
 
-			for (auto o = 0ull; o < reward_pool.reward_pool[i].count; o++)
+			const auto reward_count = utils::random::get_integer(rank_reward.min_rewards, rank_reward.max_rewards);
+			for (auto o = 0u; o < reward_count; o++)
 			{
-				const auto& reward_list = reward_pool.reward_pool[i].rewards;
+				const auto& reward_list = rank_reward.rewards;
 				const auto rand = utils::random::index(reward_list);
 				const auto& reward = reward_list[rand];
 
+				const auto num = utils::random::get_integer(reward.min_count, reward.max_count);
+
 				reward_info_t reward_info{};
 				reward_info.rank = i;
-
-				auto num = reward.max;
-
-				if (reward.max < 50 && reward.max > 5)
-				{
-					constexpr const auto min_percent = 80; // should it be 100?
-					const auto percent = static_cast<float>(utils::random::get_integer(min_percent, 100u)) / 100.f;
-					num = static_cast<std::uint32_t>(static_cast<float>(reward.max) * percent);
-				}
-
-				switch (reward.reward_type)
-				{
-				case reward_type_resource:
-				{
-					reward_info.param.category = 0;
-					reward_info.param.code = reward.id;
-					reward_info.param.num = num;
-					reward_info.id_index = reward.resource->index;
-					break;
-				}
-				case reward_type_item:
-				{
-					reward_info.param.category = 1;
-					reward_info.param.code = reward.id;
-					reward_info.param.num = num;
-					reward_info.id_index = reward.item->index;
-					break;
-				}
-				default:
-				case reward_type_invalid:
-					continue;
-				}
+				reward_info.param.category = reward.category;
+				reward_info.param.code = reward.code;
+				reward_info.param.num = num;
 
 				rewards.emplace_back(reward_info);
 			}

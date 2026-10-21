@@ -7,6 +7,8 @@
 #include "database/models/crew_members.hpp"
 #include "database/models/challenge_tasks.hpp"
 #include "database/models/boosts.hpp"
+#include "database/models/rankings.hpp"
+#include "database/models/events.hpp"
 
 namespace emulator::ssd
 {
@@ -20,7 +22,17 @@ namespace emulator::ssd
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
 
-		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank);
+		std::uint32_t reward_event_point{};
+		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank, reward_event_point);
+
+		database::events::cached_event.access([&](const std::optional<database::events::running_event>& event)
+		{
+			if (!event.has_value() || !event->params->has_mission(mission_settings.mission_id))
+			{
+				reward_event_point = 0u;
+			}
+		});
+
 		if (!rewards.empty())
 		{
 			user->current_player->get_stackable_item_list(stackable_list);
@@ -68,11 +80,12 @@ namespace emulator::ssd
 
 		std::vector<game::item_t> presents;
 
-		const auto kub_boost = database::boosts::get_boost_of_type(user->get_user_id(), database::boosts::boost_type_kub);
-		if (kub_boost.has_value())
-		{
-			result["boost_flag"] = 1;
-		}
+		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
+		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
+		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
+		const auto has_boost = bp_boost.valid || kub_boost.valid;
+
+		result["boost_flag"] = has_boost & 1;
 
 		for (const auto& reward : rewards)
 		{
@@ -85,9 +98,9 @@ namespace emulator::ssd
 			auto& present_list_j = rank_entry["present_list"];
 
 			game::item_t give_item = reward.param;
-			if (kub_boost.has_value() && give_item.category == game::ITEM_CATEGORY_ENERGY)
+			if (kub_boost.valid && give_item.category == game::ITEM_CATEGORY_ENERGY)
 			{
-				const auto multiplier = (static_cast<float>(kub_boost->get_multiplier()) / 2.f) * 0.1f;
+				const auto multiplier = (static_cast<float>(kub_boost.get_multiplier()) / 2.f) * 0.1f;
 				give_item.num += static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
 				rank_entry["kub_boost_flag"] = 1;
 			}
@@ -101,6 +114,18 @@ namespace emulator::ssd
 
 		database::present_box::add_items(user->get_user_id(),
 			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
+
+		if (reward_event_point > 0)
+		{
+			if (bp_boost.valid)
+			{
+				reward_event_point *= bp_boost.get_multiplier();
+			}
+
+			user->add_event_points(reward_event_point);
+			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
+			result["reward_event_point"] = reward_event_point;
+		}
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = rank; i <= 5; i++)
@@ -186,7 +211,7 @@ namespace emulator::ssd
 			case 1: // wave success + mission cleared
 			{
 				next_wave++;
-				if (this_wave == mission_settings->max_wave_count - 1)
+				if (wave_result.result == 1)
 				{
 					mission_result = 1u;
 					this->generate_defense_mission_rewards(result, user, reward_list, *mission_settings, rank);

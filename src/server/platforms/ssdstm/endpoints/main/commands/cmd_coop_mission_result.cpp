@@ -8,6 +8,7 @@
 #include "database/models/boosts.hpp"
 #include "database/models/present_box.hpp"
 #include "database/models/challenge_tasks.hpp"
+#include "database/models/events.hpp"
 
 namespace emulator::ssd
 {
@@ -191,6 +192,14 @@ namespace emulator::ssd
 		const auto personal_rewards = database::coop_missions::generate_personal_rewards(iter->second->enemy_level, param.personal_score);
 		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
 
+		database::events::cached_event.access([&](const std::optional<database::events::running_event>& event)
+		{
+			if (!event.has_value() || !event->params->has_mission(iter->second->mission_id))
+			{
+				reward_event_point = 0u;
+			}
+		});
+
 		database::players::stackable_item_list_t stackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
@@ -272,14 +281,17 @@ namespace emulator::ssd
 			}
 		}
 
-		if (bp_boost.valid)
+		if (reward_event_point > 0)
 		{
-			reward_event_point *= bp_boost.get_multiplier();
-		}
+			if (bp_boost.valid)
+			{
+				reward_event_point *= bp_boost.get_multiplier();
+			}
 
-		user->add_event_points(reward_event_point);
-		database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
-		result["reward_event_point"] = reward_event_point;
+			user->add_event_points(reward_event_point);
+			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
+			result["reward_event_point"] = reward_event_point;
+		}
 
 		database::present_box::add_items(user->get_user_id(),
 			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
