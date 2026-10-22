@@ -1,6 +1,7 @@
 #include <std_include.hpp>
 
 #include "coop_missions.hpp"
+#include "game/lottery.hpp"
 
 #include "utils/encoding.hpp"
 #include "utils/json_utils.hpp"
@@ -89,7 +90,7 @@ namespace database::coop_missions
 		return list;
 	}
 
-	std::vector<reward_info_t> generate_rewards(const std::uint32_t enemy_level, const std::uint8_t rank, std::uint32_t& event_points)
+	std::vector<reward_info_t> generate_rewards(const game::coop_mission_info_t& mission, const std::uint8_t rank, std::uint32_t& event_points)
 	{
 		std::vector<reward_info_t> list;
 
@@ -98,7 +99,7 @@ namespace database::coop_missions
 		const reward_settings_t::level_t* reward_level = nullptr;
 		for (auto& level : settings.levels)
 		{
-			if (enemy_level >= level.enemy_level)
+			if (mission.enemy_level >= level.enemy_level)
 			{
 				reward_level = &level;
 				break;
@@ -108,6 +109,49 @@ namespace database::coop_missions
 		if (reward_level == nullptr)
 		{
 			return list;
+		}
+
+		for (auto i = rank; i < mission.ui_reward_info.iris_info.size(); i++)
+		{
+			for (auto& line : mission.ui_reward_info.iris_info[i].line_info)
+			{
+				if (line.icon_type == game::ui_reward_type_none || line.rarity > game::ui_reward_lotteries.size())
+				{
+					continue;
+				}
+
+				if (line.icon_type == game::ui_reward_type_energy)
+				{
+					continue;
+				}
+
+				const auto lottery = game::ui_reward_lotteries[line.rarity].find(line.icon_type);
+				if (lottery == game::ui_reward_lotteries[line.rarity].end())
+				{
+					continue;
+				}
+
+				auto count = 1u;
+
+				switch (line.icon_type)
+				{
+				case game::ui_reward_type_junk_accessory:
+				case game::ui_reward_type_junk_weapon:
+					count = 1;
+					break;
+				case game::ui_reward_type_material:
+					count = utils::random::get_integer(10u, 20u);
+					break;
+				}
+
+				for (auto o = 0u; o < count; o++)
+				{
+					reward_info_t reward{};
+					reward.item = lottery->second();
+					reward.rank = static_cast<std::uint8_t>(i);
+					list.emplace_back(reward);
+				}
+			}
 		}
 
 		for (std::size_t i = rank; i < reward_level->rank_rewards.size(); i++)
@@ -126,36 +170,43 @@ namespace database::coop_missions
 			{
 				event_points = reward.event_points;
 			}
-
-			const auto reward_count = utils::random::get_integer(reward.min_rewards, reward.max_rewards);
-			const auto& pools = reward_level->has_rank6
-				? settings.rank6_reward_pools
-				: settings.rank5_reward_pools;
-
-			if (i > pools.size())
-			{
-				break;
-			}
-
-			const auto& pool = pools[i];
-			for (auto o = 0u; o < reward_count; o++)
-			{
-				const auto idx = utils::random::index(pool);
-				const auto& item = pool[idx];
-				const auto num = item.max <= 1
-					? 1
-					: utils::random::get_integer(1u, item.max);
-
-				reward_info_t info{};
-				info.rank = static_cast<std::uint8_t>(i);
-				info.item.category = item.category;
-				info.item.code = item.code;
-				info.item.num = num;
-				list.emplace_back(info);
-			}
 		}
 
 		return list;
+	}
+
+	std::uint8_t calc_rank(const game::coop_mission_info_t& mission, const std::uint32_t score)
+	{
+		const auto rank_count = static_cast<std::uint8_t>(mission.rank_threshold.size());
+
+		std::uint8_t rank = 0u;
+		for (; rank <= rank_count; rank++)
+		{
+			if (rank < rank_count && score >= mission.rank_threshold[rank])
+			{
+				return rank;
+			}
+		}
+
+		return rank;
+	}
+
+	std::uint8_t convert_rank(const game::coop_mission_info_t& mission, const std::uint8_t rank)
+	{
+		if (mission.rank_threshold.size() == 6)
+		{
+			switch (rank)
+			{
+			case 0:
+				return 10;
+			default:
+				return rank - 1;
+			}
+		}
+		else
+		{
+			return rank;
+		}
 	}
 
 	void coop_mission_record_t::to_json(json::value& data) const

@@ -16,6 +16,7 @@ namespace game::parameters
 			const auto mission = std::make_shared<game::coop_mission_info_t>();
 			if (!mission->parse(data["coopMissionInfo"][i]))
 			{
+				console::warning("[SsdUiCoopMissionInfo] invalid coop mission info at index %lli\n", i);
 				continue;
 			}
 

@@ -1,14 +1,15 @@
 #include <std_include.hpp>
 
-#include "battle_packs.hpp"
+#include "lottery.hpp"
 #include "game/parameters.hpp"
 
 #include "utils/random.hpp"
 
-#include <utils/cryptography.hpp>
-
 namespace game
 {
+	std::unordered_map<std::uint32_t, lottery_t> battle_pack_lotteries;
+	std::array<std::unordered_map<std::uint32_t, lottery_t>, 6> ui_reward_lotteries;
+
 	namespace
 	{
 		std::size_t rand_index(const std::vector<std::uint32_t>& pool)
@@ -61,6 +62,27 @@ namespace game
 			return result;
 		}
 
+		std::vector<std::uint32_t> list_stackable_items(const std::uint32_t rarity, bool (*filter)(const game::production_t&))
+		{
+			const auto& productions_list = game::parameters_table.ssd_sbm_parameters->productions_list;
+
+			std::vector<std::uint32_t> result;
+			std::unordered_set<std::uint32_t> productions;
+
+			for (auto i = 0ull; i < productions_list.size(); i++)
+			{
+				const auto& prod = productions_list[i];
+
+				if (prod != nullptr && prod->rarity == rarity && prod->countable && filter(*prod) && !productions.contains(prod->id))
+				{
+					productions.insert(prod->id);
+					result.emplace_back(prod->id);
+				}
+			}
+
+			return result;
+		}
+
 		std::vector<std::uint32_t> list_recipes(bool (*filter)(const game::recipe_t&))
 		{
 			const auto& recipes_list = game::parameters_table.ssd_sbm_parameters->recipes_list;
@@ -95,14 +117,15 @@ namespace game
 					MATERIAL_METAL,
 					MATERIAL_PARTS,
 					MATERIAL_WOOD,
+					MATERIAL_ENHANCEMENT,
 				};
 
-				return set.contains(resource.material) || Rarity >= 4;
+				return set.contains(resource.material) && resource.type == PRD_TYPE_Material;
 			});
 
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RESOURCE;
-			item.num = utils::random::get_integer(0, 10);
+			item.num = utils::random::get_integer(1, 10);
 
 			const auto idx = rand_index(pool);
 			item.code = pool[idx];
@@ -373,17 +396,88 @@ namespace game
 
 			return item;
 		}
+
+		template <std::uint32_t Rarity>
+		game::item_t lottery_material_w_items()
+		{
+			static const auto pool = []()
+			{
+				static const auto resources = list_resources(Rarity, [](const game::resource_t& resource)
+				{
+					static std::unordered_set<std::uint32_t> set =
+					{
+						MATERIAL_BUILDING,
+						MATERIAL_CHEMICAL,
+						MATERIAL_CIRCUIT,
+						MATERIAL_FABRIC,
+						MATERIAL_METAL,
+						MATERIAL_PARTS,
+						MATERIAL_WOOD,
+					};
+
+					return set.contains(resource.material) && resource.type == PRD_TYPE_Material;
+				});
+
+				static const auto items = list_stackable_items(Rarity, [](const game::production_t& item)
+				{
+					static std::unordered_set<std::uint32_t> set =
+					{
+						PRD_TYPE_Ammo,
+						PRD_TYPE_Cure,
+						PRD_TYPE_Gadget,
+						PRD_TYPE_Material,
+					};
+
+					return set.contains(item.type);
+				});
+
+				std::vector<game::item_t> res;
+
+				for (const auto& code : resources)
+				{
+					game::item_t item{};
+					item.category = game::ITEM_CATEGORY_RESOURCE;
+					item.code = code;
+					res.emplace_back(item);
+				}
+
+				for (const auto& code : items)
+				{
+					game::item_t item{};
+					item.category = game::ITEM_CATEGORY_PRODUCTION;
+					item.code = code;
+					res.emplace_back(item);
+				}
+
+				return res;
+			}();
+
+			const auto idx = utils::random::index(pool);
+			game::item_t item = pool[idx];
+			item.num = utils::random::get_integer(1u, 50u);
+
+			return item;
+		}
 	}
 
-	std::unordered_map<std::uint32_t, battle_pack_lottery_t> battle_pack_lotteries;
-
-	void register_battle_pack_lottery(const std::uint32_t type, const battle_pack_lottery_t& lottery)
+	void register_battle_pack_lottery(const std::uint32_t type, const lottery_t& lottery)
 	{
 		lottery();
 		battle_pack_lotteries.insert(std::make_pair(type, lottery));
 	}
 
-	void initialize_battle_packs()
+	void register_reward_lottery(const std::uint32_t type, const std::uint8_t rarity, const lottery_t& lottery)
+	{
+		if (rarity > ui_reward_lotteries.size())
+		{
+			throw std::runtime_error("[lottery] invalid rarity");
+		}
+
+		lottery();
+		ui_reward_lotteries[rarity].insert(std::make_pair(type, lottery));
+	}
+
+	void initialize_lottery()
 	{
 		register_battle_pack_lottery(BP_Material_Common, lottery_material<1>);
 		register_battle_pack_lottery(BP_Material_Uncommon, lottery_material<2>);
@@ -422,5 +516,30 @@ namespace game
 		register_battle_pack_lottery(BP_Boss04Reward_03, lottery_material<2>);
 		register_battle_pack_lottery(BP_KubanEnergy_100K, lottery_energy<100'000>);
 		register_battle_pack_lottery(BP_Medical_Kit, lottery_medical);
+
+		// 0x901FA9E7 => material
+		register_reward_lottery(ui_reward_type_material, 1, lottery_material_w_items<1>);
+		register_reward_lottery(ui_reward_type_material, 2, lottery_material_w_items<2>);
+		register_reward_lottery(ui_reward_type_material, 3, lottery_material_w_items<3>);
+		register_reward_lottery(ui_reward_type_material, 4, lottery_material_w_items<4>);
+		register_reward_lottery(ui_reward_type_material, 5, lottery_material_w_items<5>);
+
+		// 0x5650D1B1 => junk weapon
+		register_reward_lottery(ui_reward_type_junk_weapon, 1, lottery_junk_weapon<1>);
+		register_reward_lottery(ui_reward_type_junk_weapon, 2, lottery_junk_weapon<2>);
+		register_reward_lottery(ui_reward_type_junk_weapon, 3, lottery_junk_weapon<3>);
+		register_reward_lottery(ui_reward_type_junk_weapon, 4, lottery_junk_weapon<4>);
+		register_reward_lottery(ui_reward_type_junk_weapon, 5, lottery_junk_weapon<5>);
+
+		// 0x5650D1B1 => junk gear
+		register_reward_lottery(ui_reward_type_junk_accessory, 1, lottery_junk_accessory<1>);
+		register_reward_lottery(ui_reward_type_junk_accessory, 2, lottery_junk_accessory<2>);
+		register_reward_lottery(ui_reward_type_junk_accessory, 3, lottery_junk_accessory<3>);
+		register_reward_lottery(ui_reward_type_junk_accessory, 4, lottery_junk_accessory<4>);
+		register_reward_lottery(ui_reward_type_junk_accessory, 5, lottery_junk_accessory<5>);
+
+		// 0x6085F29A => kuban energy
+		register_reward_lottery(ui_reward_type_energy, 0, lottery_energy<10000>);
 	}
 }
+	

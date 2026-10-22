@@ -6,7 +6,7 @@
 #include "database/database.hpp"
 #include "database/auth.hpp"
 #include "game/parameters.hpp"
-#include "game/battle_packs.hpp"
+#include "game/lottery.hpp"
 
 #include "component/console.hpp"
 #include "component/command.hpp"
@@ -38,7 +38,7 @@ namespace emulator
 
 		auth::initialize_lists();
 		game::initialize_parameters_table();
-		game::initialize_battle_packs();
+		game::initialize_lottery();
 
 		try
 		{

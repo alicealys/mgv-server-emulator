@@ -85,9 +85,9 @@ namespace database::players
 			std::uint8_t flag;
 			std::uint8_t inventory_type;
 			std::uint8_t cbox_index;
-			std::uint8_t inventory_index;
-			std::uint8_t obtain_order;
-			std::uint8_t damaged_in_count;
+			std::uint32_t inventory_index;
+			std::uint32_t obtain_order;
+			std::uint32_t damaged_in_count;
 			std::uint32_t count;
 		};
 
@@ -369,9 +369,9 @@ namespace database::players
 			std::uint8_t flag;
 			std::uint8_t inventory_type;
 			std::uint8_t cbox_index;
-			std::uint8_t inventory_index;
-			std::uint8_t obtain_order;
-			std::uint8_t damaged_in_count;
+			std::uint32_t inventory_index;
+			std::uint32_t obtain_order;
+			std::uint32_t damaged_in_count;
 			std::uint32_t count;
 		};
 
@@ -411,8 +411,8 @@ namespace database::players
 			std::uint8_t flag;
 			std::uint8_t inventory_type;
 			std::uint8_t cbox_index;
-			std::uint8_t inventory_index;
-			std::uint8_t obtain_order;
+			std::uint32_t inventory_index;
+			std::uint32_t obtain_order;
 			std::uint32_t count;
 		};
 

@@ -6,6 +6,9 @@ namespace emulator::ssd
 {
 	cmd_server_parameter_load::cmd_server_parameter_load()
 	{
+		// 3288016206 => digger boost mode (0, 1, 2)
+		// 1146547764 => max digger boost count
+
 		this->list_ = resource(RESOURCE_SERVER_PARAMETER_LIST);
 	}
 

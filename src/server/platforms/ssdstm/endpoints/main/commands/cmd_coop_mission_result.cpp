@@ -33,8 +33,8 @@ namespace emulator::ssd
 		auto& tips_open_info_j = data["tips_open_info"];
 		auto& avatar_condition_j = data["avatar_condition"];
 		auto& gimmick_timer_info_j = data["gimmick_timer_info"];
-		[[ maybe_unused ]] auto& play_record_save_coop_checkpoint_j = data["play_record_save_coop"];
-		[[ maybe_unused ]] auto& play_record_additional_130_coop_checkpoint_j = data["play_record_additional_130_coop"];
+		auto& play_record_save_coop_checkpoint_j = data["play_record_save_coop"];
+		auto& play_record_additional_130_coop_checkpoint_j = data["play_record_additional_130_coop"];
 
 		if (gimmick_timer_info_j.is_object())
 		{
@@ -73,10 +73,8 @@ namespace emulator::ssd
 		database::challenge_tasks::send_progress_list(user->current_player->get_player_id(), data["order_progress_list"]);
 
 		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
-
 		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
 		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
-
 		const auto has_boost = bp_boost.valid || kub_boost.valid;
 
 		auto kub_boost_scalar = 1.f;
@@ -85,8 +83,14 @@ namespace emulator::ssd
 			kub_boost_scalar = (static_cast<float>(kub_boost.get_multiplier()) / 2.f);
 		}
 
+		const auto rank_count = static_cast<std::uint32_t>(iter->second->rank_threshold.size());
+		const auto rank = database::coop_missions::calc_rank(*iter->second, param.score);
+		const auto converted_rank = database::coop_missions::convert_rank(*iter->second, rank);
+
+		auto& limit_result_j = result["limit_result"];
 		auto& personal_reward_j = result["personal_reward"];
 		auto& mission_rewards_j = result["reward"];
+		auto& reward_event_point_j = result["reward_event_point"];
 
 		personal_reward_j["battle_pack_list"] = json::array();
 		personal_reward_j["expire_date"] = 0;
@@ -100,68 +104,12 @@ namespace emulator::ssd
 		personal_reward_j["text_id"] = 0;
 		personal_reward_j["energy"] = 0;
 
-		const auto rank_count = static_cast<std::uint32_t>(iter->second->rank_threshold.size());
-
-		std::uint8_t rank = 0u;
-		for (; rank <= rank_count; rank++)
-		{
-			if (rank < rank_count && param.score >= iter->second->rank_threshold[rank])
-			{
-				break;
-			}
-		}
-
-		result["limit_result"]["mission_code"] = param.mission_id;
-
-		auto& limit_result = result["limit_result"]["limit_result"];
-		limit_result = json::array();
-
-		for (auto i = 0u; i < rank_count; i++)
-		{
-			limit_result[i]["count"] = 1;
-			limit_result[i]["max"] = 1;
-			limit_result[i]["index"] = i + 1;
-			limit_result[i]["rank"] = 0;
-
-			if (i < rank)
-			{
-				continue;
-			}
-
-			if (rank_count == 6 && rank == 0)
-			{
-				limit_result[i]["rank"] = 10;
-			}
-			else if (rank_count == 6)
-			{
-				limit_result[i]["rank"] = std::min(std::uint8_t(5u), rank) - 1;
-			}
-			else if (rank_count <= 5)
-			{
-				limit_result[i]["rank"] = i;
-			}
-		}
-
-		result["reward"] = json::array();
-
-		if (rank_count <= 5)
-		{
-			result["rank"] = std::min(std::uint8_t(5u), rank);
-		}
-		else
-		{
-			if (rank == 0)
-			{
-				result["rank"] = 10; // S+ rank
-			}
-			else
-			{
-				result["rank"] = std::min(std::uint8_t(5u), rank) - 1;
-			}
-		}
-
+		limit_result_j["mission_code"] = param.mission_id;
+		limit_result_j["limit_result"] = json::array();
+		result["rank"] = converted_rank;
 		result["boost_flag"] = has_boost & 1;
-		result["reward_event_point"] = 0;
+		mission_rewards_j = json::array();
+		reward_event_point_j = 0;
 
 		const auto& reward_settings = database::coop_missions::get_reward_settings();
 		if (param.clear_type != 0 && param.personal_score < reward_settings.min_personal_score)
@@ -177,24 +125,16 @@ namespace emulator::ssd
 		record.rescue = param.rescue;
 		record.clear_rank = rank;
 
-		auto record_type = param.event_flag & 1 
+		const auto record_type = param.event_flag & 1 
 			? database::coop_missions::mission_type_event
 			: database::coop_missions::mission_type_embedded;
 
 		database::coop_missions::add_result(user->current_player->get_player_id(), record_type, record);
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 14 * 24h;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-		const auto text_id = 229691447841577;
-
-		personal_reward_j["text_id"] = text_id;
-		personal_reward_j["expire_date"] = expire_date_s;
-
 		std::uint32_t reward_event_point{};
 
 		const auto personal_rewards = database::coop_missions::generate_personal_rewards(iter->second->enemy_level, param.personal_score);
-		const auto rewards = database::coop_missions::generate_rewards(iter->second->enemy_level, rank, reward_event_point);
+		const auto rewards = database::coop_missions::generate_rewards(*iter->second, rank, reward_event_point);
 
 		database::events::cached_event.access([&](const std::optional<database::events::running_event>& event)
 		{
@@ -204,18 +144,42 @@ namespace emulator::ssd
 			}
 		});
 
+		if (reward_event_point > 0)
+		{
+			if (bp_boost.valid)
+			{
+				reward_event_point *= bp_boost.get_multiplier();
+			}
+
+			user->add_event_points(reward_event_point);
+			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
+			reward_event_point_j = reward_event_point;
+		}
+
+		if (personal_rewards.empty() || rewards.empty())
+		{
+			return result;
+		}
+
+		const auto now = std::chrono::system_clock::now();
+		const auto expire_date = now + 14 * 24h;
+		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto text_id = 229691447841577;
+
+		personal_reward_j["text_id"] = text_id;
+		personal_reward_j["expire_date"] = expire_date_s;
+
 		database::players::stackable_item_list_t stackable_list{};
+		database::players::nonstackable_item_list_t nonstackable_list{};
 		database::players::inventory_resource_list_t resource_list{};
 		database::players::player_inventory_t player_inventory{};
 		database::players::battle_pack_list_t battle_pack_list{};
 
-		if (!personal_rewards.empty() || !rewards.empty())
-		{
-			user->current_player->get_stackable_item_list(stackable_list);
-			user->current_player->get_inventory_resource_list(resource_list);
-			user->current_player->get_inventory(player_inventory);
-			user->current_player->get_battle_pack_list(battle_pack_list);
-		}
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_nonstackable_item_list(nonstackable_list);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_inventory(player_inventory);
+		user->current_player->get_battle_pack_list(battle_pack_list);
 
 		for (auto i = rank; i < rank_count; i++)
 		{
@@ -236,6 +200,7 @@ namespace emulator::ssd
 		database::users::give_item_params_t give_params{};
 		give_params.resource_list = &resource_list;
 		give_params.stackable_list = &stackable_list;
+		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
 		give_params.battle_pack_list = &battle_pack_list;
 		give_params.text_id = text_id;
@@ -285,18 +250,6 @@ namespace emulator::ssd
 			}
 		}
 
-		if (reward_event_point > 0)
-		{
-			if (bp_boost.valid)
-			{
-				reward_event_point *= bp_boost.get_multiplier();
-			}
-
-			user->add_event_points(reward_event_point);
-			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
-			result["reward_event_point"] = reward_event_point;
-		}
-
 		database::present_box::add_items(user->get_user_id(),
 			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
 
@@ -307,13 +260,11 @@ namespace emulator::ssd
 			rank_entry["present_box_num"] = present_count;
 		}
 
-		if (!personal_rewards.empty() || !rewards.empty())
-		{
-			user->current_player->set_inventory_resource_list(resource_list);
-			user->current_player->set_stackable_item_list(stackable_list);
-			user->current_player->set_inventory(player_inventory);
-			user->current_player->set_battle_pack_list(battle_pack_list);
-		}
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_nonstackable_item_list(nonstackable_list);
+		user->current_player->set_inventory(player_inventory);
+		user->current_player->set_battle_pack_list(battle_pack_list);
 
 		return result;
 	}

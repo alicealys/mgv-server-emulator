@@ -4,7 +4,7 @@
 
 #include "database/models/present_box.hpp"
 
-#include "game/battle_packs.hpp"
+#include "game/lottery.hpp"
 
 namespace emulator::ssd
 {

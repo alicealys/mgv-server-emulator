@@ -2,6 +2,7 @@
 
 #include "game.hpp"
 #include "parameters.hpp"
+#include "lottery.hpp"
 
 #include "utils/resources.hpp"
 #include "utils/json_utils.hpp"
@@ -305,7 +306,8 @@ struct glz::meta<game::coop_mission_info_t>
 		"waveCountMax", &T::max_wave_count,
 		"enemyLevel", &T::enemy_level,
 		"missionId", &T::mission_id,
-		"rankThreashold", &T::rank_threshold
+		"rankThreashold", &T::rank_threshold,
+		"uiRewardInfo", &T::ui_reward_info
 	);
 };
 
@@ -571,7 +573,6 @@ namespace game
 	{
 		return sizeof(static_key);
 	}
-
 
 	bool item_t::parse(json::value& data)
 	{
