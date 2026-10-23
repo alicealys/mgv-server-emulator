@@ -29,13 +29,32 @@ namespace emulator::ssd
 		database::players::nonstackable_item_list_t nonstackable_list;
 		const auto loadout_list = std::make_unique<database::players::loadout_list_t>();
 		const auto player_inventory = std::make_unique<database::players::player_inventory_t>();
+
 		player->get_loadout_list(*loadout_list);
 		player->get_nonstackable_item_list(nonstackable_list);
 		player->get_inventory(*player_inventory);
 
 		auto& equipment_info = result["equipment_info"];
-		loadout_list->list[0].to_json(equipment_info["loadout"], 0);
-		nonstackable_list.to_json(equipment_info["nonstackable_list"]);
+		auto& current_loadout = loadout_list->list[0];
+
+		current_loadout.to_json(equipment_info["loadout"], 0);
+
+		auto& nonstackable_list_j = equipment_info["nonstackable_list"];
+		nonstackable_list_j = json::array();
+
+		{
+			auto idx = 0u;
+			for (auto o = 0ull; o < nonstackable_list.size(); o++)
+			{
+				auto& item = nonstackable_list[o];
+				if (!current_loadout.has_item_index(item.inventory_index))
+				{
+					continue;
+				}
+
+				item.to_json(nonstackable_list_j[idx++]);
+			}
+		}
 
 		for (auto i = 0ull; i < ARRAYSIZE(player_inventory->energy_invested); i++)
 		{

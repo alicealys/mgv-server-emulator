@@ -452,6 +452,28 @@ namespace database::players
 		}
 	}
 
+	bool loadout_t::has_item_index(const std::uint16_t inventory_index) const
+	{
+		if (inventory_index == this->gear_info.arm_inventory_index ||
+			inventory_index == this->gear_info.body_inventory_index ||
+			inventory_index == this->gear_info.leg_inventory_index ||
+			inventory_index == this->gear_info.head_inventory_index)
+		{
+			return true;
+		}
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->main_weapon_list); i++)
+		{
+			if (inventory_index == this->main_weapon_list[i].inventory_index ||
+				inventory_index == this->sub_weapon_list[i].inventory_index)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void nonstackable_item_t::initialize(const std::shared_ptr<game::production_t>& production, const std::shared_ptr<game::potential_t>& potential)
 	{
 		this->production_id = production->id;

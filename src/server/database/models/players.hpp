@@ -166,6 +166,8 @@ namespace database::players
 		void initialize(const std::uint32_t index = 0u);
 		bool parse(json::value& data, std::uint32_t& index);
 		void to_json(json::value& data, const std::uint32_t index = 0u) const;
+
+		bool has_item_index(const std::uint16_t inventory_index) const;
 	};
 
 	struct mission_info_t

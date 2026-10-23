@@ -47,7 +47,7 @@ namespace emulator::ssd
 				for (auto o = 0ull; o < nonstackable_list->size(); o++)
 				{
 					auto& item = nonstackable_list->operator[](o);
-					if (item.production_id == 0 || item.life == 0 || item.life_max == 0)
+					if (!current_loadout.has_item_index(item.inventory_index))
 					{
 						continue;
 					}
