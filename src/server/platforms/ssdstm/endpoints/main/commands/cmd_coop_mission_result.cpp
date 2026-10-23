@@ -83,7 +83,7 @@ namespace emulator::ssd
 			kub_boost_scalar = (static_cast<float>(kub_boost.get_multiplier()) / 2.f);
 		}
 
-		const auto rank_count = static_cast<std::uint32_t>(iter->second->rank_threshold.size());
+		const auto rank_count = static_cast<std::uint8_t>(iter->second->rank_threshold.size());
 		const auto rank = database::coop_missions::calc_rank(*iter->second, param.score);
 		const auto converted_rank = database::coop_missions::convert_rank(*iter->second, rank);
 

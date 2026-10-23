@@ -111,7 +111,7 @@ namespace database::coop_missions
 			return list;
 		}
 
-		for (auto i = rank; i < mission.ui_reward_info.iris_info.size(); i++)
+		for (auto i = rank; i < static_cast<std::uint8_t>(mission.ui_reward_info.iris_info.size()); i++)
 		{
 			for (auto& line : mission.ui_reward_info.iris_info[i].line_info)
 			{
