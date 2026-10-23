@@ -42,7 +42,7 @@ namespace emulator::ssd
 
 		return database::shop_purchases::purchase_product(user.value(), product.value(), [&](json::value& result)
 		{
-			return cmd_deploy_complete::complete_mission(user.value(), team.value(), true, result);
+			return cmd_deploy_complete::complete_mission(user.value(), team.value(), result);
 		});
 	}
 

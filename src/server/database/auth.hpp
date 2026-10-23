@@ -27,7 +27,8 @@ namespace auth
 		auth_offline = 0,
 		auth_konami = 1,
 		auth_custom = 2,
-		auth_hybrid = 3
+		auth_hybrid = 3,
+		auth_nosteam = 4,
 	};
 
 	void initialize_lists();

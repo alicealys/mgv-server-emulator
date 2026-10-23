@@ -62,8 +62,13 @@ Example config
 
 mgv-server-emulator allows for 4 different authentication modes to verify players that log in:
 
-- **offline**: no verification is done, steam id is extracted from the steam ticket.
-- **konami**: steam ticket is relayed to KONAMI servers, and verified.
+- **offline** (default): steam ticket is parsed and using the App Ticket section:
+    - validates its signature against Valve's public RSA key
+    - checks that the App Id matches the game's (543900)
+    - checks steam id format
+    - checks that the ticket isn't expired
+- **konami**: steam ticket is relayed to KONAMI servers and verified.
+- **nosteam**: no verification is done, steam id is extracted from the GC section of the steam ticket.
 - **custom**: requires a custom steam ticket, and for the user to have linked their steam account to the server.  
     the structure for the ticket is the following:
     ```c

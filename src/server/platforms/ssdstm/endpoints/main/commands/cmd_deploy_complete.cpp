@@ -9,7 +9,7 @@
 
 namespace emulator::ssd
 {
-	bool cmd_deploy_complete::complete_mission(const database::users::user& user, const database::deployments::deployment_team& team, const bool is_forced, json::value& result)
+	bool cmd_deploy_complete::complete_mission(const database::users::user& user, const database::deployments::deployment_team& team, json::value& result)
 	{
 		const auto& mission_map = database::deployments::get_deployments_mission_map();
 		const auto iter = mission_map.find(team.get_mission_id());
@@ -238,7 +238,7 @@ namespace emulator::ssd
 			return error(ERR_NOT_COMPLETE);
 		}
 
-		if (!this->complete_mission(user.value(), team.value(), false, result))
+		if (!this->complete_mission(user.value(), team.value(), result))
 		{
 			return error(ERR_DATABASE);
 		}

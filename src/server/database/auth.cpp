@@ -33,6 +33,7 @@ namespace auth
 			{"konami", auth_konami},
 			{"custom", auth_custom},
 			{"hybrid", auth_hybrid},
+			{"nosteam", auth_nosteam},
 		};
 
 		std::optional<std::unordered_set<std::uint64_t>> parse_list(const std::string& file)
@@ -176,6 +177,26 @@ namespace auth
 		return {account_id};
 	}
 
+	std::optional<std::uint64_t> verify_ticket_nosteam(const std::string& auth_ticket, const size_t ticket_size)
+	{
+		const auto data = utils::cryptography::base64::decode(auth_ticket);
+
+		if (data.size() < 20)
+		{
+			return {};
+		}
+
+		const auto data_ptr = reinterpret_cast<size_t>(data.data());
+		const auto steam_id = *reinterpret_cast<std::uint64_t*>(data_ptr + 12);
+
+		if (!check_steam_id(steam_id))
+		{
+			return {};
+		}
+
+		return {steam_id};
+	}
+
 	std::optional<std::uint64_t> verify_ticket_offline(const std::string& auth_ticket, const size_t ticket_size)
 	{
 		const auto data = utils::cryptography::base64::decode(auth_ticket);
@@ -240,6 +261,8 @@ namespace auth
 			return verify_ticket_konami(auth_ticket, ticket_size);
 		case auth_custom:
 			return verify_ticket_custom(auth_ticket, ticket_size);
+		case auth_nosteam:
+			return verify_ticket_nosteam(auth_ticket, ticket_size);
 		case auth_hybrid:
 		{
 			if (ticket_size == sizeof(auth_ticket_custom_t))
