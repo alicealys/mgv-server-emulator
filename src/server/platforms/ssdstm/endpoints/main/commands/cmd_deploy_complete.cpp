@@ -233,7 +233,6 @@ namespace emulator::ssd
 			return error(ERR_NOT_DEPLOY);
 		}
 
-		const auto now = std::chrono::system_clock::now();
 		if (team->is_progress() && !team->is_complete())
 		{
 			return error(ERR_NOT_COMPLETE);
