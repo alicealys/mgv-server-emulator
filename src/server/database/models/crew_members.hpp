@@ -79,6 +79,15 @@ namespace database::crew_members
 		void apply_update(const member_params_t& diff);
 	};
 
+	struct sickness_type_t
+	{
+		std::uint32_t type_index;
+		std::shared_ptr<game::crew_sickness_t> sickness;
+	};
+
+	extern std::vector<sickness_type_t> sickness_list;
+	extern std::vector<sickness_type_t> injury_list;
+
 	class crew_member
 	{
 	public:

@@ -126,23 +126,55 @@ namespace emulator::ssd
 			const auto life_percent = static_cast<float>(utils::random::get_integer(40u, 80u)) / 100.f;
 			const auto new_life = static_cast<std::uint32_t>(static_cast<float>(crew_list[i].get_life()) * life_percent);
 
-			const auto injury_id = utils::random::get_integer(2u, 8u);
-			const auto injury_time = utils::random::get_integer(1000u, 5000u);
+			auto recovery_time = utils::random::get_integer(1000u, 5000u);
+			auto bad_status_type = 0u;
 
-			if (crew_list[i].get_injury_id_1() == 0)
+			if (utils::random::cointoss())
 			{
-				crew_list[i].update_injury(new_life, injury_id, injury_time, 
-					crew_list[i].get_injury_id_2(), crew_list[i].get_injury_time_2());
+				const auto injury_index = utils::random::index(database::crew_members::injury_list);
+				const auto& injury = database::crew_members::injury_list[injury_index];
+				bad_status_type = injury.type_index;
+
+				if (crew_list[i].get_injury_id_1() == 0)
+				{
+					crew_list[i].update_injury(new_life,
+						bad_status_type, crew_list[i].get_injury_id_2(),
+						recovery_time, crew_list[i].get_injury_time_2()
+					);
+				}
+				else
+				{
+					crew_list[i].update_injury(new_life,
+						crew_list[i].get_injury_id_1(), bad_status_type,
+						crew_list[i].get_injury_time_1(), recovery_time
+					);
+				}
 			}
 			else
 			{
-				crew_list[i].update_injury(new_life, crew_list[i].get_injury_id_1(), 
-					crew_list[i].get_injury_time_1(), injury_id, injury_time);
+				const auto sickness_index = utils::random::index(database::crew_members::sickness_list);
+				const auto& sickness = database::crew_members::sickness_list[sickness_index];
+				bad_status_type = sickness.type_index;
+
+				if (crew_list[i].get_sickness_id_1() == 0)
+				{
+					crew_list[i].update_sickness(new_life,
+						bad_status_type, crew_list[i].get_sickness_id_2(),
+						recovery_time, crew_list[i].get_sickness_time_2()
+					);
+				}
+				else
+				{
+					crew_list[i].update_sickness(new_life,
+						crew_list[i].get_sickness_id_1(), bad_status_type,
+						crew_list[i].get_sickness_time_1(), recovery_time
+					);
+				}
 			}
-		
+
 			auto& status = bad_status_list[bad_status_list.size()];
-			status["bad_status_type"] = injury_id;
-			status["recovery_time"] = injury_time;
+			status["bad_status_type"] = bad_status_type;
+			status["recovery_time"] = recovery_time;
 			status["unique_id"] = crew_list[i].get_member_id();
 		}
 

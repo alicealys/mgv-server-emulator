@@ -11,6 +11,36 @@
 
 namespace database::crew_members
 {
+	std::vector<sickness_type_t> sickness_list;
+	std::vector<sickness_type_t> injury_list;
+
+	namespace
+	{
+		void register_sickness(const std::uint32_t id, bool is_injury = false)
+		{
+			auto& sick_table = game::parameters_table.ssd_crew_generator_table->sick_table;
+			const auto iter = std::ranges::find_if(sick_table.begin(), sick_table.end(), [&](const std::shared_ptr<game::crew_sickness_t>& sickness)
+			{
+				return sickness->id == id;
+			});
+
+			const auto type_index = std::distance(std::begin(sick_table), iter) + 1;
+			if (is_injury)
+			{
+				injury_list.emplace_back(type_index, *iter);
+			}
+			else
+			{
+				sickness_list.emplace_back(type_index, *iter);
+			}
+		}
+
+		void register_injury(const std::uint32_t id)
+		{
+			register_sickness(id, true);
+		}
+	}
+
 	GET_FIELD_C(crew_member, std::uint64_t, member_id);
 	GET_FIELD_C(crew_member, std::uint64_t, player_id);
 	GET_FIELD_C(crew_member, std::uint32_t, member_type);
@@ -759,6 +789,17 @@ namespace database::crew_members
 		void create(database_t& database) override
 		{
 			database.run_query("mgssd.crew_members.create");
+
+			register_sickness(game::BASE_Fatigue);
+			register_sickness(game::BASE_Poison);
+			register_sickness(game::BASE_DeadlyPoison);
+			register_sickness(game::BASE_FoodPoisoning);
+			register_sickness(game::BASE_Dysentery);
+
+			register_injury(game::BASE_Bruise);
+			register_injury(game::BASE_Laceration);
+			register_injury(game::BASE_Bleeding);
+			register_injury(game::BASE_Sprain);
 		}
 	};
 }

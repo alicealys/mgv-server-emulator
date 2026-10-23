@@ -30,7 +30,6 @@ namespace emulator::ssd
 			}
 		}
 
-		const auto now = std::chrono::system_clock::now();
 		const auto teams = database::deployments::get_all_teams(user->current_player->get_player_id());
 		for (auto i = 0ull; i < teams.size(); i++)
 		{

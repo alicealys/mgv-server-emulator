@@ -24,4 +24,5 @@ namespace utils::random
 	}
 
 	bool chance(const std::uint32_t probability);
+	bool cointoss();
 }

@@ -27,4 +27,9 @@ namespace utils::random
 		std::bernoulli_distribution distribution(static_cast<float>(probability) / 100.f);
 		return distribution(get_engine());
 	}
+
+	bool cointoss()
+	{
+		return chance(50u);
+	}
 }

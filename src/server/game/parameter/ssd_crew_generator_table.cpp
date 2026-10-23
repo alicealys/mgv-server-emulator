@@ -73,6 +73,18 @@ namespace game::parameters
 			this->unique_table[crew_member_type->id] = crew_member_type;
 		}
 
+		for (auto i = 0ull; i < data["sick_table"].size(); i++)
+		{
+			auto sickness = std::make_shared<crew_sickness_t>();
+			if (!sickness->parse(data["sick_table"][i]))
+			{
+				console::warning("invalid sickness at index %lli\n", i);
+				continue;
+			}
+
+			this->sick_table.emplace_back(sickness);
+		}
+
 		return true;
 	}
 

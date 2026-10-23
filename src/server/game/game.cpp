@@ -671,6 +671,11 @@ namespace game
 		return json::read(*this, data);
 	}
 
+	bool crew_sickness_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
 	bool crew_set_table_t::parse(json::value& data, const std::string& key)
 	{
 		this->id = data["id"].as<std::uint32_t>();

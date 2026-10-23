@@ -5998,6 +5998,16 @@ namespace game
 		GROUP_FARM = 0x9F49D381,
 		GROUP_BASE_DEFENSE = 0x67C56623,
 		GROUP_COMBAT_DEPLOY = 0xB63577D2,
+
+		BASE_Fatigue = 0xB1AB0461,
+		BASE_Bruise = 0x93FE7441,
+		BASE_Poison = 0x8AEB4CE1,
+		BASE_DeadlyPoison = 0xF8AE469A,
+		BASE_FoodPoisoning = 0x33B5C9F8,
+		BASE_Dysentery = 0x66D944D8,
+		BASE_Laceration = 0x9A971323,
+		BASE_Bleeding = 0x439C17E1,
+		BASE_Sprain = 0x3CF2CEA3,
 	};
 
 	enum item_category_t
@@ -6402,6 +6412,17 @@ namespace game
 
 		std::uint32_t id;
 		std::uint32_t index;
+	};
+
+	struct crew_sickness_t
+	{
+		bool parse(json::value& data);
+
+		std::string id_str;
+		std::uint32_t id;
+		std::uint32_t recovery;
+		std::uint32_t probability1;
+		std::uint32_t probability2;
 	};
 
 	struct crew_set_table_t

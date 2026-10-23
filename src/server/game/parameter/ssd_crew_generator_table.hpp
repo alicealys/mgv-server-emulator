@@ -15,6 +15,7 @@ namespace game::parameters
 		std::uint32_t roll_job(const std::uint32_t job_set_table_id);
 
 		std::vector<std::shared_ptr<crew_skill_t>> skill_table;
+		std::vector<std::shared_ptr<crew_sickness_t>> sick_table;
 		std::unordered_map<std::uint32_t, std::shared_ptr<crew_set_table_t>> job_set_table;
 		std::unordered_map<std::uint32_t, std::shared_ptr<crew_set_table_t>> skill_set_table;
 		std::unordered_map<std::uint32_t, std::shared_ptr<crew_type_t>> type_table;
