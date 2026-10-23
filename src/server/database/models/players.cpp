@@ -460,18 +460,6 @@ namespace database::players
 		auto perk_count = 0u;
 		if (potential == nullptr)
 		{
-			for (auto i = 0ull; i < production->perk.size(); i++)
-			{
-				if (production->perk[i] == 0)
-				{
-					continue;
-				}
-
-				auto idx = perk_count++;
-				this->perk_list[idx].perk_id = production->perk[i];
-				this->perk_list[idx].perk_level = 0;
-			}
-
 			this->life = static_cast<std::uint16_t>(production->life);
 			this->life_max = static_cast<std::uint16_t>(production->life);
 			this->spec = 1000;
@@ -613,28 +601,16 @@ namespace database::players
 		data["perk_list"] = json::array();
 		data["option_list"] = json::array();
 
-		auto opt_idx = 0u;
 		for (auto i = 0ull; i < ARRAYSIZE(this->option_list); i++)
 		{
-			if (this->option_list[i].option_id == 0)
-			{
-				continue;
-			}
-
-			auto& entry = data["option_list"][opt_idx++];
+			auto& entry = data["option_list"][i];
 			entry["obtained"] = this->option_list[i].obtained;
 			entry["option_id"] = this->option_list[i].option_id;
 		}
 
-		auto perk_idx = 0u;
 		for (auto i = 0ull; i < ARRAYSIZE(this->perk_list); i++)
 		{
-			if (this->perk_list[i].perk_id == 0)
-			{
-				continue;
-			}
-
-			auto& entry = data["perk_list"][perk_idx++];
+			auto& entry = data["perk_list"][i];
 			entry["perk_id"] = this->perk_list[i].perk_id;
 			entry["perk_level"] = this->perk_list[i].perk_level;
 		}
