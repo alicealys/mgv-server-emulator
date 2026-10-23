@@ -6663,6 +6663,406 @@
             "target": 3839649575
         },
         {
+            "category": 3,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1144,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 1,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 3554321407
+        },
+        {
+            "category": 0,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 2,
+                    "target": 2166129352
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1145,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 3,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 890825621
+        },
+        {
+            "category": 1,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1146,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 5,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 3178541737
+        },
+        {
+            "category": 23,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1147,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 2,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 2052255935,
+                    "num": 1,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 3839649575
+        },
+        {
+            "category": 0,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1152,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 5,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 890825621
+        },
+        {
+            "category": 5,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1153,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 6000,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 4006553472,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 2025961325
+        },
+        {
+            "category": 1,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1154,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 12,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 597140680,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                },
+                {
+                    "category": 10,
+                    "code": 3234815661,
+                    "num": 3,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 2654678634
+        },
+        {
+            "category": 23,
+            "condition_list": [],
+            "extra_list": [
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                },
+                {
+                    "category": 0,
+                    "target": 0
+                }
+            ],
+            "id": 1155,
+            "info_id": 0,
+            "name_id": 0,
+            "require": 2,
+            "reward_list": [
+                {
+                    "category": 10,
+                    "code": 2052255935,
+                    "num": 1,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0
+                }
+            ],
+            "target": 3839649575
+        },
+        {
             "category": 0,
             "condition_list": [],
             "extra_list": [
