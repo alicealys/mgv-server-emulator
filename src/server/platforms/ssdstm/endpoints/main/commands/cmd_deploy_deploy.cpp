@@ -2,6 +2,8 @@
 
 #include "cmd_deploy_deploy.hpp"
 
+#include "utils/random.hpp"
+
 #include "database/models/deployments.hpp"
 
 namespace emulator::ssd
@@ -31,6 +33,24 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
+		if (param.reward_valid.size() != iter->second.reward_list.size())
+		{
+			return error(ERR_INVALIDARG);
+		}
+
+		for (auto i = 0ull; i < param.reward_valid.size(); i++)
+		{
+			const auto is_valid = param.reward_valid[i] != 0;
+			const auto bit_index = i >> 3;
+
+			if (i >= sizeof(param.reward_valid) * 8)
+			{
+				break;
+			}
+
+			team_params.reward_valid[bit_index] |= (is_valid << (i & 7));
+		}
+
 		const auto team = database::deployments::find_team_by_index(user->current_player->get_player_id(), param.team_info.index);
 		if (!team.has_value())
 		{
@@ -50,12 +70,16 @@ namespace emulator::ssd
 		deploy_params.name = utils::cryptography::base64::decode(param.team_info.name);
 		deploy_params.combat = param.team_info.combat;
 		deploy_params.survive = param.team_info.survive;
-		deploy_params.status = database::deployments::team_status_deploy_progress;
 		deploy_params.team_params = team_params;
 		deploy_params.mission_id = param.mission_id;
 		deploy_params.mission_info = param.mission_info;
 		deploy_params.mission_type = param.mission_type;
 		deploy_params.complete_date = std::chrono::system_clock::now() + param.required_time * 1s;
+
+		const auto is_win = utils::random::chance(param.success_rate);
+		deploy_params.status = is_win
+			? database::deployments::team_status_deploy_progress_success
+			: database::deployments::team_status_deploy_progress_fail;
 
 		if (!team->deploy(deploy_params))
 		{

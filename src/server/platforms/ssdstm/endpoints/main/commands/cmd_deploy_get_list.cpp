@@ -21,7 +21,7 @@ namespace emulator::ssd
 		const auto teams = database::deployments::get_all_teams(user->current_player->get_player_id());
 		for (auto i = 0ull; i < teams.size(); i++)
 		{
-			if (teams[i].get_info_status() == database::deployments::team_status_deploy_progress)
+			if (teams[i].is_progress())
 			{
 				active_missions.insert(teams[i].get_mission_id());
 			}

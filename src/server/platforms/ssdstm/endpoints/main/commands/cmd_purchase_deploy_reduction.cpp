@@ -17,32 +17,27 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto team = database::deployments::find_team_by_index(user->current_player->get_player_id(), team_index);
-		if (!team.has_value())
-		{
-			return error(ERR_NOT_FOUND);
-		}
-
-		if (team->get_info_status() != database::deployments::team_status_deploy_progress)
-		{
-			return error(ERR_NOT_DEPLOY);
-		}
-
-		const auto now = std::chrono::system_clock::now();
-		const auto now_s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
-
-		if (team->get_complete_date() < now_s)
-		{
-			return error(ERR_ALREADY_COMPLETED);
-		}
-
 		auto product = database::shop_purchases::find_product(database::shop_purchases::product_deploy_reduction);
 		if (!product.has_value())
 		{
 			return error(ERR_DATABASE);
 		}
 
+		const auto team = database::deployments::find_team_by_index(user->current_player->get_player_id(), team_index);
+		if (!team.has_value())
+		{
+			return error(ERR_NOT_FOUND);
+		}
+
+		if (!team->is_progress() || team->is_complete())
+		{
+			return error(ERR_NOT_DEPLOY);
+		}
+
+		const auto now = std::chrono::system_clock::now();
+		const auto now_s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
 		const auto diff = team->get_complete_date() - now_s;
+
 		product->price = game::calc_time_reduction_cost(static_cast<std::uint32_t>(diff.count()));
 
 		return database::shop_purchases::purchase_product(user.value(), product.value(), [&](json::value& result)

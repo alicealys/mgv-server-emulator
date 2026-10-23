@@ -22,8 +22,8 @@ namespace database::deployments
 	{
 		team_status_none = 0,
 		team_status_deploy_none = 1,
-		team_status_unk2 = 2,
-		team_status_deploy_progress = 3,
+		team_status_deploy_progress_success = 2,
+		team_status_deploy_progress_fail = 3,
 		team_status_deploy_success = 4,
 		team_status_deploy_fail = 5,
 	};
@@ -95,6 +95,9 @@ namespace database::deployments
         std::uint32_t required_time;
 		std::uint32_t success_rate;
 		std::uint32_t injure_rate;
+		std::uint8_t reward_valid[4];
+
+		bool has_reward(const std::size_t index) const;
 	};
 
 	using team_params_t = database_struct<team_params_internal_t>;
@@ -230,6 +233,10 @@ namespace database::deployments
 		void update_crew_ids(const std::uint64_t crew_id_01, const std::uint64_t crew_id_02, const std::uint64_t crew_id_03, const std::uint64_t crew_id_04) const;
 
 		bool deploy(const deploy_params_t& params) const;
+
+		bool is_progress() const;
+		bool is_success() const;
+		bool is_complete() const;
 
 		void to_json(json::value& data) const;
 

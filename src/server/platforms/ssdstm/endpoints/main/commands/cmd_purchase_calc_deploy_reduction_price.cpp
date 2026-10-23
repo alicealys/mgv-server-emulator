@@ -23,20 +23,15 @@ namespace emulator::ssd
 			return error(ERR_NOT_FOUND);
 		}
 
-		if (team->get_info_status() != database::deployments::team_status_deploy_progress)
+		if (!team->is_progress() || team->is_complete())
 		{
 			return error(ERR_ALREADY_COMPLETED);
 		}
 
 		const auto now = std::chrono::system_clock::now();
 		const auto now_s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
-
-		if (team->get_complete_date() < now_s)
-		{
-			return error(ERR_ALREADY_COMPLETED);
-		}
-
 		const auto diff = team->get_complete_date() - now_s;
+
 		result["price_result"]["price"] = game::calc_time_reduction_cost(static_cast<std::uint32_t>(diff.count()));
 
 		return result;

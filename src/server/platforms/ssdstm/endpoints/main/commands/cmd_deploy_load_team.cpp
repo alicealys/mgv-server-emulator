@@ -35,21 +35,6 @@ namespace emulator::ssd
 		for (auto i = 0ull; i < teams.size(); i++)
 		{
 			teams[i].to_json(result["team_list"][i]);
-
-			const auto& team = teams[i];
-			if (team.get_info_status() == database::deployments::team_status_deploy_progress &&
-				now.time_since_epoch() >= team.get_complete_date())
-			{
-				const auto rand = utils::random::get_integer(0u, 100u);
-				const auto is_win = rand <= team.get_params().success_rate;
-				const auto status = is_win 
-					? database::deployments::team_status_deploy_success 
-					: database::deployments::team_status_deploy_fail;
-				team.update_status(status);
-
-				result["team_list"][i]["team_info"]["status"] = status;
-			}
-
 		}
 
 		return result;

@@ -26,6 +26,7 @@ namespace emulator::ssd
 			std::uint32_t required_combat;
 			std::uint32_t required_survive;
 			std::uint32_t required_time;
+			std::vector<std::uint8_t> reward_valid;
 			team_info_t team_info;
 		};
 

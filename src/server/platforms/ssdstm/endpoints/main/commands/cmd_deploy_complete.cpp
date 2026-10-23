@@ -51,8 +51,8 @@ namespace emulator::ssd
 		reward_info["recipe_list"] = json::array();
 		reward_info["resources_list"] = json::array();
 		reward_info["stackable_list"] = json::array();
-		reward_info["text_id"] = 0;
-		reward_info["energy"] = text_id;
+		reward_info["text_id"] = text_id;
+		reward_info["energy"] = 0;
 
 		auto& present_list_j = reward_info["present_list"];
 
@@ -72,20 +72,7 @@ namespace emulator::ssd
 
 		const auto& params = team.get_params();
 
-		auto is_win = false;
-		if (!is_forced)
-		{
-			if (team.get_info_status() == database::deployments::team_status_deploy_progress)
-			{
-				is_win = utils::random::chance(params.success_rate);
-			}
-			else
-			{
-				is_win = team.get_info_status() == database::deployments::team_status_deploy_success;
-			}
-		}
-
-		if (is_win)
+		if (team.is_success())
 		{
 			database::users::give_item_params_t give_params{};
 			give_params.resource_list = &resource_list;
@@ -96,7 +83,7 @@ namespace emulator::ssd
 			for (auto i = 0ull; i < iter->second.reward_list.size(); i++)
 			{
 				const auto& reward = iter->second.reward_list[i];
-				if (team.get_info_combat() < reward.combat_rate || team.get_info_survive() < reward.survival_rate)
+				if (!params.has_reward(i) || !utils::random::chance(reward.rate))
 				{
 					continue;
 				}
@@ -112,9 +99,9 @@ namespace emulator::ssd
 		const auto is_deploy_crew = [&](const std::uint64_t member_id)
 		{
 			return member_id == team.get_crew_id_01() ||
-				member_id == team.get_crew_id_02() ||
-				member_id == team.get_crew_id_03() ||
-				member_id == team.get_crew_id_04();
+				   member_id == team.get_crew_id_02() ||
+				   member_id == team.get_crew_id_03() ||
+				   member_id == team.get_crew_id_04();
 		};
 
 		auto& bad_status_list = deploy_result["bad_status_list"];
@@ -214,7 +201,8 @@ namespace emulator::ssd
 			return error(ERR_NOT_DEPLOY);
 		}
 
-		if (team->get_info_status() == database::deployments::team_status_deploy_progress)
+		const auto now = std::chrono::system_clock::now();
+		if (team->is_progress() && !team->is_complete())
 		{
 			return error(ERR_NOT_COMPLETE);
 		}

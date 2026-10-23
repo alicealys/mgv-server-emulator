@@ -64,6 +64,19 @@ namespace database::deployments
 		return json::read(*this, data);
 	}
 
+	bool team_params_internal_t::has_reward(const std::size_t index) const
+	{
+		if (index > sizeof(this->reward_valid) * 8)
+		{
+			return false;
+		}
+
+		const auto bit_index = index >> 3;
+		const auto mask = (1 << (index & 7));
+
+		return (this->reward_valid[bit_index] & mask) == mask;
+	}
+
 	void deployment_mission_info_t::to_json(json::value& data) const
 	{
 		data["combat"] = this->combat;
@@ -544,6 +557,24 @@ namespace database::deployments
 		data["team_info"]["crew_id_list"][1] = this->crew_id_02_;
 		data["team_info"]["crew_id_list"][2] = this->crew_id_03_;
 		data["team_info"]["crew_id_list"][3] = this->crew_id_04_;
+	}
+
+	bool deployment_team::is_progress() const
+	{
+		return this->info_status_ == team_status_deploy_progress_success ||
+			this->info_status_ == team_status_deploy_progress_fail;
+	}
+
+	bool deployment_team::is_success() const
+	{
+		return this->info_status_ == team_status_deploy_progress_success ||
+			this->info_status_ == team_status_deploy_success;
+	}
+
+	bool deployment_team::is_complete() const
+	{
+		const auto now = std::chrono::system_clock::now();
+		return this->complete_date_ <= now.time_since_epoch();
 	}
 
 	std::uint64_t create_team(const std::uint64_t player_id)
