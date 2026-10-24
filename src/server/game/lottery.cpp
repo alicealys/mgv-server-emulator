@@ -73,7 +73,7 @@ namespace game
 			{
 				const auto& prod = productions_list[i];
 
-				if (prod != nullptr && prod->rarity == rarity && prod->countable && filter(*prod) && !productions.contains(prod->id))
+				if (prod != nullptr && prod->rarity == rarity && prod->is_stackable() && filter(*prod) && !productions.contains(prod->id))
 				{
 					productions.insert(prod->id);
 					result.emplace_back(prod->id);
