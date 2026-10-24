@@ -115,6 +115,26 @@ namespace database::users
 		std::uint64_t text_id;
 	};
 
+	struct reward_info_t
+	{
+		reward_info_t();
+
+		std::uint8_t kub_boost_flag;
+		std::uint32_t energy;
+		std::size_t present_box_num;
+		std::uint64_t text_id;
+		std::chrono::seconds expire_date;
+
+		std::vector<std::uint32_t> recipe_list; 
+		std::vector<game::item_t> present_list;
+		std::vector<players::battle_pack_t> battle_pack_list;
+		std::vector<players::nonstackable_item_t> nonstackable_list;
+		std::vector<players::inventory_resource_t> resources_list;
+		std::vector<players::stackable_item_t> stackable_list;
+
+		void to_json(json::value& data) const;
+	};
+
 	using user_loadout_header_t = database_struct<user_loadout_header_internal_t>;
 
 	class user
@@ -262,8 +282,8 @@ namespace database::users
 		bool inc_player_capacity() const;
 		bool set_daily_reward() const;
 
-		bool give_item(game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
-		bool give_item(const game::item_t& reward, give_item_params_t& params, json::value& reward_info) const;
+		bool give_item(game::item_t& reward, give_item_params_t& params, reward_info_t* reward_info = nullptr) const;
+		bool give_item(const game::item_t& reward, give_item_params_t& params, reward_info_t* reward_info = nullptr) const;
 		bool has_permanent_item(const game::item_t& item, const user_inventory_t& inventory, bool& is_permanent) const;
 
 		std::optional<players::player> create_additional_player() const;

@@ -6,6 +6,8 @@
 #include "database/models/rankings.hpp"
 #include "database/models/present_box.hpp"
 
+#include "utils/time.hpp"
+
 namespace emulator::ssd
 {
 	json::value cmd_event_reward_receive::execute(json::value& data, const std::optional<database::users::user>& user)
@@ -18,27 +20,12 @@ namespace emulator::ssd
 			return error(ERR_INVALIDARG);
 		}
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 14 * 24h;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto expire_date = utils::time::from_now(14d);
 
-		auto& reward_info = result["reward_info"];
-		reward_info["energy"] = 0;
-		reward_info["kub_boost_flag"] = 0;
-		reward_info["expire_date"] = 0;
-		reward_info["present_box_num"] = 0;
-		reward_info["battle_pack_list"] = json::array();
-		reward_info["nonstackable_list"] = json::array();
-		reward_info["present_list"] = json::array();
-		reward_info["recipe_list"] = json::array();
-		reward_info["resources_list"] = json::array();
-		reward_info["stackable_list"] = json::array();
-		reward_info["text_id"] = 0;
+		database::users::reward_info_t reward_info{};
 
 		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
 		user->get_inventory(*user_inventory);
-
-		auto& present_list = reward_info["present_list"];
 
 		const auto current_event = database::events::get_current_event();
 		if (!current_event.has_value())
@@ -50,11 +37,9 @@ namespace emulator::ssd
 
 		const auto add_reward = [&](const game::item_t& item, const std::uint64_t text_id)
 		{
-			reward_info["text_id"] = text_id;
-			reward_info["expire_date"] = expire_date_s.count();
-
-			presents.emplace_back(item);
-			item.to_json(present_list[present_list.size()]);
+			reward_info.text_id = text_id;
+			reward_info.expire_date = expire_date;
+			reward_info.present_list.emplace_back(item);
 		};
 
 		switch (type)
@@ -67,7 +52,7 @@ namespace emulator::ssd
 			}
 
 			const auto acquired_rewards = database::events::get_acquired_rewards(current_event->get_event_id(), user->get_user_id());
-			const auto text_id = 1898634391ull;
+			constexpr const auto text_id = game::lang_id_total_battle_points_reward;
 
 			const auto got_reward = [&](const std::uint8_t type, const std::uint64_t reward_id)
 			{
@@ -101,12 +86,12 @@ namespace emulator::ssd
 
 			database::present_box::add_items(user->get_user_id(),
 				database::present_box::present_flag_expire,
-				expire_date_s, presents, text_id);
+				expire_date, reward_info.present_list, text_id);
 		}
 		case 1:
 		{
 			const auto entitlements = database::events::get_entitlements(current_event->get_event_id(), user->get_user_id());
-			const auto text_id = 1306356998ull;
+			constexpr const auto text_id = game::lang_id_ranking_reward;
 
 			for (const auto& entitlement : entitlements)
 			{
@@ -146,13 +131,14 @@ namespace emulator::ssd
 
 			database::present_box::add_items(user->get_user_id(),
 				database::present_box::present_flag_expire,
-				expire_date_s, presents, text_id);
+				expire_date, reward_info.present_list, text_id);
 
 			database::events::clear_entitlements(current_event->get_event_id(), user->get_user_id());
 		}
 		}
 
-		reward_info["present_box_num"] = database::present_box::get_present_count(user->get_user_id());
+		reward_info.present_box_num = database::present_box::get_present_count(user->get_user_id());
+		reward_info.to_json(result["reward_info"]);
 
 		return result;
 	}

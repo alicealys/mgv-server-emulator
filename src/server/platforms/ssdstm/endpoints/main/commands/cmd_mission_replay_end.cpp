@@ -25,16 +25,10 @@ namespace emulator::ssd
 		result["info"]["is_clear"] = param.is_clear;
 		result["info"]["is_reward"] = 1;
 
-		result["reward"]["energy"] = 0;
-		result["reward"]["kub_boost_flag"] = 0;
-		result["reward"]["present_box_num"] = database::present_box::get_present_count(user->get_user_id());
-		result["reward"]["battle_pack_list"] = json::array();
-		result["reward"]["nonstackable_list"] = json::array();
-		result["reward"]["present_list"] = json::array();
-		result["reward"]["recipe_list"] = json::array();
-		result["reward"]["resources_list"] = json::array();
-		result["reward"]["stackable_list"] = json::array();
-		result["reward"]["text_id"] = 229691447841577;
+		database::users::reward_info_t reward_info{};
+		reward_info.present_box_num = database::present_box::get_present_count(user->get_user_id());
+		reward_info.text_id = game::lang_id_mission_completion_reward;
+		reward_info.to_json(result["reward"]);
 
 		return result;
 	}

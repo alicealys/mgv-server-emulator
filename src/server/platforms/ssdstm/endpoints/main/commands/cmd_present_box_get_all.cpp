@@ -49,8 +49,7 @@ namespace emulator::ssd
 			give_params.text_id = item.get_text_id();
 
 			const auto& reward = item.get_reward();
-			json::value empty;
-			if (!user->give_item(reward, give_params, empty))
+			if (!user->give_item(reward, give_params))
 			{
 				continue;
 			}

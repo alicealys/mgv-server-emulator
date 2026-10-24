@@ -28,26 +28,9 @@ namespace emulator::ssd
 			return error(ERR_DATABASE);
 		}
 
-		const auto text_id = 82513511927685;
-		const auto now = std::chrono::system_clock::now();
-		const auto now_s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
-		const auto expire_date = now_s + 14 * 24h;
-
-		auto& reward_info = result["reward_info"];
-		reward_info["energy"] = 0;
-		reward_info["expire_date"] = 0;
-		reward_info["kub_boost_flag"] = 0;
-		reward_info["present_box_num"] = 0;
-		reward_info["battle_pack_list"] = json::array();
-		reward_info["nonstackable_list"] = json::array();
-		reward_info["recipe_list"] = json::array();
-		reward_info["resources_list"] = json::array();
-		reward_info["stackable_list"] = json::array();
-		reward_info["text_id"] = text_id;
-		reward_info["expire_date"] = expire_date.count();
-
-		auto& present_list = reward_info["present_list"];
-		present_list = json::array();
+		database::users::reward_info_t reward_info{};
+		reward_info.text_id = game::lang_id_order_completion_reward;
+		reward_info.expire_date = utils::time::from_now(14d);
 
 		database::players::battle_pack_list_t battle_pack_list{};
 
@@ -55,19 +38,22 @@ namespace emulator::ssd
 
 		database::users::give_item_params_t give_params{};
 		give_params.battle_pack_list = &battle_pack_list;
-		give_params.text_id = text_id;
+		give_params.text_id = reward_info.text_id;
 
 		const auto rewards = database::challenge_tasks::get_task_rewards(id);
 		for (auto i = 0ull; i < rewards.size(); i++)
 		{
-			if (!user->give_item(rewards[i], give_params, reward_info))
+			if (!user->give_item(rewards[i], give_params, &reward_info))
 			{
-				database::present_box::add_item(user->get_user_id(),
-					database::present_box::present_flag_expire, 
-					expire_date, rewards[i], text_id);
-				rewards[i].to_json(present_list[present_list.size()]);
+				reward_info.present_list.emplace_back(rewards[i]);
 			}
 		}
+
+		database::present_box::add_items(user->get_user_id(),
+			database::present_box::present_flag_expire,
+			reward_info.expire_date, reward_info.present_list, reward_info.text_id);
+
+		reward_info.to_json(result["reward_info"]);
 
 		user->current_player->set_battle_pack_list(battle_pack_list);
 

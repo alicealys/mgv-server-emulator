@@ -59,8 +59,7 @@ namespace emulator::ssd
 
 			if (is_player_slot_purchase)
 			{
-				json::value empty;
-				return user->give_item(product->item, give_params, empty);
+				return user->give_item(product->item, give_params);
 			}
 			else
 			{

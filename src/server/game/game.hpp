@@ -6010,6 +6010,517 @@ namespace game
 		BASE_Sprain = 0x3CF2CEA3,
 	};
 
+	enum lang_id_t : std::uint64_t
+	{
+		lang_id_ED49D685 = 0xED49D685, // CRAFT
+		lang_id_6535499E = 0x6535499E, // CUSTOMIZE
+		lang_id_EF0CB809 = 0xEF0CB809, // REPAIR
+		lang_id_3539EA14 = 0x3539EA14, // DISMANTLE
+		lang_id_8BA7C8EC = 0x8BA7C8EC, // Required Materials
+		lang_id_27B1C1B3 = 0x27B1C1B3, // ----
+		lang_id_D9F34F76 = 0xD9F34F76, // Not Set
+		lang_id_1DF669CC = 0x1DF669CC, // &lt;I=G=DECISION&gt;(Hold) Craft
+		lang_id_6B082F76 = 0x6B082F76, // &lt;I=G=PAD_X&gt;Compare
+		lang_id_F2E5A9C6 = 0xF2E5A9C6, // &lt;I=G=PAD_X&gt;Change Comparison
+		lang_id_76D8C2BC = 0x76D8C2BC, // Crafting...
+		lang_id_914DD9A9 = 0x914DD9A9, // %s completed.
+		lang_id_A37023DC = 0xA37023DC, // &lt;I=G=DECISION&gt;Equip
+		lang_id_F9A6A7C1 = 0xF9A6A7C1, // &lt;I=G=CANCEL&gt;Send to Storehouse
+		lang_id_9BE7582E = 0x9BE7582E, // Current Inventory/
+		lang_id_EC2BF836 = 0xEC2BF836, // Primary Weapons
+		lang_id_7512BB6A = 0x7512BB6A, // Secondary Weapons
+		lang_id_4F29DD81 = 0x4F29DD81, // Food, Drink &amp; Medicine
+		lang_id_832C064C = 0x832C064C, // Storehouse
+		lang_id_2E3FD6EB = 0x2E3FD6EB, // Total Defense
+		lang_id_4C28C501 = 0x4C28C501, // Total Weight
+		lang_id_C045EFDC = 0xC045EFDC, // &lt;I=G=DECISION&gt;Select Equipment Slot
+		lang_id_BFE7E9B1 = 0xBFE7E9B1, // &lt;I=G=PAD_X&gt;Hide Comparison
+		lang_id_FF57CE6C = 0xFF57CE6C, // &lt;I=G=PAD_X&gt;Show Comparison
+		lang_id_69340BE2 = 0x69340BE2, // &lt;I=G=PAD_Y&gt;Details
+		lang_id_315723D3 = 0x315723D3, // &lt;I=G=PAD_X&gt;Unequip
+		lang_id_8EE9C131 = 0x8EE9C131, // &lt;I=G=DECISION&gt;Add to Slot
+		lang_id_742EB417 = 0x742EB417, // &lt;I=G=PAD_Y&gt;Inventory/Storehouse
+		lang_id_5AAE80F6 = 0x5AAE80F6, // &lt;I=G=DECISION&gt;Move to Storehouse
+		lang_id_1D9DD30 = 0x1D9DD30, // &lt;I=G=DECISION&gt;Move to Inventory
+		lang_id_DA3ADC82 = 0xDA3ADC82, // &lt;I=G=PAD_X&gt;Discard
+		lang_id_68515521 = 0x68515521, // SALVAGE MISSION SELECTION
+		lang_id_3E7AE924 = 0x3E7AE924, // SCORE
+		lang_id_FDB214F7 = 0xFDB214F7, // ----
+		lang_id_223B3940 = 0x223B3940, // RANK
+		lang_id_407A1596 = 0x407A1596, // --
+		lang_id_9EEBD4D8 = 0x9EEBD4D8, // Mission will be accepted. Proceed?
+		lang_id_C738DCA3 = 0xC738DCA3, // Mission will not be accepted. Proceed?
+		lang_id_ABB7B173 = 0xABB7B173, // DETAILS
+		lang_id_A1E19E7 = 0xA1E19E7, // Clear Time
+		lang_id_28299AC7 = 0x28299AC7, // Friend Ranking
+		lang_id_2D7AC485 = 0x2D7AC485, // World Ranking
+		lang_id_F0FE4EAC = 0xF0FE4EAC, // Strengthen
+		lang_id_8C2F9839 = 0x8C2F9839, // Perk Settings
+		lang_id_179E0D22 = 0x179E0D22, // Option Parts Settings
+		lang_id_D251BADC = 0xD251BADC, // Color Settings
+		lang_id_D26C7AA6 = 0xD26C7AA6, // ENHANCEMENT
+		lang_id_87FAF4BF = 0x87FAF4BF, // &lt;I=G=DECISION&gt;(Hold) Strengthen
+		lang_id_94037C88 = 0x94037C88, // %s has been strengthened.
+		lang_id_BA4FDEC2 = 0xBA4FDEC2, // &lt;I=G=DECISION&gt;OK
+		lang_id_6DFC6473 = 0x6DFC6473, // &lt;I=G=PAD_Y&gt;Equip
+		lang_id_9558FA52 = 0x9558FA52, // PERK SETTINGS
+		lang_id_D0AACC20 = 0xD0AACC20, // &lt;I=G=DECISION&gt;(Hold) Attempt to Add Perk
+		lang_id_3299F05F = 0x3299F05F, // &lt;I=G=DECISION&gt;(Hold) Attempt to Grow Perk
+		lang_id_3F44491B = 0x3F44491B, // Successfully added %s perk.
+		lang_id_EF409059 = 0xEF409059, // Failed to add %s perk.
+		lang_id_53B2CBF5 = 0x53B2CBF5, // Successfully grew %s perk.
+		lang_id_E3B6AB24 = 0xE3B6AB24, // Failed to grow %s perk.
+		lang_id_424E02AA = 0x424E02AA, // OPTION PARTS SETTINGS
+		lang_id_5EDA4B18 = 0x5EDA4B18, // OPTION PARTS
+		lang_id_B5327878 = 0xB5327878, // &lt;I=G=DECISION&gt;Configure Option Parts
+		lang_id_DE14DC74 = 0xDE14DC74, // &lt;I=G=DECISION&gt;(Hold) Unlock Option Part
+		lang_id_E4A6E193 = 0xE4A6E193, // Option part %s unlocked.
+		lang_id_E5E7CED3 = 0xE5E7CED3, // &lt;I=G=PAD_Y&gt;Configure Option Parts
+		lang_id_5CF4C906 = 0x5CF4C906, // COLOR SETTINGS
+		lang_id_D7748555 = 0xD7748555, // &lt;I=G=DECISION&gt;Change Color
+		lang_id_E485F3E5 = 0xE485F3E5, // SKILL SETTINGS
+		lang_id_84DCC95A = 0x84DCC95A, // Basic Skill
+		lang_id_5FE5CA4A = 0x5FE5CA4A, // Required KUB
+		lang_id_4087BC45 = 0x4087BC45, // Prerequisite:
+		lang_id_F167438 = 0xF167438, // KUB
+		lang_id_CD392E6B = 0xCD392E6B, // &lt;I=G=DECISION&gt;(Hold) Learn Skill
+		lang_id_B606B979 = 0xB606B979, // &lt;I=G=DECISION&gt;(Hold) Rank Up Skill
+		lang_id_CE9B89C1 = 0xCE9B89C1, // Craft
+		lang_id_C27F574C = 0xC27F574C, // Customize
+		lang_id_D4D5262C = 0xD4D5262C, // Repair
+		lang_id_1F243035 = 0x1F243035, // Dismantle
+		lang_id_66DBBB5B = 0x66DBBB5B, // (Not Set)
+		lang_id_3C806C10 = 0x3C806C10, // UNDERGARMENT
+		lang_id_3E1A7033 = 0x3E1A7033, // MAG POUCH 1
+		lang_id_21894192 = 0x21894192, // MAG POUCH 2
+		lang_id_688AFA57 = 0x688AFA57, // Request Withdrawal
+		lang_id_CEA4E2DF = 0xCEA4E2DF, // Cancel Withdrawal Request
+		lang_id_A2737E40 = 0xA2737E40, // Reactivate
+		lang_id_C1FD9C11 = 0xC1FD9C11, // ACTIVATE
+		lang_id_8F4A0B21 = 0x8F4A0B21, // Reforge
+		lang_id_7EFB82EB = 0x7EFB82EB, // REFORGE ATTACK
+		lang_id_6E77EDF2 = 0x6E77EDF2, // REFORGE DEFENSE
+		lang_id_3A93A64A = 0x3A93A64A, // REFORGE DURABILITY
+		lang_id_FF675537 = 0xFF675537, // ADD / GROW PERK
+		lang_id_B2D279C1 = 0xB2D279C1, // REFORGE
+		lang_id_AA0CC90E = 0xAA0CC90E, // SPEED UP DIGGING
+		lang_id_A4239721 = 0xA4239721, // WORMHOLE DIGGER
+		lang_id_A95ED14F = 0xA95ED14F, // SHARED HANGAR
+		lang_id_5AC0E042 = 0x5AC0E042, // Change Equipment
+		lang_id_B3A37D18 = 0xB3A37D18, // Edit Loadout
+		lang_id_8F3CAB92 = 0x8F3CAB92, // EDIT CRAFTING BOARD
+		lang_id_FB7DEB60 = 0xFB7DEB60, // CRAFTED
+		lang_id_93B3F900 = 0x93B3F900, // {&lt;I=G=DECISION&gt;Add Craftable Item
+		lang_id_5565591 = 0x5565591, // {&lt;I=G=PAD_X&gt;Remove Craftable Item
+		lang_id_828C81AC = 0x828C81AC, // ENABLE BOARD
+		lang_id_FFD2023B = 0xFFD2023B, // EDIT BOARD
+		lang_id_7E62E63D = 0x7E62E63D, // &lt;I=G=PAD_L3&gt;Replenish All Ammo &amp; Gadgets
+		lang_id_8E417D4B = 0x8E417D4B, // Wake Time
+		lang_id_3EDD807E = 0x3EDD807E, // Hunger
+		lang_id_A8B340C7 = 0xA8B340C7, // Thirst
+		lang_id_FA50B735 = 0xFA50B735, // Virgil AT-9
+		lang_id_65E18DC = 0x65E18DC, // Stand-alone operational support program with a variety of capabilities.
+		lang_id_5EFFCA15 = 0x5EFFCA15, // Skill Trainer
+		lang_id_4F45CB0D = 0x4F45CB0D, // Improve classes and learn skills
+		lang_id_DFD64305 = 0xDFD64305, // Construction Terminal
+		lang_id_24937ED7 = 0x24937ED7, // Build base facilities
+		lang_id_537393C5 = 0x537393C5, // &lt;I=G=DECISION&gt;Sleep
+		lang_id_E4439DB6 = 0xE4439DB6, // Cannot sleep because Hunger/Thirst would fall below zero.
+		lang_id_64B78FDD = 0x64B78FDD, // %s has been repaired
+		lang_id_9C916BB2 = 0x9C916BB2, // STOREHOUSE
+		lang_id_1D06ACAC = 0x1D06ACAC, // CRAFTING BOARD
+		lang_id_C73BB9A = 0xC73BB9A, // LOADING
+		lang_id_20ECFCDE = 0x20ECFCDE, // Special Effect:
+		lang_id_8A3C529E = 0x8A3C529E, // None
+		lang_id_146DD3F4 = 0x146DD3F4, // Fully recover from abnormalities
+		lang_id_F0E272ED = 0xF0E272ED, // View RTB Report
+		lang_id_BDA2285D = 0xBDA2285D, // Salvage Mission List
+		lang_id_DC060A81 = 0xDC060A81, // Building Instructions
+		lang_id_6881BAE9 = 0x6881BAE9, // Base Camp Management
+		lang_id_AC5839AE = 0xAC5839AE, // Move to the staging area for CO-OP mission
+		lang_id_C176D2C0 = 0xC176D2C0, // Improve Class
+		lang_id_98CEAE33 = 0x98CEAE33, // Learn Skill
+		lang_id_939F26A5 = 0x939F26A5, // Improve / Change Class
+		lang_id_66A7FB05 = 0x66A7FB05, // Learn / Set Skill
+		lang_id_28C55BCD = 0x28C55BCD, // Eat
+		lang_id_7F91B26F = 0x7F91B26F, // Shared Resource Mutualization Craft
+		lang_id_3486C76A = 0x3486C76A, // Treat
+		lang_id_7762EC66 = 0x7762EC66, // Convert Materials
+		lang_id_B836BC65 = 0xB836BC65, // Mutualize as shared resource
+		lang_id_39CC3C5F = 0x39CC3C5F, // Communication Settings
+		lang_id_78F1AA84 = 0x78F1AA84, // Change Mission Settings
+		lang_id_BF391770 = 0xBF391770, // Edit radio presets
+		lang_id_82D23E06 = 0x82D23E06, // Edit gestures
+		lang_id_AC56DF3F = 0xAC56DF3F, // Edit command markers
+		lang_id_94C87F = 0x94C87F, // PRESET RADIO SETTINGS
+		lang_id_97AEB95E = 0x97AEB95E, // GESTURE SETTINGS
+		lang_id_E978575D = 0xE978575D, // COMMAND MARKER SETTINGS
+		lang_id_F32362DD = 0xF32362DD, // Group A
+		lang_id_6670719D = 0x6670719D, // Group B
+		lang_id_79F5397C = 0x79F5397C, // Group C
+		lang_id_CAEFC88F = 0xCAEFC88F, // Group D
+		lang_id_3127BCE6 = 0x3127BCE6, // &lt;I=G=PAD_X&gt;Clear All Settings
+		lang_id_32BDBBF5 = 0x32BDBBF5, // &lt;I=G=PAD_X&gt;Preview
+		lang_id_935E2F87 = 0x935E2F87, // SURVIVAL PACK
+		lang_id_60C0D4C3 = 0x60C0D4C3, // Set A
+		lang_id_C323CDB0 = 0xC323CDB0, // Set B
+		lang_id_B0DA8EDB = 0xB0DA8EDB, // Set C
+		lang_id_DD157FFC = 0xDD157FFC, // Set D
+		lang_id_52E6BF70 = 0x52E6BF70, // (%.1fKG)
+		lang_id_A4536A37 = 0xA4536A37, // Selected Items
+		lang_id_E42026B7 = 0xE42026B7, // Storage Status
+		lang_id_C614BB58 = 0xC614BB58, // &lt;I=G=DECISION&gt;(Hold) Apply Set
+		lang_id_B2EB6899 = 0xB2EB6899, // &lt;I=G=PAD_X&gt;Edit Set
+		lang_id_4F4DC946 = 0x4F4DC946, // &lt;I=G=PAD_Y&gt;Rename Set
+		lang_id_E2422DD0 = 0xE2422DD0, // *There are items missing
+		lang_id_CF0B72A9 = 0xCF0B72A9, // LOADOUT
+		lang_id_4ED050B4 = 0x4ED050B4, // Edit equipment
+		lang_id_841D7A50 = 0x841D7A50, // Edit skills or class
+		lang_id_A9CCE76B = 0xA9CCE76B, // Update with current selection
+		lang_id_FABCB40B = 0xFABCB40B, // Updating %s with current equipment.&#xD;&#xA;Proceed?
+		lang_id_EF6AF1D6 = 0xEF6AF1D6, // Updating %s with current equipment, skills, and class.&#xD;&#xA;Proceed?
+		lang_id_40FD8412 = 0x40FD8412, // Dismantled %s
+		lang_id_E97CFEA0 = 0xE97CFEA0, // Converted %s to materials
+		lang_id_B9A422A5 = 0xB9A422A5, // Acquired Materials
+		lang_id_FD3175BA = 0xFD3175BA, // CONVERT
+		lang_id_C6301650 = 0xC6301650, // &lt;I=G=DECISION&gt;(Hold) Convert Materials
+		lang_id_224AFF62 = 0x224AFF62, // &lt;I=G=PAD_X&gt;Change Group Name
+		lang_id_8AC75D09 = 0x8AC75D09, // Move to Wormhole Transporter in Same Field
+		lang_id_801462C2 = 0x801462C2, // Move to Other Base
+		lang_id_7523DEC9 = 0x7523DEC9, // Supply Box
+		lang_id_7C40F2B7 = 0x7C40F2B7, // Receive given/purchased items or privileges
+		lang_id_96CDD366 = 0x96CDD366, // Construct/move/upgrade base facilities or defenses
+		lang_id_C9D80DC9 = 0xC9D80DC9, // Check shared resources or change crew assignments
+		lang_id_345EEE3 = 0x345EEE3, // Go to Salvage (CO-OP) Mission prep area
+		lang_id_B66BED0C = 0xB66BED0C, // Use KUB to improve class or acquire skill points
+		lang_id_3BF2791F = 0x3BF2791F, // Use skill points to acquire new skills or upgrade them
+		lang_id_A7284F94 = 0xA7284F94, // Improve class or change sub class
+		lang_id_4247101F = 0x4247101F, // Skill acquisition and upgrading, skill slot settings
+		lang_id_66B8CF45 = 0x66B8CF45, // Create items using materials
+		lang_id_46875267 = 0x46875267, // Eat prepared food immediately
+		lang_id_C3BA8FD7 = 0xC3BA8FD7, // Distribute crafted items as shared resources
+		lang_id_4930B108 = 0x4930B108, // Use materials to strengthen items
+		lang_id_937EA1B3 = 0x937EA1B3, // Repair items using materials
+		lang_id_BE625A7E = 0xBE625A7E, // Break down items and extract materials
+		lang_id_92957733 = 0x92957733, // Perform medical treatment using materials
+		lang_id_ED4BE2AA = 0xED4BE2AA, // Change materials into other materials
+		lang_id_F06AE4C6 = 0xF06AE4C6, // Change weapons, gear, or survival equipment
+		lang_id_3C81E9DB = 0x3C81E9DB, // Edit or assign equipment combination
+		lang_id_9718D157 = 0x9718D157, // Set which craftable items can be used in Salvage Missions
+		lang_id_EC6B6793 = 0xEC6B6793, // Edit communication parameters
+		lang_id_97723FB1 = 0x97723FB1, // Convert items into shared resources
+		lang_id_961A2832 = 0x961A2832, // Check RTB Report, receive rewards
+		lang_id_9D60013C = 0x9D60013C, // Change settings for missions accepted
+		lang_id_122F00D2 = 0x122F00D2, // Edit radio presets
+		lang_id_AADA59A = 0xAADA59A, // Edit gesture sets
+		lang_id_EAC5D4F3 = 0xEAC5D4F3, // Edit command marker sets
+		lang_id_39D95F30 = 0x39D95F30, // Move to another transporter
+		lang_id_3379E0E3 = 0x3379E0E3, // Move to FOB
+		lang_id_A9E54781 = 0xA9E54781, // Manage Possessions
+		lang_id_9E36BFC5 = 0x9E36BFC5, // Take out or deposit consumables
+		lang_id_C1DDDCAB = 0xC1DDDCAB, // Speed up the digging of Iris Energy.&#xD;&#xA;Cost: %d KUB
+		lang_id_C03D345C = 0xC03D345C, // Activate digger and start collecting Iris Energy
+		lang_id_2F273FB3 = 0x2F273FB3, // Initiate withdrawal request&#xD;&#xA;*Request will be approved with majority agreement
+		lang_id_9315CE03 = 0x9315CE03, // Cancel withdrawal request
+		lang_id_45175635 = 0x45175635, // Reactivate digger immediately
+		lang_id_3CDE238F = 0x3CDE238F, // Take out or deposit items&#xD;&#xA;*Item status shared with squad&#xD;&#xA;*Unused items will disappear when the mission is over.
+		lang_id_A17DDB44 = 0xA17DDB44, // SUPPLY BOX INFORMATION
+		lang_id_BA236B5 = 0xBA236B5, // The following has been sent to the supply box.
+		lang_id_2F3E40DE = 0x2F3E40DE, // Supply Box Capacity
+		lang_id_47A9089F = 0x47A9089F, // *If the supply box has more items than the capacity allows, the oldest supplies will be discarded in order to make space
+		lang_id_93FCA2A4 = 0x93FCA2A4, // * Supplies which have past their expiration date will automatically be discarded
+		lang_id_DCE62C49 = 0xDCE62C49, // SUPPLY BOX
+		lang_id_40B747D0 = 0x40B747D0, // Newest first
+		lang_id_7F5A08B = 0x7F5A08B, // Oldest first
+		lang_id_A4CE21E5 = 0xA4CE21E5, // With expiration date
+		lang_id_F01B009D = 0xF01B009D, // Without expiration date
+		lang_id_21427E17 = 0x21427E17, // &lt;I=G=PAD_X&gt;Receive All
+		lang_id_2E3E95F5 = 0x2E3E95F5, // Cannot be received due to insufficient Storehouse space
+		lang_id_544FAA0 = 0x544FAA0, // There are items that could not be received due to a lack of Storehouse space
+		lang_id_4A3A6FAD = 0x4A3A6FAD, // Cannot be used due to duplicate effects.&#xD;&#xA;Please try again after current effect wears off.
+		lang_id_A5DDBCCA = 0xA5DDBCCA, // There are items that could not be received due to duplicate effects.&#xD;&#xA;Please try again after current effect wears off.
+		lang_id_D200D4B7 = 0xD200D4B7, // INFORMATION
+		lang_id_A3E43F20 = 0xA3E43F20, // The following items will be received as a reward for completing the mission for the first time:
+		lang_id_7311C5F5 = 0x7311C5F5, // Reward received
+		lang_id_E5F1736E = 0xE5F1736E, // Expired order has been cancelled
+		lang_id_D4925CAF = 0xD4925CAF, // Updating order list
+		lang_id_19629EA3 = 0x19629EA3, // Daily
+		lang_id_3234D5E2 = 0x3234D5E2, // Weekly
+		lang_id_F2AF0EAE = 0xF2AF0EAE, // Reportable
+		lang_id_1500F707 = 0x1500F707, // &lt;I=G=PAD_X&gt;Show/Hide Completed
+		lang_id_BDAA7D20 = 0xBDAA7D20, // &lt;I=G=PAD_X&gt;Show/Hide Reward Information
+		lang_id_CC07188F = 0xCC07188F, // &lt;I=G=DECISION&gt;Cancel Order
+		lang_id_BD16BB43 = 0xBD16BB43, // The order will be cancelled.&#xD;&#xA;All progress will be lost. Proceed?
+		lang_id_9A51694D = 0x9A51694D, // &lt;I=G=DECISION&gt;Report Completed Order
+		lang_id_79C8D897 = 0x79C8D897, // CLASS SETTINGS
+		lang_id_EF2B4CFF = 0xEF2B4CFF, // Survive (SV) Coin Shop
+		lang_id_47498FF6 = 0x47498FF6, // Purchase special items or privileges using SV coins
+		lang_id_B0D24EA3 = 0xB0D24EA3, // Time Required
+		lang_id_63FA866B = 0x63FA866B, // &lt;I=G=DECISION&gt;Improve Class
+		lang_id_15DB921F = 0x15DB921F, // &lt;I=G=PAD_X&gt;Change Sub Class
+		lang_id_6A0CA688 = 0x6A0CA688, // &lt;I=G=PAD_X&gt;Improve Class
+		lang_id_DF106EB0 = 0xDF106EB0, // CLASS &amp; SKILL
+		lang_id_D6646805 = 0xD6646805, // MAIN CLASS
+		lang_id_28A02EF4 = 0x28A02EF4, // SUB CLASS
+		lang_id_60EF218 = 0x60EF218, // LV
+		lang_id_D01E363 = 0xD01E363, // NEXT
+		lang_id_C6402D01 = 0xC6402D01, // KUB
+		lang_id_8704E2AE = 0x8704E2AE, // LEVEL UP
+		lang_id_A4AB1F26 = 0xA4AB1F26, // Skill Points
+		lang_id_BA299EB6 = 0xBA299EB6, // Acquisition Rate
+		lang_id_73748BAF = 0x73748BAF, // REGISTERING
+		lang_id_F8AE45A2 = 0xF8AE45A2, // Change set name
+		lang_id_FD204BFC = 0xFD204BFC, // Unlocking of %s perk complete
+		lang_id_552CCE6E = 0x552CCE6E, // Reforge of %s complete
+		lang_id_255261E3 = 0x255261E3, // Cancel mission undertaken
+		lang_id_9A2A6C49 = 0x9A2A6C49, // The mission will be cancelled (progress will be lost)
+		lang_id_781488E5 = 0x781488E5, // Wormhole Transporter
+		lang_id_2E2BE613 = 0x2E2BE613, // Travel Between Fields
+		lang_id_59C0A05A = 0x59C0A05A, // Travel to Base Camp
+		lang_id_96BA2695 = 0x96BA2695, // Move to FOB
+		lang_id_B45F6DF1 = 0xB45F6DF1, // Acceptance Period
+		lang_id_login_bonus = 0xA31D8452, // Login Bonus
+		lang_id_order_completion_reward = 0xAC914F85, // Order Completion Reward
+		lang_id_mission_completion_reward = 0x35281329, // Mission Completion Reward
+		lang_id_event_completion_reward = 0xA1B2BDF0, // Event Completion Reward
+		lang_id_ranking_reward = 0x4DDD6D06, // Ranking Reward
+		lang_id_total_battle_points_reward = 0x712ADC97, // Total Battle Points Reward
+		lang_id_sv_coins_purchase = 0x3105EB6B, // SV Coins Purchase
+		lang_id_battle_points_purchase = 0x397DEB18, // Battle Points Purchase
+		lang_id_99CCABE6 = 0x99CCABE6, // Gift from Admin Team
+		lang_id_BA8F974F = 0xBA8F974F, // Compensation from Admin Team
+		lang_id_649A8636 = 0x649A8636, // MUSIC SETTINGS
+		lang_id_17751B6C = 0x17751B6C, // PLAYLISTS
+		lang_id_D37D7D6A = 0xD37D7D6A, // MUSIC
+		lang_id_32C4D83B = 0x32C4D83B, // ALL MUSIC
+		lang_id_5597FEDF = 0x5597FEDF, // PLAYLIST %d
+		lang_id_8DDB1E2A = 0x8DDB1E2A, // &lt;I=G=DECISION&gt;Playback Designation ON/OFF
+		lang_id_8D7A4F9D = 0x8D7A4F9D, // &lt;I=G=PAD_Y&gt;Shuffle ON/OFF
+		lang_id_2D6CB9C2 = 0x2D6CB9C2, // &lt;I=G=PAD_X&gt;Edit Menu
+		lang_id_B909E756 = 0xB909E756, // Edit Playlist
+		lang_id_A9FA058D = 0xA9FA058D, // Change Playlist Name
+		lang_id_13444A7 = 0x13444A7, // &lt;I=G=RS_SCROLL&gt;Scroll
+		lang_id_6D992F1A = 0x6D992F1A, // &lt;I=G=DECISION&gt;Change Track
+		lang_id_554E92C6 = 0x554E92C6, // &lt;I=G=DECISION&gt;Add Track
+		lang_id_15FFB1E = 0x15FFB1E, // &lt;I=G=PAD_X&gt;Delete Track
+		lang_id_DE2F6A95 = 0xDE2F6A95, // &lt;I=G=PAD_Y&gt;Track Details ON/OFF
+		lang_id_98C944AD = 0x98C944AD, // &lt;I=G=PAD_R2&gt;Change Order: Up
+		lang_id_C68A2834 = 0xC68A2834, // &lt;I=G=PAD_L2&gt;Change Order: Down
+		lang_id_2734F99A = 0x2734F99A, // Weapons List
+		lang_id_D735F53B = 0xD735F53B, // Check all weapons kept in Armory
+		lang_id_47A34BDF = 0x47A34BDF, // Gear List
+		lang_id_370F14C6 = 0x370F14C6, // Check all gear kept in Gear Storage
+		lang_id_476160E6 = 0x476160E6, // Others List
+		lang_id_8A196A1E = 0x8A196A1E, // Check everything kept in Repository
+		lang_id_BDBFF2BA = 0xBDBFF2BA, // (Add Track)
+		lang_id_9F104F88 = 0x9F104F88, // &lt;I=G=DECISION&gt;(Hold) Mutualize
+		lang_id_D05506C3 = 0xD05506C3, // RESOURCE SHARING
+		lang_id_8CBA5520 = 0x8CBA5520, // Accept Order/Report Completion
+		lang_id_9599E101 = 0x9599E101, // Accept an order, or receive a reward for a completed order
+		lang_id_90A8BAA5 = 0x90A8BAA5, // Change Nameplate
+		lang_id_992916B9 = 0x992916B9, // Change your nameplate
+		lang_id_2C3EC11D = 0x2C3EC11D, // Order will be accepted&#xD;&#xA;Are you sure?
+		lang_id_DFD1AEEF = 0xDFD1AEEF, // Production/Consumption Info
+		lang_id_A7AF5BD6 = 0xA7AF5BD6, // Armory
+		lang_id_A5E0D014 = 0xA5E0D014, // Gear Storage
+		lang_id_583E38F8 = 0x583E38F8, // Repository
+		lang_id_ECD36224 = 0xECD36224, // Compensation from Admin Team
+		lang_id_2143F078 = 0x2143F078, // NAMEPLATE
+		lang_id_B3045163 = 0xB3045163, // Acquisition Status
+		lang_id_CAEB1013 = 0xCAEB1013, // Acquisition Conditions
+		lang_id_894AF83B = 0x894AF83B, // The acceptance period has expired for one or more items&#xD;&#xA;Updating supply box to most recent version
+		lang_id_34B762E5 = 0x34B762E5, // Stored Item List
+		lang_id_CAC36B42 = 0xCAC36B42, // Check all contents of Storehouse
+		lang_id_619E7A26 = 0x619E7A26, // Order acceptance limit reached&#xD;&#xA;Report an order's completion or cancel order
+		lang_id_F7124F90 = 0xF7124F90, // Skills in Effect
+		lang_id_8EB1CBAD = 0x8EB1CBAD, // &lt;I=G=PAD_X&gt;Add/Remove Skill
+		lang_id_691C7989 = 0x691C7989, // Change Avatar
+		lang_id_E5620D89 = 0xE5620D89, // Change your avatar's appearance or name&#xD;&#xA;(Single Player only)
+		lang_id_A038AE8D = 0xA038AE8D, // &lt;I=G=PAD_X&gt;Remove
+		lang_id_EB31D879 = 0xEB31D879, // Survival equipment slot unlocked with %s class Lv. %d
+		lang_id_7FD3940 = 0x7FD3940, // Facility that enables instantaneous long-distance travel
+		lang_id_11BF2B9 = 0x11BF2B9, // Deployment Mission Reward
+		lang_id_8B700B2 = 0x8B700B2, // Remote Craft
+		lang_id_215B80CD = 0x215B80CD, // Craft item by sending materials and receiving completed item with a time delay
+		lang_id_C548E255 = 0xC548E255, // REMOTE CRAFT
+		lang_id_B0E41603 = 0xB0E41603, // Remote Craft Status
+		lang_id_BE497387 = 0xBE497387, // Designated %s to be Remote Crafted
+		lang_id_8C9A5D54 = 0x8C9A5D54, // Comes into effect after at least %d hour(s) rest
+		lang_id_CC13929D = 0xCC13929D, // As Durability is too low, you will not obtain materials from dismantling item&#xD;&#xA;If you proceed with dismantling, item will be discarded without using KUB
+		lang_id_E79745A3 = 0xE79745A3, // Use materials to increase equipment stats
+		lang_id_FCB1CFC3 = 0xFCB1CFC3, // Use materials to give equipment special abilities
+		lang_id_7A6B26D0 = 0x7A6B26D0, // Use junk of the same type to reforge equipment stats
+		lang_id_612014FD = 0x612014FD, // Use materials to craft equipment-specific add-on parts&#xD;&#xA;Attach/remove add-on parts already crafted
+		lang_id_96B45619 = 0x96B45619, // Use materials to unlock additional colors and patterns for equipment&#xD;&#xA;Apply colors or patterns already unlocked
+		lang_id_763A069B = 0x763A069B, // Number to Move to Inventory
+		lang_id_C34C91A7 = 0xC34C91A7, // Number to Move to Storehouse
+		lang_id_E72A48C7 = 0xE72A48C7, // Number to Discard
+		lang_id_19902DB = 0x19902DB, // Number to Equip
+		lang_id_D52F997B = 0xD52F997B, // AVATAR INFORMATION
+		lang_id_E37473C4 = 0xE37473C4, // Class Skill: %s
+		lang_id_71FEB79 = 0x71FEB79, // Select material(s) that you will use to strengthen
+		lang_id_4D1AC186 = 0x4D1AC186, // Select material(s) that you will use to grant perk
+		lang_id_AA6A9637 = 0xAA6A9637, // Select material(s) that you will use to reforge
+		lang_id_11D57942 = 0x11D57942, // Cannot strengthen any further
+		lang_id_7EC92EAE = 0x7EC92EAE, // Cannot grant any more perks
+		lang_id_FBEBB432 = 0xFBEBB432, // SUPPRESSOR
+		lang_id_AA00AEB2 = 0xAA00AEB2, // FLASHLIGHT
+		lang_id_79DCB94B = 0x79DCB94B, // &lt;I=G=PAD_LEFT&gt; Switch Gadget Slot &lt;I=G=PAD_RIGHT&gt;
+		lang_id_7E8125CB = 0x7E8125CB, // Use materials to craft item
+		lang_id_19B717A5 = 0x19B717A5, // Select the slot you want to equip it to
+		lang_id_665F6027 = 0x665F6027, // Select what you want to customize
+		lang_id_DBC0E26 = 0xDBC0E26, // Select the weapon or material you will use
+		lang_id_1D5AFD16 = 0x1D5AFD16, // Select a slot for option parts editing
+		lang_id_998DB63F = 0x998DB63F, // Select an option part to set to slot
+		lang_id_A8CC2697 = 0xA8CC2697, // Select a color
+		lang_id_1DB2D6BB = 0x1DB2D6BB, // Select what you want to repair
+		lang_id_6DC6FDFF = 0x6DC6FDFF, // Select what you want to dismantle
+		lang_id_AB270696 = 0xAB270696, // Convert material
+		lang_id_D0C153AC = 0xD0C153AC, // Select the slot whose equipment you will change
+		lang_id_EA23BA09 = 0xEA23BA09, // Select equipment to set to slot
+		lang_id_29251DF0 = 0x29251DF0, // Move items from Inventory to Storehouse, or discard items in Inventory
+		lang_id_350BA964 = 0x350BA964, // Move items from Storehouse to Inventory, or discard items in Storehouse
+		lang_id_BFF9450E = 0xBFF9450E, // Select an item to convert to shared resources
+		lang_id_71D0D89D = 0x71D0D89D, // Use KUB to improve class
+		lang_id_D6E463E5 = 0xD6E463E5, // Improve class, or change sub class
+		lang_id_86AE1627 = 0x86AE1627, // Learn or rank up skill
+		lang_id_590228E4 = 0x590228E4, // Learn or rank up skill, or set sub class skill
+		lang_id_ECE340B4 = 0xECE340B4, // Only active skills can be set to this slot
+		lang_id_A6E0EE13 = 0xA6E0EE13, // Only passive skills can be set to this slot
+		lang_id_D0F90187 = 0xD0F90187, // &lt;I=G=PAD_L3&gt;BASE CAMP
+		lang_id_D3901184 = 0xD3901184, // &lt;I=G=PAD_L3&gt;FOB
+		lang_id_36727BBD = 0x36727BBD, // A list of items on your person
+		lang_id_8945682A = 0x8945682A, // Add or call in equipment loadouts
+		lang_id_E0F7B167 = 0xE0F7B167, // Add or call in equipment, class, and skill loadouts
+		lang_id_C3158650 = 0xC3158650, // Select a slot to add a recipe to
+		lang_id_DFBBC020 = 0xDFBBC020, // Select a recipe to add to a slot
+		lang_id_E6D924A4 = 0xE6D924A4, // Select preset message to add to group
+		lang_id_FD5016C1 = 0xFD5016C1, // Select command marker to add to group
+		lang_id_C3E300AD = 0xC3E300AD, // Select gesture to add to group
+		lang_id_5246FD14 = 0x5246FD14, // Select a slot
+		lang_id_7F8D9A6E = 0x7F8D9A6E, // Select a nameplate to display as your player info
+		lang_id_D8929DA = 0xD8929DA, // Select item to add to Storehouse, or select a privilege(s) to come into effect
+		lang_id_650803A0 = 0x650803A0, // The following privilege(s) will come into effect.&#xD;&#xA;Are you sure?
+		lang_id_91F61A85 = 0x91F61A85, // Select a Salvage Mission to accept
+		lang_id_8B2DE6D0 = 0x8B2DE6D0, // Move items from Inventory to Shared Hangar
+		lang_id_40D72ACB = 0x40D72ACB, // Move items from Shared Hangar to Inventory
+		lang_id_BF1A711C = 0xBF1A711C, // Select an item to designate for Remote Crafting
+		lang_id_264A2D09 = 0x264A2D09, // &lt;I=G=PAD_Y&gt; Remote Craft Status
+		lang_id_2489331 = 0x2489331, // Select a playlist to set as Base Camp background music
+		lang_id_B74E5AB5 = 0xB74E5AB5, // Select a slot to add/change/delete track
+		lang_id_79B0D150 = 0x79B0D150, // Select a track to add
+		lang_id_40354723 = 0x40354723, // Accept Salvage Mission
+		lang_id_BDD7E77 = 0xBDD7E77, // Number to be mutualized
+		lang_id_33F93047 = 0x33F93047, // Insufficient Storehouse space
+		lang_id_4CCD0264 = 0x4CCD0264, // Spend %s coins to increase storage limit?
+		lang_id_5A31099C = 0x5A31099C, // You cannot spend %s coins to increase storage limit any further
+		lang_id_8AA6E81C = 0x8AA6E81C, // &lt;I=G=PAD_L3&gt;Increase Storage Limit
+		lang_id_32A457E5 = 0x32A457E5, // &lt;I=G=PAD_LEFT&gt; Change List &lt;I=G=PAD_RIGHT&gt;
+		lang_id_A4D65BCD = 0xA4D65BCD, // Beta Test Participation Reward
+		lang_id_1725D1B7 = 0x1725D1B7, // Save and Exit
+		lang_id_C58AD1AB = 0xC58AD1AB, // Save progress and return to title menu.
+		lang_id_DFD1A910 = 0xDFD1A910, // Progress up to now will be saved, and the game will return to the title menu.&#xD;&#xA;Proceed?
+		lang_id_1D70581B = 0x1D70581B, // DOT SIGHT
+		lang_id_49E87061 = 0x49E87061, // SCOPE
+		lang_id_FA36A2C5 = 0xFA36A2C5, // &lt;I=G=DECISION&gt;(Hold) Dismantle
+		lang_id_AA4FCB94 = 0xAA4FCB94, // Muzzle Accessory
+		lang_id_C2BF490E = 0xC2BF490E, // Optics
+		lang_id_4C7B3742 = 0x4C7B3742, // Flashlight
+		lang_id_96E5D2BA = 0x96E5D2BA, // Laser Sight
+		lang_id_3F37D93B = 0x3F37D93B, // APPLYING
+		lang_id_7B04DBA3 = 0x7B04DBA3, // Device for mining Iris Energy.
+		lang_id_5DE61FC = 0x5DE61FC, // Begin Base Camp Dig
+		lang_id_2A9586A6 = 0x2A9586A6, // View Base Camp Dig Conditions
+		lang_id_2D08C38F = 0x2D08C38F, // Recommence Base Camp Dig
+		lang_id_7269C9DA = 0x7269C9DA, // Suspend Base Camp Dig
+		lang_id_A0CFA7D3 = 0xA0CFA7D3, // Base Camp Dig History
+		lang_id_19B84149 = 0x19B84149, // Select a plan and begin digging
+		lang_id_28ECAA5A = 0x28ECAA5A, // View information on next wave
+		lang_id_C7A25A87 = 0xC7A25A87, // Begin next wave immediately
+		lang_id_C89688DB = 0xC89688DB, // Stop digging immediately and receive reward
+		lang_id_82509A8 = 0x82509A8, // View Base Camp dig result
+		lang_id_C96639E1 = 0xC96639E1, // BASE CAMP DIGGING HISTORY
+		lang_id_4B2093AA = 0x4B2093AA, // Overview
+		lang_id_FD3BA4D0 = 0xFD3BA4D0, // Resource Losses
+		lang_id_247CAAAA = 0x247CAAAA, // Facility Losses
+		lang_id_7594C00 = 0x7594C00, // Reward
+		lang_id_9A5A4FA3 = 0x9A5A4FA3, // {not in use}
+		lang_id_6CAD05E0 = 0x6CAD05E0, // {not in use}
+		lang_id_ADE9BE4E = 0xADE9BE4E, // {not in use}
+		lang_id_C2A9DC11 = 0xC2A9DC11, // {not in use}
+		lang_id_4AD5466B = 0x4AD5466B, // {not in use}
+		lang_id_2B47C1FA = 0x2B47C1FA, // {not in use}
+		lang_id_77264994 = 0x77264994, // {not in use}
+		lang_id_7AC47752 = 0x7AC47752, // {not in use}
+		lang_id_4C7353B3 = 0x4C7353B3, // Plan
+		lang_id_5EA50B4A = 0x5EA50B4A, // Period
+		lang_id_A275BD19 = 0xA275BD19, // Rank
+		lang_id_2B5327F6 = 0x2B5327F6, // Result
+		lang_id_F3A90F0A = 0xF3A90F0A, // View Base Camp digging history
+		lang_id_39C4739B = 0x39C4739B, // Crew Defense History
+		lang_id_A2BC162B = 0xA2BC162B, // &lt;I=G=PAD_Y&gt;View Defense History
+		lang_id_78966C63 = 0x78966C63, // BASE CAMP DIGGING PLANS
+		lang_id_989D5FF = 0x989D5FF, // Wave %d Enemy Distribution
+		lang_id_C4700E77 = 0xC4700E77, // MISSION PROGRESS
+		lang_id_79981EE7 = 0x79981EE7, // SV Coin Shop / History
+		lang_id_24F5490E = 0x24F5490E, // Enter SV Coin Shop or view history
+		lang_id_BFCB8FD1 = 0xBFCB8FD1, // Open Events
+		lang_id_372C544 = 0x372C544, // Open Events Information
+		lang_id_BC39B66F = 0xBC39B66F, // Exiting Single Player and moving to Staging Area.&#xD;&#xA;Proceed?
+		lang_id_EC475398 = 0xEC475398, // Item is currently equipped/registered to loadout.&#xD;&#xA;If dismantled or discarded, item will be removed.
+		lang_id_6C2296EB = 0x6C2296EB, // Open Case
+		lang_id_4D991737 = 0x4D991737, // Open All Locked Cases
+		lang_id_80449124 = 0x80449124, // UNLOCKING
+		lang_id_FF8763AC = 0xFF8763AC, // Cases in Possession
+		lang_id_D8D9439F = 0xD8D9439F, // Cases to Be Opened
+		lang_id_7AA9756D = 0x7AA9756D, // Key Required to Open Case
+		lang_id_7D54586D = 0x7D54586D, // Open
+		lang_id_2F2E2CE = 0x2F2E2CE, // &lt;I=G=DECISION&gt;Select Case(s) to Open
+		lang_id_24E92533 = 0x24E92533, // &lt;I=G=PAD_R3&gt;Open All Cases
+		lang_id_B39E6DC6 = 0xB39E6DC6, // Number to Open
+		lang_id_F0FB6E01 = 0xF0FB6E01, // &lt;I=G=DECISION&gt;Select Case(s) Not to Open
+		lang_id_7DD105CD = 0x7DD105CD, // &lt;I=G=PAD_R3&gt;Do Not Open Case(s)
+		lang_id_5D4974D2 = 0x5D4974D2, // Opening...
+		lang_id_44D685FC = 0x44D685FC, // UNLOCKING RESULT
+		lang_id_93699648 = 0x93699648, // Tactical Support
+		lang_id_6204F508 = 0x6204F508, // Use Kuban Energy to call in Tactical Support via wormhole
+		lang_id_67A564D0 = 0x67A564D0, // Executed
+		lang_id_5E1B4CC2 = 0x5E1B4CC2, // The following privilege has been enabled:
+		lang_id_F7ACFBF8 = 0xF7ACFBF8, // Downloaded Content
+		lang_id_5B379284 = 0x5B379284, // Entries marked &quot;Acquired&quot; have already been given.
+		lang_id_A98EE2D = 0xA98EE2D, // Acquired
+		lang_id_A6852D97 = 0xA6852D97, // Aborting Base Camp dig. You will receive a reward according to your current rank.&#xD;&#xA;Proceed?
+		lang_id_8130F873 = 0x8130F873, // Change your avatar's name
+		lang_id_67BE1493 = 0x67BE1493, // Change your avatar's appearance
+		lang_id_2FBA947B = 0x2FBA947B, // (Only some elements can be altered)
+		lang_id_A6F0FE0C = 0xA6F0FE0C, // Change Avatar+
+		lang_id_BF468C0A = 0xBF468C0A, // (Any element, except gender, can be altered)
+		lang_id_D92F1B02 = 0xD92F1B02, // (Any element can be altered)
+		lang_id_216F980 = 0x216F980, // Conditions to learn skills
+		lang_id_60C4F576 = 0x60C4F576, // &lt;I=G=PAD_Y&gt;Customize
+		lang_id_463280C0 = 0x463280C0, // You have not completed the tutorial. It is recommended that you finish the tutorial before playing co-op missions.&#xD;&#xA;&#xD;&#xA;Exiting Single Player and moving to Staging Area.&#xD;&#xA;Proceed?
+		lang_id_8BDF9BB3 = 0x8BDF9BB3, // Unable to function without crew assigned to it.
+		lang_id_2EB88CEB = 0x2EB88CEB, // There is no equipment to change.
+		lang_id_21290B5B = 0x21290B5B, // There is nothing to craft.
+		lang_id_420639D9 = 0x420639D9, // &lt;I=G=PAD_X&gt;Change Recipe(%d/%d)
+		lang_id_831A2E63 = 0x831A2E63, // &lt;I=G=PAD_L2&gt;&lt;I=G=PAD_R2&gt;Switch Information
+		lang_id_84056109 = 0x84056109, // Shuffle Play ON/OFF
+		lang_id_835CAB13 = 0x835CAB13, //
+		lang_id_9464C023 = 0x9464C023, // Apply Loadout
+		lang_id_E890062B = 0xE890062B, // &lt;I=G=DECISION&gt;(Hold) Unlock Color
+		lang_id_C6B6828B = 0xC6B6828B, // Select a slot to change
+		lang_id_D5D97A4D = 0xD5D97A4D, // Construct a facility that will increase storage limit.
+		lang_id_5027AB52 = 0x5027AB52, // Unable to function with no animals present.
+		lang_id_81511CDB = 0x81511CDB, // Change your avatar's appearance&#xD;&#xA;(Only some elements can be altered)
+		lang_id_D3884F20 = 0xD3884F20, // Change your avatar's appearance&#xD;&#xA;(Any element, except gender, can be altered)
+		lang_id_39D7C453 = 0x39D7C453, // SURVIVOR Lv. %d
+		lang_id_51890D83 = 0x51890D83, // &lt;I=G=PAD_X&gt;Switch Information
+		lang_id_B1E4A7F3 = 0xB1E4A7F3, // Equippable at SURVIVOR Lv. %d
+		lang_id_FA2A76DA = 0xFA2A76DA, // Shuffle Play ON/OFF
+		lang_id_26A5EB6E = 0x26A5EB6E, // &lt;I=G=PAD_X&gt;Begin Playback and Close Menu
+		lang_id_63CBDF39 = 0x63CBDF39, // &lt;I=G=PAD_X&gt; STOP
+	};
+
 	enum item_category_t
 	{
 		ITEM_CATEGORY_RESOURCE = 0,

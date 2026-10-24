@@ -255,6 +255,20 @@ namespace database::crew_members
 			this->motivation_history_.deserialize(row.motivation_history.value());
 
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());
+
+			const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
+			{
+				if (id == 0 || time == 0)
+				{
+					id = 0;
+					time = 0;
+				}
+			};
+
+			fix_sickness(this->sickness_id_1_, this->sickness_time_1_);
+			fix_sickness(this->sickness_id_2_, this->sickness_time_2_);
+			fix_sickness(this->injury_id_1_, this->injury_time_1_);
+			fix_sickness(this->injury_id_2_, this->injury_time_2_);
 		}
 
 		GET_FIELD_H(std::uint64_t, member_id);
@@ -335,6 +349,8 @@ namespace database::crew_members
 
 	bool remove(const std::uint64_t player_id, const std::uint64_t member_id);
 	void remove_all(const std::uint64_t player_id);
+
+	void update(const std::uint64_t player_id, const std::uint64_t member_id, const member_params_t& params);
 
 	void delete_player_data(const std::uint64_t player_id);
 }

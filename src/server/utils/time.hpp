@@ -11,4 +11,7 @@ namespace utils::time
 	std::size_t get_day();
 	std::size_t get_weekday();
 	std::size_t get_week();
+
+	std::chrono::seconds from_now(const std::chrono::seconds duration);
+	std::chrono::seconds from_now(const std::chrono::day duration);
 }

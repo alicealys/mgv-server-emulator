@@ -5,6 +5,7 @@
 #include "database/models/present_box.hpp"
 
 #include "utils/random.hpp"
+#include "utils/time.hpp"
 
 namespace emulator::ssd
 {
@@ -79,31 +80,16 @@ namespace emulator::ssd
 		result["next_date"] = next_date.count();
 		result["is_reward"] = std::uint8_t(is_reward);
 
-		auto& reward_info = result["reward_info"];
+		database::users::reward_info_t reward_info{};
 
-		reward_info["energy"] = 0;
-		reward_info["expire_date"] = 0;
-		reward_info["kub_boost_flag"] = 0;
-		reward_info["present_box_num"] = 0;
-		reward_info["battle_pack_list"] = json::array();
-		reward_info["nonstackable_list"] = json::array();
-		reward_info["recipe_list"] = json::array();
-		reward_info["resources_list"] = json::array();
-		reward_info["stackable_list"] = json::array();
-		reward_info["text_id"] = 0;
-
-		auto& present_list = reward_info["present_list"];
-		present_list = json::array();
-
-		const auto text_id = 181130097427538;
+		constexpr const auto text_id = game::lang_id_login_bonus;
 
 		std::vector<game::item_t> presents;
 
 		if (is_reward)
 		{
-			const auto expire_date = now_s + 14 * 24h;
-			reward_info["text_id"] = text_id;
-			reward_info["expire_date"] = expire_date.count();
+			reward_info.text_id = text_id;
+			reward_info.expire_date = utils::time::from_now(14d);
 			
 			std::unordered_set<std::uint32_t> added_codes;
 
@@ -120,18 +106,18 @@ namespace emulator::ssd
 				}
 
 				added_codes.insert(item.code);
-				presents.emplace_back(item);
-				item.to_json(present_list[present_list.size()]);
+				reward_info.present_list.emplace_back(item);
 			}
 
 			database::present_box::add_items(user->get_user_id(),
 				database::present_box::present_flag_expire,
-				expire_date, presents, text_id);
+				reward_info.expire_date, reward_info.present_list, text_id);
 
 			user->set_daily_reward();
 		}
 
-		reward_info["present_box_num"] = database::present_box::get_present_count(user->get_user_id());
+		reward_info.present_box_num = database::present_box::get_present_count(user->get_user_id());
+		reward_info.to_json(result["reward_info"]);
 
 		return result;
 	}

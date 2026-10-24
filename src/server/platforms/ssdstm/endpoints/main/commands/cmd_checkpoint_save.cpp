@@ -46,30 +46,11 @@ namespace emulator::ssd
 			reward_list.push(reward.param);
 		}
 
+		std::vector<database::users::reward_info_t> rank_reward_infos(mission_settings.rank_threshold.size());
 		auto& defense_mission_reward_j = result["defense_mission_reward"];
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 14 * 24h;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-		const auto text_id = 229691447841577;
-
-		for (auto i = rank; i <= 5; i++)
-		{
-			auto& rank_entry = defense_mission_reward_j[i - rank];
-			rank_entry["battle_pack_list"] = json::array();
-			rank_entry["expire_date"] = expire_date_s.count();
-			rank_entry["kub_boost_flag"] = 0;
-			rank_entry["nonstackable_list"] = json::array();
-			rank_entry["present_box_num"] = 0;
-			rank_entry["present_list"] = json::array();
-			rank_entry["recipe_list"] = json::array();
-			rank_entry["resources_list"] = json::array();
-			rank_entry["stackable_list"] = json::array();
-			rank_entry["text_id"] = text_id;
-			rank_entry["energy"] = 0;
-		}
-		
-		// todo: give recipes?
+		const auto expire_date = utils::time::from_now(14d);
+		constexpr const auto text_id = game::lang_id_mission_completion_reward;
 
 		database::users::give_item_params_t give_params{};
 		give_params.resource_list = &resource_list;
@@ -89,31 +70,33 @@ namespace emulator::ssd
 
 		for (const auto& reward : rewards)
 		{
-			if (reward.rank < rank)
+			if (reward.rank >= rank_reward_infos.size())
 			{
 				continue;
 			}
 
-			auto& rank_entry = defense_mission_reward_j[reward.rank - rank];
-			auto& present_list_j = rank_entry["present_list"];
+			auto& rank_entry = rank_reward_infos[reward.rank];
+			rank_entry.text_id = text_id;
+			rank_entry.expire_date = expire_date;
 
 			game::item_t give_item = reward.param;
 			if (kub_boost.valid && give_item.category == game::ITEM_CATEGORY_ENERGY)
 			{
 				const auto multiplier = (static_cast<float>(kub_boost.get_multiplier()) / 2.f) * 0.1f;
 				give_item.num += static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
-				rank_entry["kub_boost_flag"] = 1;
+				rank_entry.kub_boost_flag = 1;
 			}
 
-			if (!user->give_item(give_item, give_params, rank_entry))
+			if (!user->give_item(give_item, give_params, &rank_entry))
 			{
 				presents.emplace_back(give_item);
-				give_item.to_json(present_list_j[present_list_j.size()]);
+				rank_entry.present_list.emplace_back(give_item);
 			}
 		}
 
 		database::present_box::add_items(user->get_user_id(),
-			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
+			database::present_box::present_flag_expire, 
+			expire_date, presents, text_id);
 
 		if (reward_event_point > 0)
 		{
@@ -128,10 +111,14 @@ namespace emulator::ssd
 		}
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
-		for (auto i = rank; i <= 5; i++)
+		for (auto i = 0ull; i < rank_reward_infos.size(); i++)
 		{
-			auto& rank_entry = defense_mission_reward_j[i - rank];
-			rank_entry["present_box_num"] = present_count;
+			auto& info = rank_reward_infos[i];
+			if (info.text_id != 0)
+			{
+				info.present_box_num = present_count;
+				info.to_json(defense_mission_reward_j[defense_mission_reward_j.size()]);
+			}
 		}
 
 		if (!rewards.empty())
@@ -514,13 +501,7 @@ namespace emulator::ssd
 						continue;
 					}
 
-					const auto member = database::crew_members::find(user->current_player->get_player_id(), update_params.unique_index);
-					if (!member.has_value())
-					{
-						continue;
-					}
-
-					member->update(update_params);
+					database::crew_members::update(user->current_player->get_player_id(), update_params.unique_index, update_params);
 				}
 			}
 

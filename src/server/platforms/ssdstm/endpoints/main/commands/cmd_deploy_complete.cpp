@@ -6,6 +6,7 @@
 #include "database/models/crew_members.hpp"
 
 #include "utils/random.hpp"
+#include "utils/time.hpp"
 
 namespace emulator::ssd
 {
@@ -37,24 +38,9 @@ namespace emulator::ssd
 
 		auto& deploy_result = result["deploy_result"];
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 14 * 24h;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-		const auto text_id = 229691447841577;
-
-		auto& reward_info = deploy_result["reward_info"];
-		reward_info["battle_pack_list"] = json::array();
-		reward_info["expire_date"] = expire_date_s.count();
-		reward_info["kub_boost_flag"] = 0;
-		reward_info["nonstackable_list"] = json::array();
-		reward_info["present_list"] = json::array();
-		reward_info["recipe_list"] = json::array();
-		reward_info["resources_list"] = json::array();
-		reward_info["stackable_list"] = json::array();
-		reward_info["text_id"] = text_id;
-		reward_info["energy"] = 0;
-
-		auto& present_list_j = reward_info["present_list"];
+		database::users::reward_info_t reward_info{};
+		reward_info.expire_date = utils::time::from_now(14d);
+		reward_info.text_id = game::lang_id_mission_completion_reward;
 
 		deploy_result["bad_status_list"] = json::array();
 		deploy_result["motivation_list"] = json::array();
@@ -78,7 +64,7 @@ namespace emulator::ssd
 			give_params.resource_list = &resource_list;
 			give_params.stackable_list = &stackable_list;
 			give_params.player_inventory = &player_inventory;
-			give_params.text_id = text_id;
+			give_params.text_id = reward_info.text_id;
 
 			for (auto i = 0ull; i < iter->second.reward_list.size(); i++)
 			{
@@ -88,10 +74,10 @@ namespace emulator::ssd
 					continue;
 				}
 
-				if (!user.give_item(reward.item_info, give_params, reward_info))
+				if (!user.give_item(reward.item_info, give_params, &reward_info))
 				{
 					presents.emplace_back(reward.item_info);
-					reward.item_info.to_json(present_list_j[present_list_j.size()]);
+					reward_info.present_list.emplace_back(reward.item_info);
 				}
 			}
 		}
@@ -206,9 +192,12 @@ namespace emulator::ssd
 		user.current_player->set_inventory(player_inventory);
 
 		database::present_box::add_items(user.get_user_id(),
-			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
+			database::present_box::present_flag_expire, 
+			reward_info.expire_date, presents, reward_info.text_id);
 
-		reward_info["present_box_num"] = database::present_box::get_present_count(user.get_user_id());
+		reward_info.present_box_num = database::present_box::get_present_count(user.get_user_id());
+		reward_info.to_json(deploy_result["reward_info"]);
+
 		return true;
 	}
 

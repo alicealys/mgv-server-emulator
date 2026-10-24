@@ -5,6 +5,7 @@
 #include "database/models/present_box.hpp"
 
 #include "game/lottery.hpp"
+#include "utils/time.hpp"
 
 namespace emulator::ssd
 {
@@ -33,11 +34,9 @@ namespace emulator::ssd
 
 		user->get_inventory(user_inventory);
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 24h * 14;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
+		const auto expire_date = utils::time::from_now(14d);
 
-		auto& result_list = result["battle_pack_lottery_list"];
+		auto& lottery_list_j = result["battle_pack_lottery_list"];
 
 		database::users::give_item_params_t give_params{};
 		give_params.stackable_list = &stackable_list;
@@ -69,7 +68,6 @@ namespace emulator::ssd
 			}
 
 			const auto& bp_def = game::parameters_table.ssd_sbm_parameters->battle_pack_list[bp->bp_index];
-			
 			const auto lottery = game::battle_pack_lotteries.find(bp_def->id);
 			if (lottery == game::battle_pack_lotteries.end())
 			{
@@ -78,33 +76,25 @@ namespace emulator::ssd
 
 			for (auto o = 0u; o < entry.num; o++)
 			{
-				auto& result_entry = result_list[result_list.size()];
-				auto& battle_pack_id_j = result_entry["battle_pack_id"];
-				auto& present_list_j = result_entry["present_list"];
-				auto& expire_date_j = result_entry["expire_date"];
-				result_entry["resources_list"] = json::array();
-				result_entry["stackable_list"] = json::array();
-				result_entry["nonstackable_list"] = json::array();
-				result_entry["energy"] = 0;
-
-				present_list_j = json::array();
-				battle_pack_id_j = 0;
-				expire_date_j = 0;
-
-				battle_pack_id_j = bp_def->id;
+				database::users::reward_info_t lottery_entry{};
+				auto& lottery_entry_j = lottery_list_j[lottery_list_j.size()];
 
 				const auto item = lottery->second();
-				if (!user->give_item(item, give_params, result_entry))
+				if (!user->give_item(item, give_params, &lottery_entry))
 				{
 					presents.emplace_back(item);
-					item.to_json(present_list_j[present_list_j.size()]);
-					expire_date_j = expire_date_s.count();
+					lottery_entry.present_list.emplace_back(item);
+					lottery_entry.expire_date = expire_date;
 				}
+
+				lottery_entry.to_json(lottery_entry_j);
+				lottery_entry_j["battle_pack_id"] = bp_def->id;
 			}
 		}
 
 		database::present_box::add_items(user->get_user_id(),
-			database::present_box::present_flag_expire, expire_date_s, presents);
+			database::present_box::present_flag_expire, 
+			expire_date, presents);
 
 		user->current_player->set_battle_pack_list(inventory_battle_packs);
 		user->current_player->set_stackable_item_list(stackable_list);

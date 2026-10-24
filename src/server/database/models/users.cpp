@@ -479,6 +479,43 @@ namespace database::users
 		return this->user_id_;
 	}
 
+	reward_info_t::reward_info_t()
+	{
+		this->energy = 0;
+		this->kub_boost_flag = 0;
+		this->present_box_num = 0;
+		this->text_id = 0;
+		this->expire_date = {};
+	}
+
+	void reward_info_t::to_json(json::value& data) const
+	{
+		data["energy"] = this->energy;
+		data["kub_boost_flag"] = this->kub_boost_flag;
+		data["present_box_num"] = this->present_box_num;
+		data["text_id"] = this->text_id;
+		data["expire_date"] = this->expire_date.count();
+		data["recipe_list"] = this->recipe_list;
+
+		const auto copy_array = [&]<typename T>(const std::string_view& key, const T& array)
+		{
+			auto& list_j = data[key];
+			list_j = json::array(array.size());
+			auto& list_array = list_j.get_array();
+
+			for (auto i = 0ull; i < array.size(); i++)
+			{
+				array[i].to_json(list_array[i]);
+			}
+		};
+
+		copy_array("present_list", this->present_list);
+		copy_array("stackable_list", this->stackable_list);
+		copy_array("nonstackable_list", this->nonstackable_list);
+		copy_array("resources_list", this->resources_list);
+		copy_array("battle_pack_list", this->battle_pack_list);
+	}
+
 	namespace impl
 	{
 		template <database_type_t Type>
@@ -1076,7 +1113,7 @@ namespace database::users
 		RUN_IMPL(impl::set_daily_reward, this->get_user_id());
 	}
 
-	bool user::give_item(game::item_t& reward, give_item_params_t& params, json::value& reward_info) const
+	bool user::give_item(game::item_t& reward, give_item_params_t& params, reward_info_t* reward_info) const
 	{
 		switch (reward.category)
 		{
@@ -1101,11 +1138,10 @@ namespace database::users
 				return false;
 			}
 
-			if (reward_info.is_object())
+			if (reward_info != nullptr)
 			{
-				auto& resources_list_j = reward_info["resources_list"];
 				resource.count = static_cast<std::uint16_t>(reward.num);
-				resource.to_json(resources_list_j[resources_list_j.size()]);
+				reward_info->resources_list.emplace_back(resource);
 			}
 
 			return true;
@@ -1144,11 +1180,10 @@ namespace database::users
 					return false;
 				}
 
-				if (reward_info.is_object())
+				if (reward_info != nullptr)
 				{
-					auto& stackable_list_j = reward_info["stackable_list"];
 					stackable_item.count = static_cast<std::uint16_t>(reward.num);
-					stackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+					reward_info->stackable_list.emplace_back(stackable_item);
 				}
 
 				return true;
@@ -1183,10 +1218,9 @@ namespace database::users
 					params.nonstackable_list->inc_gear_count(1u);
 				}
 
-				if (reward_info.is_object())
+				if (reward_info != nullptr)
 				{
-					auto& stackable_list_j = reward_info["nonstackable_list"];
-					nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+					reward_info->nonstackable_list.emplace_back(nonstackable_item);
 				}
 
 				return true;
@@ -1231,10 +1265,9 @@ namespace database::users
 					params.nonstackable_list->inc_gear_count(1u);
 				}
 
-				if (reward_info.is_object())
+				if (reward_info != nullptr)
 				{
-					auto& stackable_list_j = reward_info["nonstackable_list"];
-					nonstackable_item.to_json(stackable_list_j[stackable_list_j.size()]);
+					reward_info->nonstackable_list.emplace_back(nonstackable_item);
 				}
 
 				return true;
@@ -1246,10 +1279,9 @@ namespace database::users
 					return false;
 				}
 
-				if (reward_info.is_object())
+				if (reward_info != nullptr)
 				{
-					auto& recipe_list_j = reward_info["recipe_list"];
-					recipe_list_j[recipe_list_j.size()] = recipe_iter->second->id;
+					reward_info->recipe_list.emplace_back(recipe_iter->second->id);
 				}
 
 				params.user_inventory->set_obtained_recipe(recipe_iter->second->index);
@@ -1320,14 +1352,9 @@ namespace database::users
 			}
 
 			params.player_inventory->energy += reward.num;
-
-			if (reward_info.is_object())
+			if (reward_info != nullptr)
 			{
-				auto& energy_j = reward_info["energy"];
-				if (energy_j.is_number())
-				{
-					energy_j = energy_j.as<std::uint32_t>() + reward.num;
-				}
+				reward_info->energy += reward.num;
 			}
 
 			return true;
@@ -1353,11 +1380,9 @@ namespace database::users
 				return false;
 			}
 
-			if (reward_info.is_object())
+			if (reward_info != nullptr)
 			{
-				auto& battle_pack_list_j = reward_info["battle_pack_list"];
-				battle_pack.count = static_cast<std::uint16_t>(reward.num);
-				battle_pack.to_json(battle_pack_list_j[battle_pack_list_j.size()]);
+				reward_info->battle_pack_list.emplace_back(battle_pack);
 			}
 
 			if (params.user_inventory == nullptr)
@@ -1396,7 +1421,7 @@ namespace database::users
 		return false;
 	}
 
-	bool user::give_item(const game::item_t& item, give_item_params_t& params, json::value& reward_info) const
+	bool user::give_item(const game::item_t& item, give_item_params_t& params, reward_info_t* reward_info) const
 	{
 		game::item_t item_result = item;
 		return this->give_item(item_result, params, reward_info);

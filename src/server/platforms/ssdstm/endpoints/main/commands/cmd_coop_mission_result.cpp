@@ -92,17 +92,8 @@ namespace emulator::ssd
 		auto& mission_rewards_j = result["reward"];
 		auto& reward_event_point_j = result["reward_event_point"];
 
-		personal_reward_j["battle_pack_list"] = json::array();
-		personal_reward_j["expire_date"] = 0;
-		personal_reward_j["kub_boost_flag"] = static_cast<std::uint8_t>(kub_boost.valid);
-		personal_reward_j["nonstackable_list"] = json::array();
-		personal_reward_j["present_box_num"] = 0;
-		personal_reward_j["present_list"] = json::array();
-		personal_reward_j["recipe_list"] = json::array();
-		personal_reward_j["resources_list"] = json::array();
-		personal_reward_j["stackable_list"] = json::array();
-		personal_reward_j["text_id"] = 0;
-		personal_reward_j["energy"] = 0;
+		database::users::reward_info_t personal_reward_info{};
+		personal_reward_info.kub_boost_flag = static_cast<std::uint8_t>(kub_boost.valid);
 
 		limit_result_j["mission_code"] = param.mission_id;
 		limit_result_j["limit_result"] = json::array();
@@ -158,16 +149,15 @@ namespace emulator::ssd
 
 		if (personal_rewards.empty() || rewards.empty())
 		{
+			personal_reward_info.to_json(personal_reward_j);
 			return result;
 		}
 
-		const auto now = std::chrono::system_clock::now();
-		const auto expire_date = now + 14 * 24h;
-		const auto expire_date_s = std::chrono::duration_cast<std::chrono::seconds>(expire_date.time_since_epoch());
-		const auto text_id = 229691447841577;
+		const auto expire_date = utils::time::from_now(14d);
+		constexpr const auto text_id = game::lang_id_mission_completion_reward;
 
-		personal_reward_j["text_id"] = text_id;
-		personal_reward_j["expire_date"] = expire_date_s;
+		personal_reward_info.text_id = text_id;
+		personal_reward_info.expire_date = expire_date;
 
 		database::players::stackable_item_list_t stackable_list{};
 		database::players::nonstackable_item_list_t nonstackable_list{};
@@ -181,21 +171,7 @@ namespace emulator::ssd
 		user->current_player->get_inventory(player_inventory);
 		user->current_player->get_battle_pack_list(battle_pack_list);
 
-		for (auto i = rank; i < rank_count; i++)
-		{
-			auto& rank_entry = mission_rewards_j[i - rank];
-			rank_entry["battle_pack_list"] = json::array();
-			rank_entry["expire_date"] = expire_date_s.count();
-			rank_entry["kub_boost_flag"] = (i * 4u + 2u) + static_cast<std::uint8_t>(kub_boost.valid);
-			rank_entry["nonstackable_list"] = json::array();
-			rank_entry["present_box_num"] = 0;
-			rank_entry["present_list"] = json::array();
-			rank_entry["recipe_list"] = json::array();
-			rank_entry["resources_list"] = json::array();
-			rank_entry["stackable_list"] = json::array();
-			rank_entry["text_id"] = text_id;
-			rank_entry["energy"] = 0;
-		}
+		std::vector<database::users::reward_info_t> rank_reward_infos(rank_count);
 
 		database::users::give_item_params_t give_params{};
 		give_params.resource_list = &resource_list;
@@ -216,26 +192,26 @@ namespace emulator::ssd
 				give_item.num = static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
 			}
 
-			if (!user->give_item(give_item, give_params, personal_reward_j))
+			if (!user->give_item(give_item, give_params, &personal_reward_info))
 			{
-				auto& present_list_j = personal_reward_j["present_list"];
+				personal_reward_info.present_list.emplace_back(give_item);
 				presents.emplace_back(give_item);
-				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
 
 		for (const auto& reward : rewards)
 		{
-			if (reward.rank < rank)
+			if (reward.rank >= rank_reward_infos.size())
 			{
 				continue;
 			}
 
-			auto& rank_entry = mission_rewards_j[reward.rank - rank];
-			auto& present_list_j = rank_entry["present_list"];
+			auto& rank_entry = rank_reward_infos[reward.rank];
+			rank_entry.expire_date = expire_date;
+			rank_entry.kub_boost_flag = (reward.rank * 4u + 2u) + static_cast<std::uint8_t>(kub_boost.valid);
+			rank_entry.text_id = text_id;
 
 			game::item_t give_item = reward.item;
-
 			if (kub_boost.valid && give_item.category == game::ITEM_CATEGORY_ENERGY)
 			{
 				// multiplier changes (sometimes) based on enemy level but i cba
@@ -243,21 +219,28 @@ namespace emulator::ssd
 				give_item.num = static_cast<std::uint32_t>(static_cast<float>(give_item.num) * multiplier);
 			}
 
-			if (!user->give_item(give_item, give_params, rank_entry))
+			if (!user->give_item(give_item, give_params, &rank_entry))
 			{
+				rank_entry.present_list.emplace_back(give_item);
 				presents.emplace_back(give_item);
-				give_item.to_json(present_list_j[present_list_j.size()]);
 			}
 		}
 
 		database::present_box::add_items(user->get_user_id(),
-			database::present_box::present_flag_expire, expire_date_s, presents, text_id);
+			database::present_box::present_flag_expire, 
+			expire_date, presents, text_id);
+
+		personal_reward_info.to_json(personal_reward_j);
 
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
-		for (auto i = rank; i < rank_count; i++)
+		for (auto i = 0ull; i < rank_reward_infos.size(); i++)
 		{
-			auto& rank_entry = mission_rewards_j[i - rank];
-			rank_entry["present_box_num"] = present_count;
+			auto& info = rank_reward_infos[i];
+			if (info.text_id != 0)
+			{
+				info.present_box_num = present_count;
+				rank_reward_infos[i].to_json(mission_rewards_j[mission_rewards_j.size()]);
+			}
 		}
 
 		user->current_player->set_inventory_resource_list(resource_list);

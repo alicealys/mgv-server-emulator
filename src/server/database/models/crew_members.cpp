@@ -136,6 +136,21 @@ namespace database::crew_members
 		utils::json_utils::parse_array(data["motivation_history_event"], this->motivation_history.event);
 		utils::json_utils::parse_array(data["motivation_history_value"], this->motivation_history.value);
 		utils::json_utils::parse_string(data["nickname"], this->nickname);
+
+		const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
+		{
+			if (id == 0 || time == 0)
+			{
+				id = 0;
+				time = 0;
+			}
+		};
+
+		fix_sickness(this->sickness_id_1, this->sickness_time_1);
+		fix_sickness(this->sickness_id_2, this->sickness_time_2);
+		fix_sickness(this->injury_id_1, this->injury_time_1);
+		fix_sickness(this->injury_id_2, this->injury_time_2);
+
 		return true;
 	}
 
@@ -179,6 +194,21 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["survival_days"], this->survival_days);
 		utils::json_utils::parse_array(data["motivation_history_event"], this->motivation_history.event);
 		utils::json_utils::parse_array(data["motivation_history_value"], this->motivation_history.value);
+
+		const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
+		{
+			if (id == 0 || time == 0)
+			{
+				id = 0;
+				time = 0;
+			}
+		};
+
+		fix_sickness(this->sickness_id_1, this->sickness_time_1);
+		fix_sickness(this->sickness_id_2, this->sickness_time_2);
+		fix_sickness(this->injury_id_1, this->injury_time_1);
+		fix_sickness(this->injury_id_2, this->injury_time_2);
+
 		return true;
 	}
 
@@ -191,18 +221,12 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["item4_count"], this->item4_count);
 		utils::json_utils::get_or(data["item5_count"], this->item5_count);
 		utils::json_utils::get_or(data["item6_count"], this->item6_count);
-		utils::json_utils::get_or(data["map_location"], this->map_location);
 		utils::json_utils::get_or(data["voice_type"], this->voice_type);
 
 		utils::json_utils::get_or(data["face_id"], this->face_id);
 		utils::json_utils::get_or(data["body_id"], this->body_id);
 		utils::json_utils::get_or(data["race_id"], this->race_id);
 		utils::json_utils::get_or(data["sex_id"], this->sex_id);
-
-		if (this->map_location > 1)
-		{
-			return false;
-		}
 
 		std::uint32_t crew_type_code{};
 		std::uint32_t unique_type_code{};
@@ -251,6 +275,7 @@ namespace database::crew_members
 			this->ability_animal = 0;
 			this->ability_defense_unit = 0;
 			this->ability_gadget = 0;
+			this->map_location = 0;
 
 			this->ability_base_defense = roll_skill_value(crew_type.base_defense_low, crew_type.base_defense_high, game::BASE_DEFENSE);
 			this->ability_develop = roll_skill_value(crew_type.develop_low, crew_type.develop_high, game::DEVELOP);
@@ -776,6 +801,11 @@ namespace database::crew_members
 	void remove_all(const std::uint64_t player_id)
 	{
 		RUN_IMPL(impl::remove_all, player_id);
+	}
+
+	void update(const std::uint64_t player_id, const std::uint64_t member_id, const member_params_t& params)
+	{
+		RUN_IMPL(impl::update1, player_id, member_id, params);
 	}
 
 	void delete_player_data(const std::uint64_t player_id)

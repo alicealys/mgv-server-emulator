@@ -51,9 +51,8 @@ namespace emulator::ssd
 		give_params.user_inventory = &user_inventory;
 		give_params.text_id = item->get_text_id();
 
-		json::value empty;
 		game::item_t result_item = item->get_reward();
-		if (!user->give_item(result_item, give_params, empty))
+		if (!user->give_item(result_item, give_params))
 		{
 			return error(ERR_OVER_CAPACITY);
 		}

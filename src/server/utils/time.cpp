@@ -55,4 +55,15 @@ namespace utils::time
 	{
 		return get_day() / 7;
 	}
+
+	std::chrono::seconds from_now(const std::chrono::seconds duration)
+	{
+		const auto now = std::chrono::system_clock::now();
+		return std::chrono::duration_cast<std::chrono::seconds>((now + duration).time_since_epoch());
+	}
+
+	std::chrono::seconds from_now(const std::chrono::day duration)
+	{
+		return from_now(duration.operator unsigned int() * 24h);
+	}
 }
