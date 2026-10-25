@@ -2448,16 +2448,18 @@ namespace database::players
 				for (auto o = 0ull; o < stackable_item_list.size(); o++)
 				{
 					auto& entry = stackable_item_list[o];
-					if (cost[i].id == entry.get_production_id())
+					if (cost[i].id != entry.get_production_id())
 					{
-						const auto sub_value = std::min(entry.count, cost[i].count * amount);
-						entry.count -= sub_value;
-						cost_value -= sub_value;
+						continue;
+					}
 
-						if (cost_value == 0)
-						{
-							break;
-						}
+					const auto sub_value = std::min(entry.count, cost_value);
+					entry.count -= sub_value;
+					cost_value -= sub_value;
+
+					if (cost_value == 0)
+					{
+						break;
 					}
 				}
 
