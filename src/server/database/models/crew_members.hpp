@@ -14,6 +14,7 @@ namespace database::crew_members
 		std::uint8_t event[10];
 		std::uint8_t value[10];
 
+		void push(const std::uint8_t event, const std::uint8_t value);
 		void to_json(json::value& data) const;
 	};
 
@@ -252,7 +253,7 @@ namespace database::crew_members
 			this->last_name_index_ = static_cast<std::uint32_t>(row.last_name_index);
 
 			this->nickname_ = row.nickname;
-			this->motivation_history_.deserialize(row.motivation_history.value());
+			this->motivation_history.deserialize(row.motivation_history.value());
 
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());
 
@@ -336,8 +337,7 @@ namespace database::crew_members
 
 		void add_items(const std::array<std::uint32_t, 6>& add_counts) const;
 
-	private:
-		motivation_history_t motivation_history_{};
+		motivation_history_t motivation_history{};
 
 	};
 

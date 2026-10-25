@@ -1382,6 +1382,7 @@ namespace database::users
 
 			if (reward_info != nullptr)
 			{
+				battle_pack.count = static_cast<std::uint16_t>(reward.num);
 				reward_info->battle_pack_list.emplace_back(battle_pack);
 			}
 

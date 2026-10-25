@@ -41,6 +41,15 @@ namespace database::crew_members
 		}
 	}
 
+	void motivation_history_internal_t::push(const std::uint8_t new_event, const std::uint8_t new_value)
+	{
+		std::memmove(&this->event[1], &this->event[0], sizeof(std::uint8_t) * (ARRAYSIZE(this->event) - 1));
+		std::memmove(&this->value[1], &this->value[0], sizeof(std::uint8_t) * (ARRAYSIZE(this->value) - 1));
+
+		this->event[0] = new_event;
+		this->value[0] = new_value;
+	}
+
 	GET_FIELD_C(crew_member, std::uint64_t, member_id);
 	GET_FIELD_C(crew_member, std::uint64_t, player_id);
 	GET_FIELD_C(crew_member, std::uint32_t, member_type);
@@ -770,7 +779,7 @@ namespace database::crew_members
 		data["unique_index"] = this->member_type_;
 		data["generation_date"] = this->creation_date_.count();
 
-		this->motivation_history_.to_json(data);
+		this->motivation_history.to_json(data);
 	}
 
 	std::uint64_t create(const std::uint64_t player_id, const member_params_t& params)
