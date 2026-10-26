@@ -156,6 +156,9 @@ namespace emulator::ssd
 			auto& user_flag_j = mission_progress_j["user_flag"];
 			auto& defense_mission_parameter_j = mission_progress_j["defense_mission_parameter"];
 			auto& communication_gesture_slot_j = mission_progress_j["communication_gesture_slot"];
+			auto& bgm_my_list_j = mission_progress_j["bgm_my_list"];
+			auto& play_record_player_j = mission_progress_j["play_record_player"];
+			auto& play_record_player_additional_130_j = mission_progress_j["play_record_player_additional_130"];
 
 			auto gimmick_info = std::make_unique<database::players::gimmick_info_t>();
 			if (gimmick_save_info_afghan_j.is_object())
@@ -196,10 +199,14 @@ namespace emulator::ssd
 			if (inventory_user_info_j.is_object())
 			{
 				auto inventory = std::make_unique<database::users::user_inventory_t>();
-				if (inventory->parse(inventory_user_info_j))
+				inventory->parse(inventory_user_info_j);
+
+				if (bgm_my_list_j.is_array())
 				{
-					user->set_inventory(*inventory);
+					inventory->bgm_settings.parse_playlists(bgm_my_list_j);
 				}
+
+				user->set_inventory(*inventory);
 			}
 
 			if (load_out_list_j.is_array())
@@ -217,7 +224,7 @@ namespace emulator::ssd
 
 					if (index < ARRAYSIZE(loadouts->list))
 					{
-						std::memcpy(&loadouts->list[i], loadout.get(), sizeof(database::players::loadout_t));
+						std::memcpy(&loadouts->list[index], loadout.get(), sizeof(database::players::loadout_t));
 					}
 				}
 
@@ -364,6 +371,15 @@ namespace emulator::ssd
 					{
 						user->current_player->set_mission_info(*mission_info);
 					}
+				}
+			}
+
+			if (play_record_player_j.is_array() && play_record_player_additional_130_j.is_array())
+			{
+				auto record = std::make_unique<database::players::player_play_record_t>();
+				if (record->parse_first(play_record_player_j) && record->parse_additional(play_record_player_additional_130_j))
+				{
+					user->current_player->set_play_record(*record);
 				}
 			}
 

@@ -153,23 +153,27 @@ namespace database::users
 		}
 
 		utils::json_utils::get_or(data["setting"], this->setting, this->setting);
+		this->parse_playlists(data["list_infos"]);
+		return true;
+	}
 
-		auto& list_infos = data["list_infos"];
-		if (!list_infos.is_array())
+	bool bgm_settings_t::parse_playlists(json::value& data)
+	{
+		if (!data.is_array())
 		{
-			return true;
+			return false;
 		}
 
-		const auto count = std::min(list_infos.size(), ARRAYSIZE(this->playlists));
+		const auto count = std::min(data.size(), ARRAYSIZE(this->playlists));
 		for (auto i = 0ull; i < count; i++)
 		{
 			playlist_t::parseable entry{};
-			if (!json::read(entry, list_infos[i]) || entry.index >= ARRAYSIZE(this->playlists))
+			if (!json::read(entry, data[i]) || entry.index >= ARRAYSIZE(this->playlists))
 			{
 				continue;
 			}
 
-			utils::json_utils::parse_string(list_infos[i]["name"], this->playlists[entry.index].name);
+			utils::json_utils::parse_string(data[i]["name"], this->playlists[entry.index].name);
 
 			for (auto o = 0ull; o < ARRAYSIZE(this->playlists[entry.index].cassette_ids); o++)
 			{

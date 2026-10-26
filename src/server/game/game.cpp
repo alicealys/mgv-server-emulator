@@ -604,7 +604,7 @@ namespace game
 		}
 
 		auto idx = 0u;
-		std::array<option_t, 8> new_options;
+		std::array<option_t, 8> new_options{};
 		for (auto i = 0ull; i < this->options.size(); i++)
 		{
 			if (this->options[i].optid == 0)

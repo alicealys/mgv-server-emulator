@@ -2172,6 +2172,36 @@ namespace database::players
 		std::memcpy(this, default_info, sizeof(communication_gesture_info_t));
 	}
 
+	bool player_play_record_t::parse_first(json::value& first_list)
+	{
+		if (!first_list.is_array() || first_list.size() != ARRAYSIZE(this->first))
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->first); i++)
+		{
+			json::read(this->first[i], first_list[i]);
+		}
+
+		return true;
+	}
+
+	bool player_play_record_t::parse_additional(json::value& additional_list)
+	{
+		if (!additional_list.is_array() || additional_list.size() != ARRAYSIZE(this->additional))
+		{
+			return false;
+		}
+
+		for (auto i = 0ull; i < ARRAYSIZE(this->additional); i++)
+		{
+			json::read(this->additional[i], additional_list[i]);
+		}
+
+		return true;
+	}
+
 	bool player_play_record_t::parse_save(json::value& first_save, json::value& additional_save)
 	{
 		if (!first_save.is_array() || !additional_save.is_array())

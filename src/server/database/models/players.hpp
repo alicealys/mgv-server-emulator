@@ -693,6 +693,8 @@ namespace database::players
 		std::uint32_t first[191];
 		std::uint32_t additional[46];
 
+		bool parse_first(json::value& first_list);
+		bool parse_additional(json::value& additional_list);
 		bool parse_save(json::value& first_save, json::value& additional_save);
 		bool parse_coop_save(json::value& first_save, json::value& additional_save);
 	};

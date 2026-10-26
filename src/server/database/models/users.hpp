@@ -25,6 +25,7 @@ namespace database::users
 		playlist_t playlists[5];
 
 		bool parse(json::value& data);
+		bool parse_playlists(json::value& data);
 		void to_json(json::value& data) const;
 	};
 
