@@ -616,6 +616,7 @@ namespace game
 		}
 
 		this->options = new_options;
+		return true;
 	}
 
 	bool customize_t::parse(json::value& data)
@@ -643,6 +644,7 @@ namespace game
 
 		this->option_slots = new_slots;
 		this->option_slot_ids = new_slots_ids;
+		return true;
 	}
 
 	bool resource_t::parse(json::value& data)

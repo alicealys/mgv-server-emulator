@@ -26,9 +26,15 @@ namespace utils
 
 	struct request_params
 	{
+		struct header_t
+		{
+			std::string key;
+			std::string value;
+		};
+
 		std::string uri;
-		std::string headers;
 		std::string body;
+		std::vector<header_t> headers;
 		request_address address;
 		request_query query;
 	};
@@ -45,6 +51,12 @@ namespace utils
 		std::uint32_t code{};
 		std::string headers;
 		std::string body;
+	};
+
+	struct task_data_t
+	{
+		request_params request;
+		response_params response;
 	};
 
 	using event_handler_t = std::function<void(const request_params&, response_params& response)>;

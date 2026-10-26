@@ -11,6 +11,34 @@ namespace utils
 {
 	namespace
 	{
+		std::string_view mg_str_to_view(const std::string& new_string, mg_str source, mg_str str)
+		{
+			const auto offset = str.buf - source.buf;
+			return {new_string.data() + offset, str.len};
+		}
+
+		std::string mg_str_copy(mg_str str)
+		{
+			return {str.buf, str.len};
+		}
+
+		mg_str str_to_mg_str(std::string& str)
+		{
+			return mg_str{str.data(), str.size()};
+		}
+
+		void request_to_http_message(request_params& request, mg_http_message& message)
+		{
+			message.body = str_to_mg_str(request.body);
+			message.uri = str_to_mg_str(request.uri);
+
+			for (auto i = 0ull; i < request.headers.size(); i++)
+			{
+				message.headers[i].name = str_to_mg_str(request.headers[i].key);
+				message.headers[i].value = str_to_mg_str(request.headers[i].value);
+			}
+		}
+
 		bool parse_client_ip(mg_connection* c, mg_http_message* http_message, std::uint8_t* ip)
 		{
 			static const auto& client_ip_header = config::get().http_client_ip_header;
@@ -58,6 +86,21 @@ namespace utils
 			}
 		}
 
+		void parse_request_headers(mg_http_message* msg, std::vector<request_params::header_t>& headers)
+		{
+			for (auto i = 0ull; i < ARRAYSIZE(msg->headers); i++)
+			{
+				if (msg->headers[i].value.len == 0)
+				{
+					continue;
+				}
+
+				headers.emplace_back(
+					mg_str_copy(msg->headers[i].name),
+					mg_str_copy(msg->headers[i].value));
+			}
+		}
+
 		static void mg_wakeup_handler(struct mg_connection* c, int ev, void* ev_data) 
 		{
 			if (ev == MG_EV_READ) 
@@ -81,9 +124,9 @@ namespace utils
 						}
 					}
 
-					if (data.len == sizeof(response_params*))
+					if (data.len == sizeof(task_data_t*))
 					{
-						auto task_data = *reinterpret_cast<response_params**>(data.buf);
+						auto task_data = *reinterpret_cast<task_data_t**>(data.buf);
 						delete task_data;
 					}
 
@@ -190,11 +233,12 @@ namespace utils
 				break;
 			}
 
-			request_params params{};
-			params.body = {http_message->body.buf, http_message->body.len};
-			params.uri = {http_message->uri.buf, http_message->uri.len};
-			params.address.is_valid = parse_client_ip(c, http_message, params.address.ip);
-			parse_query_params(http_message, params.query);
+			auto task_data = new task_data_t();
+			task_data->request.body = mg_str_copy(http_message->body);
+			task_data->request.uri = mg_str_copy(http_message->uri);
+			task_data->request.address.is_valid = parse_client_ip(c, http_message, task_data->request.address.ip);
+			parse_query_params(http_message, task_data->request.query);
+			parse_request_headers(http_message, task_data->request.headers);
 
 #ifdef DEBUG
 			static std::atomic_int64_t thread_index;
@@ -206,14 +250,13 @@ namespace utils
 
 #ifdef DEBUG
 			console::debug("[HTTP Server] Create task data\n");
-			inst->thread_pool_.push([params = std::move(params), inst, id, start, index]()
+			inst->thread_pool_.push([task_data, inst, id, start, index]()
 #else
-			inst->thread_pool_.push([params = std::move(params), inst, id]()
+			inst->thread_pool_.push([task_data, inst, id]()
 #endif
 			{
-				auto response = new response_params();
-				inst->request_handler->operator()(params, *response);
-				mg_wakeup(&inst->manager_, id, &response, sizeof(response));
+				inst->request_handler->operator()(task_data->request, task_data->response);
+				mg_wakeup(&inst->manager_, id, &task_data, sizeof(task_data));
 #ifdef DEBUG
 				const auto now = std::chrono::high_resolution_clock::now();
 				console::debug("[HTTP Server] [Request %lli] Finished in %lli msec\n", index,
@@ -226,19 +269,20 @@ namespace utils
 		case MG_EV_WAKEUP:
 		{
 			auto data = reinterpret_cast<mg_str*>(ev_data);
-			auto response = *reinterpret_cast<response_params**>(data->buf);
-			switch (response->type)
+			auto task_data = *reinterpret_cast<task_data_t**>(data->buf);
+			switch (task_data->response.type)
 			{
 			case response_file:
 			{
 				mg_http_serve_opts options{};
-				const auto http_message = static_cast<mg_http_message*>(ev_data);
-				mg_http_serve_file(c, http_message, response->body.data(), &options);
+				mg_http_message http_message{};
+				request_to_http_message(task_data->request, http_message);
+				mg_http_serve_file(c, &http_message, task_data->response.body.data(), &options);
 				break;
 			}
 			default:
 			case response_text:
-				mg_http_reply(c, response->code, response->headers.data(), "%s", response->body.data());
+				mg_http_reply(c, task_data->response.code, task_data->response.headers.data(), "%s", task_data->response.body.data());
 				break;
 			}
 			break;
