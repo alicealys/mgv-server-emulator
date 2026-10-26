@@ -549,7 +549,7 @@ namespace database::deployments
 
 		data["team_info"]["combat"] = this->info_combat_;
 		data["team_info"]["index"] = this->index_;
-		data["team_info"]["name"] = utils::cryptography::base64::encode(this->info_name_);
+		data["team_info"]["name"] = this->info_name_;
 		data["team_info"]["status"] = this->info_status_;
 		data["team_info"]["survive"] = this->info_survive_;
 

@@ -72,7 +72,7 @@ namespace database::crew_members
 		std::uint32_t sex_id;
 		std::uint32_t unique_index;
 		motivation_history_t motivation_history;
-		char nickname[32];
+		std::string nickname;
 
 		bool parse(json::value& data);
 		bool parse_update(json::value& data);

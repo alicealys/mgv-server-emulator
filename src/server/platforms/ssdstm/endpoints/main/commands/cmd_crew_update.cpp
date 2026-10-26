@@ -61,7 +61,14 @@ namespace emulator::ssd
 		do_list.template operator()<update_nickname_entry_t>("update_nickname_list", 
 			[](const database::crew_members::crew_member& member, update_nickname_entry_t& entry)
 			{
-				member.update_nickname(entry.nickname);
+				if (entry.nickname.size() > 64)
+				{
+					return;
+				}
+
+				const auto decoded = utils::cryptography::base64::decode(entry.nickname);
+				const auto encoded = utils::cryptography::base64::encode(decoded);
+				member.update_nickname(encoded);
 			}
 		);
 

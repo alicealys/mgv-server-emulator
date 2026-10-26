@@ -13,7 +13,7 @@ namespace emulator::ssd
 		json::value result;
 
 		param_t param{};
-		if (!json::read(param, data))
+		if (!json::read(param, data) || param.team_info.name.size() > 64)
 		{
 			return error(ERR_INVALIDARG);
 		}
@@ -62,12 +62,15 @@ namespace emulator::ssd
 			return error(ERR_ALREADY_DEPLOY);
 		}
 
+		const auto decoded_name = utils::cryptography::base64::decode(param.team_info.name);
+		const auto encoded_name = utils::cryptography::base64::encode(decoded_name);
+
 		database::deployments::deploy_params_t deploy_params;
 		deploy_params.crew_ids[0] = param.team_info.crew_id_list[0];
 		deploy_params.crew_ids[1] = param.team_info.crew_id_list[1];
 		deploy_params.crew_ids[2] = param.team_info.crew_id_list[2];
 		deploy_params.crew_ids[3] = param.team_info.crew_id_list[3];
-		deploy_params.name = utils::cryptography::base64::decode(param.team_info.name);
+		deploy_params.name = encoded_name;
 		deploy_params.combat = param.team_info.combat;
 		deploy_params.survive = param.team_info.survive;
 		deploy_params.team_params = team_params;

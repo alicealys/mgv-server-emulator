@@ -34,7 +34,7 @@ create table if not exists `players`
 (
 	player_id					integer	primary key autoincrement,
 	f_user_id					bigint unsigned not null,
-	player_index				bigint unsigned unique default null,
+	player_index				bigint unsigned default 0,
 	player_creation_date		datetime        not null,
 	nameplate					int unsigned default 0,
 	gimmick_info				varchar(64) default null,
@@ -164,7 +164,7 @@ create table if not exists `deployment_teams`
 (
 	team_id				integer	primary key autoincrement,
 	f_player_id			bigint unsigned	not null,
-	team_index			bigint unsigned	not null,
+	team_index			bigint unsigned default 0,
 	params				varchar(64) default null,
 	info_name			varchar(64) default null,
 	info_status			int unsigned not null default 0,
@@ -203,7 +203,7 @@ begin
         from deployment_teams 
         where f_player_id = NEW.f_player_id
     )
-    where team_id = NEW.player_id;
+    where team_id = NEW.f_player_id;
 end
 -- query:mgssd.deployment_teams.remove_update_trigger
 drop trigger if exists deployment_teams_update_trigger
@@ -438,7 +438,6 @@ create table if not exists `coop_missions`
 	mission_code		int unsigned	not null,
 	flag				int unsigned	not null,
 	create_date			datetime not null,
-	primary key (`coop_mission_id`),
 	foreign key (`owner_player_id`) references `players`(`player_id`)
 )
 -- query:mgssd.coop_mission_results.create
@@ -451,11 +450,9 @@ create table if not exists `coop_mission_results`
 	clear_rank				int unsigned	not null,
 	score					int unsigned	not null,
 	personal_score			int unsigned	not null,
-	result					int unsigned	not null,
 	waves					int unsigned	not null,
 	rescue					int unsigned	not null,
 	create_date				datetime not null,
-	primary key (`coop_mission_result_id`),
 	foreign key (`f_player_id`) references `players`(`player_id`)
 )
 -- query:mgssd.boosts.create

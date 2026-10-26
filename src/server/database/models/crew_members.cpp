@@ -144,7 +144,15 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["unique_index"], this->unique_index);
 		utils::json_utils::parse_array(data["motivation_history_event"], this->motivation_history.event);
 		utils::json_utils::parse_array(data["motivation_history_value"], this->motivation_history.value);
-		utils::json_utils::parse_string(data["nickname"], this->nickname);
+		utils::json_utils::get_or(data["nickname"], this->nickname);
+
+		if (this->nickname.size() > 64)
+		{
+			return false;
+		}
+
+		const auto decoded = utils::cryptography::base64::decode(this->nickname);
+		this->nickname = utils::cryptography::base64::encode(decoded);
 
 		const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
 		{
