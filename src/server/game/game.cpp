@@ -598,12 +598,51 @@ namespace game
 
 	bool customize_option_group_t::parse(json::value& data)
 	{
-		return json::read(*this, data);
+		if (!json::read(*this, data))
+		{
+			return false;
+		}
+
+		auto idx = 0u;
+		std::array<option_t, 8> new_options;
+		for (auto i = 0ull; i < this->options.size(); i++)
+		{
+			if (this->options[i].optid == 0)
+			{
+				continue;
+			}
+
+			new_options[idx++] = this->options[i];
+		}
+
+		this->options = new_options;
 	}
 
 	bool customize_t::parse(json::value& data)
 	{
-		return json::read(*this, data);
+		if (!json::read(*this, data))
+		{
+			return false;
+		}
+
+		auto idx = 0u;
+		std::array<std::shared_ptr<customize_option_group_t>, 8> new_slots{};
+		std::array<std::uint32_t, 8> new_slots_ids{};
+
+		for (auto i = 0ull; i < this->option_slot_ids.size(); i++)
+		{
+			if (this->option_slot_ids[i] == 0)
+			{
+				continue;
+			}
+
+			auto index = idx++;
+			new_slots[index] = this->option_slots[i];
+			new_slots_ids[index] = this->option_slot_ids[i];
+		}
+
+		this->option_slots = new_slots;
+		this->option_slot_ids = new_slots_ids;
 	}
 
 	bool resource_t::parse(json::value& data)
