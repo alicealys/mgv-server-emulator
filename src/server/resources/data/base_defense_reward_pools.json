@@ -7,7 +7,6 @@
                 "event_points": 0,
                 "max_rewards": 1,
                 "min_rewards": 1,
-                "recipe_list": [],
                 "rewards": [
                     {
                         "category": 0,
@@ -524,6 +523,11 @@
                 "event_points": 1100,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    404460420,
+                    173632057,
+                    2414708157
+                ],
                 "rewards": [
                     {
                         "category": 0,
@@ -996,6 +1000,11 @@
                 "event_points": 1210,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    302411118,
+                    3077447021,
+                    383212591
+                ],
                 "rewards": [
                     {
                         "category": 0,
@@ -1468,6 +1477,15 @@
                 "event_points": 1104,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    1338850745,
+                    536826263,
+                    812041117,
+                    1441993742,
+                    2016651110,
+                    969284346,
+                    3814161747
+                ],
                 "rewards": [
                     {
                         "category": 0,
@@ -1892,6 +1910,16 @@
                 "event_points": 1196,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    1771871993,
+                    608540233,
+                    3331043315,
+                    164907532,
+                    1537752011,
+                    3569194866,
+                    2235036628,
+                    3112796468
+                ],
                 "rewards": [
                     {
                         "category": 0,
@@ -2364,6 +2392,14 @@
                 "event_points": 1260,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    65324177,
+                    3668158287,
+                    2769523034,
+                    2837817950,
+                    636546939,
+                    3563312257
+                ],
                 "rewards": [
                     {
                         "category": 0,
@@ -2836,6 +2872,10 @@
                 "event_points": 1350,
                 "max_rewards": 2,
                 "min_rewards": 2,
+                "recipe_list": [
+                    1679215563,
+                    428315677
+                ],
                 "rewards": [
                     {
                         "category": 0,

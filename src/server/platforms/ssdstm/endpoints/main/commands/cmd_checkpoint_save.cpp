@@ -17,11 +17,6 @@ namespace emulator::ssd
 		database::defense_missions::reward_list_t& reward_list,
 		const game::defense_mission_settings_t& mission_settings, const std::uint8_t rank)
 	{
-		database::players::stackable_item_list_t stackable_list{};
-		database::players::nonstackable_item_list_t nonstackable_list{};
-		database::players::inventory_resource_list_t resource_list{};
-		database::players::player_inventory_t player_inventory{};
-
 		std::uint32_t reward_event_point{};
 		const auto rewards = database::defense_missions::generate_rewards(mission_settings, rank, reward_event_point);
 
@@ -33,13 +28,41 @@ namespace emulator::ssd
 			}
 		});
 
-		if (!rewards.empty())
+		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
+		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
+		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
+		const auto has_boost = bp_boost.valid || kub_boost.valid;
+
+		result["boost_flag"] = has_boost & 1;
+
+		if (reward_event_point > 0)
 		{
-			user->current_player->get_stackable_item_list(stackable_list);
-			user->current_player->get_nonstackable_item_list(nonstackable_list);
-			user->current_player->get_inventory_resource_list(resource_list);
-			user->current_player->get_inventory(player_inventory);
+			if (bp_boost.valid)
+			{
+				reward_event_point *= bp_boost.get_multiplier();
+			}
+
+			user->add_event_points(reward_event_point);
+			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
+			result["reward_event_point"] = reward_event_point;
 		}
+
+		if (rewards.empty())
+		{
+			return;
+		}
+
+		database::players::stackable_item_list_t stackable_list{};
+		database::players::nonstackable_item_list_t nonstackable_list{};
+		database::players::inventory_resource_list_t resource_list{};
+		database::players::player_inventory_t player_inventory{};
+		const auto user_inventory = std::make_unique<database::users::user_inventory_t>();
+
+		user->current_player->get_stackable_item_list(stackable_list);
+		user->current_player->get_nonstackable_item_list(nonstackable_list);
+		user->current_player->get_inventory_resource_list(resource_list);
+		user->current_player->get_inventory(player_inventory);
+		user->get_inventory(*user_inventory);
 
 		for (const auto& reward : rewards)
 		{
@@ -57,16 +80,10 @@ namespace emulator::ssd
 		give_params.stackable_list = &stackable_list;
 		give_params.nonstackable_list = &nonstackable_list;
 		give_params.player_inventory = &player_inventory;
+		give_params.user_inventory = user_inventory.get();
 		give_params.text_id = text_id;
 
 		std::vector<game::item_t> presents;
-
-		const auto boost_list = database::boosts::get_boost_list(user->get_user_id());
-		const auto& kub_boost = boost_list[database::boosts::boost_type_kub];
-		const auto& bp_boost = boost_list[database::boosts::boost_type_bp];
-		const auto has_boost = bp_boost.valid || kub_boost.valid;
-
-		result["boost_flag"] = has_boost & 1;
 
 		for (const auto& reward : rewards)
 		{
@@ -98,18 +115,6 @@ namespace emulator::ssd
 			database::present_box::present_flag_expire, 
 			expire_date, presents, text_id);
 
-		if (reward_event_point > 0)
-		{
-			if (bp_boost.valid)
-			{
-				reward_event_point *= bp_boost.get_multiplier();
-			}
-
-			user->add_event_points(reward_event_point);
-			database::rankings::increment_points(user->get_user_id(), database::rankings::ranking_type_event, reward_event_point);
-			result["reward_event_point"] = reward_event_point;
-		}
-
 		const auto present_count = database::present_box::get_present_count(user->get_user_id());
 		for (auto i = 0ull; i < rank_reward_infos.size(); i++)
 		{
@@ -121,13 +126,11 @@ namespace emulator::ssd
 			}
 		}
 
-		if (!rewards.empty())
-		{
-			user->current_player->set_inventory_resource_list(resource_list);
-			user->current_player->set_stackable_item_list(stackable_list);
-			user->current_player->set_nonstackable_item_list(nonstackable_list);
-			user->current_player->set_inventory(player_inventory);
-		}
+		user->current_player->set_inventory_resource_list(resource_list);
+		user->current_player->set_stackable_item_list(stackable_list);
+		user->current_player->set_nonstackable_item_list(nonstackable_list);
+		user->current_player->set_inventory(player_inventory);
+		user->set_inventory(*user_inventory);
 	}
 
 	void cmd_checkpoint_save::save_defense_mission(json::value& result, json::value& wave_results, const std::optional<database::users::user>& user)

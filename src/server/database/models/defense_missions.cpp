@@ -167,6 +167,15 @@ namespace database::defense_missions
 				rewards.emplace_back(reward_info);
 			}
 
+			for (const auto& recipe_id : rank_reward.recipe_list)
+			{
+				reward_info_t reward_info{};
+				reward_info.rank = i;
+				reward_info.param.category = game::ITEM_CATEGORY_RECIPE;
+				reward_info.param.code = recipe_id;
+				rewards.emplace_back(reward_info);
+			}
+
 			const auto reward_count = utils::random::get_integer(rank_reward.min_rewards, rank_reward.max_rewards);
 			for (auto o = 0u; o < reward_count; o++)
 			{

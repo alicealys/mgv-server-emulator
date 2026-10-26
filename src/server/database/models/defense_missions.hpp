@@ -105,6 +105,7 @@ namespace database::defense_missions
 			std::uint32_t event_points;
 			std::uint32_t min_rewards;
 			std::uint32_t max_rewards;
+			std::vector<std::uint32_t> recipe_list;
 			std::vector<reward_t> rewards;
 		};
 

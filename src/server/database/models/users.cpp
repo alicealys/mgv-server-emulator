@@ -1283,7 +1283,9 @@ namespace database::users
 					return false;
 				}
 
-				if (reward_info != nullptr)
+				const auto index = recipe_iter->second->index;
+				if (reward_info != nullptr && 
+					!params.user_inventory->check_obtained_generic(params.user_inventory->recipe_opened, index))
 				{
 					reward_info->recipe_list.emplace_back(recipe_iter->second->id);
 				}
