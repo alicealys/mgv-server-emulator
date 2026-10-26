@@ -21,12 +21,12 @@ namespace config
 			std::string data;
 			const auto path = get_config_file_path();
 
+			config_t config{};
 			if (!utils::io::read_file(path, &data))
 			{
-				throw std::runtime_error("failed to read config");
+				return config;
 			}
 
-			config_t config{};
 			if (!json::read(config, data))
 			{
 				throw std::runtime_error("failed to parse config");
