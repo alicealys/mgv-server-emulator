@@ -11,11 +11,11 @@ namespace utils
 {
 	namespace
 	{
-		std::string_view mg_str_to_view(const std::string& new_string, mg_str source, mg_str str)
-		{
-			const auto offset = str.buf - source.buf;
-			return {new_string.data() + offset, str.len};
-		}
+		//std::string_view mg_str_to_view(const std::string& new_string, mg_str source, mg_str str)
+		//{
+		//	const auto offset = str.buf - source.buf;
+		//	return {new_string.data() + offset, str.len};
+		//}
 
 		std::string mg_str_copy(mg_str str)
 		{
