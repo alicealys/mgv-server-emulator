@@ -144,7 +144,7 @@ namespace emulator::ssd
 					}
 					else
 					{
-						bad_status_type = 0u;
+						bad_status_type = 99u;
 					}
 				}
 				else
@@ -169,7 +169,7 @@ namespace emulator::ssd
 					}
 					else
 					{
-						bad_status_type = 0u;
+						bad_status_type = 99u;
 					}
 				}
 
@@ -177,6 +177,13 @@ namespace emulator::ssd
 				status["bad_status_type"] = bad_status_type;
 				status["recovery_time"] = recovery_time;
 				status["unique_id"] = crew_list[i].get_member_id();
+
+				if (bad_status_type == 99u)
+				{
+					end_deploy_params.crew_ids[crew_index] = 0;
+					database::deployments::remove_crew_id(user.current_player->get_player_id(), crew_list[i].get_member_id());
+					database::crew_members::remove(user.current_player->get_player_id(), crew_list[i].get_member_id());
+				}
 			}
 		}
 
