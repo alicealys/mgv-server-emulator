@@ -153,3 +153,5 @@ deps/mysql
 deps/sqlite3
 
 *.js
+*.sh
+*.bat
