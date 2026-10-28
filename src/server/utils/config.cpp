@@ -22,6 +22,8 @@ namespace config
 			const auto path = get_config_file_path();
 
 			config_t config{};
+			config.steam_public_key = auth::get_default_steam_public_key();
+
 			if (!utils::io::read_file(path, &data))
 			{
 				return config;

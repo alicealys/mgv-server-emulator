@@ -7,9 +7,9 @@ namespace utils::steam
 	public:
 		bool parse(const std::string& data);
 		bool is_expired();
-		bool is_valid();
 		bool has_license(const std::uint32_t license_id);
 		bool has_dlc(const std::uint32_t app_id);
+		bool verify_signature(const std::string& public_key);
 
 		union ip_t
 		{
@@ -45,12 +45,9 @@ namespace utils::steam
 			std::vector<std::uint32_t> licenses;
 			std::vector<std::uint32_t> dlc_app_ids;
 			std::uint16_t unk1;
+			std::string ticket;
+			std::string signature;
 		} ownership{};
-
-	private:
-		bool verify_signature(const std::string& ticket, const std::string& signature);
-
-		bool valid_signature_{};
 
 	};
 }

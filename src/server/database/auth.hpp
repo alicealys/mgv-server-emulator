@@ -38,4 +38,5 @@ namespace auth
 	std::optional<auth_response> authenticate_user(const std::string& account_id, const std::string& password);
 	std::string generate_data(const size_t len, bool base64);
 	bool validate_auth_mode(const std::string& value);
+	std::string get_default_steam_public_key();
 }

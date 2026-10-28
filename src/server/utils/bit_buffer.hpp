@@ -23,6 +23,12 @@ namespace utils
             return read_bits<T>(num_bytes * 8);
         }
 
+        template <typename T = std::uint32_t>
+        T read_bytes()
+        {
+            return read_bits<T>(sizeof(T) * 8);
+        }
+
         std::uint64_t total();
         std::uint64_t bytes_left();
 

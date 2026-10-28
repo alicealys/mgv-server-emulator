@@ -114,6 +114,18 @@ namespace auth
 			return steam_id.raw.account_type == 1 && steam_id.raw.universe == 1 &&
 				steam_id.raw.account_instance == 1 && steam_id.raw.account_id != 0;
 		}
+
+		std::string load_steam_public_key()
+		{
+			const auto& key = config::get().steam_public_key;
+			return utils::cryptography::base64::decode(key);
+		}
+
+		const std::string& get_steam_public_key()
+		{
+			static const auto key = load_steam_public_key();
+			return key;
+		}
 	}
 
 	void initialize_lists()
@@ -207,7 +219,7 @@ namespace auth
 			return {};
 		}
 
-		if (ticket.ownership.app_id != 543900u || ticket.is_expired() || !ticket.is_valid() || 
+		if (ticket.ownership.app_id != 543900u || ticket.is_expired() || !ticket.verify_signature(get_steam_public_key()) ||
 			!check_steam_id(ticket.ownership.steam_id))
 		{
 			return {};
@@ -353,5 +365,13 @@ namespace auth
 	bool validate_auth_mode(const std::string& value)
 	{
 		return auth_mode_map.contains(value);
+	}
+
+	std::string get_default_steam_public_key()
+	{
+		return "MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDf7BrWLBBmLBc1OhSwfFkRf53T"
+			"2Ct64+AVzRkeRuh7h3SiGEYxqQMUeYKO6UWiSRKpI2hzic9pobFhRr3Bvr/WARvY"
+			"gdTckPv+T1JzZsuVcNfFjrocejN1oWI0Rrtgt4Bo+hOneoo3S57G9F1fOpn5nsQ6"
+			"6WOiu4gZKODnFMBCiQIBEQ==";
 	}
 }

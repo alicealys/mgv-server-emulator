@@ -31,6 +31,7 @@ namespace config
 		std::string auth_mode = "offline";
 		std::string cert_file = "";
 		std::string key_file = "";
+		std::string steam_public_key = "";
 		bool use_tmp_folder = true;
 		std::string http_client_ip_header = "";
 		bool enable_web_api = true;

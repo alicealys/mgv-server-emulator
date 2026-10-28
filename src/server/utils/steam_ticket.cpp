@@ -74,20 +74,20 @@ namespace utils::steam
 		this->ownership.expire_date = std::chrono::seconds(buffer.read_bytes(4));
 
 		const auto license_count = buffer.read_bytes<std::uint16_t>(2);
-		for (auto i = 0u; i < license_count; i++)
+		for (auto i = 0u; i < std::min(license_count, std::uint16_t(128u)); i++)
 		{
 			this->ownership.licenses.emplace_back(buffer.read_bytes(4));
 		}
 
 		const auto dlc_count = buffer.read_bytes<std::uint16_t>(2);
-		for (auto i = 0u; i < dlc_count; i++)
+		for (auto i = 0u; i < std::min(dlc_count, std::uint16_t(128u)); i++)
 		{
-			this->ownership.dlc_app_ids.emplace_back(buffer.read_bytes<std::uint16_t>(4));
+			this->ownership.dlc_app_ids.emplace_back(buffer.read_bytes(4));
 
 			const auto dlc_license_count = buffer.read_bytes<std::uint16_t>(2);
 			for (auto o = 0u; o < dlc_license_count; o++)
 			{
-				const auto license = buffer.read_bytes<std::uint16_t>(4);
+				const auto license = buffer.read_bytes(4);
 				this->ownership.licenses.emplace_back(license);
 			}
 		}
@@ -100,31 +100,21 @@ namespace utils::steam
 			const auto offset = buffer.total() / 8;
 			const auto signature = buffer.get_buffer().substr(offset, signature_size);
 			const auto ticket_data = buffer.get_buffer().substr(ownership_ticket_offset, ownership_ticket_length);
-			this->valid_signature_ = this->verify_signature(ticket_data, signature);
+			this->ownership.ticket = ticket_data;
+			this->ownership.signature = signature;
 		}
 
 		return true;
 	}
 
-	bool auth_ticket::verify_signature(const std::string& ticket, const std::string& signature)
+	bool auth_ticket::verify_signature(const std::string& public_key)
 	{
-		if (signature.empty())
+		if (this->ownership.signature.empty())
 		{
 			return false;
 		}
 
-		static const auto steam_pub_key = utils::cryptography::base64::decode(
-			"MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDf7BrWLBBmLBc1OhSwfFkRf53T"
-			"2Ct64+AVzRkeRuh7h3SiGEYxqQMUeYKO6UWiSRKpI2hzic9pobFhRr3Bvr/WARvY"
-			"gdTckPv+T1JzZsuVcNfFjrocejN1oWI0Rrtgt4Bo+hOneoo3S57G9F1fOpn5nsQ6"
-			"6WOiu4gZKODnFMBCiQIBEQ==");
-
-		return utils::cryptography::rsa::verify(ticket, signature, steam_pub_key);
-	}
-
-	bool auth_ticket::is_valid()
-	{
-		return this->valid_signature_;
+		return utils::cryptography::rsa::verify(this->ownership.ticket, this->ownership.signature, public_key);
 	}
 
 	bool auth_ticket::is_expired()
