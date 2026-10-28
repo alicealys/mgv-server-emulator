@@ -195,7 +195,7 @@ namespace utils
 	}
 
 	http_server::http_server()
-		: thread_pool_(100)
+		: thread_pool_(config::get().max_worker_threads)
 	{
 		this->set_ports(80, 443);
 	}

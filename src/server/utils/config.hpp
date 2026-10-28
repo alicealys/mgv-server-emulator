@@ -34,6 +34,8 @@ namespace config
 		bool use_tmp_folder = true;
 		std::string http_client_ip_header = "";
 		bool enable_web_api = true;
+		std::size_t max_worker_threads = 100;
+		std::size_t max_database_connections = 100;
 		vars_t vars;
 	};
 

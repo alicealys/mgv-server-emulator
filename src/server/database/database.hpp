@@ -20,6 +20,8 @@
 
 namespace database
 {
+	constexpr const auto access_timeout = 5s;
+
 	using database_mutex_t = std::recursive_mutex;
 
 	enum database_type_t
@@ -127,6 +129,7 @@ namespace database
 		connection() = default;
 		void check();
 		void cleanup();
+		void stop();
 
 		database_t db;
 		database_mutex_t mutex;
@@ -140,17 +143,25 @@ namespace database
 	connection* get_connection(std::unique_lock<database_mutex_t>& lock);
 
 	template <typename T = void, typename F>
-	T access(F&& accessor)
+	inline T access(F&& accessor)
 	{
 		std::unique_lock<database_mutex_t> lock;
-		auto conn = get_connection(lock);
-		if (conn == nullptr)
-		{
-			throw std::runtime_error("out of connections");
-		}
 
-		conn->check();
-		return accessor(conn->db);
+		const auto timeout = std::chrono::system_clock::now() + access_timeout;
+
+		do
+		{
+			auto conn = get_connection(lock);
+			if (conn != nullptr)
+			{
+				conn->check();
+				return accessor(conn->db);
+			}
+
+			std::this_thread::sleep_for(50ms);
+		} while (timeout > std::chrono::system_clock::now());
+
+		throw std::runtime_error("[database] out of connections");
 	}
 
 	void initialize();
