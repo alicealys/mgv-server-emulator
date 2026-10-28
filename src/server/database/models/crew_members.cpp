@@ -151,8 +151,7 @@ namespace database::crew_members
 			return false;
 		}
 
-		const auto decoded = utils::cryptography::base64::decode(this->nickname);
-		this->nickname = utils::cryptography::base64::encode(decoded);
+		this->nickname = utils::encoding::validate_base64(this->nickname);
 
 		const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
 		{

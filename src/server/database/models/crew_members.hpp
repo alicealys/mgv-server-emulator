@@ -252,7 +252,7 @@ namespace database::crew_members
 			this->first_name_index_ = static_cast<std::uint32_t>(row.first_name_index);
 			this->last_name_index_ = static_cast<std::uint32_t>(row.last_name_index);
 
-			this->nickname_ = row.nickname;
+			this->nickname_ = utils::encoding::validate_base64(row.nickname);
 			this->motivation_history.deserialize(row.motivation_history.value());
 
 			this->creation_date_ = std::chrono::duration_cast<std::chrono::seconds>(row.creation_date.value().time_since_epoch());

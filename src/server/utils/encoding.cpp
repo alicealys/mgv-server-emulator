@@ -119,4 +119,10 @@ namespace utils::encoding
 	{
 		return encode_as_hex(data.data(), data.size());
 	}
+
+	std::string validate_base64(const std::string& data)
+	{
+		const auto decoded = utils::cryptography::base64::decode(data);
+		return utils::cryptography::base64::encode(decoded);
+	}
 }

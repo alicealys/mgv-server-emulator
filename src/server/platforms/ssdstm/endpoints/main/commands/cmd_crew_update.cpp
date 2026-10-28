@@ -66,8 +66,7 @@ namespace emulator::ssd
 					return;
 				}
 
-				const auto decoded = utils::cryptography::base64::decode(entry.nickname);
-				const auto encoded = utils::cryptography::base64::encode(decoded);
+				const auto encoded = utils::encoding::validate_base64(entry.nickname);
 				member.update_nickname(encoded);
 			}
 		);

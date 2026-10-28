@@ -24,15 +24,13 @@ namespace emulator::ssd
 				return error(ERR_INVALIDARG);
 			}
 
-			const auto name = utils::cryptography::base64::decode(entry.name);
-			const auto name_encode = utils::cryptography::base64::encode(name);
-
 			const auto team = database::deployments::find_team_by_index(user->current_player->get_player_id(), entry.index);
 			if (!team.has_value())
 			{
 				return error(ERR_DATABASE);
 			}
 
+			const auto name_encode = utils::encoding::validate_base64(entry.name);
 			team->update_crew_ids(entry.crew_id_list[0], entry.crew_id_list[1], entry.crew_id_list[2], entry.crew_id_list[3]);
 			team->update_info(entry.combat, name_encode, entry.survive);
 		}

@@ -43,4 +43,6 @@ namespace utils::encoding
 		const auto buffer = reinterpret_cast<std::uint8_t*>(reinterpret_cast<size_t>(&data));
 		return utils::cryptography::base64::encode(buffer, sizeof(T));
 	}
+
+	std::string validate_base64(const std::string& data);
 }

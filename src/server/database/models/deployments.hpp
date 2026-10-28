@@ -177,7 +177,7 @@ namespace database::deployments
 			this->team_id_ = row.team_id;
 			this->player_id_ = row.f_player_id;
 			this->index_ = row.team_index;
-			this->info_name_ = row.info_name;
+			this->info_name_ = utils::encoding::validate_base64(row.info_name);
 			this->info_status_ = static_cast<std::uint32_t>(row.info_status);
 			this->info_combat_ = static_cast<std::uint32_t>(row.info_combat);
 			this->info_survive_ = static_cast<std::uint32_t>(row.info_survive);
