@@ -262,6 +262,19 @@ struct glz::meta<game::crew_unique_type_t>
 };
 
 template <>
+struct glz::meta<game::crew_quest_t>
+{
+	using T = game::crew_quest_t;
+	static constexpr auto modify = glz::object(
+		"crewType", &T::crew_type,
+		"crewType2", &T::crew_type2,
+		"crewType3", &T::crew_type3,
+		"crewType4", &T::crew_type4,
+		"crewType5", &T::crew_type5
+	);
+};
+
+template <>
 struct glz::meta<game::survival_gear_t>
 {
 	using T = game::survival_gear_t;
@@ -297,7 +310,6 @@ struct glz::meta<game::defense_mission_settings_t>
 	);
 };
 
-
 template <>
 struct glz::meta<game::coop_mission_info_t>
 {
@@ -325,7 +337,10 @@ namespace game
 		{
 			auto list = utils::resources::load_json(RESOURCE_MISSION_LIST);
 			
-			const auto parse_part = [](json::value& data, std::vector<std::uint32_t>& list, std::unordered_map<std::uint32_t, std::int32_t>& map)
+			const auto parse_part = [](json::value& data, 
+				std::vector<std::uint32_t>& list, 
+				std::unordered_map<std::uint32_t, std::int32_t>& map,
+				std::vector<mission_list_t::entry_t>& entry_list)
 			{
 				if (!data.is_array())
 				{
@@ -345,6 +360,7 @@ namespace game
 						list.resize(entry.index + 1ull);
 					}
 
+					entry_list.emplace_back(entry);
 					list[entry.index] = entry.id;
 					map.insert(std::make_pair(entry.id, entry.index));
 				}
@@ -352,10 +368,10 @@ namespace game
 
 			mission_list_t mission_list;
 
-			parse_part(list["mission_id_list"], mission_list.mission_id_list, mission_list.mission_id_map);
-			parse_part(list["quest_id_list"], mission_list.quest_id_list, mission_list.quest_id_map);
-			parse_part(list["defense_mission_id_list"], mission_list.defense_mission_id_list, mission_list.defense_mission_id_map);
-			parse_part(list["replay_mission_id_list"], mission_list.replay_mission_id_list, mission_list.replay_mission_id_map);
+			parse_part(list["mission_id_list"], mission_list.mission_id_list, mission_list.mission_id_map, mission_list.mission_list);
+			parse_part(list["quest_id_list"], mission_list.quest_id_list, mission_list.quest_id_map, mission_list.quest_list);
+			parse_part(list["defense_mission_id_list"], mission_list.defense_mission_id_list, mission_list.defense_mission_id_map, mission_list.defense_mission_list);
+			parse_part(list["replay_mission_id_list"], mission_list.replay_mission_id_list, mission_list.replay_mission_id_map, mission_list.replay_mission_list);
 
 			return mission_list;
 		}
@@ -753,6 +769,11 @@ namespace game
 	}
 
 	bool crew_unique_type_t::parse(json::value& data)
+	{
+		return json::read(*this, data);
+	}
+
+	bool crew_quest_t::parse(json::value& data)
 	{
 		return json::read(*this, data);
 	}

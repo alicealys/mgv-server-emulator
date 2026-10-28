@@ -110,6 +110,7 @@ namespace game
 		{
 			std::uint32_t id;
 			std::int32_t index;
+			std::string name;
 		};
 
 		std::unordered_map<std::uint32_t, std::int32_t> mission_id_map;
@@ -120,6 +121,11 @@ namespace game
 		std::vector<std::uint32_t> quest_id_list;
 		std::vector<std::uint32_t> defense_mission_id_list;
 		std::vector<std::uint32_t> replay_mission_id_list;
+
+		std::vector<entry_t> mission_list;
+		std::vector<entry_t> quest_list;
+		std::vector<entry_t> defense_mission_list;
+		std::vector<entry_t> replay_mission_list;
 	};
 
 	const mission_list_t& get_mission_list();
@@ -7025,6 +7031,24 @@ namespace game
 		std::uint16_t skill_table;
 		std::uint32_t id;
 		std::string id_str;
+	};
+
+	struct crew_quest_t
+	{
+		bool parse(json::value& data);
+
+		std::string id_str;
+		std::uint32_t id;
+		std::uint32_t crew_type;
+		std::uint32_t ratio;
+		std::uint32_t crew_type2;
+		std::uint32_t ratio2;
+		std::uint32_t crew_type3;
+		std::uint32_t ratio3;
+		std::uint32_t crew_type4;
+		std::uint32_t ratio4;
+		std::uint32_t crew_type5;
+		std::uint32_t ratio5;
 	};
 
 	struct defense_mission_settings_t

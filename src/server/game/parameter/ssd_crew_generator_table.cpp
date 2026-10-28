@@ -85,6 +85,36 @@ namespace game::parameters
 			this->sick_table.emplace_back(sickness);
 		}
 
+		this->crew_quest.resize(0x1000);
+
+		for (auto i = 0ull; i < data["quest_table"].size(); i++)
+		{
+			auto quest = std::make_shared<crew_quest_t>();
+			if (!quest->parse(data["quest_table"][i]))
+			{
+				console::warning("invalid crew quest at index %lli\n", i);
+				continue;
+			}
+			
+			const auto& mission_list = game::get_mission_list();
+			const auto iter = std::ranges::find_if(mission_list.quest_list.begin(), mission_list.quest_list.end(), 
+				[&](const game::mission_list_t::entry_t& mission)
+				{
+					return mission.name == quest->id_str;
+				}
+			);
+
+			if (iter != mission_list.quest_list.end())
+			{
+				this->quest_table[iter->id] = quest;
+
+				if (iter->index < this->crew_quest.size())
+				{
+					this->crew_quest[iter->index] = true;
+				}
+			}
+		}
+
 		return true;
 	}
 

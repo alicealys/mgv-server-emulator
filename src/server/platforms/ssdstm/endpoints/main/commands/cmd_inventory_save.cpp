@@ -117,14 +117,14 @@ namespace emulator::ssd
 			user->current_player->set_nonstackable_item_list(*nonstackable_list);
 		}
 
-		if (cell_info_j.is_object() || farming_update_list_j.is_array())
+		if (cell_info_j.is_array() || farming_update_list_j.is_array())
 		{
 			const auto building_info = std::make_unique<database::players::building_info_t>();
 			user->current_player->get_building_info(*building_info);
 
-			if (cell_info_j.is_object())
+			if (cell_info_j.is_array() && !cell_info_j.empty())
 			{
-				building_info->parse(cell_info_j, true);
+				building_info->parse(cell_info_j[0], true);
 			}
 
 			if (farming_update_list_j.is_array())

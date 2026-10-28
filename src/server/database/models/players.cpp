@@ -1198,7 +1198,7 @@ namespace database::players
 			}
 
 			this->list[index].open = 1;
-			this->list[index].flagset = entry.flagset;
+			this->list[index].flagset = entry.flagset & 0x3F;
 			this->list[index].repop_count = entry.repop_count;
 		}
 
@@ -1217,7 +1217,7 @@ namespace database::players
 		return true;
 	}
 
-	void quest_record_list_internal_t::to_json(json::value& data) const
+	void quest_record_list_internal_t::to_json(json::value& data, bool skip_crew_quests) const
 	{
 		data = json::array();
 
@@ -1225,13 +1225,25 @@ namespace database::players
 		const auto& mission_list = game::get_mission_list();
 		for (auto i = 0ull; i < mission_list.quest_id_list.size(); i++)
 		{
-			if (this->list[i].open == 0)
+			const auto cleared = (skip_crew_quests &&
+				game::parameters_table.ssd_crew_generator_table->is_crew_quest(static_cast<std::uint32_t>(i)));
+
+			if (this->list[i].open == 0 && !cleared)
 			{
 				continue;
 			}
+			
+			// 0x140AE604B
+			// flagset
+			//  1: qst_questClearedFlag
+			//  2: qst_questRepopFlag
+			//  4: qst_questFailureFlag
+			//  8: qst_questSuspendFlag
+			// 16: qst_questAcceptedFlag
+			// 32: qst_questLockedFlag
 
 			auto& entry = data[count++];
-			entry["flagset"] = this->list[i].flagset;
+			entry["flagset"] = this->list[i].flagset | std::uint8_t(cleared);
 			entry["mission_code"] = mission_list.quest_id_list[i];
 			entry["repop_count"] = this->list[i].repop_count;
 		}

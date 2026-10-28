@@ -877,7 +877,7 @@ namespace database::players
 
 		bool open_mission(const std::uint32_t mission_code);
 		bool parse_diff(json::value& data);
-		void to_json(json::value& data) const;
+		void to_json(json::value& data, bool skip_crew_quests) const;
 	};
 
 	struct replay_info_list_internal_t

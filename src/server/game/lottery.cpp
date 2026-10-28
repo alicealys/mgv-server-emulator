@@ -428,7 +428,7 @@ namespace game
 						PRD_TYPE_Material,
 					};
 
-					return set.contains(item.type);
+					return item.id != PRD_IT_Binocle && set.contains(item.type);
 				});
 
 				std::vector<game::item_t> res;

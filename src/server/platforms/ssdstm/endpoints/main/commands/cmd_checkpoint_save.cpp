@@ -467,6 +467,7 @@ namespace emulator::ssd
 		{
 			auto count = 0u;
 
+			auto member_count = database::crew_members::get_member_count(user->current_player->get_player_id());
 			for (auto i = 0ull; i < reward_crew_j.size(); i++)
 			{
 				database::crew_members::member_params_t new_member_params{};
@@ -475,10 +476,9 @@ namespace emulator::ssd
 					continue;
 				}
 
-				const auto member_count = database::crew_members::get_member_count(user->current_player->get_player_id());
 				if (member_count >= database::crew_members::max_crew_members)
 				{
-					return error(ERR_OVER_CAPACITY);
+					break;
 				}
 
 				const auto added_member_id = database::crew_members::create(user->current_player->get_player_id(), new_member_params);
@@ -486,7 +486,8 @@ namespace emulator::ssd
 				{
 					return error(ERR_DATABASE);
 				}
-
+				
+				++member_count;
 				const auto new_member = database::crew_members::find(user->current_player->get_player_id(), added_member_id);
 				new_member->to_json(result["added_crew"][count++]);
 			}
