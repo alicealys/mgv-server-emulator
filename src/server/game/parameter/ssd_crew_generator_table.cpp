@@ -108,7 +108,7 @@ namespace game::parameters
 			{
 				this->quest_table[iter->id] = quest;
 
-				if (iter->index < this->crew_quest.size())
+				if (static_cast<std::size_t>(iter->index) < this->crew_quest.size())
 				{
 					this->crew_quest[iter->index] = true;
 				}
