@@ -492,15 +492,8 @@ namespace database::users
 		this->expire_date = {};
 	}
 
-	void reward_info_t::to_json(json::value& data) const
+	void reward_info_t::to_json(json::value& data, bool from_lottery) const
 	{
-		data["energy"] = this->energy;
-		data["kub_boost_flag"] = this->kub_boost_flag;
-		data["present_box_num"] = this->present_box_num;
-		data["text_id"] = this->text_id;
-		data["expire_date"] = this->expire_date.count();
-		data["recipe_list"] = this->recipe_list;
-
 		const auto copy_array = [&]<typename T>(const std::string_view& key, const T& array)
 		{
 			auto& list_j = data[key];
@@ -513,11 +506,22 @@ namespace database::users
 			}
 		};
 
+		data["energy"] = this->energy;
+		data["expire_date"] = this->expire_date.count();
+
 		copy_array("present_list", this->present_list);
 		copy_array("stackable_list", this->stackable_list);
 		copy_array("nonstackable_list", this->nonstackable_list);
 		copy_array("resources_list", this->resources_list);
-		copy_array("battle_pack_list", this->battle_pack_list);
+
+		if (!from_lottery)
+		{
+			data["present_box_num"] = this->present_box_num;
+			data["kub_boost_flag"] = this->kub_boost_flag;
+			data["text_id"] = this->text_id;
+			data["recipe_list"] = this->recipe_list;
+			copy_array("battle_pack_list", this->battle_pack_list);
+		}
 	}
 
 	namespace impl

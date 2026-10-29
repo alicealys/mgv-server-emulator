@@ -76,6 +76,7 @@ namespace database::present_box
 
 		void to_json(json::value& data) const;
 		void to_json_item(json::value& data) const;
+		void to_json_present(json::value& data) const;
 
 		const game::item_t& get_reward() const;
 

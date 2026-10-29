@@ -133,7 +133,7 @@ namespace database::users
 		std::vector<players::inventory_resource_t> resources_list;
 		std::vector<players::stackable_item_t> stackable_list;
 
-		void to_json(json::value& data) const;
+		void to_json(json::value& data, bool from_lottery = false) const;
 	};
 
 	using user_loadout_header_t = database_struct<user_loadout_header_internal_t>;

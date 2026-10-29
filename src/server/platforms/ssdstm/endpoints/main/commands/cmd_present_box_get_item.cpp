@@ -57,12 +57,7 @@ namespace emulator::ssd
 			return error(ERR_OVER_CAPACITY);
 		}
 
-		result["present"]["id"] = item->get_present_id();
-		result["present"]["param1"] = result_item.param1;
-		result["present"]["param2"] = result_item.param2;
-		result["present"]["param3"] = result_item.param3;
-		result["present"]["param4"] = result_item.param4;
-		result["present"]["param5"] = result_item.param5;
+		item->to_json_present(result["present"]);
 
 		user->current_player->set_stackable_item_list(stackable_list);
 		user->current_player->set_nonstackable_item_list(nonstackable_list);

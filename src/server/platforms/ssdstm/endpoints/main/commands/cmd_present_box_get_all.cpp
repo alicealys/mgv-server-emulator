@@ -54,24 +54,17 @@ namespace emulator::ssd
 				continue;
 			}
 
-			auto& entry_j = result["present_list"][count++];
-			entry_j["id"] = item.get_present_id();
-			entry_j["param1"] = reward.param1;
-			entry_j["param2"] = reward.param2;
-			entry_j["param3"] = reward.param3;
-			entry_j["param4"] = reward.param4;
-			entry_j["param5"] = reward.param5;
-
+			item.to_json_present(result["present_list"][count++]);
 			delete_present_ids.emplace_back(item.get_present_id());
 		}
 
-		database::present_box::delete_items(delete_present_ids);
 		user->current_player->set_stackable_item_list(stackable_list);
 		user->current_player->set_nonstackable_item_list(nonstackable_list);
 		user->current_player->set_inventory_resource_list(resource_list);
 		user->current_player->set_inventory(player_inventory);
 		user->current_player->set_battle_pack_list(battle_pack_list);
 		user->set_inventory(user_inventory);
+		database::present_box::delete_items(delete_present_ids);
 
 		return result;
 	}

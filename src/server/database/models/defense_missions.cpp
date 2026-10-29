@@ -173,6 +173,7 @@ namespace database::defense_missions
 				reward_info.rank = i;
 				reward_info.param.category = game::ITEM_CATEGORY_RECIPE;
 				reward_info.param.code = recipe_id;
+				reward_info.param.num = 1;
 				rewards.emplace_back(reward_info);
 			}
 

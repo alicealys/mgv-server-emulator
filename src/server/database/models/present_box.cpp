@@ -397,9 +397,9 @@ namespace database::present_box
 	{
 		data["expire_date"] = this->expire_date_.count();
 		data["id"] = this->present_id_;
-		data["is_expire"] = this->flags_ & present_flag_expire;
-		data["is_new"] = this->flags_ & present_flag_new;
-		data["is_purchase"] = this->flags_ & present_flag_purchase;
+		data["is_expire"] = std::uint8_t((this->flags_ & present_flag_expire) != 0);
+		data["is_new"] = std::uint8_t((this->flags_ & present_flag_new) != 0);
+		data["is_purchase"] = std::uint8_t((this->flags_ & present_flag_purchase) != 0);
 		data["text_id"] = this->text_id_;
 		this->to_json_item(data["item"]);
 	}
@@ -415,6 +415,35 @@ namespace database::present_box
 		data["param3"] = reward.param3;
 		data["param4"] = reward.param4;
 		data["param5"] = reward.param5;
+	}
+
+	void present_box_entry::to_json_present(json::value& data) const
+	{
+		const auto& reward = this->get_reward();
+		data["id"] = this->get_present_id();
+
+		switch (reward.category)
+		{
+		case game::ITEM_CATEGORY_COIN:
+		case game::ITEM_CATEGORY_ENERGY:
+		{
+			data["param1"] = reward.num;
+			data["param2"] = 0;
+			data["param3"] = 0;
+			data["param4"] = 0;
+			data["param5"] = 0;
+			break;
+		}
+		default:
+		{
+			data["param1"] = reward.category;
+			data["param2"] = reward.code;
+			data["param3"] = 0;
+			data["param4"] = 0;
+			data["param5"] = 0;
+			break;
+		}
+		}
 	}
 
 	std::optional<present_box_entry> find_item(const std::uint64_t present_id)

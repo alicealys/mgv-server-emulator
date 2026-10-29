@@ -341,12 +341,12 @@ namespace game
 			return item;
 		}
 
-		template <std::uint32_t Production>
-		game::item_t lottery_production_single()
+		template <std::uint32_t Recipe>
+		game::item_t lottery_junk_single()
 		{
 			game::item_t item{};
 			item.category = game::ITEM_CATEGORY_RECIPE;
-			item.code = Production;
+			item.code = Recipe;
 			item.num = 1;
 
 			return item;
@@ -382,13 +382,13 @@ namespace game
 
 		game::item_t lottery_medical()
 		{
-			static const auto pool = list_productions([](const game::recipe_t& recipe)
+			static const auto pool = list_stackable_items(1, [](const game::production_t& production)
 			{
-				return recipe.production != nullptr && recipe.production->type == PRD_TYPE_Cure && recipe.production->rarity == 1;
+				return production.type == PRD_TYPE_Cure;
 			});
 
 			game::item_t item{};
-			item.category = game::ITEM_CATEGORY_RECIPE;
+			item.category = game::ITEM_CATEGORY_PRODUCTION;
 			item.num = 1;
 
 			const auto idx = rand_index(pool);
@@ -501,14 +501,14 @@ namespace game
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Body, lottery_junk_accessory_legendary<ACC_TYPE_Body>);
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Arm, lottery_junk_accessory_legendary<ACC_TYPE_Arm>);
 		register_battle_pack_lottery(BP_Junk_Accessory_Legendary_Leg, lottery_junk_accessory_legendary<ACC_TYPE_Leg>);
-		register_battle_pack_lottery(BP_Junk_Weapon_Legendary_singleQuest, lottery_production_single<RCP_EQP_WP_sg01_sw1_TypeA>);
-		register_battle_pack_lottery(BP_Boss01Reward_Weapon, lottery_production_single<RCP_EQP_WP_sr03_TypeA>);
-		register_battle_pack_lottery(BP_Boss01Reward_Accessory, lottery_production_single<RCP_ACC_Body_15_TypeA>);
+		register_battle_pack_lottery(BP_Junk_Weapon_Legendary_singleQuest, lottery_junk_single<RCP_EQP_WP_sg01_sw1_TypeA>);
+		register_battle_pack_lottery(BP_Boss01Reward_Weapon, lottery_junk_single<RCP_EQP_WP_sr03_TypeA>);
+		register_battle_pack_lottery(BP_Boss01Reward_Accessory, lottery_junk_single<RCP_ACC_Body_15_TypeA>);
 		register_battle_pack_lottery(BP_Boss01Reward_Material, lottery_material<3>);
 		register_battle_pack_lottery(BP_Boss02Reward_WeaponEnhance, lottery_weapon_enhance);
 		register_battle_pack_lottery(BP_Boss02Reward_AccessoryEnhance, lottery_weapon_enhance);
 		register_battle_pack_lottery(BP_Boss02Reward_Material, lottery_material<3>);
-		register_battle_pack_lottery(BP_Boss03Reward_01, lottery_production_single<RCP_ACC_Body_15_TypeA>);
+		register_battle_pack_lottery(BP_Boss03Reward_01, lottery_junk_single<RCP_ACC_Body_15_TypeA>);
 		register_battle_pack_lottery(BP_Boss03Reward_02, lottery_material<3>);
 		register_battle_pack_lottery(BP_Boss03Reward_03, lottery_material<2>);
 		register_battle_pack_lottery(BP_Boss04Reward_01, lottery_material<4>);

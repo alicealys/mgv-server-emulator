@@ -87,7 +87,7 @@ namespace emulator::ssd
 					lottery_entry.expire_date = expire_date;
 				}
 
-				lottery_entry.to_json(lottery_entry_j);
+				lottery_entry.to_json(lottery_entry_j, true);
 				lottery_entry_j["battle_pack_id"] = bp_def->id;
 			}
 		}
