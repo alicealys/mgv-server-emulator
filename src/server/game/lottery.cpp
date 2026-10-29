@@ -41,7 +41,7 @@ namespace game
 			return result;
 		}
 
-		std::vector<std::uint32_t> list_productions(bool (*filter)(const game::recipe_t&))
+		/*std::vector<std::uint32_t> list_productions(bool (*filter)(const game::recipe_t&))
 		{
 			const auto& recipes_list = game::parameters_table.ssd_sbm_parameters->recipes_list;
 
@@ -60,7 +60,7 @@ namespace game
 			}
 
 			return result;
-		}
+		}*/
 
 		std::vector<std::uint32_t> list_stackable_items(const std::uint32_t rarity, bool (*filter)(const game::production_t&))
 		{
