@@ -1426,7 +1426,7 @@ namespace database::players
 		return false;
 	}
 
-	bool building_info_t::cell_edge_t::parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type)
+	bool building_info_t::cell_edge_t::parse(json::value& data, const std::uint32_t type, const bool is_diff)
 	{
 		if (type == edge_type_center)
 		{
@@ -1434,20 +1434,16 @@ namespace database::players
 			utils::json_utils::get_or(data["rotation"], this->rotation, this->rotation);
 		}
 
-		utils::json_utils::get_or(data["life"], this->life, this->life);
-		utils::json_utils::get_or(data["max_life"], this->max_life, this->max_life);
-		utils::json_utils::get_or(data["production_id"], this->production_index, this->production_index);
-		utils::json_utils::get_or(data["completion_remaining_time"], this->completion_remaining_time, this->completion_remaining_time);
-		utils::json_utils::get_or(data["recovery_time"], this->recovery_time, this->recovery_time);
-		utils::json_utils::get_or(data["row"], row);
-		utils::json_utils::get_or(data["column"], column);
-
-		if (row >= building_grid_size || column >= building_grid_size)
+		if (!is_diff)
 		{
-			return false;
+			utils::json_utils::get_or(data["max_life"], this->max_life, this->max_life);
+			utils::json_utils::get_or(data["production_id"], this->production_index, this->production_index);
 		}
 
-		return this->is_valid(type);
+		utils::json_utils::get_or(data["life"], this->life, this->life);
+		utils::json_utils::get_or(data["recovery_time"], this->recovery_time, this->recovery_time);
+
+		return true;
 	}
 
 	void building_info_t::cell_edge_t::to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const
@@ -1461,7 +1457,7 @@ namespace database::players
 		data["life"] = this->life;
 		data["max_life"] = this->max_life;
 		data["production_id"] = this->production_index;
-		data["completion_remaining_time"] = this->completion_remaining_time;
+		data["completion_remaining_time"] = 0;
 		data["recovery_time"] = this->recovery_time;
 		data["row"] = row;
 		data["column"] = column;
@@ -1490,11 +1486,6 @@ namespace database::players
 		utils::json_utils::get_or(data["column"], column);
 		utils::json_utils::get_or(data["row"], row);
 
-		if (row >= building_grid_size || column >= building_grid_size)
-		{
-			return false;
-		}
-
 		return true;
 	}
 
@@ -1522,7 +1513,7 @@ namespace database::players
 		data["row"] = row;
 	}
 
-	bool building_info_t::parse_type(json::value& data, const std::uint32_t type)
+	bool building_info_t::parse_type(json::value& data, const std::uint32_t type, const bool is_diff)
 	{
 		if (!data.is_array())
 		{
@@ -1531,15 +1522,23 @@ namespace database::players
 
 		for (auto i = 0ull; i < data.size(); i++)
 		{
-			cell_edge_t cell_edge{};
 			std::uint32_t row{};
 			std::uint32_t column{};
-			if (!cell_edge.parse(data[i], row, column, type))
+
+			auto& entry = data[i];
+			utils::json_utils::get_or(entry["row"], row);
+			utils::json_utils::get_or(entry["column"], column);
+
+			if (row >= building_grid_size || column >= building_grid_size)
 			{
 				continue;
 			}
 
-			std::memcpy(&this->cells[row][column].edges[type], &cell_edge, sizeof(cell_edge_t));
+			auto& cell_edge = this->cells[row][column].edges[type];
+			if (!cell_edge.parse(data[i], type, is_diff) || !cell_edge.is_valid(type))
+			{
+				std::memset(&cell_edge, 0, sizeof(cell_edge_t));
+			}
 		}
 
 		return true;
@@ -1568,17 +1567,36 @@ namespace database::players
 		return true;
 	}
 
-	bool building_info_t::parse(json::value& data, const bool is_diff)
+	bool building_info_t::parse(json::value& data)
 	{
-		if (!is_diff)
-		{
-			std::memset(this, 0, sizeof(building_info_t));
-		}
+		std::memset(this, 0, sizeof(building_info_t));
+		this->parse_type(data["center_info"], edge_type_center, false);
+		this->parse_type(data["upper_edge_info"], edge_type_upper, false);
+		this->parse_type(data["left_edge_info"], edge_type_left, false);
+		return true;
+	}
 
-		this->parse_type(data["center_info"], edge_type_center);
-		this->parse_type(data["upper_edge_info"], edge_type_upper);
-		this->parse_type(data["left_edge_info"], edge_type_left);
+	bool building_info_t::parse_save(json::value& data)
+	{
+		this->parse_type(data["center_info"], edge_type_center, true);
+		this->parse_type(data["upper_edge_info"], edge_type_upper, true);
+		this->parse_type(data["left_edge_info"], edge_type_left, true);
+		return true;
+	}
 
+	bool building_info_t::parse_damage(json::value& data)
+	{
+		this->parse_type(data["center_info"], edge_type_center, true);
+		this->parse_type(data["upper_edge_info"], edge_type_upper, true);
+		this->parse_type(data["left_edge_info"], edge_type_left, true);
+		return true;
+	}
+
+	bool building_info_t::parse_create(json::value& data)
+	{
+		this->parse_type(data["center_info"], edge_type_center, false);
+		this->parse_type(data["upper_edge_info"], edge_type_upper, false);
+		this->parse_type(data["left_edge_info"], edge_type_left, false);
 		return true;
 	}
 
@@ -1631,9 +1649,9 @@ namespace database::players
 			static building_info_t data{};
 
 			json::value default_data = get_default_data("building_info");
-			data.parse_type(default_data["center_info"], edge_type_center);
-			data.parse_type(default_data["upper_edge_info"], edge_type_upper);
-			data.parse_type(default_data["left_edge_info"], edge_type_left);
+			data.parse_type(default_data["center_info"], edge_type_center, false);
+			data.parse_type(default_data["upper_edge_info"], edge_type_upper, false);
+			data.parse_type(default_data["left_edge_info"], edge_type_left, false);
 
 			return &data;
 		}();

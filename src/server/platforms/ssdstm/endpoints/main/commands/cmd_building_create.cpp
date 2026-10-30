@@ -37,7 +37,7 @@ namespace emulator::ssd
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
 		user->current_player->get_building_info(*building_info);
-		building_info->parse(cell_info, true);
+		building_info->parse_create(cell_info);
 
 		if (!user->current_player->set_building_info(*building_info))
 		{

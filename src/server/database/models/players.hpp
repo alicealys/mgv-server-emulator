@@ -743,11 +743,10 @@ namespace database::players
 			std::uint16_t life;
 			std::uint16_t max_life;
 			std::uint16_t production_index;
-			std::uint32_t completion_remaining_time;
-			std::uint32_t recovery_time;
+			std::uint16_t recovery_time;
 
 			bool is_valid(const std::uint32_t type) const;
-			bool parse(json::value& data, std::uint32_t& row, std::uint32_t& column, const std::uint32_t type);
+			bool parse(json::value& data, const std::uint32_t type, const bool is_diff);
 			void to_json(json::value& data, const std::uint32_t row, const std::uint32_t column, const std::uint32_t type) const;
 		};
 
@@ -768,9 +767,13 @@ namespace database::players
 
 		cell_t cells[building_grid_size][building_grid_size];
 
-		bool parse_type(json::value& data, const std::uint32_t type);
+		bool parse_type(json::value& data, const std::uint32_t type, const bool is_diff);
+		bool parse(json::value& data);
+
 		bool parse_farming(json::value& data);
-		bool parse(json::value& data, const bool is_diff);
+		bool parse_damage(json::value& data);
+		bool parse_create(json::value& data);
+		bool parse_save(json::value& data);
 
 		void to_json(json::value& data) const;
 		void to_json_farming(json::value& data) const;

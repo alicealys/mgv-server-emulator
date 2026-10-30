@@ -61,13 +61,16 @@ namespace emulator::ssd
 		auto& src_edge = building_info->cells[src_row][src_col].edges[departure_edge_type];
 		auto& dst_edge = building_info->cells[dst_row][dst_col].edges[destination_edge_type];
 
-		if (src_edge.life == 0u || dst_edge.life != 0u)
+		if (&src_edge != &dst_edge)
 		{
-			return error(ERR_INVALIDARG);
-		}
+			if (src_edge.life == 0u || dst_edge.life != 0u)
+			{
+				return error(ERR_INVALIDARG);
+			}
 
-		std::memcpy(&dst_edge, &src_edge, sizeof(database::players::building_info_t::cell_edge_t));
-		std::memset(&src_edge, 0, sizeof(database::players::building_info_t::cell_edge_t));
+			std::memcpy(&dst_edge, &src_edge, sizeof(database::players::building_info_t::cell_edge_t));
+			std::memset(&src_edge, 0, sizeof(database::players::building_info_t::cell_edge_t));
+		}
 
 		dst_edge.rotation = destination_rotation;
 

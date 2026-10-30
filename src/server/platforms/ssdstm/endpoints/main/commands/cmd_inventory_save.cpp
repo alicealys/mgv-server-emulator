@@ -124,7 +124,7 @@ namespace emulator::ssd
 
 			if (cell_info_j.is_array() && !cell_info_j.empty())
 			{
-				building_info->parse(cell_info_j[0], true);
+				building_info->parse_save(cell_info_j[0]);
 			}
 
 			if (farming_update_list_j.is_array())
