@@ -93,7 +93,7 @@ namespace player_names
 			}
 
 			const auto& cfg = config::get();
-			const auto url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}";
+			constexpr const auto url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}";
 			const auto formatted = std::format(url, cfg.steam_api_key, steam_id_list);
 			const auto data = utils::http::get_data(formatted);
 
