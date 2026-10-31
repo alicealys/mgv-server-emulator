@@ -77,7 +77,6 @@ namespace database::crew_members
 		bool parse(json::value& data);
 		bool parse_update(json::value& data);
 		bool parse_add_param(json::value& data);
-		void apply_update(const member_params_t& diff);
 	};
 
 	struct sickness_type_t
@@ -117,6 +116,7 @@ namespace database::crew_members
 		DEFINE_FIELD(skill, sqlpp::integer_unsigned);
 		DEFINE_FIELD(sanity, sqlpp::integer_unsigned);
 		DEFINE_FIELD(survival_days, sqlpp::integer_unsigned);
+		DEFINE_FIELD(generation_date, sqlpp::integer_unsigned);
 		DEFINE_FIELD(injury_id_1, sqlpp::integer_unsigned);
 		DEFINE_FIELD(injury_id_2, sqlpp::integer_unsigned);
 		DEFINE_FIELD(injury_time_1, sqlpp::integer_unsigned);
@@ -169,6 +169,7 @@ namespace database::crew_members
 			skill_field_t,
 			sanity_field_t,
 			survival_days_field_t,
+			generation_date_field_t,
 			injury_id_1_field_t,
 			injury_id_2_field_t,
 			injury_time_1_field_t,
@@ -228,6 +229,7 @@ namespace database::crew_members
 			this->sanity_ = static_cast<std::uint32_t>(row.sanity);
 			this->skill_ = static_cast<std::uint32_t>(row.skill);
 			this->survival_days_ = static_cast<std::uint32_t>(row.survival_days);
+			this->generation_date_ = static_cast<std::uint32_t>(row.generation_date);
 			this->injury_id_1_ = static_cast<std::uint32_t>(row.injury_id_1);
 			this->injury_id_2_ = static_cast<std::uint32_t>(row.injury_id_2);
 			this->injury_time_1_ = static_cast<std::uint32_t>(row.injury_time_1);
@@ -297,6 +299,7 @@ namespace database::crew_members
 		GET_FIELD_H(std::uint32_t, sanity);
 		GET_FIELD_H(std::uint32_t, skill);
 		GET_FIELD_H(std::uint32_t, survival_days);
+		GET_FIELD_H(std::uint32_t, generation_date);
 		GET_FIELD_H(std::uint32_t, injury_id_1);
 		GET_FIELD_H(std::uint32_t, injury_id_2);
 		GET_FIELD_H(std::uint32_t, injury_time_1);

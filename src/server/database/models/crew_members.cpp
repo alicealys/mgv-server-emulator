@@ -75,6 +75,7 @@ namespace database::crew_members
 	GET_FIELD_C(crew_member, std::uint32_t, sanity);
 	GET_FIELD_C(crew_member, std::uint32_t, skill);
 	GET_FIELD_C(crew_member, std::uint32_t, survival_days);
+	GET_FIELD_C(crew_member, std::uint32_t, generation_date);
 	GET_FIELD_C(crew_member, std::uint32_t, injury_id_1);
 	GET_FIELD_C(crew_member, std::uint32_t, injury_id_2);
 	GET_FIELD_C(crew_member, std::uint32_t, injury_time_1);
@@ -168,27 +169,6 @@ namespace database::crew_members
 		fix_sickness(this->injury_id_2, this->injury_time_2);
 
 		return true;
-	}
-
-	void member_params_t::apply_update(const member_params_t& diff)
-	{
-		this->condition = diff.condition;
-		this->health_flag = diff.health_flag;
-		this->injury_id_1 = diff.injury_id_1;
-		this->injury_id_2 = diff.injury_id_2;
-		this->injury_time_1 = diff.injury_time_1;
-		this->injury_time_2 = diff.injury_time_2;
-		this->life = diff.life;
-		this->max_life = diff.max_life;
-		this->previous_group = diff.previous_group;
-		this->sanity = diff.sanity;
-		this->sickness_id_1 = diff.sickness_id_1;
-		this->sickness_id_2 = diff.sickness_id_2;
-		this->sickness_time_1 = diff.sickness_time_1;
-		this->sickness_time_2 = diff.sickness_time_2;
-		this->survival_days = diff.survival_days;
-		std::memcpy(this->motivation_history.event, diff.motivation_history.event, sizeof(this->motivation_history.event));
-		std::memcpy(this->motivation_history.value, diff.motivation_history.value, sizeof(this->motivation_history.value));
 	}
 
 	bool member_params_t::parse_update(json::value& data)
@@ -365,7 +345,7 @@ namespace database::crew_members
 		}
 
 		this->sanity = 1000;
-		this->previous_group = 1;
+		this->previous_group = 0;
 		this->current_group = 1;
 
 		return true;
@@ -413,6 +393,7 @@ namespace database::crew_members
 							 crew_member::table.skill = params.skill,
 							 crew_member::table.sanity = params.sanity,
 							 crew_member::table.survival_days = params.survival_days,
+							 crew_member::table.generation_date = params.generation_date,
 							 crew_member::table.injury_id_1 = params.injury_id_1,
 							 crew_member::table.injury_id_2 = params.injury_id_2,
 							 crew_member::table.injury_time_1 = params.injury_time_1,
@@ -535,14 +516,14 @@ namespace database::crew_members
 		}
 
 		template <database_type_t Type>
-		void update_group(const std::uint64_t player_id, const std::uint64_t member_id, const std::uint32_t previous_group, const std::uint32_t group_id)
+		void update_group(const std::uint64_t player_id, const std::uint64_t member_id, const std::uint32_t group_id)
 		{
 			database::access([&](database::database_t& db)
 			{
 				db.exec<Type>(
 					sqlpp::update(crew_member::table)
-						.set(crew_member::table.previous_group = previous_group,
-							 crew_member::table.current_group = group_id)
+						.set(crew_member::table.previous_group = 1,
+							crew_member::table.current_group = group_id)
 								.where(crew_member::table.member_id == member_id && crew_member::table.f_player_id == player_id));
 			});
 		}
@@ -667,7 +648,7 @@ namespace database::crew_members
 
 	void crew_member::update_group(const std::uint32_t group_id) const
 	{
-		RUN_IMPL(impl::update_group, this->get_player_id(), this->get_member_id(), this->get_current_group(), group_id);
+		RUN_IMPL(impl::update_group, this->get_player_id(), this->get_member_id(), group_id);
 	}
 
 	void crew_member::update_health_flag(const std::uint32_t health_flag) const
@@ -784,7 +765,7 @@ namespace database::crew_members
 		data["life_max"] = this->life_max_;
 		data["unique_id"] = this->member_id_;
 		data["unique_index"] = this->member_type_;
-		data["generation_date"] = this->creation_date_.count();
+		data["generation_date"] = this->generation_date_;
 
 		this->motivation_history.to_json(data);
 	}

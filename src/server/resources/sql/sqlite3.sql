@@ -249,6 +249,7 @@ create table if not exists `crew_members`
 	skill						int unsigned not null default 0,
 	sanity						int unsigned not null default 0,
 	survival_days				int unsigned not null default 0,
+	generation_date				int unsigned not null default 0,
 	injury_id_1					int unsigned not null default 0,
 	injury_id_2					int unsigned not null default 0,
 	injury_time_1				int unsigned not null default 0,
