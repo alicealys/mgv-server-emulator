@@ -322,6 +322,10 @@ namespace database::users
 	std::uint64_t get_online_user_count();
 	std::uint64_t get_online_user_count(const std::chrono::milliseconds within);
 
+	std::vector<std::uint64_t> get_account_id_list();
+	std::vector<std::uint64_t> get_online_account_id_list();
+	std::vector<std::uint64_t> get_online_account_id_list(const std::chrono::milliseconds within);
+
 	bool add_sv_coins(const std::uint64_t user_id, const std::uint32_t value);
 	std::uint32_t get_sv_coins(const std::uint64_t user_id);
 

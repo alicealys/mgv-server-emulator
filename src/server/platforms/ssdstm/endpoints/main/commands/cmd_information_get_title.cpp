@@ -2,6 +2,7 @@
 
 #include "cmd_information_get_title.hpp"
 
+#include "component/player_names.hpp"
 #include "utils/lang_strings.hpp"
 #include "server.hpp"
 
@@ -183,6 +184,20 @@ namespace emulator::ssd
 		this->register_message_var("version", [](const std::uint8_t)
 		{
 			return VERSION;
+		});
+
+		this->register_message_var("online_player_list", [](const std::uint8_t)
+		{
+			std::string buffer;
+
+			const auto account_ids = database::users::get_online_account_id_list();
+			for (auto& account_id : account_ids)
+			{
+				const auto info = std::format("{}\n", player_names::get(account_id));
+				buffer.append(info);
+			}
+
+			return buffer;
 		});
 
 		auto list = utils::resources::load_json(RESOURCE_INFORMATION_LIST);

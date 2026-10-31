@@ -826,6 +826,47 @@ namespace database::users
 		}
 
 		template <database_type_t Type>
+		std::vector<std::uint64_t> get_account_id_list()
+		{
+			return database::access<std::vector<std::uint64_t>>([&](database::database_t& db)
+			{
+				auto results = db.get_database<Type>()->operator()(
+					sqlpp::select(user::table.account_id)
+							.from(user::table).unconditionally());
+
+				std::vector<std::uint64_t> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row.account_id);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
+		std::vector<std::uint64_t> get_online_account_id_list(const std::chrono::milliseconds within)
+		{
+			return database::access<std::vector<std::uint64_t>>([&](database::database_t& db)
+			{
+				auto results = db.get_database<Type>()->operator()(
+					sqlpp::select(user::table.account_id)
+							.from(user::table)
+								.where(user::table.last_update >= std::chrono::system_clock::now() - within));
+
+				std::vector<std::uint64_t> list;
+
+				for (auto& row : results)
+				{
+					list.emplace_back(row.account_id);
+				}
+
+				return list;
+			});
+		}
+
+		template <database_type_t Type>
 		std::uint32_t get_sv_coins(const std::uint64_t user_id)
 		{
 			return database::access<std::uint32_t>([&](database::database_t& db)
@@ -1639,6 +1680,21 @@ namespace database::users
 	std::uint64_t get_online_user_count()
 	{
 		return get_online_user_count(database::vars.session_timeout);
+	}
+
+	std::vector<std::uint64_t> get_account_id_list()
+	{
+		RUN_IMPL(impl::get_account_id_list);
+	}
+
+	std::vector<std::uint64_t> get_online_account_id_list(const std::chrono::milliseconds within)
+	{
+		RUN_IMPL(impl::get_online_account_id_list, within);
+	}
+
+	std::vector<std::uint64_t> get_online_account_id_list()
+	{
+		RUN_IMPL(impl::get_online_account_id_list, database::vars.session_timeout);
 	}
 
 	void delete_user_data(const std::uint64_t user_id)
