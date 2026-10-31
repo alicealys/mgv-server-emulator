@@ -39,16 +39,18 @@ namespace emulator::ssd
 
 				const auto col = column_j.as<std::uint32_t>();
 				const auto row = row_j.as<std::uint32_t>();
-				const auto current_life = current_life_j.as<std::uint16_t>();
+				auto current_life = current_life_j.as<std::uint16_t>();
 
 				auto& edge = building_info->cells[row][col].edges[type];
-				if (!edge.is_valid(type) || current_life > edge.max_life)
+				const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
+				if (recipe == nullptr)
 				{
 					return false;
 				}
 
-				const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
-				if (recipe == nullptr)
+				current_life = std::min(current_life, edge.max_life);
+
+				if (!edge.is_valid(type))
 				{
 					return false;
 				}

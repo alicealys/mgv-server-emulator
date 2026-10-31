@@ -1398,7 +1398,7 @@ namespace database::players
 
 	bool building_info_t::cell_edge_t::is_valid(const std::uint32_t type) const
 	{
-		if (this->production_index == 0 || this->life == 0)
+		if (this->production_index == 0 || this->life == 0 || this->max_life == 0)
 		{
 			return false;
 		}
@@ -1434,14 +1434,19 @@ namespace database::players
 			utils::json_utils::get_or(data["rotation"], this->rotation, this->rotation);
 		}
 
+		utils::json_utils::get_or(data["life"], this->life, this->life);
+		utils::json_utils::get_or(data["recovery_time"], this->recovery_time, this->recovery_time);
+
 		if (!is_diff)
 		{
 			utils::json_utils::get_or(data["max_life"], this->max_life, this->max_life);
 			utils::json_utils::get_or(data["production_id"], this->production_index, this->production_index);
-		}
 
-		utils::json_utils::get_or(data["life"], this->life, this->life);
-		utils::json_utils::get_or(data["recovery_time"], this->recovery_time, this->recovery_time);
+			if (this->max_life == 0)
+			{
+				this->max_life = this->life;
+			}
+		}
 
 		return true;
 	}

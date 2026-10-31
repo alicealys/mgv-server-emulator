@@ -38,7 +38,7 @@ namespace emulator::ssd
 
 		const auto col = column_j.as<std::uint32_t>();
 		const auto row = row_j.as<std::uint32_t>();
-		const auto current_life = current_life_j.as<std::uint16_t>();
+		auto current_life = current_life_j.as<std::uint16_t>();
 
 		const auto building_info = std::make_unique<database::players::building_info_t>();
 
@@ -52,13 +52,15 @@ namespace emulator::ssd
 		user->current_player->get_inventory(inventory);
 
 		auto& edge = building_info->cells[row][col].edges[edge_type];
-		if (!edge.is_valid(edge_type) || edge.production_index != production_id || current_life > edge.max_life)
+		const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
+		if (recipe == nullptr)
 		{
 			return error(ERR_DATABASE);
 		}
 
-		const auto& recipe = game::parameters_table.ssd_sbm_parameters->get_production_recipe(edge.production_index);
-		if (recipe == nullptr)
+		current_life = std::min(current_life, edge.max_life);
+
+		if (!edge.is_valid(edge_type) || edge.production_index != production_id)
 		{
 			return error(ERR_DATABASE);
 		}
