@@ -522,9 +522,8 @@ namespace database::crew_members
 			{
 				db.exec<Type>(
 					sqlpp::update(crew_member::table)
-						.set(crew_member::table.previous_group = 1,
-							crew_member::table.current_group = group_id)
-								.where(crew_member::table.member_id == member_id && crew_member::table.f_player_id == player_id));
+						.set(crew_member::table.current_group = group_id)
+							.where(crew_member::table.member_id == member_id && crew_member::table.f_player_id == player_id));
 			});
 		}
 		
