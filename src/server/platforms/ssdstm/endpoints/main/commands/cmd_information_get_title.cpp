@@ -193,7 +193,7 @@ namespace emulator::ssd
 			const auto account_ids = database::users::get_online_account_id_list();
 			for (auto& account_id : account_ids)
 			{
-				const auto info = std::format("{}\n", player_names::get(account_id));
+				const auto info = std::format("- {}\n", player_names::get(account_id));
 				buffer.append(info);
 			}
 
