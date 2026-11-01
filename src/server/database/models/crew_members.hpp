@@ -68,7 +68,6 @@ namespace database::crew_members
 		std::uint32_t body_id;
 		std::uint32_t face_id;
 		std::uint32_t generation_date;
-		std::uint64_t unique_id;
 		std::uint32_t sex_id;
 		std::uint32_t unique_index;
 		motivation_history_t motivation_history;

@@ -13,6 +13,7 @@ namespace database::crew_members
 {
 	std::vector<sickness_type_t> sickness_list;
 	std::vector<sickness_type_t> injury_list;
+	std::int64_t max_injury_index{};
 
 	namespace
 	{
@@ -25,6 +26,8 @@ namespace database::crew_members
 			});
 
 			const auto type_index = std::distance(std::begin(sick_table), iter) + 1;
+			max_injury_index = std::max(max_injury_index, type_index);
+
 			if (is_injury)
 			{
 				injury_list.emplace_back(type_index, *iter);
@@ -104,15 +107,21 @@ namespace database::crew_members
 
 	bool member_params_t::parse(json::value& data)
 	{
+		utils::json_utils::get_or(data["ability_accessory"], this->ability_accessory);
+		utils::json_utils::get_or(data["ability_animal"], this->ability_animal);
+		utils::json_utils::get_or(data["ability_base_defense"], this->ability_base_defense);
+		utils::json_utils::get_or(data["ability_defense_unit"], this->ability_defense_unit);
+		utils::json_utils::get_or(data["ability_develop"], this->ability_develop);
+		utils::json_utils::get_or(data["ability_expedition"], this->ability_expedition);
+		utils::json_utils::get_or(data["ability_food"], this->ability_food);
+		utils::json_utils::get_or(data["ability_gadget"], this->ability_gadget);
+		utils::json_utils::get_or(data["ability_medical"], this->ability_medical);
+		utils::json_utils::get_or(data["ability_plant"], this->ability_plant);
 		utils::json_utils::get_or(data["condition"], this->condition);
 		utils::json_utils::get_or(data["current_group"], this->current_group);
 		utils::json_utils::get_or(data["first_name_index"], this->first_name_index);
 		utils::json_utils::get_or(data["health_flag"], this->health_flag);
 		utils::json_utils::get_or(data["initial_max_life"], this->initial_max_life);
-		utils::json_utils::get_or(data["injury_id_1"], this->injury_id_1);
-		utils::json_utils::get_or(data["injury_id_2"], this->injury_id_2);
-		utils::json_utils::get_or(data["injury_time_1"], this->injury_time_1);
-		utils::json_utils::get_or(data["injury_time_2"], this->injury_time_2);
 		utils::json_utils::get_or(data["item1_count"], this->item1_count);
 		utils::json_utils::get_or(data["item2_count"], this->item2_count);
 		utils::json_utils::get_or(data["item3_count"], this->item3_count);
@@ -130,17 +139,20 @@ namespace database::crew_members
 		utils::json_utils::get_or(data["resistance_sleepless"], this->resistance_sleepless);
 		utils::json_utils::get_or(data["resistance_water_shortage"], this->resistance_water_shortage);
 		utils::json_utils::get_or(data["sanity"], this->sanity);
+		utils::json_utils::get_or(data["skill"], this->skill);
+		utils::json_utils::get_or(data["survival_days"], this->survival_days);
+		utils::json_utils::get_or(data["voice_type"], this->voice_type);
+		utils::json_utils::get_or(data["injury_id_1"], this->injury_id_1);
+		utils::json_utils::get_or(data["injury_id_2"], this->injury_id_2);
+		utils::json_utils::get_or(data["injury_time_1"], this->injury_time_1);
+		utils::json_utils::get_or(data["injury_time_2"], this->injury_time_2);
 		utils::json_utils::get_or(data["sickness_id_1"], this->sickness_id_1);
 		utils::json_utils::get_or(data["sickness_id_2"], this->sickness_id_2);
 		utils::json_utils::get_or(data["sickness_time_1"], this->sickness_time_1);
 		utils::json_utils::get_or(data["sickness_time_2"], this->sickness_time_2);
-		utils::json_utils::get_or(data["skill"], this->skill);
-		utils::json_utils::get_or(data["survival_days"], this->survival_days);
-		utils::json_utils::get_or(data["voice_type"], this->voice_type);
 		utils::json_utils::get_or(data["body_id"], this->body_id);
 		utils::json_utils::get_or(data["face_id"], this->face_id);
 		utils::json_utils::get_or(data["generation_date"], this->generation_date);
-		//utils::json_utils::get_or(data["unique_id"], this->unique_id);
 		utils::json_utils::get_or(data["sex_id"], this->sex_id);
 		utils::json_utils::get_or(data["unique_index"], this->unique_index);
 		utils::json_utils::parse_array(data["motivation_history_event"], this->motivation_history.event);
@@ -156,7 +168,7 @@ namespace database::crew_members
 
 		const auto fix_sickness = [](std::uint32_t& id, std::uint32_t& time)
 		{
-			if (id == 0 || time == 0)
+			if ((id == 0 || id > static_cast<std::uint32_t>(max_injury_index)) || time == 0)
 			{
 				id = 0;
 				time = 0;
