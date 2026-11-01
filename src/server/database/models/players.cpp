@@ -662,13 +662,21 @@ namespace database::players
 			return false;
 		}
 
-		const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(production_id);
-		if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+		if (production_id != 0)
 		{
-			return false;
+			const auto iter = game::parameters_table.ssd_sbm_parameters->productions.find(production_id);
+			if (iter == game::parameters_table.ssd_sbm_parameters->productions.end())
+			{
+				return false;
+			}
+
+			this->production_index = iter->second->index;
+		}
+		else
+		{
+			this->production_index = 0;
 		}
 
-		this->production_index = iter->second->index;
 		return true;
 	}
 
@@ -707,14 +715,22 @@ namespace database::players
 		{
 			return false;
 		}
-
-		const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(resource_id);
-		if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+		
+		if (resource_id != 0)
 		{
-			return false;
+			const auto iter = game::parameters_table.ssd_sbm_parameters->resources.find(resource_id);
+			if (iter == game::parameters_table.ssd_sbm_parameters->resources.end())
+			{
+				return false;
+			}
+
+			this->resource_index = iter->second->index;
+		}
+		else
+		{
+			this->resource_index = 0;
 		}
 
-		this->resource_index = iter->second->index;
 		return true;
 	}
 
@@ -741,13 +757,21 @@ namespace database::players
 			return false;
 		}
 
-		const auto iter = game::parameters_table.ssd_sbm_parameters->battle_packs.find(resource_id);
-		if (iter == game::parameters_table.ssd_sbm_parameters->battle_packs.end())
+		if (resource_id != 0)
 		{
-			return false;
+			const auto iter = game::parameters_table.ssd_sbm_parameters->battle_packs.find(resource_id);
+			if (iter == game::parameters_table.ssd_sbm_parameters->battle_packs.end())
+			{
+				return false;
+			}
+
+			this->bp_index = iter->second->index;
+		}
+		else
+		{
+			this->bp_index = 0;
 		}
 
-		this->bp_index = iter->second->index;
 		return true;
 	}
 
