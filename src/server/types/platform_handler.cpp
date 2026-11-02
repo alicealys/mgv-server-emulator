@@ -6,7 +6,7 @@
 
 namespace emulator
 {
-	void platform_handler::handle_endpoint(const std::string& endpoint, const utils::request_params& request, utils::response_params& response)
+	void platform_handler::handle_endpoint(const std::string_view& endpoint, const utils::request_params& request, utils::response_params& response)
 	{
 		const auto handler = this->handlers_.find(endpoint);
 		if (handler == this->handlers_.end())
@@ -24,7 +24,7 @@ namespace emulator
 		}
 	}
 
-	void platform_handler::print_handler_name([[ maybe_unused ]] const std::string& name)
+	void platform_handler::print_handler_name([[ maybe_unused ]] const std::string_view& name)
 	{
 		console::log("Registering endpoint \"%s\"\n", name.data());
 	}

@@ -6,6 +6,7 @@
 namespace utils::string
 {
 	std::vector<std::string> split(const std::string& s, char delim);
+	std::vector<std::string_view> split_view(const std::string_view& s, char delim);
 
 	std::string to_lower(std::string text);
 	std::string to_upper(std::string text);

@@ -30,7 +30,7 @@ namespace emulator
 
 		virtual void handle_command(const utils::request_params& request, utils::response_params& response);
 
-		void print_handler_name([[ maybe_unused ]] const std::string& name) override;
+		void print_handler_name([[ maybe_unused ]] const std::string_view& name) override;
 
 		void set_platform(const std::string& platform);
 

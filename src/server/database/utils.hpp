@@ -182,7 +182,8 @@ namespace database
 		virtual void to_json(json::value& data) const
 		{
 			auto idx = 0;
-			data = json::array();
+			data = json::array(this->size());
+			auto& array = data.get_array();
 
 			const auto list = this->data();
 			for (auto i = 0ull; i < this->size(); i++)
@@ -192,8 +193,10 @@ namespace database
 					continue;
 				}
 
-				list[i].to_json(data[idx++]);
+				list[i].to_json(array[idx++]);
 			}
+
+			array.resize(idx);
 		}
 
 		virtual inline bool is_element_empty(const T& value) const

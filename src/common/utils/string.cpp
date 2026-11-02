@@ -3,6 +3,7 @@
 #include <cstdarg>
 #include <algorithm>
 #include <format>
+#include <ranges>
 
 namespace utils::string
 {
@@ -18,6 +19,13 @@ namespace utils::string
 		}
 
 		return elems;
+	}
+
+	std::vector<std::string_view> split_view(const std::string_view& s, const char delim)
+	{
+		auto tokens = std::views::split(s, delim);
+		std::vector<std::string_view> vec(tokens.begin(), tokens.end());
+		return vec;
 	}
 
 	std::string to_lower(std::string text)

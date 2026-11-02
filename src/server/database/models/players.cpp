@@ -620,19 +620,23 @@ namespace database::players
 		data["spec"] = this->spec;
 		data["option_slot"] = this->option_slot;
 		data["production_id"] = this->production_id;
-		data["perk_list"] = json::array();
-		data["option_list"] = json::array();
+
+		auto& perk_list_j = data["perk_list"];
+		auto& option_list_j = data["option_list"];
+
+		perk_list_j = json::array(ARRAYSIZE(this->perk_list));
+		option_list_j = json::array(ARRAYSIZE(this->perk_list));
 
 		for (auto i = 0ull; i < ARRAYSIZE(this->option_list); i++)
 		{
-			auto& entry = data["option_list"][i];
+			auto& entry = option_list_j[i];
 			entry["obtained"] = this->option_list[i].obtained;
 			entry["option_id"] = this->option_list[i].option_id;
 		}
 
 		for (auto i = 0ull; i < ARRAYSIZE(this->perk_list); i++)
 		{
-			auto& entry = data["perk_list"][i];
+			auto& entry = perk_list_j[i];
 			entry["perk_id"] = this->perk_list[i].perk_id;
 			entry["perk_level"] = this->perk_list[i].perk_level;
 		}

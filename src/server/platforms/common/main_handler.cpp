@@ -22,17 +22,7 @@ namespace emulator
 	{
 		std::optional<json::value> json;
 
-#ifdef DEBUG
-		const auto start = std::chrono::high_resolution_clock::now();
-		const auto _0 = gsl::finally([=]
-		{
-			const auto end = std::chrono::high_resolution_clock::now();
-			const auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-			console::debug("[Endpoint] decrypt request took %lli us", diff);
-		});
-#endif
-		const auto decoded_data = utils::encoding::decode_url_string(data);
-		const auto str = this->blow_.decrypt(decoded_data);
+		const auto str = this->blow_.decrypt(data);
 		if (str.empty())
 		{
 			return json;
@@ -152,16 +142,6 @@ namespace emulator
 	bool main_handler::encrypt_response(json::value& request, json::value& data,
 		const std::optional<database::users::user>& user, std::string& result)
 	{
-#ifdef DEBUG
-		const auto start = std::chrono::high_resolution_clock::now();
-		const auto _0 = gsl::finally([=]
-		{
-			const auto end = std::chrono::high_resolution_clock::now();
-			const auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-			console::debug("[Endpoint] encrypt response took %lli us", diff);
-		});
-#endif
-
 		const auto& session_crypto_val = request["session_crypto"];
 		const auto session_crypto = session_crypto_val.is_boolean() && session_crypto_val.get<bool>();
 
@@ -176,12 +156,15 @@ namespace emulator
 
 		data["flowid"] = json::null{};
 		data["xuid"] = json::null{};
-		data["rqid"] = request["data"]["rqid"];
-		data["msgid"] = request["data"]["msgid"];
 
-		if (data["result"].is_null())
+		auto& request_data_j = request["data"];
+		data["rqid"] = request_data_j["rqid"];
+		data["msgid"] = request_data_j["msgid"];
+
+		auto& result_j = data["result"];
+		if (result_j.is_null())
 		{
-			data["result"] = "NOERR";
+			result_j = "NOERR";
 		}
 
 		const auto data_dump = json::dump(data);

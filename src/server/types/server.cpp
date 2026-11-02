@@ -29,24 +29,24 @@ namespace emulator
 		{
 			response.type = utils::response_text;
 			response.code = 200;
+			response.headers.append(
+				"Keep-Alive: timeout=5, max=100\r\n"
+				"Connection: Keep-Alive\r\n");
 
-			const auto endpoint_params = utils::string::split(request.uri.substr(1), '/');
-			if (endpoint_params.size() < 2)
+			const auto endpoint_params = utils::string::split_view(request.uri, '/');
+			if (endpoint_params.size() < 3)
 			{
 				return;
 			}
 
-			const auto& platform = endpoint_params[0];
-			const auto& endpoint = endpoint_params[1];
+			const auto& platform = endpoint_params[1];
+			const auto& endpoint = endpoint_params[2];
 
 			const auto handler = this->handlers_.find(platform);
 			if (handler == this->handlers_.end())
 			{
 				return;
 			}
-
-			response.headers.append("Keep-Alive: timeout=5, max=100\r\n");
-			response.headers.append("Connection: Keep-Alive\r\n");
 
 			handler->second->handle_endpoint(endpoint, request, response);
 		}

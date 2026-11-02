@@ -17,8 +17,7 @@ namespace emulator
 
 	std::optional<json::value> gate_handler::decrypt_request(const std::string& data, std::optional<database::users::user>&)
 	{
-		const auto decoded_data = utils::encoding::decode_url_string(data);
-		const auto str = this->blow_.decrypt(decoded_data);
+		const auto str = this->blow_.decrypt(data);
 		if (str.empty())
 		{
 			return {};
@@ -98,10 +97,13 @@ namespace emulator
 		const std::optional<database::users::user>&, std::string& result)
 	{
 		data["crypto_type"] = "COMMON";
+
 		data["flowid"] = json::null{};
 		data["xuid"] = json::null{};
-		data["rqid"] = request["data"]["rqid"];
-		data["msgid"] = request["data"]["msgid"];
+
+		auto& request_data_j = request["data"];
+		data["rqid"] = request_data_j["rqid"];
+		data["msgid"] = request_data_j["msgid"];
 
 		auto& result_j = data["result"];
 		if (result_j.is_null())

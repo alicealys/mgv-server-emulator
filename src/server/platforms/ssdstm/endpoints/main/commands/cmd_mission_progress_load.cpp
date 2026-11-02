@@ -200,6 +200,8 @@ namespace emulator::ssd
 			player->get_loadout_list(*loadout_list);
 
 			auto& loadout_list_j = result["load_out_list"];
+			loadout_list_j = json::array(user->get_loadout_count());
+
 			for (auto i = 0u; i < user->get_loadout_count(); i++)
 			{
 				loadout_list->list[i].to_json(loadout_list_j[i], static_cast<std::uint16_t>(i));
@@ -251,6 +253,11 @@ namespace emulator::ssd
 			auto& play_record_user_total_j = result["play_record_user_total"];
 			auto& play_record_player_additional_130_j = result["play_record_player_additional_130"];
 			auto& play_record_user_total_additional_130_j = result["play_record_user_total_additional_130"];
+
+			play_record_player_j = json::array(ARRAYSIZE(record_player.first));
+			play_record_user_total_j = json::array(ARRAYSIZE(record_player.first));
+			play_record_player_additional_130_j = json::array(ARRAYSIZE(record_player.additional));
+			play_record_user_total_additional_130_j = json::array(ARRAYSIZE(record_player.additional));
 
 			for (auto i = 0ull; i < ARRAYSIZE(record_player.first); i++)
 			{

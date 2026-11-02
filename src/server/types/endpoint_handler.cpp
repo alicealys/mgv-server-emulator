@@ -88,7 +88,7 @@ namespace emulator
 		}
 	}
 
-	void endpoint_handler::print_handler_name([[ maybe_unused ]] const std::string& name)
+	void endpoint_handler::print_handler_name([[ maybe_unused ]] const std::string_view& name)
 	{
 		console::log("Registering command for \"%s\": \"%s\"\n", this->platform_.data(), name.data());
 	}
