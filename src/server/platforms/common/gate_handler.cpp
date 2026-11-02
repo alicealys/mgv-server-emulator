@@ -111,16 +111,17 @@ namespace emulator
 			result_j = "NOERR";
 		}
 
-		const auto data_dump = json::dump(data);
+		auto data_dump = json::dump(data);
 		const auto original_size = data_dump.size();
 
-		auto data_res = utils::compression::zlib::compress(data_dump);
-		data_res = utils::cryptography::base64::encode(data_res);
+		data_dump = utils::compression::zlib::compress(data_dump, 1u, Z_BEST_SPEED);
+		data_dump.push_back('\0');
+		data_dump = utils::cryptography::base64::encode(data_dump);
 
 		json::value response;
 
 		response["compress"] = true;
-		response["data"] = utils::encoding::split_into_lines(data_res);
+		response["data"] = utils::encoding::split_into_lines(data_dump);
 		response["original_size"] = original_size;
 		response["session_crypto"] = false;
 		response["session_key"] = json::null{};

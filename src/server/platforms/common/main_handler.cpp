@@ -167,15 +167,15 @@ namespace emulator
 			result_j = "NOERR";
 		}
 
-		const auto data_dump = json::dump(data);
+		auto data_dump = json::dump(data);
 		const auto original_size = data_dump.size();
 
-		auto data_res = utils::compression::zlib::compress(data_dump, 1u);
-		data_res.push_back('\0');
+		data_dump = utils::compression::zlib::compress(data_dump, 1u, Z_BEST_SPEED);
+		data_dump.push_back('\0');
 
 		if (!session_crypto)
 		{
-			data_res = utils::cryptography::base64::encode(data_res);
+			data_dump = utils::cryptography::base64::encode(data_dump);
 		}
 		else
 		{
@@ -186,13 +186,13 @@ namespace emulator
 
 			utils::cryptography::blowfish session_blow;
 			session_blow.set_key(user->get_crypto_key());
-			data_res = session_blow.encrypt(data_res);
+			data_dump = session_blow.encrypt(data_dump);
 		}
 
 		json::value response;
 
 		response["compress"] = true;
-		response["data"] = utils::encoding::split_into_lines(data_res);
+		response["data"] = utils::encoding::split_into_lines(data_dump);
 		response["original_size"] = original_size;
 		response["session_crypto"] = session_crypto_val;
 		response["session_key"] = request["session_key"];
