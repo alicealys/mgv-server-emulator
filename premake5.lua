@@ -286,19 +286,15 @@ workspace "mgv-server-emulator"
 		flags {"NoIncrementalLink", "NoMinimalRebuild", "MultiProcessorCompile", "No64BitChecks"}
 
 		filter "configurations:Release"
-			optimize "Size"
+			optimize "Full"
 			defines {"NDEBUG"}
+			linktimeoptimization "On"
 			fatalwarnings {"all"}
 		filter {}
 
 		filter "configurations:Debug"
 			optimize "Debug"
 			defines {"DEBUG", "_DEBUG"}
-		filter {}
-
-		filter { "configurations:Release", "toolset:msc*" }
-			buildoptions {"/GL"}
-			linkoptions {"/IGNORE:4702", "/LTCG"}
 		filter {}
 
 		filter { "configurations:Debug", "toolset:msc*" }
