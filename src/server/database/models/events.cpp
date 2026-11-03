@@ -672,6 +672,8 @@ namespace database::events
 					rankings::update_rankings(rankings::ranking_type_event);
 				}
 			}
+
+			break;
 		}
 		case event_state_finished:
 		{
@@ -680,6 +682,8 @@ namespace database::events
 				set_event_state(db, current_event->get_event_id(), event_state_dead);
 				console::print("[events] event state changed: DEAD\n");
 			}
+
+			break;
 		}
 		case event_state_dead:
 		{
