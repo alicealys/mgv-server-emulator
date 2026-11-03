@@ -65,7 +65,7 @@ jobs:
       - name: Upload ${{matrix.arch}} libs
         uses: actions/upload-artifact@v7
         with:
-          name: libs
+          name: libs-windows-${{matrix.configuration}}
           path: |
             deps/mysql/lib/*.dll
   build-linux:
@@ -127,7 +127,7 @@ jobs:
       - name: Upload ${{matrix.arch}} libs
         uses: actions/upload-artifact@v7
         with:
-          name: libs
+          name: libs-linux-${{matrix.configuration}}
           path: |
             deps/mysql/lib/*.so*
   deploy:
@@ -183,8 +183,11 @@ jobs:
       - name: Upload resources
         run: rsync -avz ./resources ${{ secrets.ALICE_MASTER_SSH_USER }}@${{ secrets.ALICE_MASTER_SSH_ADDRESS }}:${{ env.ALICE_MASTER_PATH }}/mgv-server-emulator/
 
-      - name: Upload libs
-        run: rsync -avz ./libs ${{ secrets.ALICE_MASTER_SSH_USER }}@${{ secrets.ALICE_MASTER_SSH_ADDRESS }}:${{ env.ALICE_MASTER_PATH }}/mgv-server-emulator/
+      - name: Upload windows libs
+        run: rsync -avz ./libs-windows-release ${{ secrets.ALICE_MASTER_SSH_USER }}@${{ secrets.ALICE_MASTER_SSH_ADDRESS }}:${{ env.ALICE_MASTER_PATH }}/mgv-server-emulator/
 
+      - name: Upload linux libs
+        run: rsync -avz ./libs-linux-release ${{ secrets.ALICE_MASTER_SSH_USER }}@${{ secrets.ALICE_MASTER_SSH_ADDRESS }}:${{ env.ALICE_MASTER_PATH }}/mgv-server-emulator/
+        
       - name: Publish changes
         run: ssh ${{ secrets.ALICE_MASTER_SSH_USER }}@${{ secrets.ALICE_MASTER_SSH_ADDRESS }} ${{ secrets.ALICE_MASTER_SSH_CHANGE_PUBLISH_COMMAND }}
