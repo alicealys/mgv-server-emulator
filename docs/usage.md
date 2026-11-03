@@ -6,14 +6,16 @@
   - **[Windows x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-windows_x64.tar)**  
   - **[Linux x64](https://github.alicent.cat/mgv-server-emulator/mgv-server-emulator-linux_x64.tar)**  
 - \***OPTIONAL**\* Setup a mysql server with a database called `mgssd`.
-- In the EXE's path create a file called `config.json` and add the following values:
+- \***OPTIONAL**\* In the EXE's path create a file called `config.json` and add the following values:
     * `database_type`: (default: `"mysql"`, options: "mysql", "sqlite3")
     * `database_user`: (default: `"root"`)
     * `database_password`: (default: `"root"`)
     * `database_host`: (default: `"localhost"`)
     * `database_port`: (default: `3306`)
     * `database_name`: (default: `"mgssd"`)
-- Run [mgv-mod](https://github.com/alicealys/mgv-mod) with the `+net_custom_server <url>` command line param.
+- Run `mgv-server-emulator.exe` or run `start.sh` for linux to start the server
+- Run [mgv-mod](https://github.com/alicealys/mgv-mod) with the `+net_ncl_url <url>` command line param.  
+  `<url>` is the url to the gate endpoint of the server, default: `http://localhost/ssdstm/gate`
 
 ## Config
 
@@ -23,9 +25,6 @@ Example config
 {
     "base_url": "http://localhost:80",
     "http_port": 80,
-    "https_port": 443,
-    "cert_file": "",
-    "key_file": "",
     "database_type": "sqlite3",
     "database_password": "root",
     "database_name": "mgssd",
@@ -54,9 +53,18 @@ Example config
 | database_host | database hostname | "localhost" |
 | database_port | database port | 3306 |
 | database_name | database name | "mgsmgv" |
-| auth_mode | authentication mode, must be one of: "offline", "konami", "custom", "hybrid", **if set to `offline` steam tickets will not be verified** | "offline" |
+| auth_mode | authentication mode, must be one of: "nosteam", "offline", "konami", "custom", "hybrid", **if set to `nosteam` steam tickets will not be verified** | "offline" |
+| steam_api_key | steam api key used for retrieval of player names | "" |
+| steam_public_key | valve's public key used for auth session tickets encoded in base64 | N/A |
+| max_worker_threads | max http server worker threads | 100 |
+| max_database_connections | max database connections | 100 |
 | vars.session_heartbeat | interval between each CMD_UPDATE_SESSION sent by the client (in seconds) | 60 |
 | vars.session_timeout | time until client is considered offline (seconds) | 200 |
+| vars.server_version | server version | 19 |
+| vars.disable_tutorial_tips | disable tutorial tips | false |
+| vars.reference_time | reference unix timestamp used for time periods calculation | 1519113600 |
+| vars.store_client_ips | store IP addresses sent by players during log-in | false |
+| vars.allow_save_restore | enable CMD_RESTORE_SAVE command (enables `dumpsave`/`restoresave` functionality from mgv-mod) | true |
 
 ### Authentication mode
 
@@ -139,6 +147,45 @@ Example file structure:
 Most resource files should not be modified, however some can be customized to your liking.
 Feel free to explore the rest of the files and tweak any setting you want.
 
+## Parameter files
+
+Within the above specified resource folder there are parameter files which have been dumped from Konami servers and contain metadata on missions, weapons, crew, npc, and various other things.  
+
+| name | description |
+| --- | --- |
+| DefenseGameBaseDigging.json | defense mission waves strategy metadata |
+| DefenseGameEmbeddedMission.json | ^ for coop missions |
+| DefenseGameEventMission.json | ^ for event coop missions |
+| DefenseGameQuest.json | metadata about quests in coop missions |
+| SsdBaseDefenseSettings.json | base defense mission reward and wave lists, wave intervals |
+| SsdBuffParameter.json | weapon buffs? |
+| SsdBuffParameter_debug.json | ^ |
+| SsdBuffParameter_opt.json | ^ |
+| SsdBuildingParameterTable.json | contains metadata about base buildings |
+| SsdCollectionItems.json | N/A |
+| SsdCombatDeployParameterTable.json | N/A |
+| SsdCrewGeneratorTable.json | story crew member type list and crew skill tables/values |
+| SsdDamageParameter.json | weapon damage parameters |
+| SsdDamageParameter_debug.json | ^ |
+| SsdDamageParameter_opt.json | ^ |
+| SsdDlcMissionSettings.json | daily/weekly/event coop mission list (rotates every 2 weeks) |
+| SsdEquipParameters.json | weapons |
+| SsdEquipParameters_debug.json | ^ |
+| SsdEquipParameters_opt.json | ^ |
+| SsdNpcLevelParameters.json | N/A |
+| SsdPlayerParameters.json | N/A |
+| SsdReplayMissionInfo_opt.json | replay mission list |
+| SsdSbmParameters.json | recipe list, item list, building list, customization, etc... |
+| SsdSbmParameters_debug.json | ^ |
+| SsdSbmParameters_opt.json | ^ |
+| SsdUiCoopMissionInfo.json | ui rank and reward list for coop missions |
+| SsdWalkerGearParameters.json | N/A |
+| SsdWeaponParameters.json | N/A |
+| SsdWeaponParameters_debug.json | ^ |
+| SsdWeaponParameters_opt.json | ^ |
+
+These files can all be tweaked in various ways to adjust and customize the gameplay experience.  
+
 ## Allow/Deny lists
 
 You can filter players connecting to your server using by creating `allow_list.json` or `deny_list.json` in your server folder  
@@ -162,6 +209,7 @@ Example:
 - `reload_lists`: Reloads allow/deny lists
 - `query`: Runs an SQL query (mysql only)
 - `quit`: Shuts down the server
+- `download_parameters`: Downloads updated parameter files from Konami servers
 
 ## Command line params
 
