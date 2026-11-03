@@ -157,7 +157,7 @@ namespace player_names
 				while (!runner.killed)
 				{
 					run_update();
-					std::this_thread::sleep_for(500ms * std::min(std::size_t(10u), runner.error_count));
+					std::this_thread::sleep_for(500ms * std::min(std::size_t(10u), runner.error_count + 1));
 				}
 			});
 		}
