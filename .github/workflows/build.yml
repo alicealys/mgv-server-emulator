@@ -156,11 +156,17 @@ jobs:
           name: release-resources
           path: resources
 
-      - name: Download libs
+      - name: Download windows libs
         uses: actions/download-artifact@v8
         with:
-          name: libs
-          path: libs
+          name: libs-windows-release
+          path: libs-windows-release
+
+      - name: Download linux libs
+        uses: actions/download-artifact@v8
+        with:
+          name: libs-linux-release
+          path: libs-linux-release
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2.7.0
