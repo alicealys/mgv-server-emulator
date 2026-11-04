@@ -283,8 +283,10 @@ workspace "mgv-server-emulator"
 			defines {"CI"}
 		end
 
-		flags {"NoIncrementalLink", "NoMinimalRebuild", "MultiProcessorCompile", "No64BitChecks"}
-
+		incrementallink "Off"
+		minimalrebuild "Off"
+		multiprocessorcompile "On"
+		
 		filter "configurations:Release"
 			optimize "Full"
 			defines {"NDEBUG"}

@@ -13,9 +13,8 @@ namespace database
 	namespace
 	{
 		database_def_t database_def{};
-		constexpr const auto max_connections = 256;
 		constexpr const auto connection_lifetime = 60s * 10;
-		std::array<connection, max_connections> connection_pool;
+		std::array<connection, 256> connection_pool;
 	}
 
 	database_type_t get_database_type()
@@ -242,12 +241,6 @@ namespace database
 
 	connection* get_connection(std::unique_lock<database_mutex_t>& lock)
 	{
-		if (!get_database_def().use_multi_connection)
-		{
-			static connection single_connection;
-			return &single_connection;
-		}
-
 		static thread_local connection* last_connection{};
 		if (last_connection != nullptr)
 		{
@@ -258,8 +251,7 @@ namespace database
 			}
 		}
 
-		const auto& cfg = config::get();
-		for (auto i = 0ull; i < cfg.max_database_connections; i++)
+		for (auto i = 0ull; i < database_def.max_connections; i++)
 		{
 			auto connection = &connection_pool[i];
 			if (connection == last_connection)
@@ -277,12 +269,13 @@ namespace database
 			return connection;
 		}
 
+		lock = {};
 		return nullptr;
 	}
 
 	void cleanup_connections()
 	{
-		if (!get_database_def().use_multi_connection)
+		if (!database_def.use_multi_connection)
 		{
 			return;
 		}
@@ -353,15 +346,20 @@ namespace database
 
 	void initialize()
 	{
-		const auto& cfg = config::get();
-		if (cfg.max_database_connections > connection_pool.size())
+		get_config();
+
+		if (!database_def.use_multi_connection)
 		{
-			throw std::runtime_error(std::format("[config] max_database_connections must not be larger than {}", connection_pool.size()));
+			database_def.max_connections = 1;
+		}
+		else
+		{
+			database_def.max_connections = config::get().max_database_connections;
 		}
 
-		if (cfg.max_worker_threads > cfg.max_database_connections)
+		if (database_def.max_connections > connection_pool.size())
 		{
-			console::warning("[config] max_worker_threads is larger than max_database_connections, this is not recommended\n");
+			throw std::runtime_error(std::format("[config] max_database_connections must not be larger than {}", connection_pool.size()));
 		}
 
 		initialize_vars();
