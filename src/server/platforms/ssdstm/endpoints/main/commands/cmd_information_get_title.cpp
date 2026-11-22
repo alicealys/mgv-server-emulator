@@ -35,7 +35,6 @@ namespace emulator::ssd
 				return message.update_date;
 			}
 		}
-
 	}
 
 	std::vector<cmd_information_get_title::message_t> cmd_information_get_title::messages;
